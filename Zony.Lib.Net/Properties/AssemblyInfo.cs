@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ZonyLrcTools")]
-[assembly: AssemblyDescription("ZonyLrcTools 第三次重构正式版本")]
+[assembly: AssemblyTitle("Zony.Lib.Net")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://blog.myzony.com")]
-[assembly: AssemblyProduct("ZonyLrcTools")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Zony.Lib.Net")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b84f4450-c20e-4f11-8152-7a95bef4f5e0")]
+[assembly: Guid("b060d7bb-6cc1-4045-b038-9ea612435ba5")]
 
 // Version information for an assembly consists of the following four values:
 //

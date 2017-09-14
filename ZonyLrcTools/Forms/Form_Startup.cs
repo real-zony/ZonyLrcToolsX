@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ZonyLrcTools
+namespace ZonyLrcTools.Forms
 {
-    public partial class Form1 : Form
+    public partial class Form_Startup : Form
     {
-        public Form1()
+        public Form_Startup()
         {
             InitializeComponent();
         }
+
+        private void Form_Startup_Load(object sender, EventArgs e)
+        {
+        }
     }
+
 }
