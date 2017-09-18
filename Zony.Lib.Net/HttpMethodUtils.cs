@@ -92,6 +92,24 @@ namespace Zony.Lib.Net
             }
         }
 
+        /// <summary>
+        /// 构建URL编码字符串
+        /// </summary>
+        /// <param name="srcText">待编码的字符串</param>
+        /// <param name="encoding">编码方式</param>
+        public string URL_Encoding(string srcText, Encoding encoding)
+        {
+            StringBuilder _builder = new StringBuilder();
+            byte[] _bytes = encoding.GetBytes(srcText);
+
+            foreach (var _byte in _bytes)
+            {
+                _builder.Append(_byte.ToString("x2")).Append('%');
+            }
+
+            return _builder.ToString();
+        }
+
         private string parametersBuildForm(object parameters)
         {
             if (parameters == null) return string.Empty;

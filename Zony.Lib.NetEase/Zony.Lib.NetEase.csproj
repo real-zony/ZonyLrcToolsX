@@ -47,6 +47,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Net\Zony.Lib.Net.csproj">
+      <Project>{B060D7BB-6CC1-4045-B038-9EA612435BA5}</Project>
+      <Name>Zony.Lib.Net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
       <Project>{043b9995-b8bf-4a36-bd57-304c6d6ce7e7}</Project>
       <Name>Zony.Lib.Plugin</Name>

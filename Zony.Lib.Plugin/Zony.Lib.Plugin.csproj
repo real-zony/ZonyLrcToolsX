@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\PluginInfoAttribute.cs" />
+    <Compile Include="Exceptions\NotFoundLyricException.cs" />
     <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />
     <Compile Include="Interfaces\IPluginDownLoader.cs" />
     <Compile Include="Interfaces\IPluginExtensions.cs" />
