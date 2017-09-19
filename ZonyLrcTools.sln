@@ -11,9 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.NetEase", "Zony.Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.Net", "Zony.Lib.Net\Zony.Lib.Net.csproj", "{B060D7BB-6CC1-4045-B038-9EA612435BA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Service.Api", "Zony.Service.Api\Zony.Service.Api.csproj", "{4E7FE282-482D-4898-92F3-8339F5B93C4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zony.Service.Api", "Zony.Service.Api\Zony.Service.Api.csproj", "{4E7FE282-482D-4898-92F3-8339F5B93C4C}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A7A13205-3F16-4F21-BEBD-6CBF74B1FC95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1D1C05B1-9F24-4909-9D68-F5F13AB9E8ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.NetEase.Test", "..\Zony.Lib.NetEase.Test\Zony.Lib.NetEase.Test.csproj", "{A0111361-289E-4956-8895-769AAFC30CAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,16 @@ Global
 		{A7A13205-3F16-4F21-BEBD-6CBF74B1FC95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A13205-3F16-4F21-BEBD-6CBF74B1FC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7A13205-3F16-4F21-BEBD-6CBF74B1FC95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0111361-289E-4956-8895-769AAFC30CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0111361-289E-4956-8895-769AAFC30CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0111361-289E-4956-8895-769AAFC30CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0111361-289E-4956-8895-769AAFC30CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0111361-289E-4956-8895-769AAFC30CAE} = {1D1C05B1-9F24-4909-9D68-F5F13AB9E8ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A6191C3-CC25-4732-885C-F4DD32F9E412}

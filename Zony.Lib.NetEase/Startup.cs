@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Zony.Lib.Net;
@@ -21,18 +21,19 @@ namespace Zony.Lib.NetEase.Plugin
             var _json = getLyricJsonObject(_param);
             var _sourceLyric = getSourceLyric(_json);
             var _translateLyric = getTranslateLyric(_json);
+            var _result = buildLyricText(_sourceLyric, _translateLyric);
 
-            data = null;
+            data = Encoding.UTF8.GetBytes(_result);
         }
 
         private object buildParameters(string songName, string artistName)
         {
-            string _encodeArtistName = m_netUtils.URL_Encoding(songName, Encoding.UTF8);
+            string _encodeArtistName = m_netUtils.URL_Encoding(artistName, Encoding.UTF8);
             string _encodeSongName = m_netUtils.URL_Encoding(songName, Encoding.UTF8);
             return new
             {
-                crsf_token = string.Empty,
-                s = $"{_encodeArtistName}{_encodeSongName}",
+                csrf_token = string.Empty,
+                s = $"{_encodeArtistName}+{_encodeSongName}",
                 type = 1,
                 offset = 0,
                 total = true,
@@ -47,8 +48,8 @@ namespace Zony.Lib.NetEase.Plugin
         /// <returns>返回的JSON对象</returns>
         private JObject getLyricJsonObject(object postParam)
         {
-            var _result = m_netUtils.Post(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com");
-            if (!string.IsNullOrWhiteSpace(_result)) throw new NullReferenceException("在getLyricJsonObject当中无法获得请求的资源,_result");
+            var _result = m_netUtils.Post(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
+            if (string.IsNullOrWhiteSpace(_result)) throw new NullReferenceException("在getLyricJsonObject当中无法获得请求的资源,_result");
 
             // 获得歌曲SID
             string _sid = getSongID(JObject.Parse(_result));
@@ -67,7 +68,7 @@ namespace Zony.Lib.NetEase.Plugin
             if (_lyric.Contains("uncollected")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
             if (string.IsNullOrWhiteSpace(_lyric)) throw new NotFoundLyricException("歌曲不存在歌词数据.");
 
-            var _jsonObject = JObject.Parse(_result);
+            var _jsonObject = JObject.Parse(_lyric);
             if (!jObjectIsContainsProperty(_jsonObject, "lrc")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
 
             return _jsonObject["lrc"] as JObject;
@@ -132,8 +133,44 @@ namespace Zony.Lib.NetEase.Plugin
         /// <returns>包含的话返回TRUE，不包含的返回FALSE</returns>
         private bool jObjectIsContainsProperty(JObject jObejct, string propertyName)
         {
-            var _tmpCheckObj = jObejct.Properties().FirstOrDefault(x => x.Name == propertyName);
-            return _tmpCheckObj != null ? true : false;
+            return jObejct.Property(propertyName) != null ? true : false;
+        }
+
+        /// <summary>
+        /// 双语歌词合并
+        /// </summary>
+        /// <param name="srcLyric">原始歌词文本</param>
+        /// <param name="transLyric">翻译中文歌词文本</param>
+        /// <returns>构建完毕的歌词数据</returns>
+        private string buildLyricText(string srcLyric, string transLyric)
+        {
+            Dictionary<string, string> _srcDic = new Dictionary<string, string>();
+            Dictionary<string, string> _transDic = new Dictionary<string, string>();
+
+            // 键值对获取方法
+            Dictionary<string, string> generateKey_Value(string lyric)
+            {
+                var _regex = new Regex(@"\[\d+:\d+.\d+\]");
+                var _matches = _regex.Matches(lyric);
+                var _dict = new Dictionary<string, string>();
+
+                foreach (var _match in _matches)
+                {
+                    var _value = _match.ToString();
+
+                }
+
+                return _dict;
+            }
+
+            // 获取原始歌词与翻译歌词的键值对
+            _srcDic = generateKey_Value(srcLyric);
+            _transDic = generateKey_Value(transLyric);
+
+            // 合并时间轴与歌词数据
+
+
+            return null;
         }
     }
 }

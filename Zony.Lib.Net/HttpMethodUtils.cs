@@ -55,13 +55,12 @@ namespace Zony.Lib.Net
             };
 
             if (referer != null) _req.Headers.Referrer = new Uri(referer);
-            if (mediaTypeValue != null)
-            {
-                if (mediaTypeValue == "application/json") _postData = parametersBuildJson(parameters);
-                else _postData = parametersBuildForm(parameters);
-                _req.Content = new StringContent(_postData);
-                _req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
-            }
+            // 请求内容构造
+            if (mediaTypeValue == "application/json") _postData = parametersBuildJson(parameters);
+            else _postData = parametersBuildForm(parameters);
+            _req.Content = new StringContent(_postData);
+            if (mediaTypeValue != null) _req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
+
 
             using (var _res = m_client.SendAsync(_req).Result)
             {
@@ -107,7 +106,7 @@ namespace Zony.Lib.Net
                 _builder.Append(_byte.ToString("x2")).Append('%');
             }
 
-            return _builder.ToString();
+            return _builder.ToString().TrimEnd('%');
         }
 
         private string parametersBuildForm(object parameters)
@@ -117,12 +116,12 @@ namespace Zony.Lib.Net
             if (_type == typeof(string)) return parameters as string;
 
             var _properties = _type.GetProperties();
-            StringBuilder _paramBuidler = new StringBuilder("$");
+            StringBuilder _paramBuidler = new StringBuilder("?");
 
             // 反射构建参数
             foreach (var _property in _properties)
             {
-                _paramBuidler.Append($"{_property.Name}{_property.GetValue(parameters)}&");
+                _paramBuidler.Append($"{_property.Name}={_property.GetValue(parameters)}&");
             }
             return _paramBuidler.ToString().Trim('&');
         }
