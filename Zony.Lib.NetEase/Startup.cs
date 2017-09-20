@@ -175,12 +175,23 @@ namespace Zony.Lib.NetEase.Plugin
             _transDic = generateKey_Value(transLyric);
 
             // 合并时间轴与歌词数据，以原始歌词为基准
+            int _syncIndex = 0;
             foreach (var _src in _srcDic)
             {
-                var _trans = _transDic.Keys.Where(key => key == _src.Key).FirstOrDefault();
-
-                if (_trans != null) _resultBuilder.Append($"{_src.Key}{_src.Value},{_transDic[_trans]}\n");
-                else _resultBuilder.Append($"{_trans}{_transDic[_trans]}\n");
+                bool _isAppend = false; // 用于跳过不必要的循环，避免重复
+                for (int _p = _syncIndex; _p < _transDic.Count; _p++)
+                {
+                    var _trans = _transDic.ElementAt(_p);
+                    if (_isAppend == true) break;
+                    if (_trans.Key == _src.Key) _resultBuilder.Append($"{_src.Key}{_src.Value},{_trans.Value}\n");
+                    else
+                    {
+                        _resultBuilder.Append($"{_src.Key}{_src.Value}\n");
+                        _resultBuilder.Append($"{_trans.Key}{_trans.Value}\n");
+                    }
+                    _isAppend = true;
+                    _syncIndex++;
+                }
             }
 
             return _resultBuilder.ToString();
