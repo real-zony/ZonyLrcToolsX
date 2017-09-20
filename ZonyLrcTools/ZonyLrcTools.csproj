@@ -49,6 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ISettingManager.cs" />
+    <Compile Include="Common\PluginStatusModel.cs" />
+    <Compile Include="Common\SettingManager.cs" />
+    <Compile Include="Common\SettingModel.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>

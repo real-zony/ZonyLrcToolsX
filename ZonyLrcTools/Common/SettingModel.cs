@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ZonyLrcTools.Common
+{
+    [Serializable]
+    public sealed class SettingModel
+    {
+        /// <summary>
+        /// 编码方式
+        /// </summary>
+        public string EncodingName { get; set; }
+        /// <summary>
+        /// 下载线程数量
+        /// </summary>
+        public string DownloadThreadNumber { get; set; }
+        /// <summary>
+        /// 是否忽略已存在歌词的文件
+        /// </summary>
+        public bool IsIgnoreExitsFile { get; set; }
+        /// <summary>
+        /// 搜索的扩展名集合
+        /// </summary>
+        public List<string> ExtensionsName { get; set; }
+        /// <summary>
+        /// 是否检测更新
+        /// </summary>
+        public bool IsCheckUpdate { get; set; }
+        /// <summary>
+        /// 插件状态
+        /// </summary>
+        public List<PluginStatusModel> PluginStatuses;
+    }
+}

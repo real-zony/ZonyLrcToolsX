@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Zony.Lib.Net;
 using Zony.Lib.Plugin.Attributes;
@@ -19,8 +20,8 @@ namespace Zony.Lib.NetEase.Plugin
         {
             var _param = buildParameters(songName, artistName);
             var _json = getLyricJsonObject(_param);
-            var _sourceLyric = getSourceLyric(_json);
-            var _translateLyric = getTranslateLyric(_json);
+            var _sourceLyric = getSourceLyric(_json.Item1);
+            var _translateLyric = getTranslateLyric(_json.Item2);
             var _result = buildLyricText(_sourceLyric, _translateLyric);
 
             data = Encoding.UTF8.GetBytes(_result);
@@ -46,7 +47,7 @@ namespace Zony.Lib.NetEase.Plugin
         /// </summary>
         /// <param name="postParam">提交访问的参数</param>
         /// <returns>返回的JSON对象</returns>
-        private JObject getLyricJsonObject(object postParam)
+        private (JObject, JObject) getLyricJsonObject(object postParam)
         {
             var _result = m_netUtils.Post(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
             if (string.IsNullOrWhiteSpace(_result)) throw new NullReferenceException("在getLyricJsonObject当中无法获得请求的资源,_result");
@@ -71,7 +72,7 @@ namespace Zony.Lib.NetEase.Plugin
             var _jsonObject = JObject.Parse(_lyric);
             if (!jObjectIsContainsProperty(_jsonObject, "lrc")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
 
-            return _jsonObject["lrc"] as JObject;
+            return (_jsonObject["lrc"] as JObject, _jsonObject);
         }
 
         /// <summary>
@@ -144,20 +145,26 @@ namespace Zony.Lib.NetEase.Plugin
         /// <returns>构建完毕的歌词数据</returns>
         private string buildLyricText(string srcLyric, string transLyric)
         {
+            if (transLyric == string.Empty) return srcLyric;
             Dictionary<string, string> _srcDic = new Dictionary<string, string>();
             Dictionary<string, string> _transDic = new Dictionary<string, string>();
+            StringBuilder _resultBuilder = new StringBuilder();
 
             // 键值对获取方法
             Dictionary<string, string> generateKey_Value(string lyric)
             {
-                var _regex = new Regex(@"\[\d+:\d+.\d+\]");
+                var _regex = new Regex(@"\[\d+:\d+.\d+\].+");
                 var _matches = _regex.Matches(lyric);
                 var _dict = new Dictionary<string, string>();
 
                 foreach (var _match in _matches)
                 {
                     var _value = _match.ToString();
-
+                    // 切割歌词，分隔时间轴与歌词内容
+                    int _pos = _value.IndexOf(']') + 1;
+                    string _timeline = _value.Substring(0, _pos);
+                    string _lyricText = _value.Substring(_pos, _value.Length - _pos);
+                    _dict.Add(_timeline, _lyricText);
                 }
 
                 return _dict;
@@ -167,10 +174,16 @@ namespace Zony.Lib.NetEase.Plugin
             _srcDic = generateKey_Value(srcLyric);
             _transDic = generateKey_Value(transLyric);
 
-            // 合并时间轴与歌词数据
+            // 合并时间轴与歌词数据，以原始歌词为基准
+            foreach (var _src in _srcDic)
+            {
+                var _trans = _transDic.Keys.Where(key => key == _src.Key).FirstOrDefault();
 
+                if (_trans != null) _resultBuilder.Append($"{_src.Key}{_src.Value},{_transDic[_trans]}\n");
+                else _resultBuilder.Append($"{_trans}{_transDic[_trans]}\n");
+            }
 
-            return null;
+            return _resultBuilder.ToString();
         }
     }
 }

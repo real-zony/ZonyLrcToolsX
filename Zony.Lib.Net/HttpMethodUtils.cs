@@ -103,7 +103,7 @@ namespace Zony.Lib.Net
 
             foreach (var _byte in _bytes)
             {
-                _builder.Append(_byte.ToString("x2")).Append('%');
+                _builder.Append('%').Append(_byte.ToString("x2"));
             }
 
             return _builder.ToString().TrimEnd('%');
