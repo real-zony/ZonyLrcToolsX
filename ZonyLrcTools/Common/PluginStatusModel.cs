@@ -13,5 +13,9 @@ namespace ZonyLrcTools.Common
         /// 是否启用
         /// </summary>
         public bool IsEnabled { get; set; }
+        /// <summary>
+        /// 下载优先级
+        /// </summary>
+        public int PriorityLevel { get; set; }
     }
 }

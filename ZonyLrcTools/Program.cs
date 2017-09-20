@@ -14,7 +14,7 @@ namespace ZonyLrcTools
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_Startup());
+            Application.Run(new From_PluginManager());
         }
     }
 }
