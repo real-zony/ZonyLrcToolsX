@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using ZonyLrcTools.Forms;
+using Castle.Windsor;
 
 namespace ZonyLrcTools
 {
@@ -12,9 +13,16 @@ namespace ZonyLrcTools
         [STAThread]
         static void Main()
         {
+            bootStarpper();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new From_PluginManager());
+        }
+
+        private static void bootStarpper()
+        {
+            IWindsorContainer _container = new WindsorContainer();
         }
     }
 }
