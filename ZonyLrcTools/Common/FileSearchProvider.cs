@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ZonyLrcTools.Common
 {
@@ -15,10 +16,14 @@ namespace ZonyLrcTools.Common
             m_settingManager = settingManager;
         }
 
-        public async List<string> FindFiles()
+        public async List<string> FindFiles(string directoryPath)
         {
             await Task.Run(() =>
             {
+                var _result = new List<string>();
+
+
+
                 return new List<string>();
             });
         }
