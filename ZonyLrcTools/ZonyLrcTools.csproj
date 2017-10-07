@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\FileSearchProvider.cs" />
+    <Compile Include="Common\ISearchProvider.cs" />
     <Compile Include="Common\ISettingManager.cs" />
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\SettingManager.cs" />

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace ZonyLrcTools.Common
 {
-    public class FileSearchProvider
+    public class FileSearchProvider : ISearchProvider
     {
         private readonly ISettingManager m_settingManager;
 
@@ -18,14 +14,15 @@ namespace ZonyLrcTools.Common
 
         public async List<string> FindFiles(string directoryPath)
         {
-            await Task.Run(() =>
+            return await Task.Run<List<string>>(() =>
             {
-                var _result = new List<string>();
-
-
-
                 return new List<string>();
             });
+        }
+
+        public Task<List<string>> FindFilesAsync(string diretcoryPath)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
