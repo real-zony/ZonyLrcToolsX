@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools", "ZonyLrcTools\ZonyLrcTools.csproj", "{B84F4450-C20E-4F11-8152-7A95BEF4F5E0}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A7A13205-3F16-4F21-BEBD-6CBF74B1FC95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.UITest", "Zony.UITest\Zony.UITest.csproj", "{465DC662-1C6A-4B3A-AFC4-1A87AC01B369}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.Infrastructures", "..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj", "{2716DF9F-443C-42DD-9454-18FF1A80AEC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{465DC662-1C6A-4B3A-AFC4-1A87AC01B369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{465DC662-1C6A-4B3A-AFC4-1A87AC01B369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{465DC662-1C6A-4B3A-AFC4-1A87AC01B369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2716DF9F-443C-42DD-9454-18FF1A80AEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2716DF9F-443C-42DD-9454-18FF1A80AEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2716DF9F-443C-42DD-9454-18FF1A80AEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2716DF9F-443C-42DD-9454-18FF1A80AEC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,17 +12,18 @@ namespace ZonyLrcTools.Common
             m_settingManager = settingManager;
         }
 
-        public async List<string> FindFiles(string directoryPath)
+        public List<string> FindFiles(string directoryPath)
         {
-            return await Task.Run<List<string>>(() =>
+            return null;
+        }
+
+        public async Task<List<string>> FindFilesAsync(string diretcoryPath)
+        {
+
+            return await Task.Run(() =>
             {
                 return new List<string>();
             });
-        }
-
-        public Task<List<string>> FindFilesAsync(string diretcoryPath)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
