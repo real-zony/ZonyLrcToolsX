@@ -32,7 +32,7 @@ namespace ZonyLrcTools.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
-            this.listView1 = new ZonyLrcTools.UIComponent.ListViewNF();
+            this.listView_SongItems = new ZonyLrcTools.UIComponent.ListViewNF();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -44,44 +44,44 @@ namespace ZonyLrcTools.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_AlbumImg = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.button_SearchFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.button_DownloadLyric = new System.Windows.Forms.ToolStripButton();
+            this.button_DownloadAlbumImage = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.button_Setting = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+            this.button_About = new System.Windows.Forms.ToolStripButton();
+            this.button_Donate = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
+            // listView_SongItems
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listView_SongItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.listView1.Location = new System.Drawing.Point(14, 31);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(432, 310);
-            this.listView1.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.listView1, "110");
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView_SongItems.Location = new System.Drawing.Point(14, 31);
+            this.listView_SongItems.Name = "listView_SongItems";
+            this.listView_SongItems.Size = new System.Drawing.Size(432, 310);
+            this.listView_SongItems.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.listView_SongItems, "110");
+            this.listView_SongItems.UseCompatibleStateImageBehavior = false;
+            this.listView_SongItems.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -113,7 +113,7 @@ namespace ZonyLrcTools.Forms
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.pictureBox_AlbumImg);
             this.groupBox1.Location = new System.Drawing.Point(452, 25);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(219, 316);
@@ -169,15 +169,15 @@ namespace ZonyLrcTools.Forms
             this.label1.TabIndex = 1;
             this.label1.Text = "标题:";
             // 
-            // pictureBox1
+            // pictureBox_AlbumImg
             // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(9, 22);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(200, 200);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBox1, "123");
+            this.pictureBox_AlbumImg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_AlbumImg.Location = new System.Drawing.Point(9, 22);
+            this.pictureBox_AlbumImg.Name = "pictureBox_AlbumImg";
+            this.pictureBox_AlbumImg.Size = new System.Drawing.Size(200, 200);
+            this.pictureBox_AlbumImg.TabIndex = 0;
+            this.pictureBox_AlbumImg.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBox_AlbumImg, "123");
             // 
             // statusStrip1
             // 
@@ -206,83 +206,83 @@ namespace ZonyLrcTools.Forms
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton3,
+            this.button_SearchFile,
             this.toolStripSeparator1,
-            this.toolStripButton1,
-            this.toolStripButton2,
+            this.button_DownloadLyric,
+            this.button_DownloadAlbumImage,
             this.toolStripSeparator2,
-            this.toolStripButton4,
+            this.button_Setting,
             this.toolStripSeparator3,
-            this.toolStripButton5,
-            this.toolStripButton6});
+            this.button_About,
+            this.button_Donate});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(680, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton3
+            // button_SearchFile
             // 
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(79, 22);
-            this.toolStripButton3.Text = "扫描歌曲";
+            this.button_SearchFile.Image = ((System.Drawing.Image)(resources.GetObject("button_SearchFile.Image")));
+            this.button_SearchFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_SearchFile.Name = "button_SearchFile";
+            this.button_SearchFile.Size = new System.Drawing.Size(79, 22);
+            this.button_SearchFile.Text = "扫描歌曲";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton1
+            // button_DownloadLyric
             // 
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(79, 22);
-            this.toolStripButton1.Text = "下载歌词";
+            this.button_DownloadLyric.Image = ((System.Drawing.Image)(resources.GetObject("button_DownloadLyric.Image")));
+            this.button_DownloadLyric.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_DownloadLyric.Name = "button_DownloadLyric";
+            this.button_DownloadLyric.Size = new System.Drawing.Size(79, 22);
+            this.button_DownloadLyric.Text = "下载歌词";
             // 
-            // toolStripButton2
+            // button_DownloadAlbumImage
             // 
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(105, 22);
-            this.toolStripButton2.Text = "下载专辑图像";
+            this.button_DownloadAlbumImage.Image = ((System.Drawing.Image)(resources.GetObject("button_DownloadAlbumImage.Image")));
+            this.button_DownloadAlbumImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_DownloadAlbumImage.Name = "button_DownloadAlbumImage";
+            this.button_DownloadAlbumImage.Size = new System.Drawing.Size(105, 22);
+            this.button_DownloadAlbumImage.Text = "下载专辑图像";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton4
+            // button_Setting
             // 
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(53, 22);
-            this.toolStripButton4.Text = "设置";
+            this.button_Setting.Image = ((System.Drawing.Image)(resources.GetObject("button_Setting.Image")));
+            this.button_Setting.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_Setting.Name = "button_Setting";
+            this.button_Setting.Size = new System.Drawing.Size(53, 22);
+            this.button_Setting.Text = "设置";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton5
+            // button_About
             // 
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(53, 22);
-            this.toolStripButton5.Text = "帮助";
+            this.button_About.Image = ((System.Drawing.Image)(resources.GetObject("button_About.Image")));
+            this.button_About.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_About.Name = "button_About";
+            this.button_About.Size = new System.Drawing.Size(53, 22);
+            this.button_About.Text = "帮助";
             // 
-            // toolStripButton6
+            // button_Donate
             // 
-            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
-            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(53, 22);
-            this.toolStripButton6.Text = "捐赠";
+            this.button_Donate.Image = ((System.Drawing.Image)(resources.GetObject("button_Donate.Image")));
+            this.button_Donate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_Donate.Name = "button_Donate";
+            this.button_Donate.Size = new System.Drawing.Size(53, 22);
+            this.button_Donate.Text = "捐赠";
             // 
             // Form_Startup
             // 
@@ -292,7 +292,7 @@ namespace ZonyLrcTools.Forms
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listView_SongItems);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "Form_Startup";
@@ -301,7 +301,7 @@ namespace ZonyLrcTools.Forms
             this.Load += new System.EventHandler(this.Form_Startup_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -313,7 +313,7 @@ namespace ZonyLrcTools.Forms
 
         #endregion
 
-        private ListViewNF listView1;
+        private ListViewNF listView_SongItems;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
@@ -321,18 +321,18 @@ namespace ZonyLrcTools.Forms
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton button_DownloadLyric;
+        private System.Windows.Forms.ToolStripButton button_DownloadAlbumImage;
+        private System.Windows.Forms.ToolStripButton button_SearchFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.ToolStripButton button_Setting;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripButton5;
-        private System.Windows.Forms.ToolStripButton toolStripButton6;
+        private System.Windows.Forms.ToolStripButton button_About;
+        private System.Windows.Forms.ToolStripButton button_Donate;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox_AlbumImg;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
