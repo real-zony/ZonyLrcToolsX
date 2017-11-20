@@ -17,7 +17,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.UITest", "Zony.UITest\Zony.UITest.csproj", "{465DC662-1C6A-4B3A-AFC4-1A87AC01B369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.Infrastructures", "..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj", "{2716DF9F-443C-42DD-9454-18FF1A80AEC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.Infrastructures", "Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj", "{2716DF9F-443C-42DD-9454-18FF1A80AEC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
