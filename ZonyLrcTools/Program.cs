@@ -17,7 +17,7 @@ namespace ZonyLrcTools
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new From_PluginManager());
+            Application.Run(new Form_Startup());
         }
 
         private static void bootStarpper()

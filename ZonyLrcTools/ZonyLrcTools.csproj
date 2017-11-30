@@ -56,12 +56,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\FileSearchProvider.cs" />
+    <Compile Include="Common\GlobalContext.cs" />
     <Compile Include="Common\ISearchProvider.cs" />
     <Compile Include="Common\ISettingManager.cs" />
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\SettingManager.cs" />
     <Compile Include="Common\SettingModel.cs" />
-    <Compile Include="EventsMethod\SearchFileEvent.cs" />
+    <Compile Include="Dependency\ConventionalRegistrationConfig.cs" />
+    <Compile Include="Dependency\ConventionalRegistrationContext.cs" />
+    <Compile Include="Dependency\DependencyLifeStyle.cs" />
+    <Compile Include="Dependency\IConventionalDependencyRegistrar.cs" />
+    <Compile Include="Dependency\IConventionalRegistrationContext.cs" />
+    <Compile Include="Dependency\IIocManager.cs" />
+    <Compile Include="Dependency\IIocRegistrar.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>

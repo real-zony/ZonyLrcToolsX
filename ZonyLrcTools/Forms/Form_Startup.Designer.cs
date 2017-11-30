@@ -32,11 +32,6 @@ namespace ZonyLrcTools.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
-            this.listView_SongItems = new ZonyLrcTools.UIComponent.ListViewNF();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -52,6 +47,7 @@ namespace ZonyLrcTools.Forms
             this.button_SearchFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.button_DownloadLyric = new System.Windows.Forms.ToolStripButton();
+            this.button_StopDownload = new System.Windows.Forms.ToolStripButton();
             this.button_DownloadAlbumImage = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.button_Setting = new System.Windows.Forms.ToolStripButton();
@@ -59,49 +55,16 @@ namespace ZonyLrcTools.Forms
             this.button_About = new System.Windows.Forms.ToolStripButton();
             this.button_Donate = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.listView_SongItems = new ZonyLrcTools.UIComponent.ListViewNF();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // listView_SongItems
-            // 
-            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView_SongItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
-            this.listView_SongItems.Location = new System.Drawing.Point(14, 31);
-            this.listView_SongItems.Name = "listView_SongItems";
-            this.listView_SongItems.Size = new System.Drawing.Size(432, 310);
-            this.listView_SongItems.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.listView_SongItems, "110");
-            this.listView_SongItems.UseCompatibleStateImageBehavior = false;
-            this.listView_SongItems.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "标题";
-            this.columnHeader1.Width = 164;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "歌手/艺术家";
-            this.columnHeader2.Width = 103;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "专辑/唱片集";
-            this.columnHeader3.Width = 88;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "状态";
-            this.columnHeader4.Width = 65;
             // 
             // groupBox1
             // 
@@ -209,6 +172,7 @@ namespace ZonyLrcTools.Forms
             this.button_SearchFile,
             this.toolStripSeparator1,
             this.button_DownloadLyric,
+            this.button_StopDownload,
             this.button_DownloadAlbumImage,
             this.toolStripSeparator2,
             this.button_Setting,
@@ -228,6 +192,7 @@ namespace ZonyLrcTools.Forms
             this.button_SearchFile.Name = "button_SearchFile";
             this.button_SearchFile.Size = new System.Drawing.Size(79, 22);
             this.button_SearchFile.Text = "扫描歌曲";
+            this.button_SearchFile.Click += new System.EventHandler(this.button_SearchFile_Click);
             // 
             // toolStripSeparator1
             // 
@@ -241,6 +206,15 @@ namespace ZonyLrcTools.Forms
             this.button_DownloadLyric.Name = "button_DownloadLyric";
             this.button_DownloadLyric.Size = new System.Drawing.Size(79, 22);
             this.button_DownloadLyric.Text = "下载歌词";
+            this.button_DownloadLyric.Click += new System.EventHandler(this.button_DownloadLyric_Click);
+            // 
+            // button_StopDownload
+            // 
+            this.button_StopDownload.Image = ((System.Drawing.Image)(resources.GetObject("button_StopDownload.Image")));
+            this.button_StopDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_StopDownload.Name = "button_StopDownload";
+            this.button_StopDownload.Size = new System.Drawing.Size(79, 22);
+            this.button_StopDownload.Text = "停止下载";
             // 
             // button_DownloadAlbumImage
             // 
@@ -284,6 +258,44 @@ namespace ZonyLrcTools.Forms
             this.button_Donate.Size = new System.Drawing.Size(53, 22);
             this.button_Donate.Text = "捐赠";
             // 
+            // listView_SongItems
+            // 
+            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView_SongItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.listView_SongItems.Location = new System.Drawing.Point(14, 31);
+            this.listView_SongItems.Name = "listView_SongItems";
+            this.listView_SongItems.Size = new System.Drawing.Size(432, 310);
+            this.listView_SongItems.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.listView_SongItems, "110");
+            this.listView_SongItems.UseCompatibleStateImageBehavior = false;
+            this.listView_SongItems.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "标题";
+            this.columnHeader1.Width = 164;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "歌手/艺术家";
+            this.columnHeader2.Width = 103;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "专辑/唱片集";
+            this.columnHeader3.Width = 88;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "状态";
+            this.columnHeader4.Width = 65;
+            // 
             // Form_Startup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -293,8 +305,6 @@ namespace ZonyLrcTools.Forms
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.listView_SongItems);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
             this.Name = "Form_Startup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form_Startup";
@@ -340,5 +350,6 @@ namespace ZonyLrcTools.Forms
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripButton button_StopDownload;
     }
 }
