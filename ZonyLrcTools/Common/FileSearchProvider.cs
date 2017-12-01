@@ -14,7 +14,7 @@ namespace ZonyLrcTools.Common
 
         public List<string> FindFiles(string directoryPath)
         {
-            return null;
+            return new List<string>() { "xxxx" };
         }
 
         public async Task<List<string>> FindFilesAsync(string diretcoryPath)

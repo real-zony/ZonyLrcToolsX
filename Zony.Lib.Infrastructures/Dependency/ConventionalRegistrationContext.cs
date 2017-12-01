@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ZonyLrcTools.Dependency
+namespace Zony.Lib.Infrastructures.Dependency
 {
     public class ConventionalRegistrationContext : IConventionalRegistrationContext
     {

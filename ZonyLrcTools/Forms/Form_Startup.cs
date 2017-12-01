@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Dependency;
 using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Forms
 {
-    public partial class Form_Startup : Form
+    public partial class Form_Startup : Form, ITransientDependency
     {
         private readonly ISearchProvider m_searchProvider;
 

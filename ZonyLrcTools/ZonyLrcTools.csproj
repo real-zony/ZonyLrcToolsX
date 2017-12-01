@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ZonyLrcTools</RootNamespace>
     <AssemblyName>ZonyLrcTools</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,15 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.1.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.1.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Windsor.4.0.0\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -62,13 +54,6 @@
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\SettingManager.cs" />
     <Compile Include="Common\SettingModel.cs" />
-    <Compile Include="Dependency\ConventionalRegistrationConfig.cs" />
-    <Compile Include="Dependency\ConventionalRegistrationContext.cs" />
-    <Compile Include="Dependency\DependencyLifeStyle.cs" />
-    <Compile Include="Dependency\IConventionalDependencyRegistrar.cs" />
-    <Compile Include="Dependency\IConventionalRegistrationContext.cs" />
-    <Compile Include="Dependency\IIocManager.cs" />
-    <Compile Include="Dependency\IIocRegistrar.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,8 +104,8 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -134,6 +119,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dependency\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
+      <Project>{2716DF9F-443C-42DD-9454-18FF1A80AEC4}</Project>
+      <Name>Zony.Lib.Infrastructures</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

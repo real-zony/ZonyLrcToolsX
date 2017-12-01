@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Dependency
+﻿namespace Zony.Lib.Infrastructures.Dependency
 {
     public interface IConventionalDependencyRegistrar
     {

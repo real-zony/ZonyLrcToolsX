@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Dependency;
 using ZonyLrcTools.Forms;
-using Castle.Windsor;
 
 namespace ZonyLrcTools
 {
@@ -17,12 +18,16 @@ namespace ZonyLrcTools
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_Startup());
+            Application.Run(IocManager.Instance.Resolve<Form_Startup>());
         }
 
         private static void bootStarpper()
         {
-            IWindsorContainer _container = new WindsorContainer();
+            IocManager.Instance.AddConventionalRegistrar(new BasicConventionalRegistrar());
+            IocManager.Instance.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly(), new ConventionalRegistrationConfig()
+            {
+                InstallInstallers = false
+            });
         }
     }
 }
