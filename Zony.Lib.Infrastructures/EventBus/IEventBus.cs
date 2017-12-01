@@ -7,7 +7,7 @@ namespace Zony.Lib.Infrastructures.EventBus
 {
     public interface IEventBus
     {
-        #region 注册
+        #region > 注册 <
         IDisposable Register<TEventData>(Action<TEventData> action) where TEventData : IEventData;
         IDisposable Register<TEventData>(IEventHandler<TEventData> handler) where TEventData : IEventData;
         IDisposable Register<TEventData, THandler>() where TEventData : IEventData where THandler : IEventHandler<TEventData>, new();
@@ -16,7 +16,7 @@ namespace Zony.Lib.Infrastructures.EventBus
         IDisposable Register(Type eventType, IEventHandlerFactory handlerFactory);
         #endregion
 
-        #region 取消注册
+        #region > 取消注册 <
         void Unregister<TEventData>(Action<TEventData> action) where TEventData : IEventData;
         void Unregister<TEventData>(IEventHandler<TEventData> handler) where TEventData : IEventData;
         void Unregister(Type eventType, IEventHandler handler);
@@ -26,7 +26,7 @@ namespace Zony.Lib.Infrastructures.EventBus
         void UnregisterAll(Type eventType);
         #endregion
 
-        #region 触发器
+        #region > 触发器 <
         void Trigger<TEventData>() where TEventData : IEventData;
         void Trigger<TEventData>(TEventData eventData) where TEventData : IEventData;
         void Trigger<TEventData>(object eventSource, TEventData eventData) where TEventData : IEventData;

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ZonyLrcTools.Forms
 {
-    public partial class From_Donate : Form
+    public partial class Form_Donate : Form
     {
-        public From_Donate()
+        public Form_Donate()
         {
             InitializeComponent();
         }

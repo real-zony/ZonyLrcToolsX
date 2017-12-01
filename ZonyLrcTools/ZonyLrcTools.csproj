@@ -61,23 +61,23 @@
     <Compile Include="Forms\Form_Startup.Designer.cs">
       <DependentUpon>Form_Startup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\From_Donate.cs">
+    <Compile Include="Forms\Form_Donate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\From_Donate.Designer.cs">
-      <DependentUpon>From_Donate.cs</DependentUpon>
+    <Compile Include="Forms\Form_Donate.Designer.cs">
+      <DependentUpon>Form_Donate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\From_PluginManager.cs">
+    <Compile Include="Forms\Form_PluginManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\From_PluginManager.Designer.cs">
-      <DependentUpon>From_PluginManager.cs</DependentUpon>
+    <Compile Include="Forms\Form_PluginManager.Designer.cs">
+      <DependentUpon>Form_PluginManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\From_Setting.cs">
+    <Compile Include="Forms\Form_Setting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\From_Setting.Designer.cs">
-      <DependentUpon>From_Setting.cs</DependentUpon>
+    <Compile Include="Forms\Form_Setting.Designer.cs">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
     </Compile>
     <Compile Include="Plugins\IPluginsManager.cs" />
     <Compile Include="Program.cs" />
@@ -88,14 +88,14 @@
     <EmbeddedResource Include="Forms\Form_Startup.resx">
       <DependentUpon>Form_Startup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\From_Donate.resx">
-      <DependentUpon>From_Donate.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_Donate.resx">
+      <DependentUpon>Form_Donate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\From_PluginManager.resx">
-      <DependentUpon>From_PluginManager.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_PluginManager.resx">
+      <DependentUpon>Form_PluginManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\From_Setting.resx">
-      <DependentUpon>From_Setting.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_Setting.resx">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,6 +1,6 @@
 ﻿namespace ZonyLrcTools.Forms
 {
-    partial class From_Setting
+    partial class Form_Setting
     {
         /// <summary>
         /// Required designer variable.

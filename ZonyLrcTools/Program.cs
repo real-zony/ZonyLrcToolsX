@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
+using Zony.Lib.Infrastructures.EventBus;
 using ZonyLrcTools.Forms;
 
 namespace ZonyLrcTools
@@ -23,6 +24,7 @@ namespace ZonyLrcTools
 
         private static void bootStarpper()
         {
+            EventBus.Init();
             IocManager.Instance.AddConventionalRegistrar(new BasicConventionalRegistrar());
             IocManager.Instance.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly(), new ConventionalRegistrationConfig()
             {

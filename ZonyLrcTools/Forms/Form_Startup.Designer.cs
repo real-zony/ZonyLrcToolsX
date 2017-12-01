@@ -60,6 +60,7 @@ namespace ZonyLrcTools.Forms
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.button_PluginsManager = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -175,6 +176,7 @@ namespace ZonyLrcTools.Forms
             this.button_StopDownload,
             this.button_DownloadAlbumImage,
             this.toolStripSeparator2,
+            this.button_PluginsManager,
             this.button_Setting,
             this.toolStripSeparator3,
             this.button_About,
@@ -294,6 +296,14 @@ namespace ZonyLrcTools.Forms
             this.columnHeader4.Text = "状态";
             this.columnHeader4.Width = 65;
             // 
+            // button_PluginsManager
+            // 
+            this.button_PluginsManager.Image = ((System.Drawing.Image)(resources.GetObject("button_PluginsManager.Image")));
+            this.button_PluginsManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_PluginsManager.Name = "button_PluginsManager";
+            this.button_PluginsManager.Size = new System.Drawing.Size(79, 22);
+            this.button_PluginsManager.Text = "插件管理";
+            // 
             // Form_Startup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -349,5 +359,6 @@ namespace ZonyLrcTools.Forms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripButton button_StopDownload;
+        private System.Windows.Forms.ToolStripButton button_PluginsManager;
     }
 }

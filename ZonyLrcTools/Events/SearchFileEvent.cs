@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
 {
-    public class ISearchFileEventData : EventData
-    {
+    public class ISearchFileEventData : EventData { }
 
-    }
-
-    public class SearchFileEvent : IEventHandler<ISearchFileEventData>
+    public class SearchFileEvent : IEventHandler<ISearchFileEventData>,ITransientDependency
     {
         private readonly ISearchProvider m_searchProvider;
         public SearchFileEvent(ISearchProvider searchProvider)

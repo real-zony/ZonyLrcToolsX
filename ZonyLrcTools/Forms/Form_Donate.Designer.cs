@@ -1,6 +1,6 @@
 ﻿namespace ZonyLrcTools.Forms
 {
-    partial class From_Donate
+    partial class Form_Donate
     {
         /// <summary>
         /// Required designer variable.
