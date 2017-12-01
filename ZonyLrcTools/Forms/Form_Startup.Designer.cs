@@ -192,7 +192,6 @@ namespace ZonyLrcTools.Forms
             this.button_SearchFile.Name = "button_SearchFile";
             this.button_SearchFile.Size = new System.Drawing.Size(79, 22);
             this.button_SearchFile.Text = "扫描歌曲";
-            this.button_SearchFile.Click += new System.EventHandler(this.button_SearchFile_Click);
             // 
             // toolStripSeparator1
             // 
@@ -206,7 +205,6 @@ namespace ZonyLrcTools.Forms
             this.button_DownloadLyric.Name = "button_DownloadLyric";
             this.button_DownloadLyric.Size = new System.Drawing.Size(79, 22);
             this.button_DownloadLyric.Text = "下载歌词";
-            this.button_DownloadLyric.Click += new System.EventHandler(this.button_DownloadLyric_Click);
             // 
             // button_StopDownload
             // 

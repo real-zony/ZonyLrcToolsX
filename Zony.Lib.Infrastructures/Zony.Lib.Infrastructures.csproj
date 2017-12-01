@@ -61,6 +61,14 @@
     <Compile Include="Dependency\IIocResolver.cs" />
     <Compile Include="Dependency\IocManager.cs" />
     <Compile Include="EventBus\EventBus.cs" />
+    <Compile Include="EventBus\EventData.cs" />
+    <Compile Include="EventBus\Factories\IEventHandlerFactory.cs" />
+    <Compile Include="EventBus\Factories\Internals\TransientEventHandlerFactory.cs" />
+    <Compile Include="EventBus\Handlers\IEventHandler.cs" />
+    <Compile Include="EventBus\Handlers\IEventHandlerOfTEventData.cs" />
+    <Compile Include="EventBus\Handlers\Internals\ActionEventHandler.cs" />
+    <Compile Include="EventBus\IEventBus.cs" />
+    <Compile Include="EventBus\IEventData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

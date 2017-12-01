@@ -54,6 +54,7 @@
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\SettingManager.cs" />
     <Compile Include="Common\SettingModel.cs" />
+    <Compile Include="Events\SearchFileEvent.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,9 +120,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dependency\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
       <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>

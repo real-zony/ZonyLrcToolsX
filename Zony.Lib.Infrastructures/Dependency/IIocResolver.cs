@@ -37,8 +37,20 @@ namespace Zony.Lib.Infrastructures.Dependency
         T[] ResolveAll<T>(object argumentsAsAnonymousType);
         object[] ResolveAll(Type type);
         object[] ResolveAll(Type type, object argumentsAsAnonymousType);
+        /// <summary>
+        /// 从依赖容器当中释放对象
+        /// </summary>
+        /// <param name="obj">需要释放的对象实例</param>
         void Release(object obj);
+        /// <summary>
+        /// 检测某种类型是否被注入到了依赖容器当中
+        /// </summary>
+        /// <param name="type">需要检测的类型</param>
         bool IsRegistered(Type type);
+        /// <summary>
+        /// 检测某种类型是否被注入到了依赖容器当中
+        /// </summary>
+        /// <typeparam name="T">需要检测的类型</typeparam>
         bool IsRegistered<T>();
     }
 }
