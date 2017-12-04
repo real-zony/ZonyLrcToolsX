@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AppConsts.cs" />
+    <Compile Include="Common\Exceptions\FileSearchException.cs" />
     <Compile Include="Common\FileSearchProvider.cs" />
     <Compile Include="Common\GlobalContext.cs" />
     <Compile Include="Common\ISearchProvider.cs" />

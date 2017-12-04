@@ -59,14 +59,15 @@
             // 
             this.columnHeader3.Text = "优先级";
             // 
-            // From_PluginManager
+            // Form_PluginManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 463);
             this.Controls.Add(this.listView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "From_PluginManager";
+            this.Name = "Form_PluginManager";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "From_PluginManager";
             this.Load += new System.EventHandler(this.From_PluginManager_Load);
             this.ResumeLayout(false);

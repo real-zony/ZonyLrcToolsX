@@ -4,20 +4,25 @@ using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using ZonyLrcTools.Common;
+using System.Text;
+using System.Linq;
 
 namespace ZonyLrcTools.Events
 {
     public class ISearchFileEventData : EventData { }
 
-    public class SearchFileEvent : IEventHandler<ISearchFileEventData>,ITransientDependency
+    public class SearchFileEvent : IEventHandler<ISearchFileEventData>, ITransientDependency
     {
         private readonly ISearchProvider m_searchProvider;
-        public SearchFileEvent(ISearchProvider searchProvider)
+        private readonly ISettingManager m_settingManager;
+
+        public SearchFileEvent(ISearchProvider searchProvider, ISettingManager settingManager)
         {
             m_searchProvider = searchProvider;
+            m_settingManager = settingManager;
         }
 
-        public void HandleEvent(ISearchFileEventData eventData)
+        public async void HandleEvent(ISearchFileEventData eventData)
         {
             FolderBrowserDialog _dlg = new FolderBrowserDialog()
             {
@@ -26,8 +31,26 @@ namespace ZonyLrcTools.Events
 
             if (_dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(_dlg.SelectedPath))
             {
-                List<string> _files = m_searchProvider.FindFiles(_dlg.SelectedPath);
+                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.txt" });
+
+                if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show(BuildSuccessMsg(_files));
             }
+        }
+
+        private string BuildSuccessMsg(Dictionary<string, List<string>> files)
+        {
+            StringBuilder _builder = new StringBuilder();
+            _builder.Append($"文件查找完成，共搜索到音乐文件 {files.Sum(x => x.Value.Count)} 个。\n");
+            _builder.Append($"--------------------\n");
+
+            foreach (var item in files)
+            {
+                _builder.Append($"{item.Key}:{item.Value.Count} 个\n");
+            }
+
+            return _builder.ToString();
         }
     }
 }

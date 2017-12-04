@@ -13,7 +13,6 @@ namespace ZonyLrcTools.Forms
 
         private void From_PluginManager_Load(object sender, EventArgs e)
         {
-            listView1.Controls.Add(new TextBox());
         }
     }
 }

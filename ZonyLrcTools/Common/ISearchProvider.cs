@@ -6,7 +6,7 @@ namespace ZonyLrcTools.Common
 {
     public interface ISearchProvider : ITransientDependency
     {
-        List<string> FindFiles(string directoryPath);
-        Task<List<string>> FindFilesAsync(string diretcoryPath);
+        Dictionary<string, List<string>> FindFiles(string directoryPath, IEnumerable<string> extensions);
+        Task<Dictionary<string, List<string>>> FindFilesAsync(string directoryPath, IEnumerable<string> extensions);
     }
 }

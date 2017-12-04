@@ -25,6 +25,10 @@ namespace Zony.Lib.Infrastructures.EventBus
 
         public EventBus()
         {
+            /*
+             * 工厂结构
+             * EventType->List<>
+             */
             _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         }
 
@@ -191,7 +195,7 @@ namespace Zony.Lib.Infrastructures.EventBus
 
         private void TriggerHandlingException(Type eventType, object eventSource, IEventData eventData, List<Exception> exceptions)
         {
-            if(eventData!= null) eventData.EventSource = eventSource;
+            if (eventData != null) eventData.EventSource = eventSource;
 
             foreach (var _handlerFactories in GetHandlerFactories(eventType))
             {
