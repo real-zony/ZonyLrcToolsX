@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Zony.Lib.Plugin.Models
+﻿namespace Zony.Lib.Plugin.Models
 {
     /// <summary>
     /// 歌曲信息模型
@@ -31,6 +25,10 @@ namespace Zony.Lib.Plugin.Models
         /// 文件扩展名
         /// </summary>
         public string Extensions { get; set; }
+        /// <summary>
+        /// 歌曲标签类型
+        /// </summary>
+        public string TagType { get; set; }
 
         /// <summary>
         /// 是否下载成功
