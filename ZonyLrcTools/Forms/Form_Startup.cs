@@ -12,23 +12,25 @@ namespace ZonyLrcTools.Forms
         public Form_Startup()
         {
             InitializeComponent();
-            BindEvent();
-
         }
 
         private void Form_Startup_Load(object sender, EventArgs e)
         {
-
+            BindUIClickEvent();
+            BindUIClickEvent();
         }
 
-        private void BindEvent()
+        private void BindUIClickEvent()
         {
             button_SearchFile.Click += delegate { EventBus.Default.Trigger<ISearchFileEventData>(); };
             button_DownloadLyric.Click += delegate { EventBus.Default.Trigger<EventData>(); };
+        }
 
-            // UI
+        private void BindButtonEvent()
+        {
             button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().Show(); };
             button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManager>().Show(); };
+            button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
         }
     }
 }
