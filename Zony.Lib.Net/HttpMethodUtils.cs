@@ -24,7 +24,7 @@ namespace Zony.Lib.Net
             var _req = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{url}{parametersBuildForm(parameters)}")
+                RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
             };
 
             if (referer != null) _req.Headers.Referrer = new Uri(referer);
@@ -56,8 +56,8 @@ namespace Zony.Lib.Net
 
             if (referer != null) _req.Headers.Referrer = new Uri(referer);
             // 请求内容构造
-            if (mediaTypeValue == "application/json") _postData = parametersBuildJson(parameters);
-            else _postData = parametersBuildForm(parameters);
+            if (mediaTypeValue == "application/json") _postData = BaseJsonBuildParameters(parameters);
+            else _postData = BaseFormBuildParameters(parameters);
             _req.Content = new StringContent(_postData);
             if (mediaTypeValue != null) _req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
 
@@ -109,7 +109,11 @@ namespace Zony.Lib.Net
             return _builder.ToString().TrimEnd('%');
         }
 
-        private string parametersBuildForm(object parameters)
+        /// <summary>
+        /// 基于 QueryString 形式构建查询参数
+        /// </summary>
+        /// <param name="parameters">参数对象</param>
+        private string BaseFormBuildParameters(object parameters)
         {
             if (parameters == null) return string.Empty;
             var _type = parameters.GetType();
@@ -126,7 +130,11 @@ namespace Zony.Lib.Net
             return _paramBuidler.ToString().Trim('&');
         }
 
-        private string parametersBuildJson(object parameters)
+        /// <summary>
+        /// 基于 JSON 形式构建查询参数
+        /// </summary>
+        /// <param name="parameters">参数对象</param>
+        private string BaseJsonBuildParameters(object parameters)
         {
             if (parameters == null) return string.Empty;
             if (parameters.GetType() == typeof(string)) return parameters as string;

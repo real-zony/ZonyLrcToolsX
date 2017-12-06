@@ -13,7 +13,7 @@ namespace ZonyLrcTools.Common
         /// <summary>
         /// 下载线程数量
         /// </summary>
-        public string DownloadThreadNumber { get; set; }
+        public int DownloadThreadNumber { get; set; }
         /// <summary>
         /// 是否忽略已存在歌词的文件
         /// </summary>
@@ -30,5 +30,9 @@ namespace ZonyLrcTools.Common
         /// 插件状态
         /// </summary>
         public List<PluginStatusModel> PluginStatuses;
+        /// <summary>
+        /// 是否同意用户协议
+        /// </summary>
+        public bool IsAgree { get; set; }
     }
 }

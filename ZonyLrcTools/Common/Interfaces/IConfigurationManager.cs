@@ -8,7 +8,7 @@ namespace ZonyLrcTools.Common.Interfaces
     public interface IConfigurationManager : ITransientDependency
     {
         /// <summary>
-        /// 加载设置
+        /// 从默认配置文件加载设置
         /// </summary>
         void LoadConfiguration();
         /// <summary>
@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Common.Interfaces
         /// <param name="filePath">设置文件路径</param>
         void LoadConfiguration(string filePath);
         /// <summary>
-        /// 保存设置
+        /// 保存设置到默认配置文件
         /// </summary>
         void SaveConfiguration();
         /// <summary>

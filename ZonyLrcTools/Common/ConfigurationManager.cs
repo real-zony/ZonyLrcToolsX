@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using ZonyLrcTools.Common.Interfaces;
 
@@ -10,30 +12,55 @@ namespace ZonyLrcTools.Common
         /// <summary>
         /// 默认配置文件路径
         /// </summary>
-        public const string ConfigurationFileName = "config.json";
+        public readonly string ConfigurationFileName = $@"{Environment.CurrentDirectory}\config.json";
 
         public void LoadConfiguration()
         {
-            FileStream _file = File.Open(Environment.CurrentDirectory + $@"\{ConfigurationFileName}", FileMode.OpenOrCreate);
-            using (StreamReader _reader = new StreamReader(_file))
-            {
-                string _jsonStr = _reader.ReadToEnd();
-            }
+            LoadConfiguration(ConfigurationFileName);
         }
 
         public void LoadConfiguration(string filePath)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(filePath))
+            {
+                ConfigModel = InitializeDefaultConfigurationModel();
+                return;
+            }
+
+            FileStream _file = File.Open(filePath, FileMode.Open);
+            using (StreamReader _reader = new StreamReader(_file))
+            {
+                ConfigModel = JsonConvert.DeserializeObject<ConfigurationModel>(_reader.ReadToEnd());
+            }
         }
 
         public void SaveConfiguration()
         {
-            throw new NotImplementedException();
+            SaveConfiguration(ConfigurationFileName);
         }
 
         public void SaveConfiguration(string filePath)
         {
-            throw new NotImplementedException();
+            using (FileStream _file = File.Open(filePath, FileMode.OpenOrCreate))
+            {
+                _file.SetLength(0);
+
+                StreamWriter _sr = new StreamWriter(_file);
+                _sr.Write(JsonConvert.SerializeObject(ConfigModel));
+            }
+        }
+
+        private ConfigurationModel InitializeDefaultConfigurationModel()
+        {
+            return new ConfigurationModel()
+            {
+                EncodingName = "utf-8",
+                DownloadThreadNumber = 4,
+                IsIgnoreExitsFile = true,
+                IsCheckUpdate = true,
+                IsAgree = false,
+                ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" }
+            };
         }
     }
 }
