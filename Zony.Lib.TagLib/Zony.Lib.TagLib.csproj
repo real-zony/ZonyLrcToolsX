@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Zony.Lib.TagLib</RootNamespace>
     <AssemblyName>Zony.Lib.TagLib</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,10 +54,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
+      <Project>{2716DF9F-443C-42DD-9454-18FF1A80AEC4}</Project>
+      <Name>Zony.Lib.Infrastructures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
       <Project>{043b9995-b8bf-4a36-bd57-304c6d6ce7e7}</Project>
       <Name>Zony.Lib.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins
+copy $(TargetDir)\taglib-sharp.dll $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins
+copy $(TargetDir)\policy.2.0.taglib-sharp.dll $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>

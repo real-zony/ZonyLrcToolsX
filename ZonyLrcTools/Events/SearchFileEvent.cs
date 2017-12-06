@@ -32,11 +32,13 @@ namespace ZonyLrcTools.Events
 
             if (_dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(_dlg.SelectedPath))
             {
-                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.txt" });
+                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3" });
 
                 if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MessageBox.Show(BuildSuccessMsg(_files));
+
+                EventBus.Default.Trigger(new MusicInfoLoadEventData() { MusicFilePaths = _files });
             }
         }
 

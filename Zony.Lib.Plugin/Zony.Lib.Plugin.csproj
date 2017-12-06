@@ -43,11 +43,20 @@
   <ItemGroup>
     <Compile Include="Attributes\PluginInfoAttribute.cs" />
     <Compile Include="Exceptions\NotFoundLyricException.cs" />
+    <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />
     <Compile Include="Interfaces\IPluginDownLoader.cs" />
     <Compile Include="Interfaces\IPluginExtensions.cs" />
+    <Compile Include="IPluginManager.cs" />
     <Compile Include="Models\MusicInfoModel.cs" />
+    <Compile Include="PluginManger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
+      <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>
+      <Name>Zony.Lib.Infrastructures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

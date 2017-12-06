@@ -56,6 +56,8 @@
     <Compile Include="Common\GlobalContext.cs" />
     <Compile Include="Common\Interfaces\IFileSearchProvider.cs" />
     <Compile Include="Common\Interfaces\IConfigurationManager.cs" />
+    <Compile Include="Common\IPluginManager.cs" />
+    <Compile Include="Common\PluginManger.cs" />
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\ConfigurationManager.cs" />
     <Compile Include="Common\ConfigurationModel.cs" />
@@ -85,7 +87,6 @@
     <Compile Include="Forms\Form_Setting.Designer.cs">
       <DependentUpon>Form_Setting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Plugins\IPluginsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIComponent\ListViewNF.cs">

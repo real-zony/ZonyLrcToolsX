@@ -30,6 +30,12 @@ namespace ZonyLrcTools
             {
                 InstallInstallers = false
             });
+
+            //IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Zony.Lib.Plugin.dll"), new ConventionalRegistrationConfig()
+            //{
+            //    InstallInstallers = false
+            //});
+            //IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Plugins\\Zony.Lib.TagLib.dll"));
         }
     }
 }

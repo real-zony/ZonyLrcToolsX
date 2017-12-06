@@ -25,10 +25,6 @@ namespace Zony.Lib.Infrastructures.EventBus
 
         public EventBus()
         {
-            /*
-             * 工厂结构
-             * EventType->List<>
-             */
             _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         }
 

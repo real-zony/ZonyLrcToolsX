@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
+using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Interfaces;
 
 namespace ZonyLrcTools.Events
@@ -10,12 +12,12 @@ namespace ZonyLrcTools.Events
         public Dictionary<string, List<string>> MusicFilePaths { get; set; }
     }
 
-    public class MusicInfoLoadEvent : IEventHandler<MusicInfoLoadEventData>
+    public class MusicInfoLoadEvent : IEventHandler<MusicInfoLoadEventData>, ITransientDependency
     {
         private readonly IPluginAcquireMusicInfo m_infoLoader;
-        public MusicInfoLoadEvent(IPluginAcquireMusicInfo infoLoader)
+        public MusicInfoLoadEvent(IPluginManager plugMgr)
         {
-            m_infoLoader = infoLoader;
+            plugMgr.LoadPlugins();
         }
 
         public async void HandleEvent(MusicInfoLoadEventData eventData)
