@@ -20,7 +20,7 @@ namespace Zony.Lib.NetEase.Plugin
         {
             var _param = BuildParameters(songName, artistName);
             var _json = GetLyricJsonObject(_param);
-            var _sourceLyric = getSourceLyric(_json.Item1);
+            var _sourceLyric = GetSourceLyric(_json.Item1);
             var _translateLyric = GetTranslateLyric(_json.Item2);
             var _result = BuildLyricText(_sourceLyric, _translateLyric);
 
@@ -97,7 +97,7 @@ namespace Zony.Lib.NetEase.Plugin
         /// </summary>
         /// <param name="lyricJObj">歌词Json对象</param>
         /// <returns>获取到的原始歌词文本</returns>
-        private string getSourceLyric(JObject lyricJObj)
+        private string GetSourceLyric(JObject lyricJObj)
         {
             if (!JObjectIsContainsProperty(lyricJObj, "lyric")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
             return FixedLyricTimeFormat(lyricJObj["lyric"].Value<string>());
