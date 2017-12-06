@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Zony.Lib.Infrastructures.Dependency;
 
-namespace ZonyLrcTools.Common
+namespace ZonyLrcTools.Common.Interfaces
 {
-    public interface ISearchProvider : ITransientDependency
+    public interface IFileSearchProvider : ITransientDependency
     {
         /// <summary>
         /// 从指定文件夹当中搜索所有指定后缀的文件

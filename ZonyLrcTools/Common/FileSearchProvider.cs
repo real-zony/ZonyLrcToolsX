@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ZonyLrcTools.Common.Exceptions;
+using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Common
 {
-    public class FileSearchProvider : ISearchProvider
+    public class FileSearchProvider : IFileSearchProvider
     {
         public Dictionary<string, List<string>> FindFiles(string directoryPath, IEnumerable<string> extensions)
         {

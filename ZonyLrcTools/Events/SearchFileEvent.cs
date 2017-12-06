@@ -1,28 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using ZonyLrcTools.Common;
-using System.Text;
-using System.Linq;
+using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
-    public class ISearchFileEventData : EventData { }
+    public class SearchFileEventData : EventData { }
 
-    public class SearchFileEvent : IEventHandler<ISearchFileEventData>, ITransientDependency
+    public class SearchFileEvent : IEventHandler<SearchFileEventData>, ITransientDependency
     {
-        private readonly ISearchProvider m_searchProvider;
-        private readonly ISettingManager m_settingManager;
+        private readonly IFileSearchProvider m_searchProvider;
+        private readonly IConfigurationManager m_settingManager;
 
-        public SearchFileEvent(ISearchProvider searchProvider, ISettingManager settingManager)
+        public SearchFileEvent(IFileSearchProvider searchProvider, IConfigurationManager settingManager)
         {
             m_searchProvider = searchProvider;
             m_settingManager = settingManager;
         }
 
-        public async void HandleEvent(ISearchFileEventData eventData)
+        public async void HandleEvent(SearchFileEventData eventData)
         {
             FolderBrowserDialog _dlg = new FolderBrowserDialog()
             {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ZonyLrcTools.Common
 {
     [Serializable]
-    public sealed class SettingModel
+    public sealed class ConfigurationModel
     {
         /// <summary>
         /// 编码方式

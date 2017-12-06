@@ -6,9 +6,9 @@ namespace ZonyLrcTools.Forms
 {
     public partial class Form_Setting : Form, ITransientDependency
     {
-        private readonly SettingManager m_settingMgr;
+        private readonly ConfigurationManager m_settingMgr;
 
-        public Form_Setting(SettingManager settingMgr)
+        public Form_Setting(ConfigurationManager settingMgr)
         {
             InitializeComponent();
             m_settingMgr = settingMgr;

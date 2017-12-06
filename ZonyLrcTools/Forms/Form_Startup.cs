@@ -22,7 +22,7 @@ namespace ZonyLrcTools.Forms
 
         private void BindUIClickEvent()
         {
-            button_SearchFile.Click += delegate { EventBus.Default.Trigger<ISearchFileEventData>(); };
+            button_SearchFile.Click += delegate { EventBus.Default.Trigger<SearchFileEventData>(); };
             button_DownloadLyric.Click += delegate { EventBus.Default.Trigger<EventData>(); };
         }
 

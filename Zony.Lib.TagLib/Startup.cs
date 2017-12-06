@@ -6,11 +6,12 @@ using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 
-using FileInfoLoader = TagLib.File;
+using TagFile = TagLib.File;
+using TagPicture = TagLib.Picture;
 
 namespace Zony.Lib.TagLib
 {
-    [PluginInfo("歌曲信息提取插件", "Zony", "1.0.0.0", "http://www.myzony.com", "提取歌曲信息的插件")]
+    [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.0.0.0", "http://www.myzony.com", "提取歌曲信息的插件")]
     public class StartUp : IPluginAcquireMusicInfo
     {
         public MusicInfoModel GetMusicInfo(string filePath)
@@ -20,17 +21,17 @@ namespace Zony.Lib.TagLib
 
             try
             {
-                var _loader = FileInfoLoader.Create(filePath);
-                _info.Song = _loader.Tag.Title;
-                _info.Artist = _loader.Tag.FirstPerformer;
-                _info.Album = _loader.Tag.Album;
+                var _file = TagFile.Create(filePath);
+                _info.Song = _file.Tag.Title;
+                _info.Artist = _file.Tag.FirstPerformer;
+                _info.Album = _file.Tag.Album;
 
                 if (string.IsNullOrEmpty(_info.Song)) _info.Song = _fileName;
                 if (string.IsNullOrEmpty(_info.Artist)) _info.Artist = _fileName;
 
-                _info.TagType = string.Join(@"/", _loader.TagTypes);
-                _info.IsAlbumImg = _loader.Tag.Pictures.Length > 0 ? true : false;
-                _info.IsBuildInLyric = string.IsNullOrEmpty(_loader.Tag.Lyrics);
+                _info.TagType = string.Join(@"/", _file.TagTypes);
+                _info.IsAlbumImg = _file.Tag.Pictures.Length > 0 ? true : false;
+                _info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
             }
             catch (System.Exception)
             {
@@ -82,30 +83,68 @@ namespace Zony.Lib.TagLib
 
         public Stream LoadAlbumImage(string filePath)
         {
-            FileInfoLoader _fileInfo = FileInfoLoader.Create(filePath);
-            if (_fileInfo.Tag.Pictures.Length == 0) return null;
+            TagFile _file = TagFile.Create(filePath);
+            if (_file.Tag.Pictures.Length == 0) return null;
 
-
+            MemoryStream _result = new MemoryStream(_file.Tag.Pictures[0].Data.Data);
+            return _result;
         }
 
         public bool SaveAlbumImage(string filePath, Stream imageStream)
         {
-            throw new NotImplementedException();
+            byte[] _buffer = new byte[1024 * 16];
+            using (MemoryStream _ms = new MemoryStream())
+            {
+                int _readCount = 0;
+                while ((_readCount = imageStream.Read(_buffer, 0, _buffer.Length)) > 0)
+                {
+                    _ms.Write(_buffer, 0, _readCount);
+                }
+
+                return SaveAlbumImage(filePath, _ms.ToArray());
+            }
         }
 
         public bool SaveAlbumImage(string filePath, byte[] imgBytes)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TagFile _file = TagFile.Create(filePath);
+
+                var _picList = new List<TagPicture>() { new TagPicture(imgBytes) };
+                _file.Tag.Pictures = _picList.ToArray();
+                _file.Save();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool SaveMusicInfo(string filePath, MusicInfoModel musicInfo, out Exception E)
         {
-            throw new NotImplementedException();
-        }
+            E = null;
+            if (musicInfo == null) return false;
 
-        private MusicInfoModel LoadMusicInfo(FileInfoLoader loader, string filePath)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                TagFile _file = TagFile.Create(filePath);
+
+                _file.Tag.Title = musicInfo.Song;
+                _file.Tag.Performers[0] = musicInfo.Artist;
+                _file.Tag.Album = musicInfo.Album;
+
+                _file.Save();
+
+                return true;
+            }
+            catch (Exception InnerE)
+            {
+                E = InnerE;
+                return false;
+            }
         }
     }
 }

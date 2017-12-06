@@ -1,11 +1,11 @@
 ﻿using Zony.Lib.Infrastructures.Dependency;
 
-namespace ZonyLrcTools.Common
+namespace ZonyLrcTools.Common.Interfaces
 {
     /// <summary>
     /// 设置管理
     /// </summary>
-    public interface ISettingManager : ITransientDependency
+    public interface IConfigurationManager : ITransientDependency
     {
         /// <summary>
         /// 加载设置
