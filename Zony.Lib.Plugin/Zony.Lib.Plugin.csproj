@@ -49,7 +49,7 @@
     <Compile Include="Interfaces\IPluginExtensions.cs" />
     <Compile Include="IPluginManager.cs" />
     <Compile Include="Models\MusicInfoModel.cs" />
-    <Compile Include="PluginManger.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

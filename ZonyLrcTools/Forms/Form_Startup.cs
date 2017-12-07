@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Forms
         private void Form_Startup_Load(object sender, EventArgs e)
         {
             BindUIClickEvent();
-            BindUIClickEvent();
+            BindButtonEvent();
         }
 
         private void BindUIClickEvent()

@@ -8,12 +8,12 @@ using Zony.Lib.Plugin.Interfaces;
 
 namespace Zony.Lib.Plugin
 {
-    public class PluginManger : IPluginManager
+    public class PluginManager : IPluginManager
     {
         private readonly ConcurrentDictionary<Type, List<Type>> m_pluginContainer;
         private readonly string m_pluginsFolderPath = Environment.CurrentDirectory + @"\Plugins";
 
-        public PluginManger()
+        public PluginManager()
         {
             m_pluginContainer = new ConcurrentDictionary<Type, List<Type>>();
         }
@@ -24,7 +24,7 @@ namespace Zony.Lib.Plugin
 
             if (m_pluginContainer.TryGetValue(_type, out List<Type> _plugins))
             {
-                return _plugins[0] as TInterface;
+                return Activator.CreateInstance(_plugins[0]) as TInterface;
             }
 
             return default(TInterface);

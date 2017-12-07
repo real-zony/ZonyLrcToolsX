@@ -51,13 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppConsts.cs" />
+    <Compile Include="Common\DownLoader.cs" />
     <Compile Include="Common\Exceptions\FileSearchException.cs" />
     <Compile Include="Common\FileSearchProvider.cs" />
     <Compile Include="Common\GlobalContext.cs" />
+    <Compile Include="Common\Interfaces\IDownLoader.cs" />
     <Compile Include="Common\Interfaces\IFileSearchProvider.cs" />
     <Compile Include="Common\Interfaces\IConfigurationManager.cs" />
-    <Compile Include="Common\IPluginManager.cs" />
-    <Compile Include="Common\PluginManger.cs" />
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\ConfigurationManager.cs" />
     <Compile Include="Common\ConfigurationModel.cs" />

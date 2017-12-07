@@ -14,16 +14,17 @@ namespace ZonyLrcTools.Events
 
     public class MusicInfoLoadEvent : IEventHandler<MusicInfoLoadEventData>, ITransientDependency
     {
-        private readonly IPluginAcquireMusicInfo m_infoLoader;
+        private readonly IPluginManager m_plugMgr;
         public MusicInfoLoadEvent(IPluginManager plugMgr)
         {
-            plugMgr.LoadPlugins();
+            m_plugMgr = plugMgr;
         }
 
-        public async void HandleEvent(MusicInfoLoadEventData eventData)
+        public void HandleEvent(MusicInfoLoadEventData eventData)
         {
-            var _result = await m_infoLoader.GetMusicInfosAsync(eventData.MusicFilePaths);
-
+            m_plugMgr.LoadPlugins();
+            var _acquire = m_plugMgr.GetPlugin<IPluginAcquireMusicInfo>();
+            var _infos = _acquire.GetMusicInfos(eventData.MusicFilePaths);
         }
     }
 }
