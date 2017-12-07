@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Interfaces;
+using Zony.Lib.Plugin.Models;
 
 namespace ZonyLrcTools.Events
 {
@@ -14,17 +16,19 @@ namespace ZonyLrcTools.Events
 
     public class MusicInfoLoadEvent : IEventHandler<MusicInfoLoadEventData>, ITransientDependency
     {
-        private readonly IPluginManager m_plugMgr;
-        public MusicInfoLoadEvent(IPluginManager plugMgr)
-        {
-            m_plugMgr = plugMgr;
-        }
+        public IPluginManager PluginManager { get; set; }
 
-        public void HandleEvent(MusicInfoLoadEventData eventData)
+        public async void HandleEvent(MusicInfoLoadEventData eventData)
         {
-            m_plugMgr.LoadPlugins();
-            var _acquire = m_plugMgr.GetPlugin<IPluginAcquireMusicInfo>();
-            var _infos = _acquire.GetMusicInfos(eventData.MusicFilePaths);
+            List<MusicInfoModel> _infos = PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfos(eventData.MusicFilePaths);
+
+            await Task.Run(() =>
+            {
+                foreach (var _item in _infos)
+                {
+
+                }
+            });
         }
     }
 }

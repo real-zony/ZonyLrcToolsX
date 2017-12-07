@@ -2,12 +2,14 @@
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
+using Zony.Lib.Plugin;
 using ZonyLrcTools.Events;
 
 namespace ZonyLrcTools.Forms
 {
     public partial class Form_Startup : Form, ITransientDependency
     {
+        public IPluginManager PluginManager { get; set; }
 
         public Form_Startup()
         {
@@ -31,6 +33,11 @@ namespace ZonyLrcTools.Forms
             button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().Show(); };
             button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManager>().Show(); };
             button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
+        }
+
+        private void ComponentInitialize()
+        {
+            PluginManager.LoadPlugins();
         }
     }
 }
