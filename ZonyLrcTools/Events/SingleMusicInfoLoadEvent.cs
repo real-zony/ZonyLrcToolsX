@@ -1,17 +1,18 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using Zony.Lib.Infrastructures.Dependency;
-using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Interfaces;
+using Zony.Lib.Plugin.Models;
 using Zony.Lib.UIComponents;
 using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
 {
-    public class SingleMusicInfoLoadEventData : EventData
+    public class SingleMusicInfoLoadEventData : MainUIComponentContext
     {
-        public ListViewNF MusicListView { get; set; }
+
     }
 
     public class SingleMusicInfoLoadEvent : IEventHandler<SingleMusicInfoLoadEventData>, ITransientDependency
@@ -27,14 +28,14 @@ namespace ZonyLrcTools.Events
 
         public void HandleEvent(SingleMusicInfoLoadEventData eventData)
         {
-            ListViewNF _listView = eventData.MusicListView;
+            ListViewNF _listView = eventData.Center_ListViewNF_MusicList;
 
             if (_listView.SelectedItems == null) return;
+            int _selectIndex = _listView.SelectedItems[0].Index;
 
             IPluginAcquireMusicInfo _acquire = m_plugManager.GetPlugin<IPluginAcquireMusicInfo>();
-            Stream _imgStream = _acquire.LoadAlbumImage(m_globalContext.MusicInfos[0].FilePath);
-            
-
+            Stream _imgStream = _acquire.LoadAlbumImage(m_globalContext.MusicInfos[_selectIndex].FilePath);
+            eventData.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);
         }
     }
 }

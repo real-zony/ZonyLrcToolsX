@@ -5,15 +5,14 @@ using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
-using Zony.Lib.UIComponents;
+using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
-    public class SearchFileEventData : EventData
+    public class SearchFileEventData : MainUIComponentContext
     {
-        public ListViewNF MusicListView { get; set; }
     }
 
     public class SearchFileEvent : IEventHandler<SearchFileEventData>, ITransientDependency
@@ -45,7 +44,7 @@ namespace ZonyLrcTools.Events
                 EventBus.Default.Trigger(new MusicInfoLoadEventData()
                 {
                     MusicFilePaths = _files,
-                    MusicListView = eventData.MusicListView
+                    Center_ListViewNF_MusicList = eventData.Center_ListViewNF_MusicList
                 });
             }
         }

@@ -30,11 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox_MusicArtist = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_MusicTitle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox_AlbumImg = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -56,8 +56,8 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -66,13 +66,13 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.textBox3);
+            this.groupBox1.Controls.Add(this.textBox_BuildInLyric);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.textBox_MusicArtist);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.textBox_MusicTitle);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.pictureBox_AlbumImg);
             this.groupBox1.Location = new System.Drawing.Point(538, 25);
@@ -82,12 +82,12 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "歌曲信息编辑";
             // 
-            // textBox3
+            // textBox_BuildInLyric
             // 
-            this.textBox3.Location = new System.Drawing.Point(46, 282);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(163, 20);
-            this.textBox3.TabIndex = 2;
+            this.textBox_BuildInLyric.Location = new System.Drawing.Point(46, 282);
+            this.textBox_BuildInLyric.Name = "textBox_BuildInLyric";
+            this.textBox_BuildInLyric.Size = new System.Drawing.Size(163, 20);
+            this.textBox_BuildInLyric.TabIndex = 2;
             // 
             // label3
             // 
@@ -98,12 +98,12 @@
             this.label3.TabIndex = 1;
             this.label3.Text = "专辑:";
             // 
-            // textBox2
+            // textBox_MusicArtist
             // 
-            this.textBox2.Location = new System.Drawing.Point(46, 256);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(163, 20);
-            this.textBox2.TabIndex = 2;
+            this.textBox_MusicArtist.Location = new System.Drawing.Point(46, 256);
+            this.textBox_MusicArtist.Name = "textBox_MusicArtist";
+            this.textBox_MusicArtist.Size = new System.Drawing.Size(163, 20);
+            this.textBox_MusicArtist.TabIndex = 2;
             // 
             // label2
             // 
@@ -114,12 +114,12 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "歌手:";
             // 
-            // textBox1
+            // textBox_MusicTitle
             // 
-            this.textBox1.Location = new System.Drawing.Point(46, 230);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(163, 20);
-            this.textBox1.TabIndex = 2;
+            this.textBox_MusicTitle.Location = new System.Drawing.Point(46, 230);
+            this.textBox_MusicTitle.Name = "textBox_MusicTitle";
+            this.textBox_MusicTitle.Size = new System.Drawing.Size(163, 20);
+            this.textBox_MusicTitle.TabIndex = 2;
             // 
             // label1
             // 
@@ -264,8 +264,8 @@
             // 
             // listView_SongItems
             // 
-            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView_SongItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
@@ -295,15 +295,15 @@
             this.columnHeader3.Text = "专辑/唱片集";
             this.columnHeader3.Width = 88;
             // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "状态";
-            this.columnHeader4.Width = 65;
-            // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "标签类型";
             this.columnHeader5.Width = 80;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "状态";
+            this.columnHeader4.Width = 65;
             // 
             // Form_Startup
             // 
@@ -353,10 +353,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.PictureBox pictureBox_AlbumImg;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox_MusicTitle;
+        private System.Windows.Forms.TextBox textBox_MusicArtist;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox_BuildInLyric;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripButton button_StopDownload;
         private System.Windows.Forms.ToolStripButton button_PluginsManager;
