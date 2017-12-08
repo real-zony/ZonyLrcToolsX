@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
 
-namespace ZonyLrcTools.UIComponent
+namespace Zony.Lib.UIComponents
 {
-    internal class ListViewNF : ListView
+    public class ListViewNF : ListView
     {
         public ListViewNF()
         {

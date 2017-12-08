@@ -42,5 +42,9 @@
         /// 是否有内置歌词
         /// </summary>
         public bool IsBuildInLyric { get; set; }
+        /// <summary>
+        /// 内置歌词
+        /// </summary>
+        public string BuildInLyric { get; set; }
     }
 }

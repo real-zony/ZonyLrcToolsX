@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</ProjectGuid>
+    <ProjectGuid>{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zony.Lib.Plugin</RootNamespace>
-    <AssemblyName>Zony.Lib.Plugin</AssemblyName>
+    <RootNamespace>Zony.Lib.UIComponents</RootNamespace>
+    <AssemblyName>Zony.Lib.UIComponents</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,27 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\PluginInfoAttribute.cs" />
-    <Compile Include="Exceptions\NotFoundLyricException.cs" />
-    <Compile Include="Interfaces\IPlugin.cs" />
-    <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />
-    <Compile Include="Interfaces\IPluginDownLoader.cs" />
-    <Compile Include="Interfaces\IPluginExtensions.cs" />
-    <Compile Include="IPluginManager.cs" />
-    <Compile Include="Models\MainUIComponentContext.cs" />
-    <Compile Include="Models\MusicInfoModel.cs" />
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="ListViewNF.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
-      <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>
-      <Name>Zony.Lib.Infrastructures</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zony.Lib.UIComponents\Zony.Lib.UIComponents.csproj">
-      <Project>{c788a631-2fc5-4130-bd7f-5b4be7ac2f6f}</Project>
-      <Name>Zony.Lib.UIComponents</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

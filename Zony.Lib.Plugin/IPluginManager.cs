@@ -3,7 +3,7 @@ using Zony.Lib.Infrastructures.Dependency;
 
 namespace Zony.Lib.Plugin
 {
-    public interface IPluginManager : ITransientDependency
+    public interface IPluginManager : ISingletonDependency
     {
         /// <summary>
         /// 获得指定类型的插件

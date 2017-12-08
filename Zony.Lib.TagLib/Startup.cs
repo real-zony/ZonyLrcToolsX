@@ -32,6 +32,7 @@ namespace Zony.Lib.TagLib
                 _info.TagType = string.Join(@"/", _file.TagTypes);
                 _info.IsAlbumImg = _file.Tag.Pictures.Length > 0 ? true : false;
                 _info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
+                if (_info.IsBuildInLyric) _info.BuildInLyric = _file.Tag.Lyrics;
             }
             catch (System.Exception)
             {

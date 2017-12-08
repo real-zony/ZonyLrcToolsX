@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // From_Donate
+            // Form_Donate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "From_Donate";
+            this.Name = "Form_Donate";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "From_Donate";
             this.ResumeLayout(false);
 

@@ -1,6 +1,4 @@
-﻿using ZonyLrcTools.UIComponent;
-
-namespace ZonyLrcTools.Forms
+﻿namespace ZonyLrcTools.Forms
 {
     partial class Form_Startup
     {
@@ -30,7 +28,6 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -50,17 +47,17 @@ namespace ZonyLrcTools.Forms
             this.button_StopDownload = new System.Windows.Forms.ToolStripButton();
             this.button_DownloadAlbumImage = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.button_PluginsManager = new System.Windows.Forms.ToolStripButton();
             this.button_Setting = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.button_About = new System.Windows.Forms.ToolStripButton();
             this.button_Donate = new System.Windows.Forms.ToolStripButton();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.listView_SongItems = new ZonyLrcTools.UIComponent.ListViewNF();
+            this.listView_SongItems = new Zony.Lib.UIComponents.ListViewNF();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button_PluginsManager = new System.Windows.Forms.ToolStripButton();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -69,7 +66,7 @@ namespace ZonyLrcTools.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.label3);
@@ -78,9 +75,9 @@ namespace ZonyLrcTools.Forms
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.pictureBox_AlbumImg);
-            this.groupBox1.Location = new System.Drawing.Point(452, 25);
+            this.groupBox1.Location = new System.Drawing.Point(538, 25);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(219, 316);
+            this.groupBox1.Size = new System.Drawing.Size(219, 508);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "歌曲信息编辑";
@@ -141,16 +138,15 @@ namespace ZonyLrcTools.Forms
             this.pictureBox_AlbumImg.Size = new System.Drawing.Size(200, 200);
             this.pictureBox_AlbumImg.TabIndex = 0;
             this.pictureBox_AlbumImg.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBox_AlbumImg, "123");
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 353);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 545);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(680, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(766, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -183,7 +179,7 @@ namespace ZonyLrcTools.Forms
             this.button_Donate});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(680, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(766, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -229,6 +225,14 @@ namespace ZonyLrcTools.Forms
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // button_PluginsManager
+            // 
+            this.button_PluginsManager.Image = ((System.Drawing.Image)(resources.GetObject("button_PluginsManager.Image")));
+            this.button_PluginsManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_PluginsManager.Name = "button_PluginsManager";
+            this.button_PluginsManager.Size = new System.Drawing.Size(79, 22);
+            this.button_PluginsManager.Text = "插件管理";
+            // 
             // button_Setting
             // 
             this.button_Setting.Image = ((System.Drawing.Image)(resources.GetObject("button_Setting.Image")));
@@ -260,19 +264,19 @@ namespace ZonyLrcTools.Forms
             // 
             // listView_SongItems
             // 
-            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.listView_SongItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView_SongItems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
+            this.columnHeader5,
             this.columnHeader4});
             this.listView_SongItems.Location = new System.Drawing.Point(14, 31);
             this.listView_SongItems.Name = "listView_SongItems";
-            this.listView_SongItems.Size = new System.Drawing.Size(432, 310);
+            this.listView_SongItems.Size = new System.Drawing.Size(518, 502);
             this.listView_SongItems.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.listView_SongItems, "110");
             this.listView_SongItems.UseCompatibleStateImageBehavior = false;
             this.listView_SongItems.View = System.Windows.Forms.View.Details;
             // 
@@ -296,19 +300,16 @@ namespace ZonyLrcTools.Forms
             this.columnHeader4.Text = "状态";
             this.columnHeader4.Width = 65;
             // 
-            // button_PluginsManager
+            // columnHeader5
             // 
-            this.button_PluginsManager.Image = ((System.Drawing.Image)(resources.GetObject("button_PluginsManager.Image")));
-            this.button_PluginsManager.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.button_PluginsManager.Name = "button_PluginsManager";
-            this.button_PluginsManager.Size = new System.Drawing.Size(79, 22);
-            this.button_PluginsManager.Text = "插件管理";
+            this.columnHeader5.Text = "标签类型";
+            this.columnHeader5.Width = 80;
             // 
             // Form_Startup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(680, 375);
+            this.ClientSize = new System.Drawing.Size(766, 567);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
@@ -331,7 +332,7 @@ namespace ZonyLrcTools.Forms
 
         #endregion
 
-        private ListViewNF listView_SongItems;
+        private Zony.Lib.UIComponents.ListViewNF listView_SongItems;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
@@ -357,8 +358,8 @@ namespace ZonyLrcTools.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripButton button_StopDownload;
         private System.Windows.Forms.ToolStripButton button_PluginsManager;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }

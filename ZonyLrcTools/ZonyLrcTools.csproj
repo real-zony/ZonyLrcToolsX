@@ -61,8 +61,10 @@
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\ConfigurationManager.cs" />
     <Compile Include="Common\ConfigurationModel.cs" />
+    <Compile Include="Events\MusicDownLoadEvent.cs" />
     <Compile Include="Events\MusicInfoLoadEvent.cs" />
     <Compile Include="Events\SearchFileEvent.cs" />
+    <Compile Include="Events\SingleMusicInfoLoadEvent.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,9 +91,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIComponent\ListViewNF.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <EmbeddedResource Include="Forms\Form_Startup.resx">
       <DependentUpon>Form_Startup.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,6 +136,10 @@
     <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
       <Project>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</Project>
       <Name>Zony.Lib.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zony.Lib.UIComponents\Zony.Lib.UIComponents.csproj">
+      <Project>{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}</Project>
+      <Name>Zony.Lib.UIComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

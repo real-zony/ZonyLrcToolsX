@@ -20,12 +20,34 @@ namespace ZonyLrcTools.Forms
         {
             BindUIClickEvent();
             BindButtonEvent();
+            ComponentInitialize();
         }
 
         private void BindUIClickEvent()
         {
-            button_SearchFile.Click += delegate { EventBus.Default.Trigger<SearchFileEventData>(); };
-            button_DownloadLyric.Click += delegate { EventBus.Default.Trigger<EventData>(); };
+            #region > 搜索文件事件 <
+            button_SearchFile.Click += delegate
+            {
+                EventBus.Default.Trigger(new SearchFileEventData()
+                {
+                    MusicListView = listView_SongItems
+                });
+            };
+            #endregion
+
+            #region > 歌曲信息加载事件 <
+            listView_SongItems.Click += delegate
+            {
+                EventBus.Default.Trigger(new SingleMusicInfoLoadEventData()
+                {
+
+                });
+            };
+            #endregion
+
+            #region > 歌词下载事件
+            button_DownloadLyric.Click += delegate { EventBus.Default.Trigger(new MusicDownLoadEventData()); };
+            #endregion
         }
 
         private void BindButtonEvent()
@@ -37,6 +59,7 @@ namespace ZonyLrcTools.Forms
 
         private void ComponentInitialize()
         {
+            CheckForIllegalCrossThreadCalls = false;
             PluginManager.LoadPlugins();
         }
     }
