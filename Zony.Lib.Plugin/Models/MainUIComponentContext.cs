@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.UIComponents;
 
@@ -38,5 +39,9 @@ namespace Zony.Lib.Plugin.Models
         /// 顶部菜单控件
         /// </summary>
         public ToolStrip Top_ToolStrip { get; set; }
+        /// <summary>
+        /// 顶部按钮集合
+        /// </summary>
+        public Dictionary<string, ToolStripButton> Top_ToolStrip_Buttons { get; set; }
     }
 }

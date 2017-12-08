@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
@@ -23,7 +24,9 @@ namespace ZonyLrcTools.Events
         public async void HandleEvent(MusicInfoLoadEventData eventData)
         {
             List<MusicInfoModel> _infos = PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfos(eventData.MusicFilePaths);
-            GlobalContext.MusicInfos = _infos;
+
+            FillGlobalContextMusicInfos(_infos);
+
             await Task.Run(() =>
             {
 
@@ -39,6 +42,16 @@ namespace ZonyLrcTools.Events
                     }));
                 }
             });
+        }
+
+        private void FillGlobalContextMusicInfos(List<MusicInfoModel> list)
+        {
+            GlobalContext.MusicInfos = new ConcurrentBag<MusicInfoModel>();
+
+            foreach (var item in list)
+            {
+                GlobalContext.MusicInfos.Add(item);
+            }
         }
     }
 }

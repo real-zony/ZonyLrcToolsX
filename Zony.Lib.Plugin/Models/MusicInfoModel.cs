@@ -5,6 +5,7 @@
     /// </summary>
     public class MusicInfoModel
     {
+        public int Index { get; set; }
         /// <summary>
         /// 歌手/艺术家
         /// </summary>

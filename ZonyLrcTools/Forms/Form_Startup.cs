@@ -4,6 +4,7 @@ using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Models;
+using ZonyLrcTools.Common;
 using ZonyLrcTools.Events;
 
 namespace ZonyLrcTools.Forms
@@ -29,21 +30,15 @@ namespace ZonyLrcTools.Forms
         private void BindUIClickEvent()
         {
             #region > 搜索文件事件 <
-            button_SearchFile.Click += delegate
-            {
-                EventBus.Default.Trigger(FillEventDataRelateUIComponents(new SearchFileEventData()));
-            };
+            button_SearchFile.Click += GenerateClickDelegate(new SearchFileEventData());
             #endregion
 
             #region > 歌曲信息加载事件 <
-            listView_SongItems.Click += delegate
-            {
-                EventBus.Default.Trigger(FillEventDataRelateUIComponents(new SingleMusicInfoLoadEventData()));
-            };
+            listView_SongItems.Click += GenerateClickDelegate(new SingleMusicInfoLoadEventData());
             #endregion
 
             #region > 歌词下载事件
-            button_DownloadLyric.Click += delegate { EventBus.Default.Trigger(new MusicDownLoadEventData()); };
+            button_DownloadLyric.Click += GenerateClickDelegate(new MusicDownLoadEventData());
             #endregion
         }
 
@@ -74,7 +69,6 @@ namespace ZonyLrcTools.Forms
 
         private TEventData FillEventDataRelateUIComponents<TEventData>(TEventData eventData) where TEventData : MainUIComponentContext, new()
         {
-
             eventData.Center_ListViewNF_MusicList = m_uiContext.Center_ListViewNF_MusicList;
             eventData.Right_PictureBox_AlbumImage = m_uiContext.Right_PictureBox_AlbumImage;
             eventData.Right_TextBox_MusicTitle = m_uiContext.Right_TextBox_MusicTitle;
@@ -82,7 +76,25 @@ namespace ZonyLrcTools.Forms
             eventData.Right_TextBox_MusicBuildInLyric = m_uiContext.Right_TextBox_MusicBuildInLyric;
             eventData.Top_ToolStrip = m_uiContext.Top_ToolStrip;
             eventData.Bottom_StatusStrip = m_uiContext.Bottom_StatusStrip;
+
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_SearchFile, button_SearchFile);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_StopDownLoad, button_StopDownload);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_PluginManager, button_PluginsManager);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadLyric);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_Donate, button_Donate);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_Configuration, button_Setting);
+            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_About, button_About);
+
             return eventData;
+        }
+
+        private EventHandler GenerateClickDelegate<TEventData>(TEventData eventData) where TEventData : MainUIComponentContext, new()
+        {
+            return delegate
+            {
+                EventBus.Default.Trigger(eventData, FillEventDataRelateUIComponents(eventData));
+            };
         }
     }
 }

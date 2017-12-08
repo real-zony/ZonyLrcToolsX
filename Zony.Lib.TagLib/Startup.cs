@@ -55,11 +55,15 @@ namespace Zony.Lib.TagLib
         {
             List<MusicInfoModel> _result = new List<MusicInfoModel>();
 
+            int _index = 0;
             foreach (var key in musicFiles)
             {
                 foreach (var file in musicFiles[key.Key])
                 {
-                    _result.Add(GetMusicInfo(file));
+                    MusicInfoModel _info = GetMusicInfo(file);
+                    _info.Index = _index;
+                    _result.Add(_info);
+                    _index++;
                 }
             }
 

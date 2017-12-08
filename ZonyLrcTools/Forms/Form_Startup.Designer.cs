@@ -316,7 +316,7 @@
             this.Controls.Add(this.listView_SongItems);
             this.Name = "Form_Startup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form_Startup";
+            this.Text = "ZonyLrcTools X";
             this.Load += new System.EventHandler(this.Form_Startup_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
