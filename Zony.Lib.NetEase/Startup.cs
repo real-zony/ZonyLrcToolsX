@@ -12,7 +12,7 @@ using Zony.Lib.Plugin.Interfaces;
 namespace Zony.Lib.NetEase.Plugin
 {
     [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.0.0.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
-    public class Startup : IPluginDownLoader,IPlugin
+    public class Startup : IPluginDownLoader, IPlugin
     {
         private readonly HttpMethodUtils m_netUtils = new HttpMethodUtils();
 
@@ -129,6 +129,7 @@ namespace Zony.Lib.NetEase.Plugin
             return _regex.Replace(srcLyricText, new MatchEvaluator((Match _match) =>
             {
                 string[] _strs = _match.Value.Split('.');
+                if (_strs[1].Length == 2) return _match.Value;
                 string _value = _strs[1].Remove(_strs[1].Length - 2);
                 int _iValue = int.Parse(_value);
                 return string.Format("{0}.{1:D2}]", _strs[0], _iValue);
