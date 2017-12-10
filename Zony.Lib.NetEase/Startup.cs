@@ -111,8 +111,11 @@ namespace Zony.Lib.NetEase.Plugin
         private string GetTranslateLyric(JObject lyricJObj)
         {
             if (!JObjectIsContainsProperty(lyricJObj, "tlyric")) return string.Empty;
-            if (lyricJObj["tlyric"]["lyric"] == null) return string.Empty;
-            return FixedLyricTimeFormat(lyricJObj["tlyric"]["lyric"].Value<string>());
+
+            string _transLyric = lyricJObj["tlyric"]["lyric"].Value<string>();
+
+            if (string.IsNullOrWhiteSpace(_transLyric)) return string.Empty;
+            return FixedLyricTimeFormat(_transLyric);
         }
 
         /// <summary>

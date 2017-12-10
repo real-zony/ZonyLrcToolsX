@@ -37,12 +37,12 @@ namespace ZonyLrcTools.Events
             {
 
 
-                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3", "*.flac" });
+                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3", "*.flac", "*.ape", "*.m4a" });
 
                 if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MessageBox.Show(BuildSuccessMsg(_files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
                 EventBus.Default.Trigger(new MusicInfoLoadEventData()
                 {
                     MusicFilePaths = _files

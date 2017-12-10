@@ -4,7 +4,7 @@ namespace ZonyLrcTools.Common.Interfaces
 {
     public interface IEncodingLyricProvider : ISingletonDependency
     {
-        string EncodeText(string sourceStr);
-        string EncodeText(byte[] sourceStr);
+        byte[] EncodeText(string sourceStr);
+        byte[] EncodeText(byte[] sourceStr);
     }
 }

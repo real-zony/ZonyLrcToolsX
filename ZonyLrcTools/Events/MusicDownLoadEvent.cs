@@ -4,8 +4,8 @@ using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
+using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
-using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
@@ -32,19 +32,26 @@ namespace ZonyLrcTools.Events
             {
                 Parallel.ForEach(GlobalContext.Instance.MusicInfos, (info) =>
                 {
-                    _downloader.DownLoad(info.Song, info.Artist, out byte[] _lyricData);
-                    if (_lyricData == null)
+                    try
                     {
-                        GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_Failed;
-                        return;
+                        _downloader.DownLoad(info.Song, info.Artist, out byte[] _lyricData);
+                        if (_lyricData == null)
+                        {
+                            GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_Failed;
+                            return;
+                        }
+
+                        // 写入歌词
+                        var _eventData = Mapper.Map<MusicDownLoadCompleteEventData>(eventData);
+                        _eventData.LyricData = _lyricData;
+                        _eventData.Info = info;
+
+                        EventBus.Default.Trigger(_eventData);
                     }
-
-                    // 写入歌词
-                    var _eventData = Mapper.Map<MusicDownLoadCompleteEventData>(eventData);
-                    _eventData.LyricData = _lyricData;
-                    _eventData.Info = info;
-
-                    EventBus.Default.Trigger(_eventData);
+                    catch (NotFoundLyricException)
+                    {
+                        GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_NotFoundLyric;
+                    }
                 });
             });
         }

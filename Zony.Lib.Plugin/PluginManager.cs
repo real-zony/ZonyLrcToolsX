@@ -51,7 +51,7 @@ namespace Zony.Lib.Plugin
         {
             if (!Directory.Exists(dirPath)) return;
 
-            string[] _files = Directory.GetFiles(dirPath);
+            string[] _files = Directory.GetFiles(dirPath,"*.dll");
             foreach (var _file in _files)
             {
                 Assembly _asm = Assembly.UnsafeLoadFrom(_file);
