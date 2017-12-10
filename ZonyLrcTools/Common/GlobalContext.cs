@@ -1,14 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Zony.Lib.Plugin.Models;
-using Zony.Lib.Infrastructures.Dependency;
 
 namespace ZonyLrcTools.Common
 {
-    public class GlobalContext : ISingletonDependency
+    public class GlobalContext
     {
+        private static GlobalContext m_uniqueInstance;
+        private static readonly object m_locker = new object();
+
+        private GlobalContext() { }
+
+        public static GlobalContext Instance
+        {
+            get
+            {
+                if (m_uniqueInstance == null)
+                {
+                    lock (m_locker)
+                    {
+                        if (m_uniqueInstance == null) m_uniqueInstance = new GlobalContext();
+                    }
+                }
+
+                return m_uniqueInstance;
+            }
+        }
+
         public Dictionary<string, List<string>> Musics { get; set; }
 
         public ConcurrentBag<MusicInfoModel> MusicInfos { get; set; }
+
+        public MainUIComponentContext UIContext { get; set; }
     }
 }

@@ -34,5 +34,13 @@ namespace ZonyLrcTools.Common
         /// 是否同意用户协议
         /// </summary>
         public bool IsAgree { get; set; }
+        /// <summary>
+        /// 代理服务器地址
+        /// </summary>
+        public string ProxyIP { get; set; }
+        /// <summary>
+        /// 代理服务器端口
+        /// </summary>
+        public string ProxyPort { get; set; }
     }
 }

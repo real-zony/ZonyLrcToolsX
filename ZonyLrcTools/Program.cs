@@ -27,11 +27,11 @@ namespace ZonyLrcTools
             EventBus.Init();
             IocManager.Instance.AddConventionalRegistrar(new BasicConventionalRegistrar());
             IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Zony.Lib.Plugin.dll"));
+
             IocManager.Instance.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly(), new ConventionalRegistrationConfig()
             {
                 InstallInstallers = false
             });
-            //IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Plugins\\Zony.Lib.TagLib.dll"));
         }
     }
 }

@@ -11,7 +11,7 @@ using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
-    public class SearchFileEventData : MainUIComponentContext
+    public class SearchFileEventData : EventData
     {
     }
 
@@ -35,16 +35,17 @@ namespace ZonyLrcTools.Events
 
             if (_dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(_dlg.SelectedPath))
             {
-                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3" });
+
+
+                var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3", "*.flac" });
 
                 if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MessageBox.Show(BuildSuccessMsg(_files));
-
+                MessageBox.Show(BuildSuccessMsg(_files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
                 EventBus.Default.Trigger(new MusicInfoLoadEventData()
                 {
-                    MusicFilePaths = _files,
-                    Center_ListViewNF_MusicList = eventData.Center_ListViewNF_MusicList
+                    MusicFilePaths = _files
                 });
             }
         }

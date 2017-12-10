@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
@@ -13,8 +15,6 @@ namespace ZonyLrcTools.Forms
     {
         public IPluginManager PluginManager { get; set; }
 
-        private MainUIComponentContext m_uiContext;
-
         public Form_Startup()
         {
             InitializeComponent();
@@ -24,21 +24,22 @@ namespace ZonyLrcTools.Forms
         {
             BindUIClickEvent();
             BindButtonEvent();
+            InitializeAutoMapper();
             ComponentInitialize();
         }
 
         private void BindUIClickEvent()
         {
             #region > 搜索文件事件 <
-            button_SearchFile.Click += GenerateClickDelegate(new SearchFileEventData());
+            button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
             #endregion
 
             #region > 歌曲信息加载事件 <
-            listView_SongItems.Click += GenerateClickDelegate(new SingleMusicInfoLoadEventData());
+            listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
             #endregion
 
             #region > 歌词下载事件
-            button_DownloadLyric.Click += GenerateClickDelegate(new MusicDownLoadEventData());
+            button_DownloadLyric.Click += GenerateClickDelegate<MusicDownLoadEventData>();
             #endregion
         }
 
@@ -49,52 +50,76 @@ namespace ZonyLrcTools.Forms
             button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
         }
 
+        #region > 私有方法 < 
+
+        /// <summary>
+        /// 组件初始化
+        /// </summary>
         private void ComponentInitialize()
         {
             CheckForIllegalCrossThreadCalls = false;
 
             PluginManager.LoadPlugins();
 
-            m_uiContext = new MainUIComponentContext()
+            GlobalContext.Instance.UIContext = new MainUIComponentContext()
             {
                 Center_ListViewNF_MusicList = listView_SongItems,
                 Right_PictureBox_AlbumImage = pictureBox_AlbumImg,
                 Right_TextBox_MusicTitle = textBox_MusicTitle,
                 Right_TextBox_MusicArtist = textBox_MusicArtist,
-                Right_TextBox_MusicBuildInLyric = textBox_BuildInLyric,
+                Right_TextBox_MusicAblum = textBox_Ablum,
                 Top_ToolStrip = toolStrip1,
-                Bottom_StatusStrip = statusStrip1
+                Bottom_StatusStrip = statusStrip1,
+                Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
         }
 
-        private TEventData FillEventDataRelateUIComponents<TEventData>(TEventData eventData) where TEventData : MainUIComponentContext, new()
+        /// <summary>
+        /// 初始化 AutoMapper 映射规则
+        /// </summary>
+        private void InitializeAutoMapper()
         {
-            eventData.Center_ListViewNF_MusicList = m_uiContext.Center_ListViewNF_MusicList;
-            eventData.Right_PictureBox_AlbumImage = m_uiContext.Right_PictureBox_AlbumImage;
-            eventData.Right_TextBox_MusicTitle = m_uiContext.Right_TextBox_MusicTitle;
-            eventData.Right_TextBox_MusicArtist = m_uiContext.Right_TextBox_MusicArtist;
-            eventData.Right_TextBox_MusicBuildInLyric = m_uiContext.Right_TextBox_MusicBuildInLyric;
-            eventData.Top_ToolStrip = m_uiContext.Top_ToolStrip;
-            eventData.Bottom_StatusStrip = m_uiContext.Bottom_StatusStrip;
-
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_SearchFile, button_SearchFile);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_StopDownLoad, button_StopDownload);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_PluginManager, button_PluginsManager);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadLyric);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_Donate, button_Donate);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_Configuration, button_Setting);
-            m_uiContext.Top_ToolStrip_Buttons.Add(AppConsts.Identity_Button_About, button_About);
-
-            return eventData;
+            Mapper.Initialize(init =>
+            {
+                init.CreateMap<MusicDownLoadEventData, MusicDownLoadCompleteEventData>();
+            });
         }
 
-        private EventHandler GenerateClickDelegate<TEventData>(TEventData eventData) where TEventData : MainUIComponentContext, new()
+        /// <summary>
+        /// 填充 EventData 的 UI 组件数据
+        /// </summary>
+        /// <typeparam name="TEventData">EventData 类型</typeparam>
+        /// <param name="eventData">要传递的事件数据</param>
+        /// <returns></returns>
+        private Dictionary<string, ToolStripButton> BuildToolStripButtons()
+        {
+            Dictionary<string, ToolStripButton> _resultDict = new Dictionary<string, ToolStripButton>();
+
+            _resultDict.Add(AppConsts.Identity_Button_SearchFile, button_SearchFile);
+            _resultDict.Add(AppConsts.Identity_Button_StopDownLoad, button_StopDownload);
+            _resultDict.Add(AppConsts.Identity_Button_PluginManager, button_PluginsManager);
+            _resultDict.Add(AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric);
+            _resultDict.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadLyric);
+            _resultDict.Add(AppConsts.Identity_Button_Donate, button_Donate);
+            _resultDict.Add(AppConsts.Identity_Button_Configuration, button_Setting);
+            _resultDict.Add(AppConsts.Identity_Button_About, button_About);
+
+            return _resultDict;
+        }
+
+        /// <summary>
+        /// 生成简单的事件委托
+        /// </summary>
+        /// <typeparam name="TEventData">EventData 类型</typeparam>
+        /// <param name="eventData">要传递的事件数据</param>
+        /// <returns></returns>
+        private EventHandler GenerateClickDelegate<TEventData>() where TEventData : EventData, new()
         {
             return delegate
             {
-                EventBus.Default.Trigger(eventData, FillEventDataRelateUIComponents(eventData));
+                EventBus.Default.Trigger(new TEventData());
             };
         }
+        #endregion
     }
 }

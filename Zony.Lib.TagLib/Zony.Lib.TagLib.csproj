@@ -65,8 +65,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins
-copy $(TargetDir)\taglib-sharp.dll $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins
-copy $(TargetDir)\policy.2.0.taglib-sharp.dll $(SolutionDir)ZonyLrcTools\$(OutDir)Plugins</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

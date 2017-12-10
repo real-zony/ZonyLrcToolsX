@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.UIComponents;
 
 namespace Zony.Lib.Plugin.Models
 {
-    public class MainUIComponentContext : EventData
+    public class MainUIComponentContext
     {
         /// <summary>
         /// 中心音乐列表控件
@@ -27,6 +26,10 @@ namespace Zony.Lib.Plugin.Models
         /// 右侧音乐内置歌词控件
         /// </summary>
         public TextBox Right_TextBox_MusicBuildInLyric { get; set; }
+        /// <summary>
+        /// 右侧音乐专辑控件
+        /// </summary>
+        public TextBox Right_TextBox_MusicAblum { get; set; }
         /// <summary>
         /// 中心音乐列表右键绑定的上下文菜单控件
         /// </summary>

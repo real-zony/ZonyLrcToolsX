@@ -34,11 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,7 +59,9 @@
     <Compile Include="Common\Exceptions\FileSearchException.cs" />
     <Compile Include="Common\FileSearchProvider.cs" />
     <Compile Include="Common\GlobalContext.cs" />
+    <Compile Include="Common\Interfaces\EncodingLyricProvider.cs" />
     <Compile Include="Common\Interfaces\IDownLoader.cs" />
+    <Compile Include="Common\Interfaces\IEncodingLyricProvider.cs" />
     <Compile Include="Common\Interfaces\IFileSearchProvider.cs" />
     <Compile Include="Common\Interfaces\IConfigurationManager.cs" />
     <Compile Include="Common\PluginStatusModel.cs" />
@@ -66,6 +72,8 @@
     <Compile Include="Events\MusicInfoLoadEvent.cs" />
     <Compile Include="Events\SearchFileEvent.cs" />
     <Compile Include="Events\SingleMusicInfoLoadEvent.cs" />
+    <Compile Include="Events\UIComponentDisableEvent.cs" />
+    <Compile Include="Events\UIComponentEnableEvent.cs" />
     <Compile Include="Forms\Form_Startup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,7 +136,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\Interceptors\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
       <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>

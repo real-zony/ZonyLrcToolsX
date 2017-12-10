@@ -8,10 +8,11 @@ using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
+using Zony.Lib.Infrastructures.EventBus;
 
 namespace ZonyLrcTools.Events
 {
-    public class MusicInfoLoadEventData : MainUIComponentContext
+    public class MusicInfoLoadEventData : EventData
     {
         public Dictionary<string, List<string>> MusicFilePaths { get; set; }
     }
@@ -19,7 +20,6 @@ namespace ZonyLrcTools.Events
     public class MusicInfoLoadEvent : IEventHandler<MusicInfoLoadEventData>, ITransientDependency
     {
         public IPluginManager PluginManager { get; set; }
-        public GlobalContext GlobalContext { get; set; }
 
         public async void HandleEvent(MusicInfoLoadEventData eventData)
         {
@@ -32,7 +32,7 @@ namespace ZonyLrcTools.Events
 
                 for (int _index = 0; _index < _infos.Count; _index++)
                 {
-                    eventData.Center_ListViewNF_MusicList.Items.Insert(_index, new ListViewItem(new string[]
+                    GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Insert(_index, new ListViewItem(new string[]
                     {
                         _infos[_index].Song,
                         _infos[_index].Artist,
@@ -46,11 +46,11 @@ namespace ZonyLrcTools.Events
 
         private void FillGlobalContextMusicInfos(List<MusicInfoModel> list)
         {
-            GlobalContext.MusicInfos = new ConcurrentBag<MusicInfoModel>();
+            GlobalContext.Instance.MusicInfos = new ConcurrentBag<MusicInfoModel>();
 
             foreach (var item in list)
             {
-                GlobalContext.MusicInfos.Add(item);
+                GlobalContext.Instance.MusicInfos.Add(item);
             }
         }
     }

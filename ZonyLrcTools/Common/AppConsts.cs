@@ -7,6 +7,7 @@
 
         public const string Status_Music_Waiting = "等待下载";
         public const string Status_Music_Success = "下载成功";
+        public const string Status_Music_Failed = "下载失败";
 
         public const string Identity_Button_SearchFile = nameof(Identity_Button_SearchFile);
         public const string Identity_Button_DownLoadLyric = nameof(Identity_Button_DownLoadLyric);

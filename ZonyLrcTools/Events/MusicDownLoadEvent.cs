@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using AutoMapper;
+using System.Threading.Tasks;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
@@ -9,7 +10,7 @@ using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
 {
-    public class MusicDownLoadEventData : MainUIComponentContext
+    public class MusicDownLoadEventData : EventData
     {
 
     }
@@ -17,12 +18,10 @@ namespace ZonyLrcTools.Events
     public class MusicDownLoadEvent : IEventHandler<MusicDownLoadEventData>, ITransientDependency
     {
         private readonly IPluginManager m_pluginManager;
-        private readonly GlobalContext m_globalContext;
 
-        public MusicDownLoadEvent(IPluginManager pluginManager, GlobalContext globalContext)
+        public MusicDownLoadEvent(IPluginManager pluginManager)
         {
             m_pluginManager = pluginManager;
-            m_globalContext = globalContext;
         }
 
         public async void HandleEvent(MusicDownLoadEventData eventData)
@@ -31,15 +30,21 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(m_globalContext.MusicInfos, (info) =>
+                Parallel.ForEach(GlobalContext.Instance.MusicInfos, (info) =>
                 {
                     _downloader.DownLoad(info.Song, info.Artist, out byte[] _lyricData);
                     if (_lyricData == null)
                     {
-                        eventData.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_Success;
+                        GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_Failed;
                         return;
                     }
-                    EventBus.Default.Trigger(eventData as MainUIComponentContext as MusicDownLoadCompleteEventData);
+
+                    // 写入歌词
+                    var _eventData = Mapper.Map<MusicDownLoadCompleteEventData>(eventData);
+                    _eventData.LyricData = _lyricData;
+                    _eventData.Info = info;
+
+                    EventBus.Default.Trigger(_eventData);
                 });
             });
         }

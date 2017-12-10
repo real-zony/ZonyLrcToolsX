@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
+            this.textBox_Ablum = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_MusicArtist = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.textBox_BuildInLyric);
+            this.groupBox1.Controls.Add(this.textBox_Ablum);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBox_MusicArtist);
             this.groupBox1.Controls.Add(this.label2);
@@ -82,12 +82,12 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "歌曲信息编辑";
             // 
-            // textBox_BuildInLyric
+            // textBox_Ablum
             // 
-            this.textBox_BuildInLyric.Location = new System.Drawing.Point(46, 282);
-            this.textBox_BuildInLyric.Name = "textBox_BuildInLyric";
-            this.textBox_BuildInLyric.Size = new System.Drawing.Size(163, 20);
-            this.textBox_BuildInLyric.TabIndex = 2;
+            this.textBox_Ablum.Location = new System.Drawing.Point(46, 282);
+            this.textBox_Ablum.Name = "textBox_Ablum";
+            this.textBox_Ablum.Size = new System.Drawing.Size(163, 20);
+            this.textBox_Ablum.TabIndex = 2;
             // 
             // label3
             // 
@@ -136,6 +136,7 @@
             this.pictureBox_AlbumImg.Location = new System.Drawing.Point(9, 22);
             this.pictureBox_AlbumImg.Name = "pictureBox_AlbumImg";
             this.pictureBox_AlbumImg.Size = new System.Drawing.Size(200, 200);
+            this.pictureBox_AlbumImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox_AlbumImg.TabIndex = 0;
             this.pictureBox_AlbumImg.TabStop = false;
             // 
@@ -356,7 +357,7 @@
         private System.Windows.Forms.TextBox textBox_MusicTitle;
         private System.Windows.Forms.TextBox textBox_MusicArtist;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox_BuildInLyric;
+        private System.Windows.Forms.TextBox textBox_Ablum;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripButton button_StopDownload;
         private System.Windows.Forms.ToolStripButton button_PluginsManager;
