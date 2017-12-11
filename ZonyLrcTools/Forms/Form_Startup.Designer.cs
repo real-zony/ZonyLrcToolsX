@@ -58,6 +58,8 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -68,6 +70,8 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.textBox_BuildInLyric);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.textBox_Ablum);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBox_MusicArtist);
@@ -306,6 +310,24 @@
             this.columnHeader4.Text = "状态";
             this.columnHeader4.Width = 65;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 311);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "歌词:";
+            // 
+            // textBox_BuildInLyric
+            // 
+            this.textBox_BuildInLyric.Location = new System.Drawing.Point(46, 308);
+            this.textBox_BuildInLyric.Multiline = true;
+            this.textBox_BuildInLyric.Name = "textBox_BuildInLyric";
+            this.textBox_BuildInLyric.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox_BuildInLyric.Size = new System.Drawing.Size(163, 194);
+            this.textBox_BuildInLyric.TabIndex = 2;
+            // 
             // Form_Startup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -362,5 +384,7 @@
         private System.Windows.Forms.ToolStripButton button_StopDownload;
         private System.Windows.Forms.ToolStripButton button_PluginsManager;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.TextBox textBox_BuildInLyric;
+        private System.Windows.Forms.Label label4;
     }
 }

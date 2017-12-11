@@ -69,6 +69,7 @@ namespace ZonyLrcTools.Forms
                 Right_TextBox_MusicTitle = textBox_MusicTitle,
                 Right_TextBox_MusicArtist = textBox_MusicArtist,
                 Right_TextBox_MusicAblum = textBox_Ablum,
+                Right_TextBox_MusicBuildInLyric = textBox_BuildInLyric,
                 Top_ToolStrip = toolStrip1,
                 Bottom_StatusStrip = statusStrip1,
                 Top_ToolStrip_Buttons = BuildToolStripButtons()

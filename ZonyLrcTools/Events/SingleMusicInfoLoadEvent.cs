@@ -36,10 +36,12 @@ namespace ZonyLrcTools.Events
             Stream _imgStream = _acquire.LoadAlbumImage(GlobalContext.Instance.MusicInfos.ToArray()[_selectIndex].FilePath);
             MusicInfoModel _info = GlobalContext.Instance.MusicInfos.ToArray()[_selectIndex];
 
+            // 加载信息
             GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);
             GlobalContext.Instance.UIContext.Right_TextBox_MusicTitle.Text = _info.Song;
             GlobalContext.Instance.UIContext.Right_TextBox_MusicArtist.Text = _info.Artist;
             GlobalContext.Instance.UIContext.Right_TextBox_MusicAblum.Text = _info.Album;
+            GlobalContext.Instance.UIContext.Right_TextBox_MusicBuildInLyric.Text = _info.BuildInLyric;
         }
     }
 }

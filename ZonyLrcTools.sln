@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.TagLib", "Zony.Lib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.UIComponents", "Zony.Lib.UIComponents\Zony.Lib.UIComponents.csproj", "{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.AlbumDownLoad", "Zony.Lib.AlbumDownLoad\Zony.Lib.AlbumDownLoad.csproj", "{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
