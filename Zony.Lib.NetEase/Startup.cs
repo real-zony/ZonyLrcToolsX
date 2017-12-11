@@ -129,9 +129,11 @@ namespace Zony.Lib.NetEase.Plugin
             return _regex.Replace(srcLyricText, new MatchEvaluator((Match _match) =>
             {
                 string[] _strs = _match.Value.Split('.');
-                if (_strs[1].Length == 2) return _match.Value;
+                if (_strs[1].Length == 3) return _match.Value;
+
                 string _value = _strs[1].Remove(_strs[1].Length - 2);
-                int _iValue = int.Parse(_value);
+                if (!int.TryParse(_value, out int _iValue)) return _match.Value;
+
                 return string.Format("{0}.{1:D2}]", _strs[0], _iValue);
             }));
         }

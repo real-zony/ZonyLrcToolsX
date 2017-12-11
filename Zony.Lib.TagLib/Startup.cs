@@ -34,7 +34,7 @@ namespace Zony.Lib.TagLib
                 _info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
                 if (_info.IsBuildInLyric) _info.BuildInLyric = _file.Tag.Lyrics;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 _info.Song = _fileName;
                 _info.Artist = _fileName;
@@ -88,11 +88,18 @@ namespace Zony.Lib.TagLib
 
         public Stream LoadAlbumImage(string filePath)
         {
-            TagFile _file = TagFile.Create(filePath);
-            if (_file.Tag.Pictures.Length == 0) return null;
+            try
+            {
+                TagFile _file = TagFile.Create(filePath);
+                if (_file.Tag.Pictures.Length == 0) return null;
 
-            MemoryStream _result = new MemoryStream(_file.Tag.Pictures[0].Data.Data);
-            return _result;
+                MemoryStream _result = new MemoryStream(_file.Tag.Pictures[0].Data.Data);
+                return _result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public bool SaveAlbumImage(string filePath, Stream imageStream)

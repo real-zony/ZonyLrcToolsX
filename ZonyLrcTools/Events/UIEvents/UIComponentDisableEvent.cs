@@ -4,7 +4,7 @@ using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using Zony.Lib.Infrastructures.EventBus;
 
-namespace ZonyLrcTools.Events
+namespace ZonyLrcTools.Events.UIEvents
 {
     public class UIComponentDisableEventData : EventData
     {

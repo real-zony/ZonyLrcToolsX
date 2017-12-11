@@ -11,7 +11,7 @@ namespace Zony.UITest
         public void TestMethod1()
         {
             var _b = new Startup();
-            _b.DownLoad("Where The Hood At", "DMX", out byte[] data);
+            _b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
         }
     }
 }

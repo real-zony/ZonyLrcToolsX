@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Zony.Lib.Plugin.Models;
 
 namespace ZonyLrcTools.Common
@@ -26,8 +25,6 @@ namespace ZonyLrcTools.Common
                 return m_uniqueInstance;
             }
         }
-
-        public Dictionary<string, List<string>> Musics { get; set; }
 
         public ConcurrentBag<MusicInfoModel> MusicInfos { get; set; }
 

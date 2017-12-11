@@ -15,14 +15,32 @@ namespace ZonyLrcTools
         [STAThread]
         static void Main()
         {
-            bootStarpper();
+            InitializeIocContainer();
+
+            // 全局异常捕获处理
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += Application_ThreadException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            // Log4Net 初始化
+            InitializeLog4Net();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(IocManager.Instance.Resolve<Form_Startup>());
         }
 
-        private static void bootStarpper()
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+
+        }
+
+        private static void InitializeIocContainer()
         {
             EventBus.Init();
             IocManager.Instance.AddConventionalRegistrar(new BasicConventionalRegistrar());
@@ -32,6 +50,11 @@ namespace ZonyLrcTools
             {
                 InstallInstallers = false
             });
+        }
+
+        private static void InitializeLog4Net()
+        {
+
         }
     }
 }

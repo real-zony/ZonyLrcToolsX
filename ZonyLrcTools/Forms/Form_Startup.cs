@@ -33,7 +33,7 @@ namespace ZonyLrcTools.Forms
             #region > 搜索文件事件 <
             button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
             #endregion
-
+            C();
             #region > 歌曲信息加载事件 <
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
             #endregion
@@ -41,6 +41,11 @@ namespace ZonyLrcTools.Forms
             #region > 歌词下载事件
             button_DownloadLyric.Click += GenerateClickDelegate<MusicDownLoadEventData>();
             #endregion
+        }
+
+        private void C()
+        {
+            //throw new ArgumentException("XXX");
         }
 
         private void BindButtonEvent()

@@ -143,7 +143,7 @@ namespace Zony.Lib.Infrastructures.EventBus
 
             if (_exceptions.Any())
             {
-                throw new AggregateException($"发生一个或者多个异常，调用失败，{eventType.Name}");
+                throw new AggregateException($"发生一个或者多个异常，调用失败，{eventType.Name}", _exceptions);
             }
 
         }

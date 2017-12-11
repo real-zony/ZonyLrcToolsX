@@ -34,8 +34,7 @@ namespace ZonyLrcTools.Events
             {
                 _lyricFile.Write(_lyricData, 0, _lyricData.Length);
             }
-
-
+            
             GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[eventData.Info.Index].SubItems[4].Text = AppConsts.Status_Music_Success;
         }
     }
