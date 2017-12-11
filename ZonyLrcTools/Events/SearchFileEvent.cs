@@ -5,9 +5,9 @@ using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
-using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
+using ZonyLrcTools.Events.UIEvents;
 
 namespace ZonyLrcTools.Events
 {
@@ -35,7 +35,7 @@ namespace ZonyLrcTools.Events
 
             if (_dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(_dlg.SelectedPath))
             {
-
+                EventBus.Default.Trigger<UIComponentDisableEventData>();
 
                 var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, new string[] { "*.mp3", "*.flac", "*.ape", "*.m4a" });
 
@@ -43,6 +43,7 @@ namespace ZonyLrcTools.Events
 
                 MessageBox.Show(BuildSuccessMsg(_files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                EventBus.Default.Trigger<UIComponentEnableEventData>();
                 EventBus.Default.Trigger(new MusicInfoLoadEventData()
                 {
                     MusicFilePaths = _files

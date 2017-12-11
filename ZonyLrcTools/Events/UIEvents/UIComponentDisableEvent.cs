@@ -1,8 +1,7 @@
 ﻿using Zony.Lib.Infrastructures.Dependency;
-using Zony.Lib.Infrastructures.EventBus.Handlers;
-using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common;
 using Zony.Lib.Infrastructures.EventBus;
+using Zony.Lib.Infrastructures.EventBus.Handlers;
+using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events.UIEvents
 {

@@ -19,5 +19,15 @@ namespace ZonyLrcTools.Common
                 return m_log;
             }
         }
+
+        public static void Exception(Exception E)
+        {
+            Log.Error(E);
+        }
+
+        public static void Info(string message)
+        {
+            Log.Info(message);
+        }
     }
 }

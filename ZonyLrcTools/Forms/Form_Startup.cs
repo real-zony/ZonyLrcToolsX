@@ -28,34 +28,30 @@ namespace ZonyLrcTools.Forms
             ComponentInitialize();
         }
 
+        #region > 私有方法 < 
+
+        /// <summary>
+        /// 绑定 UI 事件
+        /// </summary>
         private void BindUIClickEvent()
         {
-            #region > 搜索文件事件 <
+            // 搜索文件事件
             button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
-            #endregion
-            C();
-            #region > 歌曲信息加载事件 <
+            // 单击歌曲加载信息事件
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
-            #endregion
-
-            #region > 歌词下载事件
+            // 歌词下载事件
             button_DownloadLyric.Click += GenerateClickDelegate<MusicDownLoadEventData>();
-            #endregion
         }
 
-        private void C()
-        {
-            //throw new ArgumentException("XXX");
-        }
-
+        /// <summary>
+        /// 绑定简单的窗口弹出事件
+        /// </summary>
         private void BindButtonEvent()
         {
             button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().Show(); };
             button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManager>().Show(); };
             button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
         }
-
-        #region > 私有方法 < 
 
         /// <summary>
         /// 组件初始化

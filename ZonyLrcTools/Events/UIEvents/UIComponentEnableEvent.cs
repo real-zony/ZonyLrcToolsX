@@ -1,6 +1,7 @@
-﻿using Zony.Lib.Infrastructures.EventBus.Handlers;
-using ZonyLrcTools.Common;
+﻿using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
+using Zony.Lib.Infrastructures.EventBus.Handlers;
+using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events.UIEvents
 {
@@ -9,9 +10,9 @@ namespace ZonyLrcTools.Events.UIEvents
 
     }
 
-    public class UIComponentEnableEvent : IEventHandler<UIComponentDisableEventData>
+    public class UIComponentEnableEvent : IEventHandler<UIComponentEnableEventData>,ITransientDependency
     {
-        public void HandleEvent(UIComponentDisableEventData eventData)
+        public void HandleEvent(UIComponentEnableEventData eventData)
         {
             GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons[AppConsts.Identity_Button_SearchFile].Enabled = true;
             GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadLyric].Enabled = true;

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
+using ZonyLrcTools.Common;
 using ZonyLrcTools.Forms;
 
 namespace ZonyLrcTools
@@ -10,7 +11,7 @@ namespace ZonyLrcTools
     static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// 应用程序入口点
         /// </summary>
         [STAThread]
         static void Main()
@@ -19,27 +20,17 @@ namespace ZonyLrcTools
 
             // 全局异常捕获处理
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += Application_ThreadException;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
-            // Log4Net 初始化
-            InitializeLog4Net();
+            Application.ThreadException += (object sender, System.Threading.ThreadExceptionEventArgs e) => Log4NetHelper.Exception(e.Exception);
+            AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => Log4NetHelper.Exception(e.ExceptionObject as Exception);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(IocManager.Instance.Resolve<Form_Startup>());
         }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            
-        }
-
-        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// 初始化 IOC 容器
+        /// </summary>
         private static void InitializeIocContainer()
         {
             EventBus.Init();
@@ -50,11 +41,6 @@ namespace ZonyLrcTools
             {
                 InstallInstallers = false
             });
-        }
-
-        private static void InitializeLog4Net()
-        {
-
         }
     }
 }
