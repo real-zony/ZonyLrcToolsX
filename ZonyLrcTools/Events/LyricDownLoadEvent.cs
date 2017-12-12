@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
@@ -6,31 +7,35 @@ using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
+using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
 {
-    public class MusicDownLoadEventData : EventData
+    public class LyricDownLoadEventData : EventData
     {
-
+        /// <summary>
+        /// 要下载的音乐集合
+        /// </summary>
+        public IEnumerable<MusicInfoModel> MusicInfos { get; set; }
     }
 
-    public class MusicDownLoadEvent : IEventHandler<MusicDownLoadEventData>, ITransientDependency
+    public class LyricDownLoadEvent : IEventHandler<LyricDownLoadEventData>, ITransientDependency
     {
         private readonly IPluginManager m_pluginManager;
 
-        public MusicDownLoadEvent(IPluginManager pluginManager)
+        public LyricDownLoadEvent(IPluginManager pluginManager)
         {
             m_pluginManager = pluginManager;
         }
 
-        public async void HandleEvent(MusicDownLoadEventData eventData)
+        public async void HandleEvent(LyricDownLoadEventData eventData)
         {
             IPluginDownLoader _downloader = m_pluginManager.GetPlugin<IPluginDownLoader>();
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(GlobalContext.Instance.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (info) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (info) =>
                     {
                         try
                         {
@@ -42,7 +47,7 @@ namespace ZonyLrcTools.Events
                             }
 
                             // 写入歌词
-                            var _eventData = Mapper.Map<MusicDownLoadCompleteEventData>(eventData);
+                            var _eventData = Mapper.Map<LyricDownLoadCompleteEventData>(eventData);
                             _eventData.LyricData = _lyricData;
                             _eventData.Info = info;
 

@@ -40,7 +40,15 @@ namespace ZonyLrcTools.Forms
             // 单击歌曲加载信息事件
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
             // 歌词下载事件
-            button_DownloadLyric.Click += GenerateClickDelegate<MusicDownLoadEventData>();
+            button_DownloadLyric.Click += GenerateClickDelegate(new LyricDownLoadEventData()
+            {
+                MusicInfos = GlobalContext.Instance.MusicInfos
+            });
+            // 专辑图像下载事件
+            button_DownloadAlbumImage.Click += GenerateClickDelegate(new AlbumdownloadEventData()
+            {
+                MusicInfos = GlobalContext.Instance.MusicInfos
+            });
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace ZonyLrcTools.Forms
         {
             Mapper.Initialize(init =>
             {
-                init.CreateMap<MusicDownLoadEventData, MusicDownLoadCompleteEventData>();
+                init.CreateMap<LyricDownLoadEventData, LyricDownLoadCompleteEventData>();
             });
         }
 
@@ -115,11 +123,12 @@ namespace ZonyLrcTools.Forms
         /// <typeparam name="TEventData">EventData 类型</typeparam>
         /// <param name="eventData">要传递的事件数据</param>
         /// <returns></returns>
-        private EventHandler GenerateClickDelegate<TEventData>() where TEventData : EventData, new()
+        private EventHandler GenerateClickDelegate<TEventData>(TEventData eventData = null) where TEventData : EventData, new()
         {
             return delegate
             {
-                EventBus.Default.Trigger(new TEventData());
+                if (eventData == null) EventBus.Default.Trigger(new TEventData());
+                if (eventData != null) EventBus.Default.Trigger(eventData);
             };
         }
         #endregion

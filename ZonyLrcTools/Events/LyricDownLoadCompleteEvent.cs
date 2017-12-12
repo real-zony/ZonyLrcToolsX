@@ -8,22 +8,22 @@ using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
-    public class MusicDownLoadCompleteEventData : EventData
+    public class LyricDownLoadCompleteEventData : EventData
     {
         public byte[] LyricData { get; set; }
         public MusicInfoModel Info { get; set; }
     }
 
-    public class MusicDownLoadCompleteEvent : IEventHandler<MusicDownLoadCompleteEventData>, ITransientDependency
+    public class LyricDownLoadCompleteEvent : IEventHandler<LyricDownLoadCompleteEventData>, ITransientDependency
     {
         private readonly IEncodingLyricProvider m_encoder;
 
-        public MusicDownLoadCompleteEvent(IEncodingLyricProvider encoder)
+        public LyricDownLoadCompleteEvent(IEncodingLyricProvider encoder)
         {
             m_encoder = encoder;
         }
 
-        public void HandleEvent(MusicDownLoadCompleteEventData eventData)
+        public void HandleEvent(LyricDownLoadCompleteEventData eventData)
         {
             byte[] _lyricData = m_encoder.EncodeText(eventData.LyricData);
 

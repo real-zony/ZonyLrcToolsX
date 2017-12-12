@@ -56,9 +56,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.AlbumDownLoad\Zony.Lib.AlbumDownLoad.csproj">
+      <Project>{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}</Project>
+      <Name>Zony.Lib.AlbumDownLoad</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zony.Lib.NetEase\Zony.Lib.NetEase.csproj">
       <Project>{AA736E2E-68CA-4D6A-8116-EBF1FF0A6812}</Project>
       <Name>Zony.Lib.NetEase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
+      <Project>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</Project>
+      <Name>Zony.Lib.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

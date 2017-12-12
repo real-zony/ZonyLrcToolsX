@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Zony.Lib.NetEase.Plugin;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Zony.Lib.AlbumDownLoad;
+using Zony.Lib.Plugin.Models;
 
 namespace Zony.UITest
 {
@@ -10,8 +10,10 @@ namespace Zony.UITest
         [TestMethod]
         public void TestMethod1()
         {
-            var _b = new Startup();
-            _b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
+            var _c = new Startup();
+            _c.DownlaodAblumImage(new MusicInfoModel() { Artist = "DJLoveInc", Song = "Cool Kids" }, out byte[] data);
+            //var _b = new Startup();
+            //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
         }
     }
 }

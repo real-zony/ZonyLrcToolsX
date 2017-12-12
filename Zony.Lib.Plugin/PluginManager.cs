@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Interfaces;
 
 namespace Zony.Lib.Plugin
@@ -16,6 +17,22 @@ namespace Zony.Lib.Plugin
         public PluginManager()
         {
             m_pluginContainer = new ConcurrentDictionary<Type, List<Type>>();
+        }
+
+        public List<PluginInfoAttribute> GetAllPluginInfos()
+        {
+            var _result = new List<PluginInfoAttribute>();
+
+            foreach (var _type in m_pluginContainer)
+            {
+                foreach (var _plugin in _type.Value)
+                {
+                    var _info = _plugin.GetCustomAttribute<PluginInfoAttribute>();
+                    if (_info != null) _result.Add(_info);
+                }
+            }
+
+            return _result;
         }
 
         public TInterface GetPlugin<TInterface>() where TInterface : class
@@ -51,7 +68,7 @@ namespace Zony.Lib.Plugin
         {
             if (!Directory.Exists(dirPath)) return;
 
-            string[] _files = Directory.GetFiles(dirPath,"*.dll");
+            string[] _files = Directory.GetFiles(dirPath, "*.dll");
             foreach (var _file in _files)
             {
                 Assembly _asm = Assembly.UnsafeLoadFrom(_file);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Zony.Lib.Infrastructures.Dependency;
+using Zony.Lib.Plugin.Attributes;
 
 namespace Zony.Lib.Plugin
 {
@@ -17,7 +18,18 @@ namespace Zony.Lib.Plugin
         /// <typeparam name="TInterface">插件类型</typeparam>
         /// <returns>插件实例列表</returns>
         List<TInterface> GetPlugins<TInterface>() where TInterface : class;
+        /// <summary>
+        /// 从默认目录加载插件
+        /// </summary>
         void LoadPlugins();
+        /// <summary>
+        /// 从指定的路径加载插件
+        /// </summary>
+        /// <param name="dirPath">插件路径</param>
         void LoadPlugins(string dirPath);
+        /// <summary>
+        /// 获得所有插件信息
+        /// </summary>
+        List<PluginInfoAttribute> GetAllPluginInfos();
     }
 }

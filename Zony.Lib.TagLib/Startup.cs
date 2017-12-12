@@ -11,7 +11,7 @@ using TagPicture = TagLib.Picture;
 
 namespace Zony.Lib.TagLib
 {
-    [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.0.0.0", "http://www.myzony.com", "提取歌曲信息的插件")]
+    [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.1.0.0", "http://www.myzony.com", "提取歌曲信息的插件")]
     public class StartUp : IPluginAcquireMusicInfo, IPlugin
     {
         public MusicInfoModel GetMusicInfo(string filePath)

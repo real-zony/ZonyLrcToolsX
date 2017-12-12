@@ -71,8 +71,9 @@
     <Compile Include="Common\PluginStatusModel.cs" />
     <Compile Include="Common\ConfigurationManager.cs" />
     <Compile Include="Common\ConfigurationModel.cs" />
-    <Compile Include="Events\MusicDownLoadCompleteEvent.cs" />
-    <Compile Include="Events\MusicDownLoadEvent.cs" />
+    <Compile Include="Events\AlbumDownloadEvent.cs" />
+    <Compile Include="Events\LyricDownLoadCompleteEvent.cs" />
+    <Compile Include="Events\LyricDownLoadEvent.cs" />
     <Compile Include="Events\MusicInfoLoadEvent.cs" />
     <Compile Include="Events\SearchFileEvent.cs" />
     <Compile Include="Events\SingleMusicInfoLoadEvent.cs" />
