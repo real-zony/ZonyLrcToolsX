@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
+using System.Linq;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
@@ -33,11 +34,14 @@ namespace ZonyLrcTools.Events
             int _selectIndex = _listView.SelectedItems[0].Index;
 
             IPluginAcquireMusicInfo _acquire = m_plugManager.GetPlugin<IPluginAcquireMusicInfo>();
-            Stream _imgStream = _acquire.LoadAlbumImage(GlobalContext.Instance.MusicInfos.ToArray()[_selectIndex].FilePath);
             MusicInfoModel _info = GlobalContext.Instance.MusicInfos.ToArray()[_selectIndex];
+            Stream _imgStream = _acquire.LoadAlbumImage(_info.FilePath);
 
             // 加载信息
-            GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);
+            if (_imgStream != null)
+            {
+                GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);
+            }
             GlobalContext.Instance.UIContext.Right_TextBox_MusicTitle.Text = _info.Song;
             GlobalContext.Instance.UIContext.Right_TextBox_MusicArtist.Text = _info.Artist;
             GlobalContext.Instance.UIContext.Right_TextBox_MusicAblum.Text = _info.Album;

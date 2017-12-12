@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
@@ -23,21 +24,21 @@ namespace ZonyLrcTools.Events
 
         public async void HandleEvent(MusicInfoLoadEventData eventData)
         {
-            List<MusicInfoModel> _infos = PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfos(eventData.MusicFilePaths);
+            List<MusicInfoModel> _infos = PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfos(eventData.MusicFilePaths).OrderBy(z => z.Index).ToList();
 
             FillGlobalContextMusicInfos(_infos);
 
             await Task.Run(() =>
             {
 
-                for (int _index = 0; _index < _infos.Count; _index++)
+                foreach (var _info in _infos)
                 {
-                    GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Insert(_index, new ListViewItem(new string[]
+                    GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Insert(_info.Index, new ListViewItem(new string[]
                     {
-                        _infos[_index].Song,
-                        _infos[_index].Artist,
-                        _infos[_index].Album,
-                        _infos[_index].TagType,
+                        _info.Song,
+                        _info.Artist,
+                        _info.Album,
+                        _info.TagType,
                         AppConsts.Status_Music_Waiting
                     }));
                 }
@@ -46,7 +47,10 @@ namespace ZonyLrcTools.Events
 
         private void FillGlobalContextMusicInfos(List<MusicInfoModel> list)
         {
-            GlobalContext.Instance.MusicInfos = new ConcurrentBag<MusicInfoModel>();
+            if (GlobalContext.Instance.MusicInfos == null)
+            {
+                GlobalContext.Instance.MusicInfos = new ConcurrentBag<MusicInfoModel>();
+            }
 
             foreach (var item in list)
             {

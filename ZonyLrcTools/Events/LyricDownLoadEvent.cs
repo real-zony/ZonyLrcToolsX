@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
@@ -47,7 +46,7 @@ namespace ZonyLrcTools.Events
                             }
 
                             // 写入歌词
-                            var _eventData = Mapper.Map<LyricDownLoadCompleteEventData>(eventData);
+                            var _eventData = new LyricDownLoadCompleteEventData();
                             _eventData.LyricData = _lyricData;
                             _eventData.Info = info;
 

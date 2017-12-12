@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
@@ -24,7 +23,6 @@ namespace ZonyLrcTools.Forms
         {
             BindUIClickEvent();
             BindButtonEvent();
-            InitializeAutoMapper();
             ComponentInitialize();
         }
 
@@ -82,17 +80,6 @@ namespace ZonyLrcTools.Forms
                 Bottom_StatusStrip = statusStrip1,
                 Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
-        }
-
-        /// <summary>
-        /// 初始化 AutoMapper 映射规则
-        /// </summary>
-        private void InitializeAutoMapper()
-        {
-            Mapper.Initialize(init =>
-            {
-                init.CreateMap<LyricDownLoadEventData, LyricDownLoadCompleteEventData>();
-            });
         }
 
         /// <summary>
