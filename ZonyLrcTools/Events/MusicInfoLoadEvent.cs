@@ -31,7 +31,7 @@ namespace ZonyLrcTools.Events
             await Task.Run(() =>
             {
 
-                foreach (var _info in _infos)
+                foreach (var _info in GlobalContext.Instance.MusicInfos.OrderBy(z=>z.Index))
                 {
                     GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Insert(_info.Index, new ListViewItem(new string[]
                     {
@@ -49,7 +49,7 @@ namespace ZonyLrcTools.Events
         {
             if (GlobalContext.Instance.MusicInfos == null)
             {
-                GlobalContext.Instance.MusicInfos = new ConcurrentBag<MusicInfoModel>();
+                GlobalContext.Instance.MusicInfos = new List<MusicInfoModel>();
             }
 
             foreach (var item in list)

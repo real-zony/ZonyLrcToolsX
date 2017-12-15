@@ -34,7 +34,7 @@ namespace ZonyLrcTools.Events
             int _selectIndex = _listView.SelectedItems[0].Index;
 
             IPluginAcquireMusicInfo _acquire = m_plugManager.GetPlugin<IPluginAcquireMusicInfo>();
-            MusicInfoModel _info = GlobalContext.Instance.MusicInfos.ToArray()[_selectIndex];
+            MusicInfoModel _info = GlobalContext.Instance.MusicInfos[_selectIndex];
             Stream _imgStream = _acquire.LoadAlbumImage(_info.FilePath);
 
             // 加载信息

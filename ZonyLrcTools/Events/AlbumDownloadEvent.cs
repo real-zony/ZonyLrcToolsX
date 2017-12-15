@@ -13,6 +13,10 @@ namespace ZonyLrcTools.Events
     public class AlbumdownloadEventData : EventData
     {
         public IEnumerable<MusicInfoModel> MusicInfos { get; set; }
+        public AlbumdownloadEventData(IEnumerable<MusicInfoModel> musicInfos)
+        {
+            MusicInfos = musicInfos;
+        }
     }
 
     public class AlbumDownloadEvent : IEventHandler<AlbumdownloadEventData>, ITransientDependency

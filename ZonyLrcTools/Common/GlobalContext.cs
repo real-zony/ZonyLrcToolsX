@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Zony.Lib.Plugin.Models;
 
 namespace ZonyLrcTools.Common
@@ -26,8 +27,18 @@ namespace ZonyLrcTools.Common
             }
         }
 
-        public ConcurrentBag<MusicInfoModel> MusicInfos { get; set; }
+        public List<MusicInfoModel> MusicInfos { get; set; }
 
         public MainUIComponentContext UIContext { get; set; }
+
+        public ConcurrentBag<MusicInfoModel> GetConcurrentList()
+        {
+            ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
+            foreach (var _item in MusicInfos)
+            {
+                _infos.Add(_item);
+            }
+            return _infos;
+        }
     }
 }

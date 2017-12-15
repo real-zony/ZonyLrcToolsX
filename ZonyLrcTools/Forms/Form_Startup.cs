@@ -38,15 +38,9 @@ namespace ZonyLrcTools.Forms
             // 单击歌曲加载信息事件
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
             // 歌词下载事件
-            button_DownloadLyric.Click += GenerateClickDelegate(new LyricDownLoadEventData()
-            {
-                MusicInfos = GlobalContext.Instance.MusicInfos
-            });
+            button_DownloadLyric.Click += delegate { EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList())); };
             // 专辑图像下载事件
-            button_DownloadAlbumImage.Click += GenerateClickDelegate(new AlbumdownloadEventData()
-            {
-                MusicInfos = GlobalContext.Instance.MusicInfos
-            });
+            button_DownloadAlbumImage.Click += delegate { EventBus.Default.Trigger(new AlbumdownloadEventData(GlobalContext.Instance.GetConcurrentList())); };
         }
 
         /// <summary>
@@ -115,7 +109,6 @@ namespace ZonyLrcTools.Forms
             return delegate
             {
                 if (eventData == null) EventBus.Default.Trigger(new TEventData());
-                if (eventData != null) EventBus.Default.Trigger(eventData);
             };
         }
         #endregion

@@ -17,6 +17,11 @@ namespace ZonyLrcTools.Events
         /// 要下载的音乐集合
         /// </summary>
         public IEnumerable<MusicInfoModel> MusicInfos { get; set; }
+
+        public LyricDownLoadEventData(IEnumerable<MusicInfoModel> musicInfos)
+        {
+            MusicInfos = musicInfos;
+        }
     }
 
     public class LyricDownLoadEvent : IEventHandler<LyricDownLoadEventData>, ITransientDependency
