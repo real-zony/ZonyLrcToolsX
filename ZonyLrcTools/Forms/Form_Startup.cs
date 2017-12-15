@@ -24,6 +24,7 @@ namespace ZonyLrcTools.Forms
             BindUIClickEvent();
             BindButtonEvent();
             ComponentInitialize();
+            InitializeParameters();
         }
 
         #region > 私有方法 < 
@@ -74,6 +75,14 @@ namespace ZonyLrcTools.Forms
                 Bottom_StatusStrip = statusStrip1,
                 Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
+        }
+
+        /// <summary>
+        /// 初始化软件相关参数
+        /// </summary>
+        private void InitializeParameters()
+        {
+            System.Net.ServicePointManager.DefaultConnectionLimit = 512;
         }
 
         /// <summary>
