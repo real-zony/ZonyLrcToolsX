@@ -39,21 +39,24 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (info) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (info, loopState) =>
                     {
                         try
                         {
                             _downloader.DownLoad(info.Song, info.Artist, out byte[] _lyricData);
+
                             if (_lyricData == null)
                             {
-                                GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_Failed;
+                                GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[AppConsts.Status_Position].Text = AppConsts.Status_Music_Failed;
                                 return;
                             }
 
                             // 写入歌词
-                            var _eventData = new LyricDownLoadCompleteEventData();
-                            _eventData.LyricData = _lyricData;
-                            _eventData.Info = info;
+                            var _eventData = new LyricDownLoadCompleteEventData()
+                            {
+                                LyricData = _lyricData,
+                                Info = info
+                            };
 
                             EventBus.Default.Trigger(_eventData);
                         }

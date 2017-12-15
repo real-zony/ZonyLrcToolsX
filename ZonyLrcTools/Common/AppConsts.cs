@@ -20,5 +20,10 @@
         public const string Identity_Button_Donate = nameof(Identity_Button_Donate);
 
         public const string AppName = "ZonyLrcToolsX";
+
+        /// <summary>
+        /// 下载状态在 SubItem 的索引
+        /// </summary>
+        public const int Status_Position = 4;
     }
 }

@@ -54,7 +54,7 @@ namespace ZonyLrcTools.Events
 
         private void SetItemStatusString(string statusStr, int index)
         {
-            GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[index].SubItems[4].Text = statusStr;
+            GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[index].SubItems[AppConsts.Status_Position].Text = statusStr;
         }
     }
 }

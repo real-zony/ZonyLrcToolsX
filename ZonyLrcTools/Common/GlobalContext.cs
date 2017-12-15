@@ -11,6 +11,10 @@ namespace ZonyLrcTools.Common
 
         private GlobalContext() { }
 
+        public bool LyricDownloadState { get; set; }
+
+        public bool AlbumDownloadState { get; set; }
+
         public static GlobalContext Instance
         {
             get
@@ -34,10 +38,12 @@ namespace ZonyLrcTools.Common
         public ConcurrentBag<MusicInfoModel> GetConcurrentList()
         {
             ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
+
             foreach (var _item in MusicInfos)
             {
                 _infos.Add(_item);
             }
+
             return _infos;
         }
     }
