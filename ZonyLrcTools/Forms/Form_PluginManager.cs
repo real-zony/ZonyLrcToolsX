@@ -20,6 +20,9 @@ namespace ZonyLrcTools.Forms
             FillListView();
         }
 
+        /// <summary>
+        /// 填充插件 ListView 列表
+        /// </summary>
         private void FillListView()
         {
             var _infos = m_pluginManager.GetAllPluginInfos();

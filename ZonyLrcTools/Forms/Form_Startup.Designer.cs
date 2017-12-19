@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBox_Ablum = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_MusicArtist = new System.Windows.Forms.TextBox();
@@ -58,8 +60,6 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -85,6 +85,24 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "歌曲信息编辑";
+            // 
+            // textBox_BuildInLyric
+            // 
+            this.textBox_BuildInLyric.Location = new System.Drawing.Point(46, 308);
+            this.textBox_BuildInLyric.Multiline = true;
+            this.textBox_BuildInLyric.Name = "textBox_BuildInLyric";
+            this.textBox_BuildInLyric.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox_BuildInLyric.Size = new System.Drawing.Size(163, 194);
+            this.textBox_BuildInLyric.TabIndex = 2;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 311);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "歌词:";
             // 
             // textBox_Ablum
             // 
@@ -309,24 +327,6 @@
             // 
             this.columnHeader4.Text = "状态";
             this.columnHeader4.Width = 65;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 311);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(34, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "歌词:";
-            // 
-            // textBox_BuildInLyric
-            // 
-            this.textBox_BuildInLyric.Location = new System.Drawing.Point(46, 308);
-            this.textBox_BuildInLyric.Multiline = true;
-            this.textBox_BuildInLyric.Name = "textBox_BuildInLyric";
-            this.textBox_BuildInLyric.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_BuildInLyric.Size = new System.Drawing.Size(163, 194);
-            this.textBox_BuildInLyric.TabIndex = 2;
             // 
             // Form_Startup
             // 

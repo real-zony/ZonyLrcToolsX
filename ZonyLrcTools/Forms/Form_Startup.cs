@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Plugin;
+using Zony.Lib.Plugin.Common;
+using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Events;
@@ -61,8 +63,6 @@ namespace ZonyLrcTools.Forms
         {
             CheckForIllegalCrossThreadCalls = false;
 
-            PluginManager.LoadPlugins();
-
             GlobalContext.Instance.UIContext = new MainUIComponentContext()
             {
                 Center_ListViewNF_MusicList = listView_SongItems,
@@ -75,6 +75,9 @@ namespace ZonyLrcTools.Forms
                 Bottom_StatusStrip = statusStrip1,
                 Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
+
+            PluginManager.LoadPlugins();
+            PluginManager.GetPlugins<IPluginExtensions>().ForEach(x => x.InitializePlugin(PluginManager));
         }
 
         /// <summary>

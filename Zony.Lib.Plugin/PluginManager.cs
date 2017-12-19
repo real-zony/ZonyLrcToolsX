@@ -51,12 +51,11 @@ namespace Zony.Lib.Plugin
         {
             Type _type = typeof(TInterface);
 
-            if (m_pluginContainer.TryGetValue(_type, out List<Type> _plugins))
-            {
-                return _plugins as List<TInterface>;
-            }
+            List<TInterface> _instances = new List<TInterface>();
 
-            return null;
+            if (!m_pluginContainer.TryGetValue(_type, out List<Type> _plugins)) return null;
+            _plugins.ForEach(_plugin => _instances.Add(Activator.CreateInstance(_plugin) as TInterface));
+            return _instances;
         }
 
         public void LoadPlugins()

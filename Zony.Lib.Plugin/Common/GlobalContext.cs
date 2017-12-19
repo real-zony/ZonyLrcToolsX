@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Zony.Lib.Plugin.Models;
 
-namespace ZonyLrcTools.Common
+namespace Zony.Lib.Plugin.Common
 {
     public class GlobalContext
     {

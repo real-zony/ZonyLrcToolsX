@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Zony.Lib.Plugin.Common;
 
 namespace Zony.Lib.Plugin.Interfaces
 {
+    /// <summary>
+    /// 高级扩展插件
+    /// </summary>
     public interface IPluginExtensions
     {
+        void InitializePlugin(IPluginManager plugManager);
     }
 }

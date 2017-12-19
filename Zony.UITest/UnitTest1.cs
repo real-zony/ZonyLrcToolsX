@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Zony.Lib.AlbumDownLoad;
-using Zony.Lib.Plugin.Models;
+using Zony.Lib.SingleLyricSearch;
 
 namespace Zony.UITest
 {
@@ -11,7 +10,7 @@ namespace Zony.UITest
         public void TestMethod1()
         {
             var _c = new Startup();
-            _c.DownlaodAblumImage(new MusicInfoModel() { Artist = "DJLoveInc", Song = "Cool Kids" }, out byte[] data);
+            _c.Action1();
             //var _b = new Startup();
             //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
         }

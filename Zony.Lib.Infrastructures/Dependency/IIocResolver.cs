@@ -33,7 +33,17 @@ namespace Zony.Lib.Infrastructures.Dependency
         /// <param name="argumentsAsAnonymousType">解析参数</param>
         /// <returns></returns>
         object Resolve(Type type, object argumentsAsAnonymousType);
+        /// <summary>
+        /// 解析所有对象
+        /// </summary>
+        /// <typeparam name="T">要解析的接口类型</typeparam>
         T[] ResolveAll<T>();
+        /// <summary>
+        /// 解析所有对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="argumentsAsAnonymousType"></param>
+        /// <returns></returns>
         T[] ResolveAll<T>(object argumentsAsAnonymousType);
         object[] ResolveAll(Type type);
         object[] ResolveAll(Type type, object argumentsAsAnonymousType);

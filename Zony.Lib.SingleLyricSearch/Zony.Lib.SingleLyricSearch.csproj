@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</ProjectGuid>
+    <ProjectGuid>{99862AB6-3ECD-45B2-A882-3E21C4B8CD0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zony.Lib.Plugin</RootNamespace>
-    <AssemblyName>Zony.Lib.Plugin</AssemblyName>
+    <RootNamespace>Zony.Lib.SingleLyricSearch</RootNamespace>
+    <AssemblyName>Zony.Lib.SingleLyricSearch</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,29 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\PluginInfoAttribute.cs" />
-    <Compile Include="Common\GlobalContext.cs" />
-    <Compile Include="Exceptions\NotFoundLyricException.cs" />
-    <Compile Include="Interfaces\IPlugin.cs" />
-    <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />
-    <Compile Include="Interfaces\IPluginAlbumDownloader.cs" />
-    <Compile Include="Interfaces\IPluginDownLoader.cs" />
-    <Compile Include="Interfaces\IPluginExtensions.cs" />
-    <Compile Include="IPluginManager.cs" />
-    <Compile Include="Models\MainUIComponentContext.cs" />
-    <Compile Include="Models\MusicInfoModel.cs" />
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
-      <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>
-      <Name>Zony.Lib.Infrastructures</Name>
+    <ProjectReference Include="..\Zony.Lib.Net\Zony.Lib.Net.csproj">
+      <Project>{B060D7BB-6CC1-4045-B038-9EA612435BA5}</Project>
+      <Name>Zony.Lib.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Zony.Lib.UIComponents\Zony.Lib.UIComponents.csproj">
-      <Project>{c788a631-2fc5-4130-bd7f-5b4be7ac2f6f}</Project>
-      <Name>Zony.Lib.UIComponents</Name>
+    <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
+      <Project>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</Project>
+      <Name>Zony.Lib.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\ZonyLrcTools\bin\Debug\Plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>
