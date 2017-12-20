@@ -107,6 +107,28 @@ namespace Zony.Lib.SingleLyricSearch
         }
 
         /// <summary>
+        /// 获取歌单 ID
+        /// </summary>
+        private int GetMusicDetailId()
+        {
+            var _inputBox = new InputBox("请输入歌单 URL 或者歌单 ID", "网页版歌URL，例如:\r\n" +
+                                         "http://music.163.com/#/playlist?id=716152005\r\n或者输入Id:716152005");
+            _inputBox.ShowDialog();
+
+            if (string.IsNullOrWhiteSpace(_inputBox.ResultText)) return 0;
+
+            if (int.TryParse(_inputBox.ResultText, out int _inputId)) return _inputId;
+            else
+            {
+                var _regex = new Regex(@"(?<=id=)\d+");
+                var _match = _regex.Match(_inputBox.ResultText);
+                if (!_match.Success) return 0;
+                return int.Parse(_match.Value);
+            }
+        }
+
+        #region > UI 相关 <
+        /// <summary>
         /// 填充 ListView 组件
         /// </summary>
         /// <param name="infos">歌曲信息列表</param>
@@ -140,27 +162,6 @@ namespace Zony.Lib.SingleLyricSearch
         }
 
         /// <summary>
-        /// 获取歌单 ID
-        /// </summary>
-        private int GetMusicDetailId()
-        {
-            var _inputBox = new InputBox("请输入歌单 URL 或者歌单 ID", "网页版歌URL，例如:\r\n" +
-                                         "http://music.163.com/#/playlist?id=716152005\r\n或者输入Id:716152005");
-            _inputBox.ShowDialog();
-
-            if (string.IsNullOrWhiteSpace(_inputBox.ResultText)) return 0;
-
-            if (int.TryParse(_inputBox.ResultText, out int _inputId)) return _inputId;
-            else
-            {
-                var _regex = new Regex(@"(?<=id=)\d+");
-                var _match = _regex.Match(_inputBox.ResultText);
-                if (!_match.Success) return 0;
-                return int.Parse(_match.Value);
-            }
-        }
-
-        /// <summary>
         /// 启用按钮组
         /// </summary>
         private void EnableButtons()
@@ -183,5 +184,6 @@ namespace Zony.Lib.SingleLyricSearch
             GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_DownLoadAblumImage"].Enabled = false;
             m_pluginButton.Enabled = false;
         }
+        #endregion
     }
 }
