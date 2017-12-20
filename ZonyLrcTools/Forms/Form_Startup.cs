@@ -102,7 +102,7 @@ namespace ZonyLrcTools.Forms
             _resultDict.Add(AppConsts.Identity_Button_StopDownLoad, button_StopDownload);
             _resultDict.Add(AppConsts.Identity_Button_PluginManager, button_PluginsManager);
             _resultDict.Add(AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric);
-            _resultDict.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadLyric);
+            _resultDict.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadAlbumImage);
             _resultDict.Add(AppConsts.Identity_Button_Donate, button_Donate);
             _resultDict.Add(AppConsts.Identity_Button_Configuration, button_Setting);
             _resultDict.Add(AppConsts.Identity_Button_About, button_About);

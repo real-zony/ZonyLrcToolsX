@@ -111,6 +111,7 @@ namespace Zony.Lib.NetEase.Plugin
         private string GetTranslateLyric(JObject lyricJObj)
         {
             if (!JObjectIsContainsProperty(lyricJObj, "tlyric")) return string.Empty;
+            if (lyricJObj["tlyric"]["lyric"] == null) return string.Empty;
 
             string _transLyric = lyricJObj["tlyric"]["lyric"].Value<string>();
 
@@ -129,7 +130,7 @@ namespace Zony.Lib.NetEase.Plugin
             return _regex.Replace(srcLyricText, new MatchEvaluator((Match _match) =>
             {
                 string[] _strs = _match.Value.Split('.');
-                if(_strs.Length <= 1) return _match.Value;
+                if (_strs.Length <= 1) return _match.Value;
                 if (_strs[1].Length == 3) return _match.Value;
 
                 string _value = _strs[1].Remove(_strs[1].Length - 2);
@@ -176,7 +177,11 @@ namespace Zony.Lib.NetEase.Plugin
                     int _pos = _value.IndexOf(']') + 1;
                     string _timeline = _value.Substring(0, _pos);
                     string _lyricText = _value.Substring(_pos, _value.Length - _pos);
-                    _dict.Add(_timeline, _lyricText);
+                    if (_dict.ContainsKey(_timeline))
+                    {
+                        _dict[_timeline] = $"{_dict[_timeline]},{_lyricText}";
+                    }
+                    else _dict.Add(_timeline, _lyricText);
                 }
 
                 return _dict;

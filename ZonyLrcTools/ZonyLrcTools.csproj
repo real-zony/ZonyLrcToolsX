@@ -57,6 +57,7 @@
     <Compile Include="Common\AppConsts.cs" />
     <Compile Include="Common\DownLoader.cs" />
     <Compile Include="Common\Exceptions\FileSearchException.cs" />
+    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Common\FileSearchProvider.cs" />
     <Compile Include="Common\DefaultEncodingLyricProvider.cs" />
     <Compile Include="Common\Interfaces\IDownLoader.cs" />

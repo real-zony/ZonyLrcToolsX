@@ -58,6 +58,10 @@
       <Project>{043B9995-B8BF-4A36-BD57-304C6D6CE7E7}</Project>
       <Name>Zony.Lib.Plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Zony.Lib.UIComponents\Zony.Lib.UIComponents.csproj">
+      <Project>{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}</Project>
+      <Name>Zony.Lib.UIComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
