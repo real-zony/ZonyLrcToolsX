@@ -6,9 +6,9 @@ using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Common
 {
-    public sealed class ConfigurationManager : IConfigurationManager
+    internal sealed class ConfigurationManager : IConfigurationManager
     {
-        public ConfigurationModel ConfigModel { get; set; }
+        public ConfigurationModel ConfigModel { get; private set; }
         /// <summary>
         /// 默认配置文件路径
         /// </summary>

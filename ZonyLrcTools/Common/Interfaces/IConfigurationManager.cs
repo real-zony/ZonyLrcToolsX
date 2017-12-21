@@ -5,7 +5,7 @@ namespace ZonyLrcTools.Common.Interfaces
     /// <summary>
     /// 设置管理
     /// </summary>
-    public interface IConfigurationManager : ITransientDependency
+    public interface IConfigurationManager : ISingletonDependency
     {
         /// <summary>
         /// 从默认配置文件加载设置
@@ -25,5 +25,10 @@ namespace ZonyLrcTools.Common.Interfaces
         /// </summary>
         /// <param name="filePath">设置文件路径</param>
         void SaveConfiguration(string filePath);
+
+        /// <summary>
+        /// 配置模型
+        /// </summary>
+        ConfigurationModel ConfigModel { get; }
     }
 }

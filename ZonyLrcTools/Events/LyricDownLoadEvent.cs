@@ -9,6 +9,7 @@ using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
+using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
@@ -28,10 +29,12 @@ namespace ZonyLrcTools.Events
     public class LyricDownLoadEvent : IEventHandler<LyricDownLoadEventData>, ITransientDependency
     {
         private readonly IPluginManager m_pluginManager;
+        private readonly IConfigurationManager m_configMgr;
 
-        public LyricDownLoadEvent(IPluginManager pluginManager)
+        public LyricDownLoadEvent(IPluginManager pluginManager, IConfigurationManager configMgr)
         {
             m_pluginManager = pluginManager;
+            m_configMgr = configMgr;
         }
 
         public async void HandleEvent(LyricDownLoadEventData eventData)
@@ -40,7 +43,7 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = 4 }, (info, loopState) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
                     {
                         try
                         {
