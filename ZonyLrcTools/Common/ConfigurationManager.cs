@@ -43,13 +43,15 @@ namespace ZonyLrcTools.Common
         {
             using (FileStream _file = File.Open(filePath, FileMode.OpenOrCreate))
             {
-                _file.SetLength(0);
-
                 StreamWriter _sr = new StreamWriter(_file);
                 _sr.Write(JsonConvert.SerializeObject(ConfigModel));
             }
         }
 
+        /// <summary>
+        /// 默认设置初始化
+        /// </summary>
+        /// <returns></returns>
         private ConfigurationModel InitializeDefaultConfigurationModel()
         {
             return new ConfigurationModel()
@@ -59,7 +61,9 @@ namespace ZonyLrcTools.Common
                 IsIgnoreExitsFile = true,
                 IsCheckUpdate = true,
                 IsAgree = false,
-                ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" }
+                ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" },
+                ProxyIP = string.Empty,
+                ProxyPort = 0
             };
         }
     }
