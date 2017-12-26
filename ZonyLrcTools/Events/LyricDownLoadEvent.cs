@@ -5,6 +5,7 @@ using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Common;
+using Zony.Lib.Plugin.Common.Extensions;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
@@ -51,7 +52,7 @@ namespace ZonyLrcTools.Events
 
                             if (_lyricData == null)
                             {
-                                GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[AppConsts.Status_Position].Text = AppConsts.Status_Music_Failed;
+                                GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
                                 return;
                             }
 
@@ -66,7 +67,7 @@ namespace ZonyLrcTools.Events
                         }
                         catch (NotFoundLyricException)
                         {
-                            GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[info.Index].SubItems[4].Text = AppConsts.Status_Music_NotFoundLyric;
+                            GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_NotFoundLyric);
                         }
                     });
             });

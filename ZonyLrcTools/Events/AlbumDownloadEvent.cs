@@ -5,6 +5,7 @@ using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Common;
+using Zony.Lib.Plugin.Common.Extensions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
@@ -43,22 +44,18 @@ namespace ZonyLrcTools.Events
                   {
                       if (!_albumPlugin.DownlaodAblumImage(_info, out byte[] _imgData))
                       {
-                          SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
+                          GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Failed);
                           return;
                       }
                       if (!_tagPlugin.SaveAlbumImage(_info.FilePath, _imgData))
                       {
-                          SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
+                          GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Failed);
                           return;
                       }
-                      SetItemStatusString(AppConsts.Status_Music_Success, _info.Index);
+
+                      GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Success);
                   });
             });
-        }
-
-        private void SetItemStatusString(string statusStr, int index)
-        {
-            GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[index].SubItems[AppConsts.Status_Position].Text = statusStr;
         }
     }
 }
