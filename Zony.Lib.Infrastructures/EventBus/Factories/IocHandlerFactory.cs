@@ -4,6 +4,9 @@ using Zony.Lib.Infrastructures.EventBus.Handlers;
 
 namespace Zony.Lib.Infrastructures.EventBus.Factories
 {
+    /// <summary>
+    /// 基于 Ioc 的事件处理器工厂
+    /// </summary>
     public class IocHandlerFactory : IEventHandlerFactory
     {
         public Type HandlerType { get; private set; }

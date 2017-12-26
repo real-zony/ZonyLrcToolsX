@@ -8,6 +8,7 @@ using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
+using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
@@ -23,10 +24,12 @@ namespace ZonyLrcTools.Events
     public class AlbumDownloadEvent : IEventHandler<AlbumdownloadEventData>, ITransientDependency
     {
         private readonly IPluginManager m_pluginManager;
+        private readonly IConfigurationManager m_configMgr;
 
-        public AlbumDownloadEvent(IPluginManager pluginManager)
+        public AlbumDownloadEvent(IPluginManager pluginManager, IConfigurationManager configMgr)
         {
             m_pluginManager = pluginManager;
+            m_configMgr = configMgr;
         }
 
         public async void HandleEvent(AlbumdownloadEventData eventData)
@@ -36,20 +39,20 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, (_info) =>
-                {
-                    if (!_albumPlugin.DownlaodAblumImage(_info, out byte[] _imgData))
-                    {
-                        SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
-                        return;
-                    }
-                    if (!_tagPlugin.SaveAlbumImage(_info.FilePath, _imgData))
-                    {
-                        SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
-                        return;
-                    }
-                    SetItemStatusString(AppConsts.Status_Music_Success, _info.Index);
-                });
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (_info) =>
+                  {
+                      if (!_albumPlugin.DownlaodAblumImage(_info, out byte[] _imgData))
+                      {
+                          SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
+                          return;
+                      }
+                      if (!_tagPlugin.SaveAlbumImage(_info.FilePath, _imgData))
+                      {
+                          SetItemStatusString(AppConsts.Status_Music_Failed, _info.Index);
+                          return;
+                      }
+                      SetItemStatusString(AppConsts.Status_Music_Success, _info.Index);
+                  });
             });
         }
 
