@@ -8,6 +8,7 @@ using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
+using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
 
 namespace ZonyLrcTools.Forms
@@ -15,6 +16,7 @@ namespace ZonyLrcTools.Forms
     public partial class Form_Startup : Form, ITransientDependency
     {
         public IPluginManager PluginManager { get; set; }
+        public IConfigurationManager ConfigurationManager { get; set; }
 
         public Form_Startup()
         {
@@ -86,6 +88,8 @@ namespace ZonyLrcTools.Forms
         private void InitializeParameters()
         {
             System.Net.ServicePointManager.DefaultConnectionLimit = 512;
+
+            ConfigurationManager.LoadConfiguration();
         }
 
         /// <summary>

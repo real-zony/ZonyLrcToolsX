@@ -6,7 +6,7 @@ using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Common
 {
-    internal sealed class ConfigurationManager : IConfigurationManager
+    public class ConfigurationManager : IConfigurationManager
     {
         public ConfigurationModel ConfigModel { get; private set; }
         /// <summary>

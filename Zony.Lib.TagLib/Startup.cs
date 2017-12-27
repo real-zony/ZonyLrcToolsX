@@ -24,6 +24,7 @@ namespace Zony.Lib.TagLib
                 var _file = TagFile.Create(filePath);
                 _info.Song = _file.Tag.Title;
                 _info.Artist = _file.Tag.FirstPerformer;
+                if (!string.IsNullOrEmpty(_file.Tag.FirstAlbumArtist)) _info.Artist = _file.Tag.FirstAlbumArtist;
                 _info.Album = _file.Tag.Album;
 
                 if (string.IsNullOrEmpty(_info.Song)) _info.Song = _fileName;
