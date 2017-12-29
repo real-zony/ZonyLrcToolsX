@@ -2,6 +2,9 @@
 
 namespace Zony.Lib.Plugin.Attributes
 {
+    /// <summary>
+    /// 插件信息标注
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class PluginInfoAttribute : Attribute
     {

@@ -8,6 +8,7 @@ using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Extensions;
 using ZonyLrcTools.Common.Interfaces;
+using ZonyLrcTools.Encoders;
 
 namespace ZonyLrcTools.Events
 {
@@ -19,16 +20,17 @@ namespace ZonyLrcTools.Events
 
     public class LyricDownLoadCompleteEvent : IEventHandler<LyricDownLoadCompleteEventData>, ITransientDependency
     {
-        private readonly IEncodingLyricProvider m_encoder;
+        private readonly IEncoderProvider m_encoder;
+        private readonly IConfigurationManager m_configMgr;
 
-        public LyricDownLoadCompleteEvent(IEncodingLyricProvider encoder)
+        public LyricDownLoadCompleteEvent(IEncoderProvider encoder,IConfigurationManager configMgr)
         {
             m_encoder = encoder;
         }
 
         public void HandleEvent(LyricDownLoadCompleteEventData eventData)
         {
-            byte[] _lyricData = m_encoder.EncodeText(eventData.LyricData);
+            byte[] _lyricData = m_encoder.GetEncoder(m_configMgr.ConfigModel.EncodingName).Encoding(eventData.LyricData);
 
             string _lyricFilePath = SavePath(eventData.Info);
 
