@@ -41,7 +41,7 @@ namespace ZonyLrcTools.Events
 
                 if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MessageBox.Show(BuildSuccessMsg(_files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(BuildCompleteMsg(_files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 EventBus.Default.Trigger<UIComponentEnableEventData>();
                 EventBus.Default.Trigger(new MusicInfoLoadEventData()
@@ -51,7 +51,12 @@ namespace ZonyLrcTools.Events
             }
         }
 
-        private string BuildSuccessMsg(Dictionary<string, List<string>> files)
+        /// <summary>
+        /// 构建完成消息
+        /// </summary>
+        /// <param name="files">搜索出来的文件路径信息字典</param>
+        /// <returns></returns>
+        private string BuildCompleteMsg(Dictionary<string, List<string>> files)
         {
             StringBuilder _builder = new StringBuilder();
             _builder.Append($"文件查找完成，共搜索到音乐文件 {files.Sum(x => x.Value.Count)} 个。\n");

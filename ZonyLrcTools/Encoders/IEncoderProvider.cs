@@ -1,6 +1,7 @@
-﻿namespace ZonyLrcTools.Encoders
+﻿using Zony.Lib.Infrastructures.Dependency;
+namespace ZonyLrcTools.Encoders
 {
-    public interface IEncoderProvider
+    public interface IEncoderProvider : ISingletonDependency
     {
         /// <summary>
         /// 根据编码页名称获得编码器

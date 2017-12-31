@@ -23,9 +23,10 @@ namespace ZonyLrcTools.Events
         private readonly IEncoderProvider m_encoder;
         private readonly IConfigurationManager m_configMgr;
 
-        public LyricDownLoadCompleteEvent(IEncoderProvider encoder,IConfigurationManager configMgr)
+        public LyricDownLoadCompleteEvent(IEncoderProvider encoder, IConfigurationManager configMgr)
         {
             m_encoder = encoder;
+            m_configMgr = configMgr;
         }
 
         public void HandleEvent(LyricDownLoadCompleteEventData eventData)

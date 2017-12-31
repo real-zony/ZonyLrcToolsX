@@ -1,11 +1,12 @@
 ﻿using System.Text;
+using Zony.Lib.Infrastructures.Dependency;
 
 namespace ZonyLrcTools.Encoders
 {
     /// <summary>
     /// 编码器
     /// </summary>
-    public interface IEncoder
+    public interface IEncoder : ITransientDependency
     {
         /// <summary>
         /// 将字符串转换为指定编码格式的 Bytes 
@@ -24,6 +25,9 @@ namespace ZonyLrcTools.Encoders
         /// <param name="sourceEncode">源字节组编码</param>
         byte[] Encoding(byte[] sourceBytes, Encoding sourceEncode);
 
+        /// <summary>
+        /// 要使用的编码页
+        /// </summary>
         string EncodePageName { get; set; }
     }
 }

@@ -10,7 +10,13 @@ namespace Zony.Lib.Infrastructures.Dependency
 {
     public class IocManager : IIocManager
     {
+        /// <summary>
+        /// Ioc 单例容器
+        /// </summary>
         public static IocManager Instance { get; private set; }
+        /// <summary>
+        /// Windsor 容器
+        /// </summary>
         public IWindsorContainer IocContainer { get; private set; }
 
         /// <summary>
