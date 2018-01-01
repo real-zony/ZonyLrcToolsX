@@ -165,4 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)\log4net.config $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -38,7 +38,7 @@ namespace ZonyLrcTools.Events
             MusicInfoModel _info = GlobalContext.Instance.MusicInfos[_selectIndex];
             Stream _imgStream = _acquire.LoadAlbumImage(_info.FilePath);
 
-            // 加载信息
+            // 填充歌曲信息到 UI 
             if (_imgStream != null)
             {
                 GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);

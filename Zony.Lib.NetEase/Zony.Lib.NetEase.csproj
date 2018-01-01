@@ -7,8 +7,8 @@
     <ProjectGuid>{AA736E2E-68CA-4D6A-8116-EBF1FF0A6812}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zony.Lib.NetEase.Plugin</RootNamespace>
-    <AssemblyName>Zony.Lib.NetEase.Plugin</AssemblyName>
+    <RootNamespace>Zony.Lib.NetEase</RootNamespace>
+    <AssemblyName>Zony.Lib.NetEase</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
