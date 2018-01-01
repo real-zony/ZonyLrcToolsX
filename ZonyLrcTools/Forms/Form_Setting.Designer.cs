@@ -39,12 +39,12 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.checkBox_IsReplaceLyricFile = new System.Windows.Forms.CheckBox();
+            this.textBox_ExtensionsName = new System.Windows.Forms.TextBox();
+            this.comboBox_EncodingPages = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button_SaveAndExit = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -148,9 +148,9 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.checkBox2);
-            this.tabPage2.Controls.Add(this.textBox4);
-            this.tabPage2.Controls.Add(this.comboBox1);
+            this.tabPage2.Controls.Add(this.checkBox_IsReplaceLyricFile);
+            this.tabPage2.Controls.Add(this.textBox_ExtensionsName);
+            this.tabPage2.Controls.Add(this.comboBox_EncodingPages);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -161,30 +161,30 @@
             this.tabPage2.Text = "输出";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBox_IsReplaceLyricFile
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(9, 59);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(98, 17);
-            this.checkBox2.TabIndex = 3;
-            this.checkBox2.Text = "覆盖已有歌词";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox_IsReplaceLyricFile.AutoSize = true;
+            this.checkBox_IsReplaceLyricFile.Location = new System.Drawing.Point(9, 59);
+            this.checkBox_IsReplaceLyricFile.Name = "checkBox_IsReplaceLyricFile";
+            this.checkBox_IsReplaceLyricFile.Size = new System.Drawing.Size(98, 17);
+            this.checkBox_IsReplaceLyricFile.TabIndex = 3;
+            this.checkBox_IsReplaceLyricFile.Text = "覆盖已有歌词";
+            this.checkBox_IsReplaceLyricFile.UseVisualStyleBackColor = true;
             // 
-            // textBox4
+            // textBox_ExtensionsName
             // 
-            this.textBox4.Location = new System.Drawing.Point(70, 33);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(155, 20);
-            this.textBox4.TabIndex = 2;
+            this.textBox_ExtensionsName.Location = new System.Drawing.Point(70, 33);
+            this.textBox_ExtensionsName.Name = "textBox_ExtensionsName";
+            this.textBox_ExtensionsName.Size = new System.Drawing.Size(155, 20);
+            this.textBox_ExtensionsName.TabIndex = 2;
             // 
-            // comboBox1
+            // comboBox_EncodingPages
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(70, 6);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(155, 21);
-            this.comboBox1.TabIndex = 1;
+            this.comboBox_EncodingPages.FormattingEnabled = true;
+            this.comboBox_EncodingPages.Location = new System.Drawing.Point(70, 6);
+            this.comboBox_EncodingPages.Name = "comboBox_EncodingPages";
+            this.comboBox_EncodingPages.Size = new System.Drawing.Size(155, 21);
+            this.comboBox_EncodingPages.TabIndex = 1;
             // 
             // label5
             // 
@@ -204,26 +204,28 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "输出编码:";
             // 
-            // button1
+            // button_SaveAndExit
             // 
-            this.button1.Location = new System.Drawing.Point(172, 155);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "保存并应用";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button_SaveAndExit.Location = new System.Drawing.Point(172, 155);
+            this.button_SaveAndExit.Name = "button_SaveAndExit";
+            this.button_SaveAndExit.Size = new System.Drawing.Size(75, 23);
+            this.button_SaveAndExit.TabIndex = 1;
+            this.button_SaveAndExit.Text = "保存并应用";
+            this.button_SaveAndExit.UseVisualStyleBackColor = true;
+            this.button_SaveAndExit.Click += new System.EventHandler(this.button_SaveAndExit_Click);
             // 
             // Form_Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(258, 191);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button_SaveAndExit);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form_Setting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置";
+            this.Load += new System.EventHandler(this.Form_Setting_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -245,12 +247,12 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox_DownloadThreadNum;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button_SaveAndExit;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox_EncodingPages;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.TextBox textBox_ExtensionsName;
+        private System.Windows.Forms.CheckBox checkBox_IsReplaceLyricFile;
         private System.Windows.Forms.CheckBox checkBox3;
     }
 }

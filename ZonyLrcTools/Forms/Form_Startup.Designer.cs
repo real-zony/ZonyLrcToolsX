@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Startup));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_BuildInLyric = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -54,13 +53,14 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.button_About = new System.Windows.Forms.ToolStripButton();
             this.button_Donate = new System.Windows.Forms.ToolStripButton();
+            this.button_Feedback = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.listView_SongItems = new Zony.Lib.UIComponents.ListViewNF();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AlbumImg)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -80,9 +80,9 @@
             this.groupBox1.Controls.Add(this.textBox_MusicTitle);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.pictureBox_AlbumImg);
-            this.groupBox1.Location = new System.Drawing.Point(538, 25);
+            this.groupBox1.Location = new System.Drawing.Point(619, 25);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(219, 508);
+            this.groupBox1.Size = new System.Drawing.Size(219, 540);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "歌曲信息编辑";
@@ -168,9 +168,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 545);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 577);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(766, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(847, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -201,19 +201,19 @@
             this.toolStripSeparator3,
             this.button_About,
             this.button_Donate,
+            this.button_Feedback,
             this.toolStripSeparator4});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(766, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(847, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // button_SearchFile
             // 
-            this.button_SearchFile.Image = ((System.Drawing.Image)(resources.GetObject("button_SearchFile.Image")));
             this.button_SearchFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_SearchFile.Name = "button_SearchFile";
-            this.button_SearchFile.Size = new System.Drawing.Size(79, 22);
+            this.button_SearchFile.Size = new System.Drawing.Size(63, 22);
             this.button_SearchFile.Text = "扫描歌曲";
             // 
             // toolStripSeparator1
@@ -223,26 +223,24 @@
             // 
             // button_DownloadLyric
             // 
-            this.button_DownloadLyric.Image = ((System.Drawing.Image)(resources.GetObject("button_DownloadLyric.Image")));
             this.button_DownloadLyric.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_DownloadLyric.Name = "button_DownloadLyric";
-            this.button_DownloadLyric.Size = new System.Drawing.Size(79, 22);
+            this.button_DownloadLyric.Size = new System.Drawing.Size(63, 22);
             this.button_DownloadLyric.Text = "下载歌词";
             // 
             // button_StopDownload
             // 
-            this.button_StopDownload.Image = ((System.Drawing.Image)(resources.GetObject("button_StopDownload.Image")));
+            this.button_StopDownload.Enabled = false;
             this.button_StopDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_StopDownload.Name = "button_StopDownload";
-            this.button_StopDownload.Size = new System.Drawing.Size(79, 22);
+            this.button_StopDownload.Size = new System.Drawing.Size(63, 22);
             this.button_StopDownload.Text = "停止下载";
             // 
             // button_DownloadAlbumImage
             // 
-            this.button_DownloadAlbumImage.Image = ((System.Drawing.Image)(resources.GetObject("button_DownloadAlbumImage.Image")));
             this.button_DownloadAlbumImage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_DownloadAlbumImage.Name = "button_DownloadAlbumImage";
-            this.button_DownloadAlbumImage.Size = new System.Drawing.Size(105, 22);
+            this.button_DownloadAlbumImage.Size = new System.Drawing.Size(89, 22);
             this.button_DownloadAlbumImage.Text = "下载专辑图像";
             // 
             // toolStripSeparator2
@@ -252,18 +250,16 @@
             // 
             // button_PluginsManager
             // 
-            this.button_PluginsManager.Image = ((System.Drawing.Image)(resources.GetObject("button_PluginsManager.Image")));
             this.button_PluginsManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_PluginsManager.Name = "button_PluginsManager";
-            this.button_PluginsManager.Size = new System.Drawing.Size(79, 22);
+            this.button_PluginsManager.Size = new System.Drawing.Size(63, 22);
             this.button_PluginsManager.Text = "插件管理";
             // 
             // button_Setting
             // 
-            this.button_Setting.Image = ((System.Drawing.Image)(resources.GetObject("button_Setting.Image")));
             this.button_Setting.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_Setting.Name = "button_Setting";
-            this.button_Setting.Size = new System.Drawing.Size(53, 22);
+            this.button_Setting.Size = new System.Drawing.Size(37, 22);
             this.button_Setting.Text = "设置";
             // 
             // toolStripSeparator3
@@ -273,19 +269,31 @@
             // 
             // button_About
             // 
-            this.button_About.Image = ((System.Drawing.Image)(resources.GetObject("button_About.Image")));
+            this.button_About.Enabled = false;
             this.button_About.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_About.Name = "button_About";
-            this.button_About.Size = new System.Drawing.Size(53, 22);
+            this.button_About.Size = new System.Drawing.Size(37, 22);
             this.button_About.Text = "帮助";
             // 
             // button_Donate
             // 
-            this.button_Donate.Image = ((System.Drawing.Image)(resources.GetObject("button_Donate.Image")));
             this.button_Donate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_Donate.Name = "button_Donate";
-            this.button_Donate.Size = new System.Drawing.Size(53, 22);
+            this.button_Donate.Size = new System.Drawing.Size(37, 22);
             this.button_Donate.Text = "捐赠";
+            // 
+            // button_Feedback
+            // 
+            this.button_Feedback.Enabled = false;
+            this.button_Feedback.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.button_Feedback.Name = "button_Feedback";
+            this.button_Feedback.Size = new System.Drawing.Size(63, 22);
+            this.button_Feedback.Text = "反馈 BUG";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // listView_SongItems
             // 
@@ -300,7 +308,7 @@
             this.columnHeader4});
             this.listView_SongItems.Location = new System.Drawing.Point(14, 31);
             this.listView_SongItems.Name = "listView_SongItems";
-            this.listView_SongItems.Size = new System.Drawing.Size(518, 502);
+            this.listView_SongItems.Size = new System.Drawing.Size(599, 534);
             this.listView_SongItems.TabIndex = 0;
             this.listView_SongItems.UseCompatibleStateImageBehavior = false;
             this.listView_SongItems.View = System.Windows.Forms.View.Details;
@@ -330,16 +338,11 @@
             this.columnHeader4.Text = "状态";
             this.columnHeader4.Width = 65;
             // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
             // Form_Startup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 567);
+            this.ClientSize = new System.Drawing.Size(847, 599);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
@@ -394,5 +397,6 @@
         private System.Windows.Forms.TextBox textBox_BuildInLyric;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton button_Feedback;
     }
 }

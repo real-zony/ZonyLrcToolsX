@@ -1,6 +1,6 @@
 ﻿namespace ZonyLrcTools.Forms
 {
-    partial class Form_PluginManager
+    partial class Form_PluginManagement
     {
         /// <summary>
         /// Required designer variable.

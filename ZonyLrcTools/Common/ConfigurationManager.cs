@@ -43,8 +43,10 @@ namespace ZonyLrcTools.Common
         {
             using (FileStream _file = File.Open(filePath, FileMode.OpenOrCreate))
             {
-                StreamWriter _sr = new StreamWriter(_file);
-                _sr.Write(JsonConvert.SerializeObject(ConfigModel));
+                using (StreamWriter _sr = new StreamWriter(_file))
+                {
+                    _sr.Write(JsonConvert.SerializeObject(ConfigModel));
+                }
             }
         }
 
@@ -56,9 +58,9 @@ namespace ZonyLrcTools.Common
         {
             return new ConfigurationModel()
             {
-                EncodingName = "utf-8",
+                EncodingName = "UTF-8",
                 DownloadThreadNumber = 4,
-                IsIgnoreExitsFile = true,
+                IsReplaceLyricFile = true,
                 IsCheckUpdate = true,
                 IsAgree = false,
                 ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" },

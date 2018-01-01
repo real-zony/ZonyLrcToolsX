@@ -5,13 +5,12 @@ using Zony.Lib.Plugin;
 
 namespace ZonyLrcTools.Forms
 {
-    public partial class Form_PluginManager : Form, ITransientDependency
+    public partial class Form_PluginManagement : Form, ITransientDependency
     {
-        public IPluginManager m_pluginManager { get; set; }
+        public IPluginManager PlugManager { get; set; }
 
-        public Form_PluginManager(/*IPluginManager pluginManager*/)
+        public Form_PluginManagement()
         {
-            //m_pluginManager = pluginManager;
             InitializeComponent();
         }
 
@@ -25,7 +24,7 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void FillListView()
         {
-            var _infos = m_pluginManager.GetAllPluginInfos();
+            var _infos = PlugManager.GetAllPluginInfos();
             foreach (var _info in _infos)
             {
                 listView_PluginList.Items.Add(new ListViewItem(new string[]
