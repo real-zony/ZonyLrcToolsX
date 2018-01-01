@@ -6,12 +6,17 @@ namespace ZonyLrcTools.Forms
 {
     public partial class Form_Setting : Form, ITransientDependency
     {
-        private readonly IConfigurationManager m_settingMgr;
+        public IConfigurationManager ConfigurationManager { get; set; }
 
-        public Form_Setting(IConfigurationManager settingMgr)
+        public Form_Setting()
         {
             InitializeComponent();
-            m_settingMgr = settingMgr;
+            InitializeSettingUI();
+        }
+
+        private void InitializeSettingUI()
+        {
+            textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
         }
     }
 }

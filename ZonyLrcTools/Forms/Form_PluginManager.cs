@@ -7,11 +7,11 @@ namespace ZonyLrcTools.Forms
 {
     public partial class Form_PluginManager : Form, ITransientDependency
     {
-        private readonly IPluginManager m_pluginManager;
+        public IPluginManager m_pluginManager { get; set; }
 
-        public Form_PluginManager(IPluginManager pluginManager)
+        public Form_PluginManager(/*IPluginManager pluginManager*/)
         {
-            m_pluginManager = pluginManager;
+            //m_pluginManager = pluginManager;
             InitializeComponent();
         }
 
