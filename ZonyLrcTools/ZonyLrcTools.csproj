@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\App.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -76,6 +79,7 @@
     <Compile Include="Events\LyricDownLoadCompleteEvent.cs" />
     <Compile Include="Events\LyricDownLoadEvent.cs" />
     <Compile Include="Events\MusicInfoLoadEvent.cs" />
+    <Compile Include="Events\ProgramExitEvent.cs" />
     <Compile Include="Events\SearchFileEvent.cs" />
     <Compile Include="Events\SingleMusicInfoLoadEvent.cs" />
     <Compile Include="Events\UIEvents\UIComponentDisableEvent.cs" />
@@ -92,11 +96,11 @@
     <Compile Include="Forms\Form_Donate.Designer.cs">
       <DependentUpon>Form_Donate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form_PluginManager.cs">
+    <Compile Include="Forms\Form_PluginManagement.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form_PluginManager.Designer.cs">
-      <DependentUpon>Form_PluginManager.cs</DependentUpon>
+    <Compile Include="Forms\Form_PluginManagement.Designer.cs">
+      <DependentUpon>Form_PluginManagement.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form_Setting.cs">
       <SubType>Form</SubType>
@@ -112,8 +116,8 @@
     <EmbeddedResource Include="Forms\Form_Donate.resx">
       <DependentUpon>Form_Donate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form_PluginManager.resx">
-      <DependentUpon>Form_PluginManager.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_PluginManagement.resx">
+      <DependentUpon>Form_PluginManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_Setting.resx">
       <DependentUpon>Form_Setting.cs</DependentUpon>
@@ -163,6 +167,39 @@
       <Project>{C788A631-2FC5-4130-BD7F-5B4BE7AC2F6F}</Project>
       <Name>Zony.Lib.UIComponents</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194063.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194060.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194056.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194047.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194064.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194052.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194049.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1194066.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\donateImageAlipay.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\donateImageWeixin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

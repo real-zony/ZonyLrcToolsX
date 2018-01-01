@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Common
         /// <summary>
         /// 是否忽略已存在歌词的文件
         /// </summary>
-        public bool IsIgnoreExitsFile { get; set; }
+        public bool IsReplaceLyricFile { get; set; }
         /// <summary>
         /// 搜索的扩展名集合
         /// </summary>

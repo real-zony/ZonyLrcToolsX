@@ -10,6 +10,7 @@ using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
+using ZonyLrcTools.Properties;
 
 namespace ZonyLrcTools.Forms
 {
@@ -29,9 +30,8 @@ namespace ZonyLrcTools.Forms
             BindButtonEvent();
             ComponentInitialize();
             InitializeParameters();
+            InitializeIcons();
         }
-
-        #region > 私有方法 < 
 
         /// <summary>
         /// 绑定 UI 事件
@@ -42,6 +42,8 @@ namespace ZonyLrcTools.Forms
             button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
             // 单击歌曲加载信息事件
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
+            // 程序退出事件
+            FormClosed += delegate { EventBus.Default.Trigger<ProgramExitEventData>(); };
             // 歌词下载事件
             button_DownloadLyric.Click += delegate { EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList())); };
             // 专辑图像下载事件
@@ -54,7 +56,7 @@ namespace ZonyLrcTools.Forms
         private void BindButtonEvent()
         {
             button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().Show(); };
-            button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManager>().Show(); };
+            button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManagement>().Show(); };
             button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
         }
 
@@ -127,6 +129,22 @@ namespace ZonyLrcTools.Forms
                 if (eventData == null) EventBus.Default.Trigger(new TEventData());
             };
         }
-        #endregion
+
+        /// <summary>
+        /// 初始图标
+        /// </summary>
+        private void InitializeIcons()
+        {
+            button_SearchFile.Image = Resources.directory.ToBitmap();
+            button_DownloadAlbumImage.Image = button_DownloadLyric.Image = Resources.downlaod.ToBitmap();
+            button_StopDownload.Image = Resources.stopdownload.ToBitmap();
+            button_PluginsManager.Image = Resources.pluginmanagement.ToBitmap();
+            button_Setting.Image = Resources.configuration.ToBitmap();
+            button_About.Image = Resources.help.ToBitmap();
+            button_Feedback.Image = Resources.help.ToBitmap();
+            button_Donate.Image = Resources.donate.ToBitmap();
+
+            Icon = Resources.App;
+        }
     }
 }

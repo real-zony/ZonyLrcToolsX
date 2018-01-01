@@ -1,6 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
+using Zony.Lib.Infrastructures.EventBus;
 using ZonyLrcTools.Common.Interfaces;
+using ZonyLrcTools.Events;
 
 namespace ZonyLrcTools.Forms
 {
@@ -11,12 +16,48 @@ namespace ZonyLrcTools.Forms
         public Form_Setting()
         {
             InitializeComponent();
-            InitializeSettingUI();
         }
 
-        private void InitializeSettingUI()
+        private async void Form_Setting_Load(object sender, System.EventArgs e)
         {
-            textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
+            await InitializeSettingUI();
+        }
+
+        private void button_SaveAndExit_Click(object sender, System.EventArgs e)
+        {
+            SerializeUI();
+            EventBus.Default.Trigger<ProgramExitEventData>();
+        }
+
+        /// <summary>
+        /// 根据 ConfigrationModel 数据初始化 UI
+        /// </summary>
+        private async Task InitializeSettingUI()
+        {
+            await Task.Run(() => 
+            {
+                // 加载编码页
+                Encoding.GetEncodings().Cast<EncodingInfo>().ToList().ForEach(encoding => comboBox_EncodingPages.Items.Add(encoding.Name.ToUpper()));
+                comboBox_EncodingPages.Items.Add("UTF-8 BOM");
+                comboBox_EncodingPages.Items.Add("ANSI");
+                comboBox_EncodingPages.Items.Add("UTF-16");
+                comboBox_EncodingPages.Text = ConfigurationManager.ConfigModel.EncodingName;
+
+                textBox_ExtensionsName.Text = string.Join(";", ConfigurationManager.ConfigModel.ExtensionsName.ToArray());
+                textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
+                checkBox_IsReplaceLyricFile.Checked = !ConfigurationManager.ConfigModel.IsReplaceLyricFile;
+            });
+        }
+
+        /// <summary>
+        /// 序列化 UI 信息到 ConfigurationModel
+        /// </summary>
+        private void SerializeUI()
+        {
+            ConfigurationManager.ConfigModel.DownloadThreadNumber = int.Parse(textBox_DownloadThreadNum.Text);
+            ConfigurationManager.ConfigModel.EncodingName = comboBox_EncodingPages.Text;
+            ConfigurationManager.ConfigModel.ExtensionsName = textBox_ExtensionsName.Text.Split(';').ToList();
+            ConfigurationManager.ConfigModel.IsReplaceLyricFile = checkBox_IsReplaceLyricFile.Checked;
         }
     }
 }
