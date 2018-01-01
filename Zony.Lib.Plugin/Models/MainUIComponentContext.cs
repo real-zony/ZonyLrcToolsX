@@ -37,7 +37,11 @@ namespace Zony.Lib.Plugin.Models
         /// <summary>
         /// 底部状态栏控件
         /// </summary>
-        public StatusStrip Bottom_StatusStrip { get; set; }
+        public ToolStripStatusLabel Bottom_StatusStrip { get; set; }
+        /// <summary>
+        /// 底部进度条控件
+        /// </summary>
+        public ToolStripProgressBar Bottom_ProgressBar { get; set; }
         /// <summary>
         /// 顶部菜单控件
         /// </summary>

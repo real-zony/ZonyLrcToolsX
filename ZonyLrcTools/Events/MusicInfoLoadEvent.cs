@@ -10,6 +10,7 @@ using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
+using ZonyLrcTools.Events.UIEvents;
 
 namespace ZonyLrcTools.Events
 {
@@ -43,6 +44,8 @@ namespace ZonyLrcTools.Events
                     }));
                 }
             });
+
+            EventBus.Default.Trigger<UIComponentEnableEventData>();
         }
 
         private void FillGlobalContextMusicInfos(List<MusicInfoModel> list)

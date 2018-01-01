@@ -12,7 +12,10 @@ namespace Zony.Lib.Plugin.Common
         private static GlobalContext m_uniqueInstance;
         private static readonly object m_locker = new object();
 
-        private GlobalContext() { }
+        private GlobalContext()
+        {
+            MusicInfos = new List<MusicInfoModel>();
+        }
 
         /// <summary>
         /// 歌词下载状态
@@ -61,6 +64,7 @@ namespace Zony.Lib.Plugin.Common
         public ConcurrentBag<MusicInfoModel> GetConcurrentList()
         {
             ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
+            if (MusicInfos == null) MusicInfos = new List<MusicInfoModel>();
 
             foreach (var _item in MusicInfos)
             {

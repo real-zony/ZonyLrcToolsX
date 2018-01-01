@@ -9,6 +9,10 @@
         public const string Status_Music_Success = "下载成功";
         public const string Status_Music_Failed = "下载失败";
         public const string Status_Music_NotFoundLyric = "没有歌词";
+        public const string Status_Music_Ignore = "略过";
+
+        public const string Status_Bottom_DownLoadHead = "正在下载:";
+        public const string Status_Bottom_DownloadComplete = "下载完成.";
 
         public const string Identity_Button_SearchFile = nameof(Identity_Button_SearchFile);
         public const string Identity_Button_DownLoadLyric = nameof(Identity_Button_DownLoadLyric);

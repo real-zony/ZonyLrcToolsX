@@ -1,4 +1,6 @@
-﻿namespace Zony.Lib.Plugin.Models
+﻿using Zony.Lib.Plugin.Enums;
+
+namespace Zony.Lib.Plugin.Models
 {
     /// <summary>
     /// 歌曲信息模型
@@ -34,7 +36,7 @@
         /// <summary>
         /// 是否下载成功
         /// </summary>
-        public bool IsSuccess { get; set; }
+        public MusicInfoEnum Status { get; set; }
         /// <summary>
         /// 是否有专辑图像
         /// </summary>

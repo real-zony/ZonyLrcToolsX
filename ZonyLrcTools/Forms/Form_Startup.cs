@@ -10,6 +10,7 @@ using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
+using ZonyLrcTools.Events.UIEvents;
 using ZonyLrcTools.Properties;
 
 namespace ZonyLrcTools.Forms
@@ -45,9 +46,15 @@ namespace ZonyLrcTools.Forms
             // 程序退出事件
             FormClosed += delegate { EventBus.Default.Trigger<ProgramExitEventData>(); };
             // 歌词下载事件
-            button_DownloadLyric.Click += delegate { EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList())); };
+            button_DownloadLyric.Click += delegate {
+                EventBus.Default.Trigger<UIClearProgressEventData>();
+                EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList()));
+            };
             // 专辑图像下载事件
-            button_DownloadAlbumImage.Click += delegate { EventBus.Default.Trigger(new AlbumdownloadEventData(GlobalContext.Instance.GetConcurrentList())); };
+            button_DownloadAlbumImage.Click += delegate {
+                EventBus.Default.Trigger<UIClearProgressEventData>();
+                EventBus.Default.Trigger(new AlbumdownloadEventData(GlobalContext.Instance.GetConcurrentList()));
+            };
         }
 
         /// <summary>
@@ -55,9 +62,9 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void BindButtonEvent()
         {
-            button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().Show(); };
-            button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManagement>().Show(); };
-            button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().Show(); };
+            button_Setting.Click += delegate { IocManager.Instance.Resolve<Form_Setting>().ShowDialog(); };
+            button_PluginsManager.Click += delegate { IocManager.Instance.Resolve<Form_PluginManagement>().ShowDialog(); };
+            button_Donate.Click += delegate { IocManager.Instance.Resolve<Form_Donate>().ShowDialog(); };
         }
 
         /// <summary>
@@ -76,7 +83,8 @@ namespace ZonyLrcTools.Forms
                 Right_TextBox_MusicAblum = textBox_Ablum,
                 Right_TextBox_MusicBuildInLyric = textBox_BuildInLyric,
                 Top_ToolStrip = toolStrip1,
-                Bottom_StatusStrip = statusStrip1,
+                Bottom_StatusStrip = toolStripStatusLabel1,
+                Bottom_ProgressBar = toolStripProgressBar1,
                 Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
 

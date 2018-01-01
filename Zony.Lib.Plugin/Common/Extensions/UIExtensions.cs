@@ -15,5 +15,17 @@
             // 这里 4 在 ZonyLrcTools 主项目当中可使用 "AppConsts.Status_Position" 来代替
             GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items[itemIndex].SubItems[4].Text = statusText;
         }
+
+        /// <summary>
+        /// 设置底部状态栏文本内容
+        /// </summary>
+        /// <param name="text">要设置的内容文本</param>
+        public static void SetBottomStatusText(this GlobalContext context, string text)
+        {
+            if (GlobalContext.Instance.UIContext == null) return;
+            if (GlobalContext.Instance.UIContext.Bottom_StatusStrip == null) return;
+
+            GlobalContext.Instance.UIContext.Bottom_StatusStrip.Text = text;
+        }
     }
 }

@@ -82,6 +82,8 @@
     <Compile Include="Events\ProgramExitEvent.cs" />
     <Compile Include="Events\SearchFileEvent.cs" />
     <Compile Include="Events\SingleMusicInfoLoadEvent.cs" />
+    <Compile Include="Events\UIEvents\UIClearProgressEvent.cs" />
+    <Compile Include="Events\UIEvents\UIComponentDownloadCompleteEvent.cs" />
     <Compile Include="Events\UIEvents\UIComponentDisableEvent.cs" />
     <Compile Include="Events\UIEvents\UIComponentEnableEvent.cs" />
     <Compile Include="Forms\Form_Startup.cs">

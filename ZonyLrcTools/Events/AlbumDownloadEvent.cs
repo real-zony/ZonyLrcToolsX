@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
@@ -35,6 +36,8 @@ namespace ZonyLrcTools.Events
 
         public async void HandleEvent(AlbumdownloadEventData eventData)
         {
+            if (GlobalContext.Instance.MusicInfos.Count == 0 || GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Count == 0) MessageBox.Show("你还没有添加歌曲文件!", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             var _albumPlugin = m_pluginManager.GetPlugin<IPluginAlbumDownloader>();
             var _tagPlugin = m_pluginManager.GetPlugin<IPluginAcquireMusicInfo>();
 

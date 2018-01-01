@@ -43,6 +43,7 @@ namespace ZonyLrcTools.Common
         {
             using (FileStream _file = File.Open(filePath, FileMode.OpenOrCreate))
             {
+                _file.SetLength(0);
                 using (StreamWriter _sr = new StreamWriter(_file))
                 {
                     _sr.Write(JsonConvert.SerializeObject(ConfigModel));
@@ -59,7 +60,7 @@ namespace ZonyLrcTools.Common
             return new ConfigurationModel()
             {
                 EncodingName = "UTF-8",
-                DownloadThreadNumber = 4,
+                DownloadThreadNumber = 2,
                 IsReplaceLyricFile = true,
                 IsCheckUpdate = true,
                 IsAgree = false,

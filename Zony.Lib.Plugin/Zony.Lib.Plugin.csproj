@@ -45,6 +45,7 @@
     <Compile Include="Attributes\PluginInfoAttribute.cs" />
     <Compile Include="Common\Extensions\UIExtensions.cs" />
     <Compile Include="Common\GlobalContext.cs" />
+    <Compile Include="Enums\MusicInfoEnum.cs" />
     <Compile Include="Exceptions\NotFoundLyricException.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />

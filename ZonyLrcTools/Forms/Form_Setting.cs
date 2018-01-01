@@ -27,6 +27,7 @@ namespace ZonyLrcTools.Forms
         {
             SerializeUI();
             EventBus.Default.Trigger<ProgramExitEventData>();
+            Close();
         }
 
         /// <summary>
@@ -41,11 +42,12 @@ namespace ZonyLrcTools.Forms
                 comboBox_EncodingPages.Items.Add("UTF-8 BOM");
                 comboBox_EncodingPages.Items.Add("ANSI");
                 comboBox_EncodingPages.Items.Add("UTF-16");
+                comboBox_EncodingPages.Items.Add("GBK");
                 comboBox_EncodingPages.Text = ConfigurationManager.ConfigModel.EncodingName;
 
                 textBox_ExtensionsName.Text = string.Join(";", ConfigurationManager.ConfigModel.ExtensionsName.ToArray());
                 textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
-                checkBox_IsReplaceLyricFile.Checked = !ConfigurationManager.ConfigModel.IsReplaceLyricFile;
+                checkBox_IsReplaceLyricFile.Checked = ConfigurationManager.ConfigModel.IsReplaceLyricFile;
             });
         }
 
