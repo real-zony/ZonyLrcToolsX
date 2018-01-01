@@ -9,7 +9,7 @@ using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 
-namespace Zony.Lib.NetEase.Plugin
+namespace Zony.Lib.NetEase
 {
     [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.0.0.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
     public class Startup : IPluginDownLoader, IPlugin
@@ -196,9 +196,9 @@ namespace Zony.Lib.NetEase.Plugin
             foreach (var _src in _srcDic)
             {
                 bool _isAppend = false; // 用于跳过不必要的循环，避免重复
-                for (int _p = _syncIndex; _p < _transDic.Count; _p++)
+                for (int _p = _syncIndex; _p < _srcDic.Count; _p++)
                 {
-                    var _trans = _transDic.ElementAt(_p);
+                    var _trans = _transDic.ElementAtOrDefault(_p);
                     if (_isAppend == true) break;
                     if (_trans.Key == _src.Key) _resultBuilder.Append($"{_src.Key}{_src.Value},{_trans.Value}\n");
                     else
