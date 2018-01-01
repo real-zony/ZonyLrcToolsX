@@ -62,6 +62,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\ZonyLrcTools\bin\Debug\Plugins</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\ZonyLrcTools\bin\Debug\Plugins
+copy $(TargetPath) $(SolutionDir)\ZonyLrcTools\bin\Release\Plugins</PostBuildEvent>
   </PropertyGroup>
 </Project>
