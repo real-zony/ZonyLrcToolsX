@@ -103,11 +103,8 @@ namespace ZonyLrcTools.Forms
         }
 
         /// <summary>
-        /// 填充 EventData 的 UI 组件数据
+        /// 构建按钮字典，用于 Context 存储
         /// </summary>
-        /// <typeparam name="TEventData">EventData 类型</typeparam>
-        /// <param name="eventData">要传递的事件数据</param>
-        /// <returns></returns>
         private Dictionary<string, ToolStripButton> BuildToolStripButtons()
         {
             Dictionary<string, ToolStripButton> _resultDict = new Dictionary<string, ToolStripButton>();
