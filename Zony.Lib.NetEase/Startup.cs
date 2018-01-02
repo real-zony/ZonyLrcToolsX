@@ -55,7 +55,7 @@ namespace Zony.Lib.NetEase
         private (JObject, JObject) GetLyricJsonObject(object postParam)
         {
             var _result = m_netUtils.Post(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
-            if (string.IsNullOrWhiteSpace(_result)) throw new NullReferenceException("在getLyricJsonObject当中无法获得请求的资源,_result");
+            if (string.IsNullOrWhiteSpace(_result)) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
 
             // 获得歌曲SID
             string _sid = GetSongID(JObject.Parse(_result));
@@ -87,7 +87,7 @@ namespace Zony.Lib.NetEase
         /// <returns>匹配到的首位SID</returns>
         private string GetSongID(JObject sourceObj)
         {
-            if (sourceObj["result"]["songCount"].Value<int>() == 0) throw new ArgumentException("歌曲未搜索到任何结果，无法获取SID.");
+            if (sourceObj["result"]["songCount"].Value<int>() == 0) throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
             var _sids = (JArray)sourceObj["result"]["songs"];
             return _sids[0]["id"].Value<string>();
         }

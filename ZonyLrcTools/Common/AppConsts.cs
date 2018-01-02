@@ -9,6 +9,7 @@
         public const string Status_Music_Success = "下载成功";
         public const string Status_Music_Failed = "下载失败";
         public const string Status_Music_NotFoundLyric = "没有歌词";
+        public const string Status_Music_Unavailablel = "服务限制";
         public const string Status_Music_Ignore = "略过";
 
         public const string Status_Bottom_DownLoadHead = "正在下载:";

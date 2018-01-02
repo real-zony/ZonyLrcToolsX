@@ -16,7 +16,7 @@ namespace ZonyLrcTools.Events.UIEvents
 
     }
 
-    public class UIComponentDownloadCompleteEvent : IEventHandler<UIComponentDownloadCompleteEventData>,ITransientDependency
+    public class UIComponentDownloadCompleteEvent : IEventHandler<UIComponentDownloadCompleteEventData>, ITransientDependency
     {
         public void HandleEvent(UIComponentDownloadCompleteEventData eventData)
         {
@@ -29,6 +29,7 @@ namespace ZonyLrcTools.Events.UIEvents
             _builder.Append($"失败:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Failed)}\n");
             _builder.Append($"未找到:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.NotFound)}\n");
             _builder.Append($"略过:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Igonre)}\n");
+            _builder.Append($"服务限制:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Unavailble)}");
 
             MessageBox.Show(_builder.ToString(), "完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

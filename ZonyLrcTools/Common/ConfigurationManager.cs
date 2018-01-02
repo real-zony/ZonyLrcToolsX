@@ -60,7 +60,7 @@ namespace ZonyLrcTools.Common
             return new ConfigurationModel()
             {
                 EncodingName = "UTF-8",
-                DownloadThreadNumber = 2,
+                DownloadThreadNumber = 1,
                 IsReplaceLyricFile = true,
                 IsCheckUpdate = true,
                 IsAgree = false,

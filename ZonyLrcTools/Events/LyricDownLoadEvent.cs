@@ -81,6 +81,11 @@ namespace ZonyLrcTools.Events
                             info.Status = MusicInfoEnum.NotFound;
                             GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_NotFoundLyric);
                         }
+                        catch (ServiceUnavailableException)
+                        {
+                            info.Status = MusicInfoEnum.Unavailble;
+                            GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
+                        }
                         finally
                         {
                             GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
