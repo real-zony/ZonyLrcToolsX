@@ -45,7 +45,7 @@ namespace ZonyLrcTools.Events
         {
             if (GlobalContext.Instance.MusicInfos.Count == 0 || GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Count == 0) MessageBox.Show("你还没有添加歌曲文件!", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            IPluginDownLoader _downloader = m_pluginManager.GetPlugin<IPluginDownLoader>();
+            //IPluginDownLoader _downloader = m_pluginManager.GetPlugin<IPluginDownLoader>();
 
             await Task.Run(() =>
             {
@@ -60,7 +60,7 @@ namespace ZonyLrcTools.Events
                                 return;
                             }
 
-                            _downloader.DownLoad(info.Song, info.Artist, out byte[] _lyricData);
+                            m_pluginManager.GetPlugin<IPluginDownLoader>().DownLoad(info.Song, info.Artist, out byte[] _lyricData);
 
                             if (_lyricData == null)
                             {

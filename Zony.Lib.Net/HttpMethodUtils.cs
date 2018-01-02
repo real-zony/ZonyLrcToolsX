@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 
 namespace Zony.Lib.Net
 {
@@ -96,7 +97,8 @@ namespace Zony.Lib.Net
         /// </summary>
         /// <param name="srcText">待编码的字符串</param>
         /// <param name="encoding">编码方式</param>
-        public string URL_Encoding(string srcText, Encoding encoding)
+        [Obsolete("这个方法会导致将英文编码，会产生歌曲无法正常搜索的情况!")]
+        public string URL_Encoding_Old(string srcText, Encoding encoding)
         {
             StringBuilder _builder = new StringBuilder();
             byte[] _bytes = encoding.GetBytes(srcText);
@@ -107,6 +109,16 @@ namespace Zony.Lib.Net
             }
 
             return _builder.ToString().TrimEnd('%');
+        }
+
+        /// <summary>
+        /// 构建URL编码字符串
+        /// </summary>
+        /// <param name="srcText">待编码的字符串</param>
+        /// <param name="encoding">编码方式</param>
+        public string URL_Encoding(string srcText,Encoding encoding)
+        {
+            return HttpUtility.UrlEncode(srcText, encoding);
         }
 
         /// <summary>

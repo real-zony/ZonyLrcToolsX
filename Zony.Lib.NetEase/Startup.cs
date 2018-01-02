@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,15 +14,44 @@ namespace Zony.Lib.NetEase
     public class Startup : IPluginDownLoader, IPlugin
     {
         private readonly HttpMethodUtils m_netUtils = new HttpMethodUtils();
+        private int m_FaildCount = 0;
 
         public void DownLoad(string songName, string artistName, out byte[] data)
         {
             var _param = BuildParameters(songName, artistName);
+
+            try
+            {
+                var _json = GetLyricJsonObject(_param);
+                var _sourceLyric = GetSourceLyric(_json.Item1);
+                var _translateLyric = GetTranslateLyric(_json.Item2);
+                var _result = BuildLyricText(_sourceLyric, _translateLyric);
+                data = Encoding.UTF8.GetBytes(_result);
+            }
+            catch (NotFoundLyricException)
+            {
+                if (m_FaildCount == 1)
+                {
+                    SongNameIsEmptyDownLoad(songName, out byte[] twiceData);
+                    data = twiceData;
+                }
+                else
+                {
+                    throw new NotFoundLyricException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 重试下载，不带 ArtistName 进行下载
+        /// </summary>
+        public void SongNameIsEmptyDownLoad(string songName, out byte[] data)
+        {
+            var _param = BuildParameters(songName, string.Empty);
             var _json = GetLyricJsonObject(_param);
             var _sourceLyric = GetSourceLyric(_json.Item1);
             var _translateLyric = GetTranslateLyric(_json.Item2);
             var _result = BuildLyricText(_sourceLyric, _translateLyric);
-
             data = Encoding.UTF8.GetBytes(_result);
         }
 
@@ -87,7 +115,11 @@ namespace Zony.Lib.NetEase
         /// <returns>匹配到的首位SID</returns>
         private string GetSongID(JObject sourceObj)
         {
-            if (sourceObj["result"]["songCount"].Value<int>() == 0) throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
+            if (sourceObj["result"]["songCount"].Value<int>() == 0)
+            {
+                m_FaildCount++;
+                throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
+            }
             var _sids = (JArray)sourceObj["result"]["songs"];
             return _sids[0]["id"].Value<string>();
         }
