@@ -47,6 +47,7 @@
     <Compile Include="Common\GlobalContext.cs" />
     <Compile Include="Enums\MusicInfoEnum.cs" />
     <Compile Include="Exceptions\NotFoundLyricException.cs" />
+    <Compile Include="Exceptions\ServiceUnavailableException.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IPluginAcquireMusicInfo.cs" />
     <Compile Include="Interfaces\IPluginAlbumDownloader.cs" />
