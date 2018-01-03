@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.UIComponents", "Zo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.AlbumDownLoad", "Zony.Lib.AlbumDownLoad\Zony.Lib.AlbumDownLoad.csproj", "{FEC38A7A-DB97-4465-A6B8-383C604CC9A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.SingleLyricSearch", "Zony.Lib.SingleLyricSearch\Zony.Lib.SingleLyricSearch.csproj", "{99862AB6-3ECD-45B2-A882-3E21C4B8CD0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.SongListDownload", "Zony.Lib.SingleLyricSearch\Zony.Lib.SongListDownload.csproj", "{99862AB6-3ECD-45B2-A882-3E21C4B8CD0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
