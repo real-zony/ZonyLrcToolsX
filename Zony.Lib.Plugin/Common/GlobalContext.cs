@@ -73,5 +73,36 @@ namespace Zony.Lib.Plugin.Common
 
             return _infos;
         }
+
+        /// <summary>
+        /// 一个安全添加歌曲信息的方法
+        /// </summary>
+        /// <param name="infos">需要添加的歌曲信息</param>
+        public void AddMusicInfosAndFillListView(IEnumerable<MusicInfoModel> infos)
+        {
+            lock (MusicInfos)
+            {
+                int _lastIndex = MusicInfos[MusicInfos.Count - 1].Index;
+                foreach (var _info in infos)
+                {
+                    _info.Index = ++_lastIndex;
+                }
+                MusicInfos.AddRange(infos);
+            }
+        }
+
+        /// <summary>
+        /// 一个安全添加歌曲信息的方法
+        /// </summary>
+        /// <param name="infos">需要添加的歌曲信息</param>
+        public void AddMusicInfoAndFillListView(MusicInfoModel info)
+        {
+            lock (MusicInfos)
+            {
+                int _lastIndex = MusicInfos[MusicInfos.Count - 1].Index;
+                info.Index = ++_lastIndex;
+                MusicInfos.Add(info);
+            }
+        }
     }
 }
