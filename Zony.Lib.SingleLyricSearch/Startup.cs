@@ -13,7 +13,7 @@ using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using Zony.Lib.UIComponents.Box;
 
-namespace Zony.Lib.SingleLyricSearch
+namespace Zony.Lib.SongListDownload
 {
     [PluginInfo("网易云歌单获取插件", "Zony", "1.0.0.0", "http://www.myzony.com", "从用户给定的歌单 URL 当中获取歌曲信息。")]
     public class Startup : IPluginExtensions, IPlugin
