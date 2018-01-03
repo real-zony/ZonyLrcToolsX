@@ -76,6 +76,7 @@
     <Compile Include="Encoders\IEncoderProvider.cs" />
     <Compile Include="Encoders\UTF_8BOMEncoder.cs" />
     <Compile Include="Events\AlbumDownloadEvent.cs" />
+    <Compile Include="Events\CheckUpdateEvent.cs" />
     <Compile Include="Events\LyricDownLoadCompleteEvent.cs" />
     <Compile Include="Events\LyricDownLoadEvent.cs" />
     <Compile Include="Events\MusicInfoLoadEvent.cs" />

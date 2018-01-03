@@ -28,10 +28,10 @@ namespace ZonyLrcTools.Forms
         private void Form_Startup_Load(object sender, EventArgs e)
         {
             BindUIClickEvent();
-            BindButtonEvent();
             ComponentInitialize();
             InitializeParameters();
             InitializeIcons();
+            CheckUpdate();
         }
 
         /// <summary>
@@ -39,6 +39,8 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void BindUIClickEvent()
         {
+            BindButtonEvent();
+
             // 搜索文件事件
             button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
             // 单击歌曲加载信息事件
@@ -46,12 +48,14 @@ namespace ZonyLrcTools.Forms
             // 程序退出事件
             FormClosed += delegate { EventBus.Default.Trigger<ProgramExitEventData>(); };
             // 歌词下载事件
-            button_DownloadLyric.Click += delegate {
+            button_DownloadLyric.Click += delegate
+            {
                 EventBus.Default.Trigger<UIClearProgressEventData>();
                 EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList()));
             };
             // 专辑图像下载事件
-            button_DownloadAlbumImage.Click += delegate {
+            button_DownloadAlbumImage.Click += delegate
+            {
                 EventBus.Default.Trigger<UIClearProgressEventData>();
                 EventBus.Default.Trigger(new AlbumdownloadEventData(GlobalContext.Instance.GetConcurrentList()));
             };
@@ -151,5 +155,10 @@ namespace ZonyLrcTools.Forms
 
             Icon = Resources.App;
         }
+
+        /// <summary>
+        /// 检测软件更新
+        /// </summary>
+        private void CheckUpdate() => EventBus.Default.Trigger<CheckUpdateEventData>();
     }
 }
