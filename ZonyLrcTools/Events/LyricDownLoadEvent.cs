@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
@@ -45,8 +46,6 @@ namespace ZonyLrcTools.Events
         {
             if (GlobalContext.Instance.MusicInfos.Count == 0 || GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Count == 0) MessageBox.Show("你还没有添加歌曲文件!", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            //IPluginDownLoader _downloader = m_pluginManager.GetPlugin<IPluginDownLoader>();
-
             await Task.Run(() =>
             {
                 Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
@@ -54,7 +53,7 @@ namespace ZonyLrcTools.Events
                         try
                         {
                             // 略过歌词
-                            if (!m_configMgr.ConfigModel.IsReplaceLyricFile)
+                            if (!m_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
                             {
                                 info.Status = MusicInfoEnum.Igonre;
                                 return;
@@ -88,12 +87,26 @@ namespace ZonyLrcTools.Events
                         }
                         finally
                         {
+                            // 进度条自增
                             GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
                             GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value++;
+                            // 如果已经下载完成，触发完成事件
                             if (GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value == GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum) EventBus.Default.Trigger<UIComponentDownloadCompleteEventData>();
                         }
                     });
             });
+        }
+
+        /// <summary>
+        /// 检测歌词文件是否存在
+        /// </summary>
+        /// <param name="path">歌曲路径</param>
+        /// <returns>存在为 TRUE，不存在为 FALSE</returns>
+        private bool CheckLyricExist(string path)
+        {
+            string _fileName = $"{Path.GetFileNameWithoutExtension(path)}.lrc";
+            string _dirPath = Path.GetDirectoryName(path);
+            return File.Exists(Path.Combine(_dirPath, _fileName));
         }
     }
 }
