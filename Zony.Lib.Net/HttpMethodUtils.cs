@@ -93,6 +93,31 @@ namespace Zony.Lib.Net
         }
 
         /// <summary>
+        /// 对目标URL进行HTTP-GET请求，并对结果进行序列化操作
+        /// </summary>
+        /// <param name="url">目标URL</param>
+        /// <param name="parameters">要提交的参数</param>
+        /// <param name="referer">来源地址</param>
+        /// <returns>成功序列化的对象</returns>
+        public TJsonModel Get<TJsonModel>(string url, object parameters = null, string referer = null)
+        {
+            return JsonConvert.DeserializeObject<TJsonModel>(Get(url, parameters, referer));
+        }
+
+        /// <summary>
+        /// 对目标URL进行HTTP-POST请求，并对结果进行序列化操作
+        /// </summary>
+        /// <param name="url">目标URL</param>
+        /// <param name="parameters">待提交的参数</param>
+        /// <param name="referer">来源地址</param>
+        /// <param name="mediaTypeValue">提交的内容类型</param>
+        /// <returns>成功序列化的对象</returns>
+        public TJsonModel Post<TJsonModel>(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
+        {
+            return JsonConvert.DeserializeObject<TJsonModel>(Post(url, parameters, referer, mediaTypeValue));
+        }
+
+        /// <summary>
         /// 构建URL编码字符串
         /// </summary>
         /// <param name="srcText">待编码的字符串</param>
@@ -116,7 +141,7 @@ namespace Zony.Lib.Net
         /// </summary>
         /// <param name="srcText">待编码的字符串</param>
         /// <param name="encoding">编码方式</param>
-        public string URL_Encoding(string srcText,Encoding encoding)
+        public string URL_Encoding(string srcText, Encoding encoding)
         {
             return HttpUtility.UrlEncode(srcText, encoding);
         }
