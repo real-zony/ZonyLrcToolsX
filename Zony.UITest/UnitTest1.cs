@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Zony.Lib.SingleLyricSearch;
+using Zony.Lib.NetEase;
 
 namespace Zony.UITest
 {
@@ -9,7 +9,9 @@ namespace Zony.UITest
         [TestMethod]
         public void TestMethod1()
         {
-            var _c = new Startup();
+            var _downloader = new Startup();
+            _downloader.DownLoad("The Wolven Storm", "Priscilla", out byte[] data);
+            //var _c = new Startup();
             //var _b = new Startup();
             //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
         }

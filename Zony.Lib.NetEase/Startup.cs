@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Zony.Lib.Net;
+using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
@@ -82,11 +83,17 @@ namespace Zony.Lib.NetEase
         /// <returns>返回的JSON对象</returns>
         private (JObject, JObject) GetLyricJsonObject(object postParam)
         {
-            var _result = m_netUtils.Post(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
-            if (string.IsNullOrWhiteSpace(_result)) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
+            var _result = m_netUtils.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
+            if (_result == null) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
 
             // 获得歌曲SID
-            string _sid = GetSongID(JObject.Parse(_result));
+            int _sid = _result.result.songs[0].id;
+            if (_sid == 0)
+            {
+                m_FaildCount++;
+                throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
+            }
+
             // 请求歌词JSON数据
             var _params = new
             {
@@ -106,22 +113,6 @@ namespace Zony.Lib.NetEase
             if (!JObjectIsContainsProperty(_jsonObject, "lrc")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
 
             return (_jsonObject["lrc"] as JObject, _jsonObject);
-        }
-
-        /// <summary>
-        /// 获得歌曲的SID
-        /// </summary>
-        /// <param name="sourceObj">返回的歌曲列表Json对象</param>
-        /// <returns>匹配到的首位SID</returns>
-        private string GetSongID(JObject sourceObj)
-        {
-            if (sourceObj["result"]["songCount"].Value<int>() == 0)
-            {
-                m_FaildCount++;
-                throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
-            }
-            var _sids = (JArray)sourceObj["result"]["songs"];
-            return _sids[0]["id"].Value<string>();
         }
 
         /// <summary>
