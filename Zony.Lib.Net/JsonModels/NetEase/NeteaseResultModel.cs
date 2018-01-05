@@ -10,6 +10,6 @@ namespace Zony.Lib.Net.JsonModels.NetEase
 
     public class NetEaseInnerResultModel
     {
-        public List<NeteaseSongModel> tracks { get; set; }
+        public List<NetEaseSongModel> tracks { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Zony.Lib.Net.JsonModels.NetEase
 {
-    public class NeteaseSongModel
+    public class NetEaseSongModel
     {
         /// <summary>
         /// 歌曲名称

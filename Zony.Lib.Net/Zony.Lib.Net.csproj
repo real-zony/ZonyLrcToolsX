@@ -48,8 +48,9 @@
     <Compile Include="HttpMethodUtils.cs" />
     <Compile Include="JsonModels\NetEase\NetEaseAlbumModel.cs" />
     <Compile Include="JsonModels\NetEase\NetEaseArtistModel.cs" />
-    <Compile Include="JsonModels\NetEase\NeteaseResultModel.cs" />
-    <Compile Include="JsonModels\NetEase\NeteaseSongModel.cs" />
+    <Compile Include="JsonModels\NetEase\NetEaseLyricModel.cs" />
+    <Compile Include="JsonModels\NetEase\NetEaseResultModel.cs" />
+    <Compile Include="JsonModels\NetEase\NetEaseSongModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
