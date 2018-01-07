@@ -1,0 +1,16 @@
+﻿Castle.Core.dll
+Castle.Windsor.dll
+log4net.config
+log4net.dll
+Newtonsoft.Json.dll
+Zony.Lib.Infrastructures.dll
+Zony.Lib.Net.dll
+Zony.Lib.Plugin.dll
+Zony.Lib.UIComponents.dll
+ZonyLrcTools.exe
+ZonyLrcTools.exe.config
+Plugins\taglib-sharp.dll
+Plugins\Zony.Lib.AlbumDownLoad.dll
+Plugins\Zony.Lib.NetEase.dll
+Plugins\Zony.Lib.SongListDownload.dll
+Plugins\Zony.Lib.TagLib.dll

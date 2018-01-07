@@ -204,8 +204,18 @@
   <ItemGroup>
     <None Include="Resources\donateImageWeixin.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Build\7z.dll" />
+    <Content Include="Build\7z.exe" />
+    <Content Include="Build\ZipList.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)\log4net.config $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\log4net.config $(TargetDir)
+copy $(ProjectDir)\Build\7z.exe $(TargetDir)
+copy $(ProjectDir)\Build\7z.dll $(TargetDir)
+copy $(ProjectDir)\Build\ZipList.txt $(TargetDir)
+$(TargetDir)7z.exe a -tzip ZonyLrcToolsX.zip @ZipList.txt
+move $(TargetDir)ZonyLrcToolsX.zip D:\Temp\ZonyLrcToolsX.zip</PostBuildEvent>
   </PropertyGroup>
 </Project>
