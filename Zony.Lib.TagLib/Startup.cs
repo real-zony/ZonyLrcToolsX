@@ -54,24 +54,19 @@ namespace Zony.Lib.TagLib
 
         public List<MusicInfoModel> GetMusicInfos(Dictionary<string, List<string>> musicFiles)
         {
-            List<string> _files = new List<string>();
-
-            foreach (var _key in musicFiles)
-            {
-                foreach (var _file in musicFiles[_key.Key])
-                {
-                    _files.Add(_file);
-                }
-            }
-
             List<MusicInfoModel> _result = new List<MusicInfoModel>();
 
-            Parallel.For(0, _files.Count, (_index) =>
+            int _index = 0;
+            foreach (var key in musicFiles)
             {
-                MusicInfoModel _info = GetMusicInfo(_files[_index]);
-                _info.Index = _index;
-                _result.Add(_info);
-            });
+                foreach (var file in musicFiles[key.Key])
+                {
+                    MusicInfoModel _info = GetMusicInfo(file);
+                    _info.Index = _index;
+                    _result.Add(_info);
+                    _index++;
+                }
+            }
 
             return _result;
         }
