@@ -17,7 +17,7 @@ namespace Zony.Lib.Net.JsonModels.NetEase
         /// <summary>
         /// 歌曲数量
         /// </summary>
-        public int songsCount { get; set; }
+        public int songCount { get; set; }
         public List<NetEaseSongModel> tracks { get; set; }
     }
 }

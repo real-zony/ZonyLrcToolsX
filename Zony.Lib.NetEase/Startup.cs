@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
+using Zony.Lib.Net.JsonModels.NetEase.RequestModel;
 using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
@@ -24,8 +24,8 @@ namespace Zony.Lib.NetEase
             try
             {
                 var _json = GetLyricJsonObject(_param);
-                var _sourceLyric = GetSourceLyric(_json.Item1);
-                var _translateLyric = GetTranslateLyric(_json.Item2);
+                var _sourceLyric = FixedLyricTimeFormat(_json.Item1);
+                var _translateLyric = FixedLyricTimeFormat(_json.Item2);
                 var _result = BuildLyricText(_sourceLyric, _translateLyric);
                 data = Encoding.UTF8.GetBytes(_result);
             }
@@ -50,8 +50,8 @@ namespace Zony.Lib.NetEase
         {
             var _param = BuildParameters(songName, string.Empty);
             var _json = GetLyricJsonObject(_param);
-            var _sourceLyric = GetSourceLyric(_json.Item1);
-            var _translateLyric = GetTranslateLyric(_json.Item2);
+            var _sourceLyric = FixedLyricTimeFormat(_json.Item1);
+            var _translateLyric = FixedLyricTimeFormat(_json.Item2);
             var _result = BuildLyricText(_sourceLyric, _translateLyric);
             data = Encoding.UTF8.GetBytes(_result);
         }
@@ -65,15 +65,7 @@ namespace Zony.Lib.NetEase
         {
             string _encodeArtistName = m_netUtils.URL_Encoding(artistName, Encoding.UTF8);
             string _encodeSongName = m_netUtils.URL_Encoding(songName, Encoding.UTF8);
-            return new
-            {
-                csrf_token = string.Empty,
-                s = $"{_encodeArtistName}+{_encodeSongName}",
-                type = 1,
-                offset = 0,
-                total = true,
-                limit = 5
-            };
+            return new NetEaseSearchRequestModel($"{_encodeArtistName}+{_encodeSongName}");
         }
 
         /// <summary>
@@ -81,65 +73,20 @@ namespace Zony.Lib.NetEase
         /// </summary>
         /// <param name="postParam">提交访问的参数</param>
         /// <returns>返回的JSON对象</returns>
-        private (JObject, JObject) GetLyricJsonObject(object postParam)
+        private (string, string) GetLyricJsonObject(object postParam)
         {
-            var _result = m_netUtils.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
+            NetEaseResultModel _result = m_netUtils.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
             if (_result == null) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
-
-            // 获得歌曲SID
-            int _sid = _result.result.songs[0].id;
-            if (_sid == 0)
+            if (_result.result.songCount == 0)
             {
                 m_FaildCount++;
                 throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
             }
 
             // 请求歌词JSON数据
-            var _params = new
-            {
-                os = "osx",
-                id = _sid,
-                lv = -1,
-                kv = -1,
-                tv = -1
-            };
-            string _lyric = m_netUtils.Get(@"http://music.163.com/api/song/lyric", _params, @"http://music.163.com");
-            // 数据验证
-            if (_lyric.Contains("nolyric")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
-            if (_lyric.Contains("uncollected")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
-            if (string.IsNullOrWhiteSpace(_lyric)) throw new NotFoundLyricException("歌曲不存在歌词数据.");
-
-            var _jsonObject = JObject.Parse(_lyric);
-            if (!JObjectIsContainsProperty(_jsonObject, "lrc")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
-
-            return (_jsonObject["lrc"] as JObject, _jsonObject);
-        }
-
-        /// <summary>
-        /// 获得原始歌词
-        /// </summary>
-        /// <param name="lyricJObj">歌词Json对象</param>
-        /// <returns>获取到的原始歌词文本</returns>
-        private string GetSourceLyric(JObject lyricJObj)
-        {
-            if (!JObjectIsContainsProperty(lyricJObj, "lyric")) throw new NotFoundLyricException("歌曲不存在歌词数据.");
-            return FixedLyricTimeFormat(lyricJObj["lyric"].Value<string>());
-        }
-
-        /// <summary>
-        /// 获得翻译歌词
-        /// </summary>
-        /// <param name="lyricJObj"></param>
-        /// <returns></returns>
-        private string GetTranslateLyric(JObject lyricJObj)
-        {
-            if (!JObjectIsContainsProperty(lyricJObj, "tlyric")) return string.Empty;
-            if (lyricJObj["tlyric"]["lyric"] == null) return string.Empty;
-
-            string _transLyric = lyricJObj["tlyric"]["lyric"].Value<string>();
-
-            if (string.IsNullOrWhiteSpace(_transLyric)) return string.Empty;
-            return FixedLyricTimeFormat(_transLyric);
+            NetEaseLyricModel _lyric = m_netUtils.Get<NetEaseLyricModel>(@"http://music.163.com/api/song/lyric", new NetEaseLyricRequestModel(_result.result.songs[0].id), @"http://music.163.com");
+            if (_lyric.lrc == null) throw new NotFoundLyricException("歌曲不存在歌词数据.");
+            return (_lyric.lrc.lyric, _lyric.tlyric.lyric);
         }
 
         /// <summary>
@@ -149,6 +96,8 @@ namespace Zony.Lib.NetEase
         /// <returns>修复完成的二位时间轴文本</returns>
         private string FixedLyricTimeFormat(string srcLyricText)
         {
+            if (string.IsNullOrEmpty(srcLyricText)) return string.Empty;
+
             Regex _regex = new Regex(@"\[\d+:\d+.\d+\]");
             return _regex.Replace(srcLyricText, new MatchEvaluator((Match _match) =>
             {
@@ -161,16 +110,6 @@ namespace Zony.Lib.NetEase
 
                 return string.Format("{0}.{1:D2}]", _strs[0], _iValue);
             }));
-        }
-
-        /// <summary>
-        /// 判断一个JSON对象内部是否包含某个元素
-        /// </summary>
-        /// <param name="propertyName">元素名称</param>
-        /// <returns>包含的话返回TRUE，不包含的返回FALSE</returns>
-        private bool JObjectIsContainsProperty(JObject jObejct, string propertyName)
-        {
-            return jObejct.Property(propertyName) != null ? true : false;
         }
 
         /// <summary>

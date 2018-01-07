@@ -10,7 +10,7 @@ namespace Zony.UITest
         public void TestMethod1()
         {
             var _downloader = new Startup();
-            _downloader.DownLoad("The Wolven Storm", "Priscilla", out byte[] data);
+            _downloader.DownLoad("劳作的春夏秋", "阿鲲", out byte[] data);
             //var _c = new Startup();
             //var _b = new Startup();
             //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);

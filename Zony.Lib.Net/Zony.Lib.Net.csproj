@@ -51,6 +51,8 @@
     <Compile Include="JsonModels\NetEase\NetEaseLyricModel.cs" />
     <Compile Include="JsonModels\NetEase\NetEaseResultModel.cs" />
     <Compile Include="JsonModels\NetEase\NetEaseSongModel.cs" />
+    <Compile Include="JsonModels\NetEase\RequestModel\NetEaseLyricRequestModel.cs" />
+    <Compile Include="JsonModels\NetEase\RequestModel\NetEaseSearchRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
