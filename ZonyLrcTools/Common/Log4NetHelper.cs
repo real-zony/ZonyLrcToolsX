@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.IO;
+using Zony.Lib.Plugin.Common;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace ZonyLrcTools.Common

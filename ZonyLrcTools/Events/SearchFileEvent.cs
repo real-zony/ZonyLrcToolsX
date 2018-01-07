@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
-using ZonyLrcTools.Common;
+using Zony.Lib.Plugin.Common;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events.UIEvents;
 

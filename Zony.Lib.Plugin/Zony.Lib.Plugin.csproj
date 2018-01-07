@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\PluginInfoAttribute.cs" />
+    <Compile Include="Common\AppConsts.cs" />
     <Compile Include="Common\Extensions\UIExtensions.cs" />
     <Compile Include="Common\GlobalContext.cs" />
     <Compile Include="Enums\MusicInfoEnum.cs" />

@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Common
+﻿namespace Zony.Lib.Plugin.Common
 {
     public class AppConsts
     {
@@ -14,6 +14,8 @@
 
         public const string Status_Bottom_DownLoadHead = "正在下载:";
         public const string Status_Bottom_DownloadComplete = "下载完成.";
+        public const string Status_Bottom_LoadingMusicinfo = "正在加载音乐信息...";
+        public const string Status_Bottom_LoadMusicInfoComplete = "音乐信息加载完成.";
 
         public const string Identity_Button_SearchFile = nameof(Identity_Button_SearchFile);
         public const string Identity_Button_DownLoadLyric = nameof(Identity_Button_DownLoadLyric);
