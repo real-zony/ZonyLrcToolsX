@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Zony.Lib.Plugin.Enums;
 using Zony.Lib.Plugin.Models;
@@ -68,7 +69,7 @@ namespace Zony.Lib.Plugin.Common
             ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
             if (MusicInfos == null) MusicInfos = new List<MusicInfoModel>();
 
-            foreach (var _item in MusicInfos)
+            foreach (var _item in MusicInfos.Where(z => z.Status == MusicInfoEnum.Ready).OrderBy(z => z.Index))
             {
                 _infos.Add(_item);
             }
@@ -114,7 +115,7 @@ namespace Zony.Lib.Plugin.Common
         /// <param name="infos">需要添加的歌曲信息集合</param>
         public void InsertMusicInfosAndFillListView(IEnumerable<MusicInfoModel> infos)
         {
-            lock(MusicInfos)
+            lock (MusicInfos)
             {
                 int _lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
                 UIContext.Center_ListViewNF_MusicList.BeginUpdate();

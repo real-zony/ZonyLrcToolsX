@@ -54,37 +54,53 @@ namespace Zony.Lib.TagLib
 
         public List<MusicInfoModel> GetMusicInfos(Dictionary<string, List<string>> musicFiles)
         {
-            List<MusicInfoModel> _result = new List<MusicInfoModel>();
+            List<string> _files = new List<string>();
 
-            int _index = 0;
-            foreach (var key in musicFiles)
+            foreach (var _key in musicFiles)
             {
-                foreach (var file in musicFiles[key.Key])
+                foreach (var _file in musicFiles[_key.Key])
                 {
-                    MusicInfoModel _info = GetMusicInfo(file);
-                    _info.Index = _index;
-                    _result.Add(_info);
-                    _index++;
+                    _files.Add(_file);
                 }
             }
+
+            List<MusicInfoModel> _result = new List<MusicInfoModel>();
+
+            Parallel.For(0, _files.Count, (_index) =>
+            {
+                MusicInfoModel _info = GetMusicInfo(_files[_index]);
+                _info.Index = _index;
+                _result.Add(_info);
+            });
 
             return _result;
         }
 
         public async Task<List<MusicInfoModel>> GetMusicInfosAsync(Dictionary<string, List<string>> musicFiles)
         {
-            List<MusicInfoModel> _result = new List<MusicInfoModel>();
-
-            foreach (var key in musicFiles)
+            return await Task.Run(() =>
             {
-                foreach (var file in musicFiles[key.Key])
-                {
-                    var _info = await Task.Run(() => GetMusicInfo(file));
-                    _result.Add(_info);
-                }
-            }
+                List<string> _files = new List<string>();
 
-            return _result;
+                foreach (var _key in musicFiles)
+                {
+                    foreach (var _file in musicFiles[_key.Key])
+                    {
+                        _files.Add(_file);
+                    }
+                }
+
+                List<MusicInfoModel> _result = new List<MusicInfoModel>();
+
+                Parallel.For(0, _files.Count, async (_index) =>
+                {
+                    MusicInfoModel _info = GetMusicInfo(_files[0]);
+                    _info.Index = _index;
+                    _result.Add(_info);
+                });
+
+                return _result;
+            });
         }
 
         public Stream LoadAlbumImage(string filePath)

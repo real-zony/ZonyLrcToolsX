@@ -36,6 +36,7 @@ namespace ZonyLrcTools.Events
             if (_dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(_dlg.SelectedPath))
             {
                 EventBus.Default.Trigger<UIComponentDisableEventData>();
+                EventBus.Default.Trigger<UIClearMusicInfosEventData>();
 
                 var _files = await m_searchProvider.FindFilesAsync(_dlg.SelectedPath, m_settingManager.ConfigModel.ExtensionsName);
                 if (_files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);

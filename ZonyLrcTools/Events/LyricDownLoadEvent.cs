@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
@@ -13,7 +12,6 @@ using Zony.Lib.Plugin.Enums;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events.UIEvents;
 
@@ -49,54 +47,55 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos.Where(z => z.Status == MusicInfoEnum.Ready), new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
-                      {
-                          try
-                          {
-                              // 状态:略过歌词
-                              if (!m_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
-                              {
-                                  info.Status = MusicInfoEnum.Igonre;
-                                  return;
-                              }
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
+                {
+                    try
+                    {
+                        // 状态:略过歌词
+                        if (!m_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
+                        {
+                            info.Status = MusicInfoEnum.Igonre;
+                            GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Ignore);
+                            return;
+                        }
 
-                              m_pluginManager.GetPlugin<IPluginDownLoader>().DownLoad(info.Song, info.Artist, out byte[] _lyricData);
+                        m_pluginManager.GetPlugin<IPluginDownLoader>().DownLoad(info.Song, info.Artist, out byte[] _lyricData);
 
-                              // 状态:下载失败
-                              if (_lyricData == null)
-                              {
-                                  GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
-                                  info.Status = MusicInfoEnum.Failed;
-                                  return;
-                              }
+                        // 状态:下载失败
+                        if (_lyricData == null)
+                        {
+                            GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
+                            info.Status = MusicInfoEnum.Failed;
+                            return;
+                        }
 
-                              // 状态:下载成功
-                              info.Status = MusicInfoEnum.Success;
-                              EventBus.Default.Trigger(new LyricDownLoadCompleteEventData()
-                              {
-                                  LyricData = _lyricData,
-                                  Info = info
-                              });
-                          }
-                          catch (NotFoundLyricException) // 状态:未找到歌词
-                          {
-                              info.Status = MusicInfoEnum.NotFound;
-                              GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_NotFoundLyric);
-                          }
-                          catch (ServiceUnavailableException) // 状态:服务不可用
-                          {
-                              info.Status = MusicInfoEnum.Unavailble;
-                              GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
-                          }
-                          finally
-                          {
-                              // 进度条自增
-                              GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
-                              GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value++;
-                              // 如果已经下载完成，触发完成事件
-                              if (GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value == GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum) EventBus.Default.Trigger<UIComponentDownloadCompleteEventData>();
-                          }
-                      });
+                        // 状态:下载成功
+                        info.Status = MusicInfoEnum.Success;
+                        EventBus.Default.Trigger(new LyricDownLoadCompleteEventData()
+                        {
+                            LyricData = _lyricData,
+                            Info = info
+                        });
+                    }
+                    catch (NotFoundLyricException) // 状态:未找到歌词
+                    {
+                        info.Status = MusicInfoEnum.NotFound;
+                        GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_NotFoundLyric);
+                    }
+                    catch (ServiceUnavailableException) // 状态:服务不可用
+                    {
+                        info.Status = MusicInfoEnum.Unavailble;
+                        GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
+                    }
+                    finally
+                    {
+                        // 进度条自增
+                        GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
+                        GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value++;
+                        // 如果已经下载完成，触发完成事件
+                        if (GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value == GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum) EventBus.Default.Trigger<UIComponentDownloadCompleteEventData>();
+                    }
+                });
             });
         }
 
