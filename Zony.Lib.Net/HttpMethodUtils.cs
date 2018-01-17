@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Zony.Lib.Net
@@ -35,6 +36,35 @@ namespace Zony.Lib.Net
                 if (_msg.StatusCode != HttpStatusCode.OK) return string.Empty;
                 return _msg.Content.ReadAsStringAsync().Result;
             };
+        }
+
+        /// <summary>
+        /// 对目标 URL 进行异步 HTTP-GET 请求
+        /// </summary>
+        /// <param name="url">目标URL</param>
+        /// <param name="parameters">要提交的参数</param>
+        /// <param name="referer">来源地址</param>
+        /// <returns>服务器响应结果</returns>
+        /// <returns></returns>
+        public async Task<TJsonModel> GetAsync<TJsonModel>(string url, object parameters = null, string referer = null)
+        {
+            var _request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
+            };
+
+            if (referer != null) _request.Headers.Referrer = new Uri(referer);
+            using (var _msg = await m_client.SendAsync(_request))
+            {
+                if (_msg.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
+                return await Task.Run(async () =>
+                {
+                    var _jsonStr = await _msg.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<TJsonModel>(_jsonStr);
+                });
+
+            }
         }
 
         /// <summary>
