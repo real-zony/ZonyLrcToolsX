@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,6 +8,7 @@ using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Common;
+using Zony.Lib.Plugin.Common.Extensions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using Zony.Lib.UIComponents.Box;
@@ -18,40 +18,23 @@ namespace Zony.Lib.SongListDownload
     [PluginInfo("网易云歌单获取插件", "Zony", "1.0.0.0", "http://www.myzony.com", "从用户给定的歌单 URL 当中获取歌曲信息。")]
     public class Startup : IPluginExtensions, IPlugin
     {
-        private readonly HttpMethodUtils m_clinet = new HttpMethodUtils();
-        private ToolStrip m_topStrip;
-        private ToolStripItem m_pluginButton;
+        private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
+        private ToolStripItem _pluginButton;
 
         public void InitializePlugin(IPluginManager plugManager)
         {
-            InitializeDropdownButton();
-        }
-
-        /// <summary>
-        /// 初始化顶部下拉菜单
-        /// </summary>
-        private void InitializeDropdownButton()
-        {
-            m_topStrip = GlobalContext.Instance.UIContext.Top_ToolStrip;
-            m_topStrip.Items.Add(new ToolStripDropDownButton("插件功能") { Name = "Identity_PluginButtons" });
-            var _searchResult = m_topStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == "Identity_PluginButtons");
-
-            if (_searchResult != null)
-            {
-                var _button = m_pluginButton = (_searchResult as ToolStripDropDownButton).DropDownItems.Add("网易云歌单歌词下载");
-                _button.Click += _button_Click;
-            }
+            _pluginButton = GlobalContext.Instance.UIContext.AddPluginButton("网易云歌单歌词下载", _button_Click);
         }
 
         private async void _button_Click(object sender, System.EventArgs e)
         {
-            DisableButtons();
+            GlobalContext.Instance.UIContext.DisableTopButtons();
             ClearAllContainer();
 
             int _id = GetMusicDetailId();
             if (_id == 0)
             {
-                EnableButtons();
+                GlobalContext.Instance.UIContext.EnableTopButtons();
                 return;
             }
             NetEaseResultModel _jsonModel = RequestNetEase(_id);
@@ -59,7 +42,7 @@ namespace Zony.Lib.SongListDownload
             await FillListView(_infos);
 
             GlobalContext.Instance.MusicInfos.AddRange(_infos);
-            EnableButtons();
+            GlobalContext.Instance.UIContext.EnableTopButtons();
         }
 
         /// <summary>
@@ -93,7 +76,7 @@ namespace Zony.Lib.SongListDownload
         /// <param name="id">歌单 ID</param>
         private NetEaseResultModel RequestNetEase(int id)
         {
-            var _jsonResult = m_clinet.Get("http://music.163.com/api/playlist/detail", new
+            var _jsonResult = _httpClient.Get("http://music.163.com/api/playlist/detail", new
             {
                 id,
                 offset = 0,
@@ -159,30 +142,6 @@ namespace Zony.Lib.SongListDownload
             GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Clear();
             if (GlobalContext.Instance.MusicInfos == null) GlobalContext.Instance.MusicInfos = new List<MusicInfoModel>();
             GlobalContext.Instance.MusicInfos.Clear();
-        }
-
-        /// <summary>
-        /// 启用按钮组
-        /// </summary>
-        private void EnableButtons()
-        {
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_SearchFile"].Enabled = true;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_DownLoadLyric"].Enabled = true;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_StopDownLoad"].Enabled = true;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_DownLoadAblumImage"].Enabled = true;
-            m_pluginButton.Enabled = true;
-        }
-
-        /// <summary>
-        /// 禁用按钮组
-        /// </summary>
-        private void DisableButtons()
-        {
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_SearchFile"].Enabled = false;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_DownLoadLyric"].Enabled = false;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_StopDownLoad"].Enabled = false;
-            GlobalContext.Instance.UIContext.Top_ToolStrip_Buttons["Identity_Button_DownLoadAblumImage"].Enabled = false;
-            m_pluginButton.Enabled = false;
         }
         #endregion
     }

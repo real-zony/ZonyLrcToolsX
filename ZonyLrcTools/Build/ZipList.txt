@@ -14,3 +14,4 @@ Plugins\Zony.Lib.AlbumDownLoad.dll
 Plugins\Zony.Lib.NetEase.dll
 Plugins\Zony.Lib.SongListDownload.dll
 Plugins\Zony.Lib.TagLib.dll
+Plugins\Zony.Lib.AlbumImgExport.dll

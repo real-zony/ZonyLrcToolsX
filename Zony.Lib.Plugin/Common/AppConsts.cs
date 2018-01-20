@@ -25,6 +25,7 @@
         public const string Identity_Button_Configuration = nameof(Identity_Button_Configuration);
         public const string Identity_Button_About = nameof(Identity_Button_About);
         public const string Identity_Button_Donate = nameof(Identity_Button_Donate);
+        public const string Identity_PluginButtons = nameof(Identity_PluginButtons);
 
         public const string AppName = "ZonyLrcToolsX";
 

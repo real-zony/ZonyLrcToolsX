@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Zony.Lib.UIComponents;
 
@@ -18,6 +19,7 @@ namespace Zony.Lib.Plugin.Models
         /// 右侧音乐标题控件
         /// </summary>
         public TextBox Right_TextBox_MusicTitle { get; set; }
+
         /// <summary>
         /// 右侧音乐作者控件
         /// </summary>

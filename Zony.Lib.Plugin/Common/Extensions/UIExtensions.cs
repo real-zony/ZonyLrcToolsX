@@ -1,4 +1,9 @@
-﻿namespace Zony.Lib.Plugin.Common.Extensions
+﻿using System;
+using System.Linq;
+using System.Windows.Forms;
+using Zony.Lib.Plugin.Models;
+
+namespace Zony.Lib.Plugin.Common.Extensions
 {
     public static class UIExtensions
     {
@@ -26,6 +31,49 @@
             if (GlobalContext.Instance.UIContext.Bottom_StatusStrip == null) return;
 
             GlobalContext.Instance.UIContext.Bottom_StatusStrip.Text = text;
+        }
+
+        /// <summary>
+        /// 向顶部菜单的插件功能按钮添加子按钮
+        /// </summary>
+        /// <param name="context">UI 上下文</param>
+        /// <param name="buttonText">按钮名称</param>
+        public static ToolStripItem AddPluginButton(this MainUIComponentContext context, string buttonText, EventHandler buttonClickEvent)
+        {
+            ToolStripDropDownButton subButton = context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons) as ToolStripDropDownButton;
+            if (subButton == null)
+            {
+                int index = context.Top_ToolStrip.Items.Add(new ToolStripDropDownButton("插件功能") { Name = AppConsts.Identity_PluginButtons });
+                subButton = context.Top_ToolStrip.Items[index] as ToolStripDropDownButton;
+            }
+
+            var button = subButton.DropDownItems.Add(buttonText);
+            button.Click += buttonClickEvent;
+            return button;
+        }
+
+        /// <summary>
+        /// 启用按钮组
+        /// </summary>
+        public static void EnableTopButtons(this MainUIComponentContext context)
+        {
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_SearchFile].Enabled = true;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadLyric].Enabled = true;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_StopDownLoad].Enabled = true;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadAblumImage].Enabled = true;
+            context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons).Enabled = true;
+        }
+
+        /// <summary>
+        /// 禁用按钮组
+        /// </summary>
+        public static void DisableTopButtons(this MainUIComponentContext context)
+        {
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_SearchFile].Enabled = false;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadLyric].Enabled = false;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_StopDownLoad].Enabled = false;
+            context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadAblumImage].Enabled = false;
+            context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons).Enabled = false;
         }
     }
 }

@@ -82,13 +82,16 @@ namespace Zony.Lib.Plugin
                     {
                         _interfaceType = _type.GetInterfaces().Where(x => x != typeof(IPlugin)).FirstOrDefault();
 
-                        _plugins.Add(_type);
+                        if (m_pluginContainer.ContainsKey(_interfaceType))
+                        {
+                            m_pluginContainer[_interfaceType].Add(_type);
+                        }
+                        else
+                        {
+                            _plugins.Add(_type);
+                            m_pluginContainer.TryAdd(_interfaceType, _plugins);
+                        }
                     }
-                }
-
-                if (_plugins.Count != 0)
-                {
-                    m_pluginContainer.GetOrAdd(_interfaceType, _plugins);
                 }
             }
         }
