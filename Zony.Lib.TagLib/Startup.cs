@@ -1,100 +1,102 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Zony.Lib.Plugin.Attributes;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-
 using TagFile = TagLib.File;
 using TagPicture = TagLib.Picture;
 
 namespace Zony.Lib.TagLib
 {
-    [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.2.2.0", "http://www.myzony.com", "提取歌曲信息的插件")]
+    [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.2.3.0", "http://www.myzony.com", "提取歌曲信息的插件")]
     public class StartUp : IPluginAcquireMusicInfo, IPlugin
     {
         public MusicInfoModel GetMusicInfo(string filePath)
         {
-            MusicInfoModel _info = new MusicInfoModel();
-            string _fileName = Path.GetFileNameWithoutExtension(filePath);
+            MusicInfoModel info = new MusicInfoModel();
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
 
             try
             {
                 var _file = TagFile.Create(filePath);
-                _info.Song = _file.Tag.Title;
-                _info.Artist = _file.Tag.FirstPerformer;
-                if (!string.IsNullOrEmpty(_file.Tag.FirstAlbumArtist)) _info.Artist = _file.Tag.FirstAlbumArtist;
-                _info.Album = _file.Tag.Album;
+                info.Song = _file.Tag.Title;
+                info.Artist = _file.Tag.FirstPerformer;
+                if (!string.IsNullOrEmpty(_file.Tag.FirstAlbumArtist)) info.Artist = _file.Tag.FirstAlbumArtist;
+                info.Album = _file.Tag.Album;
 
-                if (string.IsNullOrEmpty(_info.Song)) _info.Song = _fileName;
-                if (string.IsNullOrEmpty(_info.Artist)) _info.Artist = _fileName;
+                if (string.IsNullOrEmpty(info.Song)) info.Song = fileName;
+                if (string.IsNullOrEmpty(info.Artist)) info.Artist = fileName;
 
-                _info.TagType = string.Join(@"/", _file.TagTypes);
-                _info.IsAlbumImg = _file.Tag.Pictures.Length > 0 ? true : false;
-                _info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
-                if (_info.IsBuildInLyric) _info.BuildInLyric = _file.Tag.Lyrics;
+                info.TagType = string.Join(@"/", _file.TagTypes);
+                info.IsAlbumImg = _file.Tag.Pictures.Length > 0 ? true : false;
+                info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
+                if (info.IsBuildInLyric) info.BuildInLyric = _file.Tag.Lyrics;
             }
             catch (Exception)
             {
-                _info.Song = _fileName;
-                _info.Artist = _fileName;
-                _info.TagType = "无";
-                _info.IsAlbumImg = false;
-                _info.IsBuildInLyric = false;
+                info.Song = fileName;
+                info.Artist = fileName;
+                info.TagType = "无";
+                info.IsAlbumImg = false;
+                info.IsBuildInLyric = false;
             }
             finally
             {
-                _info.Extensions = Path.GetExtension(filePath);
-                _info.FilePath = filePath;
+                info.Extensions = Path.GetExtension(filePath);
+                info.FilePath = filePath;
             }
 
-            return _info;
+            return info;
         }
 
         public List<MusicInfoModel> GetMusicInfos(Dictionary<string, List<string>> musicFiles)
         {
-            List<MusicInfoModel> _result = new List<MusicInfoModel>();
+            List<MusicInfoModel> result = new List<MusicInfoModel>();
 
             int _index = 0;
             foreach (var key in musicFiles)
             {
                 foreach (var file in musicFiles[key.Key])
                 {
-                    MusicInfoModel _info = GetMusicInfo(file);
-                    _info.Index = _index;
-                    _result.Add(_info);
+                    MusicInfoModel info = GetMusicInfo(file);
+                    info.Index = _index;
+                    result.Add(info);
                     _index++;
                 }
             }
 
-            return _result;
+            return result;
         }
 
         public async Task<List<MusicInfoModel>> GetMusicInfosAsync(Dictionary<string, List<string>> musicFiles)
         {
             return await Task.Run(() =>
             {
-                List<string> _files = new List<string>();
-
-                foreach (var _key in musicFiles)
+                ConcurrentDictionary<int, string> files = new ConcurrentDictionary<int, string>();
+                int index = 0;
+                foreach (var key in musicFiles)
                 {
-                    foreach (var _file in musicFiles[_key.Key])
+                    foreach (var _file in musicFiles[key.Key])
                     {
-                        _files.Add(_file);
+                        files.TryAdd(index, _file);
+                        index++;
                     }
                 }
 
-                List<MusicInfoModel> _result = new List<MusicInfoModel>();
+                ConcurrentBag<MusicInfoModel> reuslt = new ConcurrentBag<MusicInfoModel>();
 
-                Parallel.For(0, _files.Count, async (_index) =>
-                {
-                    MusicInfoModel _info = GetMusicInfo(_files[0]);
-                    _info.Index = _index;
-                    _result.Add(_info);
-                });
+                Parallel.For(0, files.Count, (_index) =>
+                 {
+                     MusicInfoModel info = GetMusicInfo(files[_index]);
+                     info.Index = _index;
+                     reuslt.Add(info);
+                 });
 
-                return _result;
+                return reuslt.ToList();
             });
         }
 

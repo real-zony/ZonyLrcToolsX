@@ -24,15 +24,10 @@ namespace ZonyLrcTools.Events
 
         public async void HandleEvent(MusicInfoLoadEventData eventData)
         {
-            List<MusicInfoModel> _infos = await Task.Run(() =>
-            {
-                return PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfos(eventData.MusicFilePaths).OrderBy(z => z.Index).ToList();
-            });
-
             GlobalContext.Instance.SetBottomStatusText(AppConsts.Status_Bottom_LoadingMusicinfo);
-            await Task.Run(() => GlobalContext.Instance.InsertMusicInfosAndFillListView(_infos));
+            List<MusicInfoModel> infos = (await PluginManager.GetPlugin<IPluginAcquireMusicInfo>().GetMusicInfosAsync(eventData.MusicFilePaths)).Where(z => z != null).OrderBy(z => z.Index).ToList();
+            await Task.Run(() => GlobalContext.Instance.InsertMusicInfosAndFillListView(infos));
             GlobalContext.Instance.SetBottomStatusText(AppConsts.Status_Bottom_LoadMusicInfoComplete);
-
             EventBus.Default.Trigger<UIComponentEnableEventData>();
         }
     }

@@ -100,28 +100,6 @@ namespace Zony.Lib.Net
             }
         }
 
-        public string Post(string url, string parameters = null, string referer = null, string mediaTypeValue = null)
-        {
-            var _req = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(parameters)
-            };
-
-            if (referer != null) _req.Headers.Referrer = new Uri(referer);
-            if (parameters != null)
-            {
-                _req.Content = new StringContent(parameters);
-                _req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
-            }
-
-            using (var _res = m_client.SendAsync(_req).Result)
-            {
-                if (_res.StatusCode != HttpStatusCode.OK) return string.Empty;
-                return _res.Content.ReadAsStringAsync().Result;
-            }
-        }
-
         /// <summary>
         /// 对目标URL进行HTTP-GET请求，并对结果进行序列化操作
         /// </summary>
@@ -145,6 +123,37 @@ namespace Zony.Lib.Net
         public TJsonModel Post<TJsonModel>(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
         {
             return JsonConvert.DeserializeObject<TJsonModel>(Post(url, parameters, referer, mediaTypeValue));
+        }
+
+        /// <summary>
+        /// 对目标 URL 进行异步 HTTP-POST 请求，并对结果进行序列化操作
+        /// </summary>
+        /// <param name="url">目标URL</param>
+        /// <param name="parameters">待提交的参数</param>
+        /// <param name="referer">来源地址</param>
+        /// <param name="mediaTypeValue">提交的内容类型</param>
+        /// <returns>成功序列化的对象</returns>
+        public async Task<TJsonModel> PostAsync<TJsonModel>(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
+        {
+            string postData = string.Empty;
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url)
+            };
+
+            if (mediaTypeValue == "application/json") postData = BaseFormBuildParameters(parameters);
+            else postData = BaseJsonBuildParameters(parameters);
+
+            if (!string.IsNullOrEmpty(postData)) request.Content = new StringContent(postData);
+            if (!string.IsNullOrEmpty(referer)) request.Headers.Referrer = new Uri(referer);
+            if (!string.IsNullOrEmpty(mediaTypeValue)) request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
+
+            using (var response = await m_client.SendAsync(request))
+            {
+                if (response.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
+                return JsonConvert.DeserializeObject<TJsonModel>(await response.Content.ReadAsStringAsync());
+            }
         }
 
         /// <summary>
