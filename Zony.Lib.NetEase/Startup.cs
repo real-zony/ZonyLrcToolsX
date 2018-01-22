@@ -14,7 +14,7 @@ namespace Zony.Lib.NetEase
     [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.0.5.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
     public class Startup : IPluginDownLoader, IPlugin
     {
-        private readonly HttpMethodUtils m_netUtils = new HttpMethodUtils();
+        private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
         private int m_FaildCount = 0;
 
         public void DownLoad(string songName, string artistName, out byte[] data)
@@ -27,7 +27,7 @@ namespace Zony.Lib.NetEase
                 var _sourceLyric = FixedLyricTimeFormat(_json.Item1);
                 var _translateLyric = FixedLyricTimeFormat(_json.Item2);
                 var _result = BuildLyricText(_sourceLyric, _translateLyric);
-                data = Encoding.UTF8.GetBytes(_result);
+                data = Encoding.UTF8.GetBytes(ReplaceLF(_result));
             }
             catch (NotFoundLyricException)
             {
@@ -63,8 +63,8 @@ namespace Zony.Lib.NetEase
         /// <param name="artistName">歌手</param>
         private object BuildParameters(string songName, string artistName)
         {
-            string _encodeArtistName = m_netUtils.URL_Encoding(artistName, Encoding.UTF8);
-            string _encodeSongName = m_netUtils.URL_Encoding(songName, Encoding.UTF8);
+            string _encodeArtistName = _httpClient.URL_Encoding(artistName, Encoding.UTF8);
+            string _encodeSongName = _httpClient.URL_Encoding(songName, Encoding.UTF8);
             return new NetEaseSearchRequestModel($"{_encodeArtistName}+{_encodeSongName}");
         }
 
@@ -75,16 +75,16 @@ namespace Zony.Lib.NetEase
         /// <returns>返回的JSON对象</returns>
         private (string, string) GetLyricJsonObject(object postParam)
         {
-            NetEaseResultModel _result = m_netUtils.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
+            NetEaseResultModel _result = _httpClient.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
             if (_result == null) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
-            if (_result.result.songCount == 0)
+            if (_result?.result.songCount == 0)
             {
                 m_FaildCount++;
                 throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
             }
 
             // 请求歌词JSON数据
-            NetEaseLyricModel _lyric = m_netUtils.Get<NetEaseLyricModel>(@"http://music.163.com/api/song/lyric", new NetEaseLyricRequestModel(_result.result.songs[0].id), @"http://music.163.com");
+            NetEaseLyricModel _lyric = _httpClient.Get<NetEaseLyricModel>(@"http://music.163.com/api/song/lyric", new NetEaseLyricRequestModel(_result.result.songs[0].id), @"http://music.163.com");
             if (_lyric.lrc == null) throw new NotFoundLyricException("歌曲不存在歌词数据.");
             return (_lyric.lrc.lyric, _lyric.tlyric.lyric);
         }
@@ -174,6 +174,19 @@ namespace Zony.Lib.NetEase
             }
 
             return _resultBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 替换换行符
+        /// </summary>
+        /// <param name="srcString">原始字符串</param>
+        /// <returns></returns>
+        private string ReplaceLF(string srcString)
+        {
+            return new Regex("\n").Replace(srcString, new MatchEvaluator((Match _match) =>
+            {
+                return "\r\n";
+            }));
         }
     }
 }

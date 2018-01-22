@@ -76,6 +76,8 @@
     <Compile Include="EventBus\Handlers\Internals\ActionEventHandler.cs" />
     <Compile Include="EventBus\IEventBus.cs" />
     <Compile Include="EventBus\IEventData.cs" />
+    <Compile Include="Middleware\IMiddlewareBudiler.cs" />
+    <Compile Include="Middleware\MiddlewareBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\Extensions\LockExtensions.cs" />
   </ItemGroup>

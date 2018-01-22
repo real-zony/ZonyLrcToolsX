@@ -56,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
+      <Project>{2716DF9F-443C-42DD-9454-18FF1A80AEC4}</Project>
+      <Name>Zony.Lib.Infrastructures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zony.Lib.NetEase\Zony.Lib.NetEase.csproj">
       <Project>{aa736e2e-68ca-4d6a-8116-ebf1ff0a6812}</Project>
       <Name>Zony.Lib.NetEase</Name>

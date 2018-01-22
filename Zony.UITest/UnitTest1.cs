@@ -1,16 +1,42 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
+using Zony.Lib.Infrastructures.Middleware;
 using Zony.Lib.NetEase;
+using System.Threading.Tasks;
+using System;
 
 namespace Zony.UITest
 {
     [TestClass]
     public class UnitTest1
     {
+        public IMiddlewareBudiler Builder { get; set; }
+
         [TestMethod]
         public void TestMethod1()
         {
-            var _downloader = new Startup();
-            _downloader.DownLoad("劳作的春夏秋", "阿鲲", out byte[] data);
+            Builder = new MiddlewareBuilder();
+            // 管道测试
+            Builder.RegisterMiddleware(lyric =>
+            {
+                return async _ =>
+                {
+                    _.Append("Method1");
+                    await lyric(_);
+                };
+            });
+
+            Builder.RegisterMiddleware(_ => async __ =>
+            {
+                __.Append("Method2");
+                await _(__);
+            });
+
+            var _delegate = Builder.Build();
+            var _lyric = new StringBuilder();
+            _delegate(_lyric);
+            Console.WriteLine("x");
+
             //var _c = new Startup();
             //var _b = new Startup();
             //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);

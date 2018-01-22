@@ -2,6 +2,7 @@
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using ZonyLrcTools.Common.Interfaces;
+using Zony.Lib.Plugin.Common;
 
 namespace ZonyLrcTools.Events
 {
@@ -22,6 +23,7 @@ namespace ZonyLrcTools.Events
         public void HandleEvent(ProgramExitEventData eventData)
         {
             m_configMgr.SaveConfiguration();
+            GlobalContext.Instance.LyricDownloadState = false;
         }
     }
 }

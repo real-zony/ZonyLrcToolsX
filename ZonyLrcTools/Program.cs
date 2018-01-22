@@ -36,6 +36,7 @@ namespace ZonyLrcTools
             EventBus.Init();
             IocManager.Instance.AddConventionalRegistrar(new BasicConventionalRegistrar());
             IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Zony.Lib.Plugin.dll"));
+            IocManager.Instance.RegisterAssemblyByConvention(Assembly.LoadFrom(Environment.CurrentDirectory + "\\Zony.Lib.Infrastructures.dll"));
 
             IocManager.Instance.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly(), new ConventionalRegistrationConfig()
             {

@@ -51,6 +51,7 @@ namespace ZonyLrcTools.Events
                 {
                     try
                     {
+                        if (GlobalContext.Instance.LyricDownloadState) loopState.Break();
                         // 状态:略过歌词
                         if (!m_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
                         {

@@ -15,6 +15,8 @@ namespace Zony.Lib.TagLib
     [PluginInfo(@"歌曲信息提取/写入插件", "Zony", "1.2.3.0", "http://www.myzony.com", "提取歌曲信息的插件")]
     public class StartUp : IPluginAcquireMusicInfo, IPlugin
     {
+        public dynamic PluginOptions { get; set; }
+
         public MusicInfoModel GetMusicInfo(string filePath)
         {
             MusicInfoModel info = new MusicInfoModel();

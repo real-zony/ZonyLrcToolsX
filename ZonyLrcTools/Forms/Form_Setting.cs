@@ -35,7 +35,7 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private async Task InitializeSettingUI()
         {
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 // 加载编码页
                 Encoding.GetEncodings().Cast<EncodingInfo>().ToList().ForEach(encoding => comboBox_EncodingPages.Items.Add(encoding.Name.ToUpper()));
