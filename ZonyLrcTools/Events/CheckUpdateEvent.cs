@@ -28,7 +28,7 @@ namespace ZonyLrcTools.Events
                 StringBuilder builder = new StringBuilder();
                 builder.Append("发现新版本，是否更新?").Append("\r\n");
                 builder.Append("更新信息:").Append("\r\n");
-                builder.Append(result.UpdateDescription.Replace("|","\r\n"));
+                builder.Append(result.UpdateDescription.Replace("|", "\r\n"));
                 return builder.ToString();
             }
 
@@ -36,7 +36,7 @@ namespace ZonyLrcTools.Events
             {
                 if (MessageBox.Show(caption: "更新提示", text: BuildMessageText(), icon: MessageBoxIcon.Information, buttons: MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    Process.Start($"explorer {result.Url}");
+                    Process.Start(result.Url);
                 }
             }
         }
