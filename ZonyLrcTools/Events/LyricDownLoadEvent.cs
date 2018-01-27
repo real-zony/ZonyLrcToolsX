@@ -32,13 +32,13 @@ namespace ZonyLrcTools.Events
 
     public class LyricDownLoadEvent : IEventHandler<LyricDownLoadEventData>, ITransientDependency
     {
-        private readonly IPluginManager m_pluginManager;
-        private readonly IConfigurationManager m_configMgr;
+        private readonly IPluginManager _pluginManager;
+        private readonly IConfigurationManager _configMgr;
 
         public LyricDownLoadEvent(IPluginManager pluginManager, IConfigurationManager configMgr)
         {
-            m_pluginManager = pluginManager;
-            m_configMgr = configMgr;
+            _pluginManager = pluginManager;
+            _configMgr = configMgr;
         }
 
         public async void HandleEvent(LyricDownLoadEventData eventData)
@@ -47,20 +47,20 @@ namespace ZonyLrcTools.Events
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = _configMgr.ConfigModel.DownloadThreadNumber }, (info, loopState) =>
                 {
                     try
                     {
                         if (GlobalContext.Instance.LyricDownloadState) loopState.Break();
                         // 状态:略过歌词
-                        if (!m_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
+                        if (!_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
                         {
                             info.Status = MusicInfoEnum.Igonre;
                             GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Ignore);
                             return;
                         }
 
-                        m_pluginManager.GetPlugin<IPluginDownLoader>().DownLoad(info.Song, info.Artist, out byte[] _lyricData);
+                        _pluginManager.GetPlugin<IPluginDownLoader>(_configMgr.ConfigModel.PluginOptions).DownLoad(info.Song, info.Artist, out byte[] _lyricData);
 
                         // 状态:下载失败
                         if (_lyricData == null)
@@ -107,9 +107,9 @@ namespace ZonyLrcTools.Events
         /// <returns>存在为 TRUE，不存在为 FALSE</returns>
         private bool CheckLyricExist(string path)
         {
-            string _fileName = $"{Path.GetFileNameWithoutExtension(path)}.lrc";
-            string _dirPath = Path.GetDirectoryName(path);
-            return File.Exists(Path.Combine(_dirPath, _fileName));
+            string fileName = $"{Path.GetFileNameWithoutExtension(path)}.lrc";
+            string dirPath = Path.GetDirectoryName(path);
+            return File.Exists(Path.Combine(dirPath, fileName));
         }
     }
 }

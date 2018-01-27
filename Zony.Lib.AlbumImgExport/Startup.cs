@@ -14,9 +14,11 @@ using Zony.Lib.Plugin.Models;
 
 namespace Zony.Lib.AlbumImgExport
 {
-    [PluginInfo("批量专辑图像导出", "Zony", "1.0.0.0", "http://www.myzony.com", "导出所有专辑图像到指定位置.")]
+    [PluginInfo("批量专辑图像导出", "Zony", "1.1.0.0", "http://www.myzony.com", "导出所有专辑图像到指定位置.")]
     public class Startup : IPluginExtensions, IPlugin
     {
+        public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
+
         public void InitializePlugin(IPluginManager plugManager)
         {
             GlobalContext.Instance.UIContext.AddPluginButton("批量专辑图像导出", async (object sender, EventArgs args) =>

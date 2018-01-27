@@ -35,26 +35,33 @@ namespace Zony.Lib.Plugin
             return _result;
         }
 
-        public TInterface GetPlugin<TInterface>() where TInterface : class
+        public TInterface GetPlugin<TInterface>(Dictionary<string, Dictionary<string, object>> @params = null) where TInterface : class
         {
             Type _type = typeof(TInterface);
 
             if (m_pluginContainer.TryGetValue(_type, out List<Type> _plugins))
             {
-                return Activator.CreateInstance(_plugins[0]) as TInterface;
+                var _instance = Activator.CreateInstance(_plugins[0]) as IPlugin;
+                _instance.PluginOptions = @params;
+                return _instance as TInterface;
             }
 
             return default(TInterface);
         }
 
-        public List<TInterface> GetPlugins<TInterface>() where TInterface : class
+        public List<TInterface> GetPlugins<TInterface>(Dictionary<string, Dictionary<string, object>> @params = null) where TInterface : class
         {
             Type _type = typeof(TInterface);
 
             List<TInterface> _instances = new List<TInterface>();
 
             if (!m_pluginContainer.TryGetValue(_type, out List<Type> _plugins)) return null;
-            _plugins.ForEach(_plugin => _instances.Add(Activator.CreateInstance(_plugin) as TInterface));
+            _plugins.ForEach(_plugin =>
+            {
+                var _instance = Activator.CreateInstance(_plugin) as IPlugin;
+                _instance.PluginOptions = @params;
+                _instances.Add(_instance as TInterface);
+            });
             return _instances;
         }
 

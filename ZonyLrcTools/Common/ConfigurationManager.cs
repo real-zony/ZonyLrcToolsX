@@ -66,7 +66,8 @@ namespace ZonyLrcTools.Common
                 IsAgree = false,
                 ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" },
                 ProxyIP = string.Empty,
-                ProxyPort = 0
+                ProxyPort = 0,
+                PluginOptions = new Dictionary<string, Dictionary<string, object>>() { { "Zony.Lib.NetEase", new Dictionary<string, object>() { { "ReplaceLF", false } } } }
             };
         }
     }

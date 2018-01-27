@@ -42,5 +42,10 @@ namespace ZonyLrcTools.Common
         /// 代理服务器端口
         /// </summary>
         public int ProxyPort { get; set; }
+
+        /// <summary>
+        /// 插件配置
+        /// </summary>
+        public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace Zony.Lib.Net
         {
             var _request = new HttpRequestMessage()
             {
-                Method = HttpMethod.Post,
+                Method = HttpMethod.Get,
                 RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
             };
 

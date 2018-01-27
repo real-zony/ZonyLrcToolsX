@@ -7,7 +7,6 @@ using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
 using ZonyLrcTools.Events.UIEvents;
@@ -159,6 +158,9 @@ namespace ZonyLrcTools.Forms
         /// <summary>
         /// 检测软件更新
         /// </summary>
-        private void CheckUpdate() => EventBus.Default.Trigger<CheckUpdateEventData>();
+        private void CheckUpdate()
+        {
+            if (ConfigurationManager.ConfigModel.IsCheckUpdate) EventBus.Default.Trigger<CheckUpdateEventData>();
+        }
     }
 }

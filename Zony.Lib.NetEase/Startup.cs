@@ -6,16 +6,19 @@ using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Net.JsonModels.NetEase.RequestModel;
 using Zony.Lib.Plugin.Attributes;
+using Zony.Lib.Plugin.Common.Extensions;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 
 namespace Zony.Lib.NetEase
 {
-    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.0.5.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
+    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.1.5.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
     public class Startup : IPluginDownLoader, IPlugin
     {
         private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
         private int m_FaildCount = 0;
+
+        public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
         public void DownLoad(string songName, string artistName, out byte[] data)
         {
@@ -23,11 +26,13 @@ namespace Zony.Lib.NetEase
 
             try
             {
-                var _json = GetLyricJsonObject(_param);
-                var _sourceLyric = FixedLyricTimeFormat(_json.Item1);
-                var _translateLyric = FixedLyricTimeFormat(_json.Item2);
-                var _result = BuildLyricText(_sourceLyric, _translateLyric);
-                data = Encoding.UTF8.GetBytes(ReplaceLF(_result));
+                var json = GetLyricJsonObject(_param);
+                var sourceLyric = FixedLyricTimeFormat(json.Item1);
+                var translateLyric = FixedLyricTimeFormat(json.Item2);
+                var result = BuildLyricText(sourceLyric, translateLyric);
+                bool isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
+                if (isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
+                data = Encoding.UTF8.GetBytes(result);
             }
             catch (NotFoundLyricException)
             {
@@ -48,12 +53,14 @@ namespace Zony.Lib.NetEase
         /// </summary>
         public void SongNameIsEmptyDownLoad(string songName, out byte[] data)
         {
-            var _param = BuildParameters(songName, string.Empty);
-            var _json = GetLyricJsonObject(_param);
-            var _sourceLyric = FixedLyricTimeFormat(_json.Item1);
-            var _translateLyric = FixedLyricTimeFormat(_json.Item2);
-            var _result = BuildLyricText(_sourceLyric, _translateLyric);
-            data = Encoding.UTF8.GetBytes(_result);
+            var param = BuildParameters(songName, string.Empty);
+            var json = GetLyricJsonObject(param);
+            var sourceLyric = FixedLyricTimeFormat(json.Item1);
+            var translateLyric = FixedLyricTimeFormat(json.Item2);
+            var result = BuildLyricText(sourceLyric, translateLyric);
+            bool isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
+            if (isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
+            data = Encoding.UTF8.GetBytes(result);
         }
 
         /// <summary>
@@ -85,7 +92,8 @@ namespace Zony.Lib.NetEase
 
             // 请求歌词JSON数据
             NetEaseLyricModel _lyric = _httpClient.Get<NetEaseLyricModel>(@"http://music.163.com/api/song/lyric", new NetEaseLyricRequestModel(_result.result.songs[0].id), @"http://music.163.com");
-            if (_lyric.lrc == null) throw new NotFoundLyricException("歌曲不存在歌词数据.");
+            if (_lyric == null) throw new ServiceUnavailableException("服务限制");
+            if (_lyric?.lrc == null) throw new NotFoundLyricException("歌曲不存在歌词数据.");
             return (_lyric.lrc.lyric, _lyric.tlyric.lyric);
         }
 

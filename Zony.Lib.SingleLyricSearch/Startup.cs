@@ -15,11 +15,13 @@ using Zony.Lib.UIComponents.Box;
 
 namespace Zony.Lib.SongListDownload
 {
-    [PluginInfo("网易云歌单获取插件", "Zony", "1.0.0.0", "http://www.myzony.com", "从用户给定的歌单 URL 当中获取歌曲信息。")]
+    [PluginInfo("网易云歌单获取插件", "Zony", "1.1.0.0", "http://www.myzony.com", "从用户给定的歌单 URL 当中获取歌曲信息。")]
     public class Startup : IPluginExtensions, IPlugin
     {
         private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
         private ToolStripItem _pluginButton;
+
+        public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
         public void InitializePlugin(IPluginManager plugManager)
         {

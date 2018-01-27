@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
@@ -9,10 +10,12 @@ using Zony.Lib.Plugin.Models;
 
 namespace Zony.Lib.AlbumDownLoad
 {
-    [PluginInfo("专辑图像下载插件", "Zony", "1.0.1.0", "http://www.myzony.com", "从网易云音乐下载专辑图像")]
+    [PluginInfo("专辑图像下载插件", "Zony", "1.1.1.0", "http://www.myzony.com", "从网易云音乐下载专辑图像")]
     public class Startup : IPluginAlbumDownloader, IPlugin
     {
         private readonly HttpMethodUtils m_netUtils = new HttpMethodUtils();
+
+        public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
         public bool DownlaodAblumImage(MusicInfoModel info, out byte[] imageData)
         {

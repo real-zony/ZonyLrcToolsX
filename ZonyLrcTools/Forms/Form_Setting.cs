@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -47,7 +49,9 @@ namespace ZonyLrcTools.Forms
 
                 textBox_ExtensionsName.Text = string.Join(";", ConfigurationManager.ConfigModel.ExtensionsName.ToArray());
                 textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
+                textBox_PluginOptions.Text = JsonConvert.SerializeObject(ConfigurationManager.ConfigModel.PluginOptions);
                 checkBox_IsReplaceLyricFile.Checked = ConfigurationManager.ConfigModel.IsReplaceLyricFile;
+                checkBox_IsCheckUpdate.Checked = ConfigurationManager.ConfigModel.IsCheckUpdate;
             });
         }
 
@@ -60,6 +64,8 @@ namespace ZonyLrcTools.Forms
             ConfigurationManager.ConfigModel.EncodingName = comboBox_EncodingPages.Text;
             ConfigurationManager.ConfigModel.ExtensionsName = textBox_ExtensionsName.Text.Split(';').ToList();
             ConfigurationManager.ConfigModel.IsReplaceLyricFile = checkBox_IsReplaceLyricFile.Checked;
+            ConfigurationManager.ConfigModel.IsCheckUpdate = checkBox_IsCheckUpdate.Checked;
+            ConfigurationManager.ConfigModel.PluginOptions = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(textBox_PluginOptions.Text);
         }
     }
 }

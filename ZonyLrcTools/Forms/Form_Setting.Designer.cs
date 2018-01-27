@@ -36,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox_IsCheckUpdate = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.checkBox_IsReplaceLyricFile = new System.Windows.Forms.CheckBox();
@@ -44,16 +44,20 @@
             this.comboBox_EncodingPages = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox_PluginOptions = new System.Windows.Forms.TextBox();
             this.button_SaveAndExit = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -68,7 +72,7 @@
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.textBox1);
             this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.checkBox3);
+            this.tabPage1.Controls.Add(this.checkBox_IsCheckUpdate);
             this.tabPage1.Controls.Add(this.checkBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -126,15 +130,15 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "代理地址:";
             // 
-            // checkBox3
+            // checkBox_IsCheckUpdate
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(146, 6);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(74, 17);
-            this.checkBox3.TabIndex = 0;
-            this.checkBox3.Text = "自动更新";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox_IsCheckUpdate.AutoSize = true;
+            this.checkBox_IsCheckUpdate.Location = new System.Drawing.Point(146, 6);
+            this.checkBox_IsCheckUpdate.Name = "checkBox_IsCheckUpdate";
+            this.checkBox_IsCheckUpdate.Size = new System.Drawing.Size(74, 17);
+            this.checkBox_IsCheckUpdate.TabIndex = 0;
+            this.checkBox_IsCheckUpdate.Text = "检测更新";
+            this.checkBox_IsCheckUpdate.UseVisualStyleBackColor = true;
             // 
             // checkBox1
             // 
@@ -204,6 +208,26 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "输出编码:";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.textBox_PluginOptions);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(231, 111);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "插件配置";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox_PluginOptions
+            // 
+            this.textBox_PluginOptions.Location = new System.Drawing.Point(6, 6);
+            this.textBox_PluginOptions.Multiline = true;
+            this.textBox_PluginOptions.Name = "textBox_PluginOptions";
+            this.textBox_PluginOptions.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox_PluginOptions.Size = new System.Drawing.Size(222, 99);
+            this.textBox_PluginOptions.TabIndex = 0;
+            // 
             // button_SaveAndExit
             // 
             this.button_SaveAndExit.Location = new System.Drawing.Point(172, 155);
@@ -231,6 +255,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -253,6 +279,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox_ExtensionsName;
         private System.Windows.Forms.CheckBox checkBox_IsReplaceLyricFile;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox_IsCheckUpdate;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox textBox_PluginOptions;
     }
 }

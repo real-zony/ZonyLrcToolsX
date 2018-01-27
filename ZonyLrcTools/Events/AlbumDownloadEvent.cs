@@ -9,7 +9,6 @@ using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Common.Extensions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
@@ -25,25 +24,25 @@ namespace ZonyLrcTools.Events
 
     public class AlbumDownloadEvent : IEventHandler<AlbumdownloadEventData>, ITransientDependency
     {
-        private readonly IPluginManager m_pluginManager;
-        private readonly IConfigurationManager m_configMgr;
+        private readonly IPluginManager _pluginManager;
+        private readonly IConfigurationManager _configMgr;
 
         public AlbumDownloadEvent(IPluginManager pluginManager, IConfigurationManager configMgr)
         {
-            m_pluginManager = pluginManager;
-            m_configMgr = configMgr;
+            _pluginManager = pluginManager;
+            _configMgr = configMgr;
         }
 
         public async void HandleEvent(AlbumdownloadEventData eventData)
         {
             if (GlobalContext.Instance.MusicInfos.Count == 0 || GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Count == 0) MessageBox.Show("你还没有添加歌曲文件!", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            var _albumPlugin = m_pluginManager.GetPlugin<IPluginAlbumDownloader>();
-            var _tagPlugin = m_pluginManager.GetPlugin<IPluginAcquireMusicInfo>();
+            var _albumPlugin = _pluginManager.GetPlugin<IPluginAlbumDownloader>(_configMgr.ConfigModel.PluginOptions);
+            var _tagPlugin = _pluginManager.GetPlugin<IPluginAcquireMusicInfo>(_configMgr.ConfigModel.PluginOptions);
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = m_configMgr.ConfigModel.DownloadThreadNumber }, (_info) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = _configMgr.ConfigModel.DownloadThreadNumber }, (_info) =>
                   {
                       if (!_albumPlugin.DownlaodAblumImage(_info, out byte[] _imgData))
                       {

@@ -1,10 +1,15 @@
-﻿namespace Zony.Lib.Plugin.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Zony.Lib.Plugin.Interfaces
 {
+    /// <summary>
+    /// 表示这个类属于一个插件
+    /// </summary>
     public interface IPlugin
     {
         /// <summary>
         /// 动态插件参数
         /// </summary>
-        //dynamic PluginOptions { get; set; }
+        Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
     }
 }
