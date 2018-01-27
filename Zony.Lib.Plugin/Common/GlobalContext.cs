@@ -69,7 +69,7 @@ namespace Zony.Lib.Plugin.Common
             ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
             if (MusicInfos == null) MusicInfos = new List<MusicInfoModel>();
 
-            foreach (var _item in MusicInfos.Where(z => z.Status == MusicInfoEnum.Ready).OrderBy(z => z.Index))
+            foreach (var _item in MusicInfos.OrderBy(z => z.Index))
             {
                 _infos.Add(_item);
             }

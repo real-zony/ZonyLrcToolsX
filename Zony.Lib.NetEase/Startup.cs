@@ -32,7 +32,7 @@ namespace Zony.Lib.NetEase
                 var result = BuildLyricText(sourceLyric, translateLyric);
                 bool isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
                 if (isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
-                data = Encoding.UTF8.GetBytes(result);
+                else data = Encoding.UTF8.GetBytes(result);
             }
             catch (NotFoundLyricException)
             {
