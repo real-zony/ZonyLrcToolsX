@@ -57,7 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\DownLoader.cs" />
     <Compile Include="Common\Exceptions\FileSearchException.cs" />
     <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Common\FileSearchProvider.cs" />
