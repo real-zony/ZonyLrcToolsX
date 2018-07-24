@@ -12,6 +12,7 @@
         public const string Status_Music_Unavailablel = "服务限制";
         public const string Status_Music_Ignore = "略过";
 
+        public const string Status_Bottom_SearchFilesing = "正在搜索文件...";
         public const string Status_Bottom_DownLoadHead = "正在下载:";
         public const string Status_Bottom_DownloadComplete = "下载完成.";
         public const string Status_Bottom_LoadingMusicinfo = "正在加载音乐信息...";

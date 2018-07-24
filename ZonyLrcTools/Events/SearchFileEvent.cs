@@ -6,6 +6,7 @@ using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin.Common;
+using Zony.Lib.Plugin.Common.Extensions;
 using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events.UIEvents;
 
@@ -37,6 +38,8 @@ namespace ZonyLrcTools.Events
             {
                 EventBus.Default.Trigger<UIComponentDisableEventData>();
                 EventBus.Default.Trigger<UIClearMusicInfosEventData>();
+
+                GlobalContext.Instance.SetBottomStatusText(AppConsts.Status_Bottom_SearchFilesing);
 
                 var files = await _searchProvider.FindFilesAsync(dlg.SelectedPath, _settingManager.ConfigModel.ExtensionsName);
                 if (files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
