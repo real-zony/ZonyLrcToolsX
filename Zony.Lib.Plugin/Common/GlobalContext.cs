@@ -124,7 +124,7 @@ namespace Zony.Lib.Plugin.Common
                 foreach (var info in infos)
                 {
                     info.Status = MusicInfoEnum.Ready;
-                    info.Index = ++lastIndex;
+                    info.Index = lastIndex++;
                     InsertItemToCenterListView(info);
                 }
                 UIContext.Center_ListViewNF_MusicList.EndUpdate();

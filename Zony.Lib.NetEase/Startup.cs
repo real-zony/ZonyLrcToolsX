@@ -12,7 +12,7 @@ using Zony.Lib.Plugin.Interfaces;
 
 namespace Zony.Lib.NetEase
 {
-    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.1.5.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
+    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.2.0.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
     public class Startup : IPluginDownLoader, IPlugin
     {
         private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();

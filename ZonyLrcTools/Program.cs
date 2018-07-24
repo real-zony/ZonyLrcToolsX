@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
-using ZonyLrcTools.Common;
 using ZonyLrcTools.Forms;
 
 namespace ZonyLrcTools
@@ -19,9 +18,9 @@ namespace ZonyLrcTools
             InitializeIocContainer();
 
             // 全局异常捕获处理
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += (object sender, System.Threading.ThreadExceptionEventArgs e) => Log4NetHelper.Exception(e.Exception);
-            AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => Log4NetHelper.Exception(e.ExceptionObject as Exception);
+            //Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            //Application.ThreadException += (object sender, System.Threading.ThreadExceptionEventArgs e) => Log4NetHelper.Exception(e.Exception);
+            //AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) => Log4NetHelper.Exception(e.ExceptionObject as Exception);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
