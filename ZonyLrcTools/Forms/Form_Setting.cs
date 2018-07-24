@@ -40,7 +40,7 @@ namespace ZonyLrcTools.Forms
             await Task.Run(() =>
             {
                 // 加载编码页
-                Encoding.GetEncodings().Cast<EncodingInfo>().ToList().ForEach(encoding => comboBox_EncodingPages.Items.Add(encoding.Name.ToUpper()));
+                Encoding.GetEncodings().ToList().ForEach(encoding => comboBox_EncodingPages.Items.Add(encoding.Name.ToUpper()));
                 comboBox_EncodingPages.Items.Add("UTF-8 BOM");
                 comboBox_EncodingPages.Items.Add("ANSI");
                 comboBox_EncodingPages.Items.Add("UTF-16");

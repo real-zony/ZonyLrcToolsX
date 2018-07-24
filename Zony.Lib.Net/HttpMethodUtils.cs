@@ -10,9 +10,9 @@ namespace Zony.Lib.Net
 {
     public class HttpMethodUtils
     {
-        private readonly HttpClient m_client;
+        private readonly HttpClient _client;
 
-        public HttpMethodUtils() => m_client = new HttpClient();
+        public HttpMethodUtils() => _client = new HttpClient();
 
         /// <summary>
         /// 对目标URL进行HTTP-GET请求
@@ -23,19 +23,19 @@ namespace Zony.Lib.Net
         /// <returns>服务器响应结果</returns>
         public string Get(string url, object parameters = null, string referer = null)
         {
-            var _req = new HttpRequestMessage()
+            var req = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
             };
 
-            if (referer != null) _req.Headers.Referrer = new Uri(referer);
+            if (referer != null) req.Headers.Referrer = new Uri(referer);
 
-            using (var _msg = m_client.SendAsync(_req).Result)
+            using (var msg = _client.SendAsync(req).Result)
             {
-                if (_msg.StatusCode != HttpStatusCode.OK) return string.Empty;
-                return _msg.Content.ReadAsStringAsync().Result;
-            };
+                if (msg.StatusCode != HttpStatusCode.OK) return string.Empty;
+                return msg.Content.ReadAsStringAsync().Result;
+            }
         }
 
         /// <summary>
@@ -48,22 +48,19 @@ namespace Zony.Lib.Net
         /// <returns></returns>
         public async Task<TJsonModel> GetAsync<TJsonModel>(string url, object parameters = null, string referer = null)
         {
-            var _request = new HttpRequestMessage()
+            var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
             };
 
-            if (referer != null) _request.Headers.Referrer = new Uri(referer);
-            using (var _msg = await m_client.SendAsync(_request))
+            if (referer != null) request.Headers.Referrer = new Uri(referer);
+            using (var msg = await _client.SendAsync(request))
             {
-                if (_msg.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
-                return await Task.Run(async () =>
-                {
-                    var _jsonStr = await _msg.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<TJsonModel>(_jsonStr);
-                });
+                if (msg.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
 
+                string jsonStr = await msg.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<TJsonModel>(jsonStr);
             }
         }
 
@@ -77,26 +74,26 @@ namespace Zony.Lib.Net
         /// <returns>服务器响应结果</returns>
         public string Post(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
         {
-            string _postData = string.Empty;
+            string postData;
 
-            var _req = new HttpRequestMessage()
+            var req = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(url)
             };
 
-            if (referer != null) _req.Headers.Referrer = new Uri(referer);
+            if (referer != null) req.Headers.Referrer = new Uri(referer);
             // 请求内容构造
-            if (mediaTypeValue == "application/json") _postData = BaseJsonBuildParameters(parameters);
-            else _postData = BaseFormBuildParameters(parameters);
-            _req.Content = new StringContent(_postData);
-            if (mediaTypeValue != null) _req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
+            if (mediaTypeValue == "application/json") postData = BaseJsonBuildParameters(parameters);
+            else postData = BaseFormBuildParameters(parameters);
+            req.Content = new StringContent(postData);
+            if (mediaTypeValue != null) req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
 
 
-            using (var _res = m_client.SendAsync(_req).Result)
+            using (var res = _client.SendAsync(req).Result)
             {
-                if (_res.StatusCode != HttpStatusCode.OK) return string.Empty;
-                return _res.Content.ReadAsStringAsync().Result;
+                if (res.StatusCode != HttpStatusCode.OK) return string.Empty;
+                return res.Content.ReadAsStringAsync().Result;
             }
         }
 
@@ -135,7 +132,7 @@ namespace Zony.Lib.Net
         /// <returns>成功序列化的对象</returns>
         public async Task<TJsonModel> PostAsync<TJsonModel>(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
         {
-            string postData = string.Empty;
+            string postData;
             var request = new HttpRequestMessage()
             {
                 Method = HttpMethod.Post,
@@ -149,7 +146,7 @@ namespace Zony.Lib.Net
             if (!string.IsNullOrEmpty(referer)) request.Headers.Referrer = new Uri(referer);
             if (!string.IsNullOrEmpty(mediaTypeValue)) request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
 
-            using (var response = await m_client.SendAsync(request))
+            using (var response = await _client.SendAsync(request))
             {
                 if (response.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
                 return JsonConvert.DeserializeObject<TJsonModel>(await response.Content.ReadAsStringAsync());
@@ -164,15 +161,15 @@ namespace Zony.Lib.Net
         [Obsolete("这个方法会导致将英文编码，会产生歌曲无法正常搜索的情况!")]
         public string URL_Encoding_Old(string srcText, Encoding encoding)
         {
-            StringBuilder _builder = new StringBuilder();
-            byte[] _bytes = encoding.GetBytes(srcText);
+            StringBuilder builder = new StringBuilder();
+            byte[] bytes = encoding.GetBytes(srcText);
 
-            foreach (var _byte in _bytes)
+            foreach (var _byte in bytes)
             {
-                _builder.Append('%').Append(_byte.ToString("x2"));
+                builder.Append('%').Append(_byte.ToString("x2"));
             }
 
-            return _builder.ToString().TrimEnd('%');
+            return builder.ToString().TrimEnd('%');
         }
 
         /// <summary>
@@ -192,18 +189,18 @@ namespace Zony.Lib.Net
         private string BaseFormBuildParameters(object parameters)
         {
             if (parameters == null) return string.Empty;
-            var _type = parameters.GetType();
-            if (_type == typeof(string)) return parameters as string;
+            var type = parameters.GetType();
+            if (type == typeof(string)) return parameters as string;
 
-            var _properties = _type.GetProperties();
-            StringBuilder _paramBuidler = new StringBuilder("?");
+            var properties = type.GetProperties();
+            StringBuilder paramBuidler = new StringBuilder("?");
 
             // 反射构建参数
-            foreach (var _property in _properties)
+            foreach (var property in properties)
             {
-                _paramBuidler.Append($"{_property.Name}={_property.GetValue(parameters)}&");
+                paramBuidler.Append($"{property.Name}={property.GetValue(parameters)}&");
             }
-            return _paramBuidler.ToString().Trim('&');
+            return paramBuidler.ToString().Trim('&');
         }
 
         /// <summary>
@@ -213,7 +210,7 @@ namespace Zony.Lib.Net
         private string BaseJsonBuildParameters(object parameters)
         {
             if (parameters == null) return string.Empty;
-            if (parameters.GetType() == typeof(string)) return parameters as string;
+            if (parameters is string s) return s;
             return JsonConvert.SerializeObject(parameters);
         }
     }

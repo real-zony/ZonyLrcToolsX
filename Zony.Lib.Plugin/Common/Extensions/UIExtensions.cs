@@ -5,11 +5,13 @@ using Zony.Lib.Plugin.Models;
 
 namespace Zony.Lib.Plugin.Common.Extensions
 {
+    // ReSharper disable once InconsistentNaming
     public static class UIExtensions
     {
         /// <summary>
         /// 在音乐列表当中设置指定项的状态文本
         /// </summary>
+        /// <param name="context">全局上下文</param>
         /// <param name="itemIndex">条目索引</param>
         /// <param name="statusText">状态文本,建议使用 AppConsts 常量文本</param>
         public static void SetItemStatus(this GlobalContext context, int itemIndex, string statusText)
@@ -24,6 +26,7 @@ namespace Zony.Lib.Plugin.Common.Extensions
         /// <summary>
         /// 设置底部状态栏文本内容
         /// </summary>
+        /// <param name="context">全局上下文</param>
         /// <param name="text">要设置的内容文本</param>
         public static void SetBottomStatusText(this GlobalContext context, string text)
         {
@@ -38,6 +41,7 @@ namespace Zony.Lib.Plugin.Common.Extensions
         /// </summary>
         /// <param name="context">UI 上下文</param>
         /// <param name="buttonText">按钮名称</param>
+        /// <param name="buttonClickEvent">绑定的按钮操作委托</param>
         public static ToolStripItem AddPluginButton(this MainUIComponentContext context, string buttonText, EventHandler buttonClickEvent)
         {
             ToolStripDropDownButton subButton = context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons) as ToolStripDropDownButton;
@@ -47,6 +51,7 @@ namespace Zony.Lib.Plugin.Common.Extensions
                 subButton = context.Top_ToolStrip.Items[index] as ToolStripDropDownButton;
             }
 
+            if (subButton == null) throw new Exception("产生严重程序异常!");
             var button = subButton.DropDownItems.Add(buttonText);
             button.Click += buttonClickEvent;
             return button;
@@ -61,7 +66,9 @@ namespace Zony.Lib.Plugin.Common.Extensions
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadLyric].Enabled = true;
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_StopDownLoad].Enabled = true;
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadAblumImage].Enabled = true;
-            context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons).Enabled = true;
+
+            var plugButton = context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons);
+            if (plugButton != null) plugButton.Enabled = true;
         }
 
         /// <summary>
@@ -73,7 +80,10 @@ namespace Zony.Lib.Plugin.Common.Extensions
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadLyric].Enabled = false;
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_StopDownLoad].Enabled = false;
             context.Top_ToolStrip_Buttons[AppConsts.Identity_Button_DownLoadAblumImage].Enabled = false;
-            context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons).Enabled = false;
+
+            var plugButton = context.Top_ToolStrip.Items.Cast<ToolStripItem>().FirstOrDefault(z => z.Name == AppConsts.Identity_PluginButtons);
+            if (plugButton != null) plugButton.Enabled = false;
         }
     }
 }
+

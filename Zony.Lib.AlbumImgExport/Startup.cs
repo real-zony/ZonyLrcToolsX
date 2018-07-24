@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace Zony.Lib.AlbumImgExport
 
         public void InitializePlugin(IPluginManager plugManager)
         {
-            GlobalContext.Instance.UIContext.AddPluginButton("批量专辑图像导出", async (object sender, EventArgs args) =>
+            GlobalContext.Instance.UIContext.AddPluginButton("批量专辑图像导出", async (sender, args) =>
             {
                 FolderBrowserDialog dialog = new FolderBrowserDialog();
                 dialog.Description = "请选择导出的文件夹";
@@ -34,9 +33,10 @@ namespace Zony.Lib.AlbumImgExport
 
                 string dirPath = dialog.SelectedPath;
 
-                IEnumerable<MusicInfoModel> exportList = GlobalContext.Instance.MusicInfos.Where(z => z.IsAlbumImg);
+                IEnumerable<MusicInfoModel> exports = GlobalContext.Instance.MusicInfos.Where(z => z.IsAlbumImg);
 
-                GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum = exportList.Count();
+                var exportList = exports.ToList();
+                GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum = exportList.Count;
                 GlobalContext.Instance.UIContext.DisableTopButtons();
                 GlobalContext.Instance.SetBottomStatusText($"正在导出专辑图像");
 

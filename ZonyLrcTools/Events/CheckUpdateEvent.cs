@@ -20,6 +20,8 @@ namespace ZonyLrcTools.Events
         public async void HandleEvent(CheckUpdateEventData eventData)
         {
             var result = await new HttpMethodUtils().GetAsync<UpdateModel>(@"http://api.myzony.com/api/VersionCheck/CheckVersion");
+
+            if (result == null) return;
             var newVersion = new Version(result.Version);
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 

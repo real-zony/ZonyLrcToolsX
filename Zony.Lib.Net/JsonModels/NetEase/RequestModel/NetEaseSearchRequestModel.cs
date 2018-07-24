@@ -20,22 +20,27 @@
         }
 
         public string csrf_token { get; set; }
+
         /// <summary>
         /// 搜索关键字
         /// </summary>
         public string s { get; set; }
+
         /// <summary>
         /// 页偏移
         /// </summary>
         public int offset { get; set; }
+
         /// <summary>
         /// 页容量
         /// </summary>
         public int limit { get; set; }
+
         /// <summary>
         /// 是否获得全部
         /// </summary>
         public bool total { get; set; }
+
         /// <summary>
         /// 搜索类型
         /// </summary>

@@ -7,27 +7,36 @@ namespace Zony.Lib.Plugin.Models
     /// </summary>
     public class MusicInfoModel
     {
+        /// <summary>
+        /// 列表索引信息
+        /// </summary>
         public int Index { get; set; }
+
         /// <summary>
         /// 歌手/艺术家
         /// </summary>
         public string Artist { get; set; }
+
         /// <summary>
         /// 歌曲名称
         /// </summary>
         public string Song { get; set; }
+
         /// <summary>
         /// 歌曲文件路径
         /// </summary>
         public string FilePath { get; set; }
+
         /// <summary>
         /// 专辑/唱片名称
         /// </summary>
         public string Album { get; set; }
+
         /// <summary>
         /// 文件扩展名
         /// </summary>
         public string Extensions { get; set; }
+
         /// <summary>
         /// 歌曲标签类型
         /// </summary>
@@ -37,14 +46,17 @@ namespace Zony.Lib.Plugin.Models
         /// 是否下载成功
         /// </summary>
         public MusicInfoEnum Status { get; set; }
+
         /// <summary>
         /// 是否有专辑图像
         /// </summary>
         public bool IsAlbumImg { get; set; }
+
         /// <summary>
         /// 是否有内置歌词
         /// </summary>
         public bool IsBuildInLyric { get; set; }
+
         /// <summary>
         /// 内置歌词
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using Zony.Lib.Infrastructures.Dependency;
-namespace ZonyLrcTools.Encoders
+
+namespace ZonyLrcTools.Encoders.Provider
 {
     public interface IEncoderProvider : ISingletonDependency
     {

@@ -24,16 +24,16 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void FillListView()
         {
-            var _infos = PlugManager.GetAllPluginInfos();
-            foreach (var _info in _infos)
+            var infos = PlugManager.GetAllPluginInfos();
+            foreach (var info in infos)
             {
-                listView_PluginList.Items.Add(new ListViewItem(new string[]
+                listView_PluginList.Items.Add(new ListViewItem(new[]
                 {
-                    _info.Name,
-                    _info.Author,
+                    info.Name,
+                    info.Author,
                     "0",
-                    _info.Version.ToString(),
-                    _info.Description
+                    info.Version.ToString(),
+                    info.Description
                 }));
             }
         }

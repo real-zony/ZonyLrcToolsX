@@ -11,92 +11,119 @@ namespace Zony.Lib.Plugin
 {
     public class PluginManager : IPluginManager
     {
-        private readonly ConcurrentDictionary<Type, List<Type>> m_pluginContainer;
-        private readonly string m_pluginsFolderPath = Environment.CurrentDirectory + @"\Plugins";
+        private readonly ConcurrentDictionary<Type, List<Type>> _pluginContainer;
+        private readonly string _pluginsFolderPath = Environment.CurrentDirectory + @"\Plugins";
 
         public PluginManager()
         {
-            m_pluginContainer = new ConcurrentDictionary<Type, List<Type>>();
+            _pluginContainer = new ConcurrentDictionary<Type, List<Type>>();
         }
 
+        /// <summary>
+        /// 获得所有插件信息
+        /// </summary>
         public List<PluginInfoAttribute> GetAllPluginInfos()
         {
-            var _result = new List<PluginInfoAttribute>();
+            var result = new List<PluginInfoAttribute>();
 
-            foreach (var _type in m_pluginContainer)
+            foreach (var type in _pluginContainer)
             {
-                foreach (var _plugin in _type.Value)
+                foreach (var plugin in type.Value)
                 {
-                    var _info = _plugin.GetCustomAttribute<PluginInfoAttribute>();
-                    if (_info != null) _result.Add(_info);
+                    var info = plugin.GetCustomAttribute<PluginInfoAttribute>();
+                    if (info != null) result.Add(info);
                 }
             }
 
-            return _result;
+            return result;
         }
 
+        /// <summary>
+        /// 获得指定类型的插件
+        /// </summary>
+        /// <typeparam name="TInterface">插件类型</typeparam>
+        /// <returns>获得到的插件单例对象</returns>
         public TInterface GetPlugin<TInterface>(Dictionary<string, Dictionary<string, object>> @params = null) where TInterface : class
         {
-            Type _type = typeof(TInterface);
+            Type type = typeof(TInterface);
 
-            if (m_pluginContainer.TryGetValue(_type, out List<Type> _plugins))
+            if (_pluginContainer.TryGetValue(type, out List<Type> plugins))
             {
-                var _instance = Activator.CreateInstance(_plugins[0]) as IPlugin;
-                _instance.PluginOptions = @params;
-                return _instance as TInterface;
+                if (Activator.CreateInstance(plugins[0]) is IPlugin instance)
+                {
+                    instance.PluginOptions = @params;
+                    return instance as TInterface;
+                }
             }
 
             return default(TInterface);
         }
 
+        /// <summary>
+        /// 获得指定类型的插件
+        /// </summary>
+        /// <typeparam name="TInterface">插件类型</typeparam>
+        /// <returns>插件实例列表</returns>
         public List<TInterface> GetPlugins<TInterface>(Dictionary<string, Dictionary<string, object>> @params = null) where TInterface : class
         {
-            Type _type = typeof(TInterface);
+            Type type = typeof(TInterface);
 
-            List<TInterface> _instances = new List<TInterface>();
+            List<TInterface> instances = new List<TInterface>();
 
-            if (!m_pluginContainer.TryGetValue(_type, out List<Type> _plugins)) return null;
-            _plugins.ForEach(_plugin =>
+            if (!_pluginContainer.TryGetValue(type, out List<Type> plugins)) return null;
+            plugins.ForEach(plugin =>
             {
-                var _instance = Activator.CreateInstance(_plugin) as IPlugin;
-                _instance.PluginOptions = @params;
-                _instances.Add(_instance as TInterface);
+                if (Activator.CreateInstance(plugin) is IPlugin instance)
+                {
+                    instance.PluginOptions = @params;
+                    instances.Add(instance as TInterface);
+                }
             });
-            return _instances;
+            return instances;
         }
 
+        /// <summary>
+        /// 从默认目录加载插件
+        /// </summary>
         public void LoadPlugins()
         {
-            LoadPlugins(m_pluginsFolderPath);
+            LoadPlugins(_pluginsFolderPath);
         }
 
+        /// <summary>
+        /// 从指定的路径加载插件
+        /// </summary>
+        /// <param name="dirPath">插件路径</param>
         public void LoadPlugins(string dirPath)
         {
             if (!Directory.Exists(dirPath)) return;
 
-            string[] _files = Directory.GetFiles(dirPath, "*.dll");
-            foreach (var _file in _files)
+            string[] files = Directory.GetFiles(dirPath, "*.dll");
+            foreach (var file in files)
             {
-                Assembly _asm = Assembly.UnsafeLoadFrom(_file);
+                Assembly asm = Assembly.UnsafeLoadFrom(file);
 
-                Type[] _types = _asm.GetTypes();
-                List<Type> _plugins = new List<Type>();
-                Type _interfaceType = null;
+                Type[] types = asm.GetTypes();
+                List<Type> plugins = new List<Type>();
 
-                foreach (var _type in _types)
+                // 遍历程序集所有类型
+                foreach (var type in types)
                 {
-                    if (_type.GetInterface(typeof(IPlugin).Name) != null)
+                    // 判断类型是否为插件(IPlugin 类型)
+                    if (type.GetInterface(typeof(IPlugin).Name) != null)
                     {
-                        _interfaceType = _type.GetInterfaces().Where(x => x != typeof(IPlugin)).FirstOrDefault();
+                        // 查找具体的接口类型，例如 IPluginDownloader 类型，如果 Container 已经存在该类型的键的话，获取其
+                        // 键关联的 List,将该类型加入，否则新建一个键值对
+                        var interfaceType = type.GetInterfaces().FirstOrDefault(x => x != typeof(IPlugin));
 
-                        if (m_pluginContainer.ContainsKey(_interfaceType))
+                        if (_pluginContainer.ContainsKey(interfaceType ?? throw new InvalidOperationException("无效接口类型，请确定插件只实现了一个插件接口.")))
                         {
-                            m_pluginContainer[_interfaceType].Add(_type);
+                            _pluginContainer[interfaceType].Add(type);
                         }
                         else
                         {
-                            _plugins.Add(_type);
-                            m_pluginContainer.TryAdd(_interfaceType, _plugins);
+                            plugins.Add(type);
+                            _pluginContainer.TryAdd(interfaceType, plugins);
                         }
                     }
                 }

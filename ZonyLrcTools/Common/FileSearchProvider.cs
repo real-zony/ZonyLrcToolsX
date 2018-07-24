@@ -10,19 +10,25 @@ namespace ZonyLrcTools.Common
 {
     public class FileSearchProvider : IFileSearchProvider
     {
+        /// <summary>
+        /// 从指定文件夹当中搜索所有指定后缀的文件
+        /// </summary>
+        /// <param name="directoryPath">要搜索的目录</param>
+        /// <param name="extensions">要搜索的后缀名集合</param>
+        /// <returns></returns>
         public Dictionary<string, List<string>> FindFiles(string directoryPath, IEnumerable<string> extensions)
         {
             if (extensions == null) throw new ArgumentNullException("搜索后缀不能为空!");
-            if (extensions.Count() == 0) throw new ArgumentException("搜索后缀不能为空!");
+            if (!extensions.Any()) throw new ArgumentException("搜索后缀不能为空!");
 
-            Dictionary<string, List<string>> _files = new Dictionary<string, List<string>>();
-            foreach (var _ext in extensions)
+            Dictionary<string, List<string>> files = new Dictionary<string, List<string>>();
+            foreach (var ext in extensions)
             {
                 try
                 {
-                    List<string> _result = new List<string>();
-                    SearchFile(_result, directoryPath, _ext);
-                    _files.Add(Path.GetExtension(_ext), _result);
+                    List<string> result = new List<string>();
+                    SearchFile(result, directoryPath, ext);
+                    files.Add(Path.GetExtension(ext) ?? throw new InvalidDataException("无法获得文件的后缀！"), result);
                 }
                 catch (Exception)
                 {
@@ -30,24 +36,30 @@ namespace ZonyLrcTools.Common
                 }
             }
 
-            return _files;
+            return files;
         }
 
+        /// <summary>
+        /// 从指定文件夹当中搜索所有指定后缀的文件
+        /// </summary>
+        /// <param name="directoryPath">要搜索的目录</param>
+        /// <param name="extensions">要搜索的后缀名集合</param>
+        /// <returns></returns>
         public async Task<Dictionary<string, List<string>>> FindFilesAsync(string directoryPath, IEnumerable<string> extensions)
         {
             if (extensions == null) throw new ArgumentNullException("搜索后缀不能为空!");
-            if (extensions.Count() == 0) throw new ArgumentException("搜索后缀不能为空!");
+            if (!extensions.Any()) throw new ArgumentException("搜索后缀不能为空!");
 
-            Dictionary<string, List<string>> _files = new Dictionary<string, List<string>>();
-            foreach (var _ext in extensions)
+            Dictionary<string, List<string>> files = new Dictionary<string, List<string>>();
+            foreach (var ext in extensions)
             {
                 try
                 {
                     await Task.Run(() =>
                     {
-                        List<string> _result = new List<string>();
-                        SearchFile(_result, directoryPath, _ext);
-                        _files.Add(Path.GetExtension(_ext), _result);
+                        List<string> result = new List<string>();
+                        SearchFile(result, directoryPath, ext);
+                        files.Add(Path.GetExtension(ext) ?? throw new InvalidDataException("无法获得文件的后缀！"), result);
                     });
                 }
                 catch (Exception)
@@ -56,7 +68,7 @@ namespace ZonyLrcTools.Common
                 }
             }
 
-            return _files;
+            return files;
         }
 
         /// <summary>
@@ -79,7 +91,10 @@ namespace ZonyLrcTools.Common
                     SearchFile(files, directory, extension);
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                //
+            }
         }
     }
 }

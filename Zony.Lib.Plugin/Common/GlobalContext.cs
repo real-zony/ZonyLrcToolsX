@@ -12,8 +12,9 @@ namespace Zony.Lib.Plugin.Common
     /// </summary>
     public class GlobalContext
     {
-        private static GlobalContext m_uniqueInstance;
-        private static readonly object m_locker = new object();
+        private static GlobalContext _uniqueInstance;
+
+        private static readonly object Locker = new object();
 
         private GlobalContext()
         {
@@ -37,15 +38,15 @@ namespace Zony.Lib.Plugin.Common
         {
             get
             {
-                if (m_uniqueInstance == null)
+                if (_uniqueInstance == null)
                 {
-                    lock (m_locker)
+                    lock (Locker)
                     {
-                        if (m_uniqueInstance == null) m_uniqueInstance = new GlobalContext();
+                        if (_uniqueInstance == null) _uniqueInstance = new GlobalContext();
                     }
                 }
 
-                return m_uniqueInstance;
+                return _uniqueInstance;
             }
         }
 
@@ -57,6 +58,7 @@ namespace Zony.Lib.Plugin.Common
         /// <summary>
         /// 主程序开放的所有 UI 组件
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public MainUIComponentContext UIContext { get; set; }
 
         /// <summary>
@@ -66,15 +68,15 @@ namespace Zony.Lib.Plugin.Common
         /// <returns>转换完成的包含所有音乐信息的 ConcurrentBag 实例</returns>
         public ConcurrentBag<MusicInfoModel> GetConcurrentList()
         {
-            ConcurrentBag<MusicInfoModel> _infos = new ConcurrentBag<MusicInfoModel>();
+            ConcurrentBag<MusicInfoModel> infos = new ConcurrentBag<MusicInfoModel>();
             if (MusicInfos == null) MusicInfos = new List<MusicInfoModel>();
 
-            foreach (var _item in MusicInfos.OrderBy(z => z.Index))
+            foreach (var item in MusicInfos.OrderBy(z => z.Index))
             {
-                _infos.Add(_item);
+                infos.Add(item);
             }
 
-            return _infos;
+            return infos;
         }
 
         /// <summary>
@@ -85,11 +87,11 @@ namespace Zony.Lib.Plugin.Common
         {
             lock (MusicInfos)
             {
-                int _lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
-                foreach (var _info in infos)
+                int lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
+                foreach (var info in infos)
                 {
-                    _info.Status = MusicInfoEnum.Ready;
-                    _info.Index = _lastIndex++;
+                    info.Status = MusicInfoEnum.Ready;
+                    info.Index = lastIndex++;
                 }
             }
         }
@@ -97,14 +99,14 @@ namespace Zony.Lib.Plugin.Common
         /// <summary>
         /// 添加一个歌曲信息到全局容器
         /// </summary>
-        /// <param name="infos">歌曲信息</param>
+        /// <param name="info">歌曲信息</param>
         public void InsertMusicInfo(MusicInfoModel info)
         {
             lock (MusicInfos)
             {
-                int _lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
+                int lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
                 info.Status = MusicInfoEnum.Ready;
-                info.Index = _lastIndex++;
+                info.Index = ++lastIndex;
                 MusicInfos.Add(info);
             }
         }
@@ -117,13 +119,13 @@ namespace Zony.Lib.Plugin.Common
         {
             lock (MusicInfos)
             {
-                int _lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
+                int lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
                 UIContext.Center_ListViewNF_MusicList.BeginUpdate();
-                foreach (var _info in infos)
+                foreach (var info in infos)
                 {
-                    _info.Status = MusicInfoEnum.Ready;
-                    _info.Index = _lastIndex++;
-                    InsertItemToCenterListView(_info);
+                    info.Status = MusicInfoEnum.Ready;
+                    info.Index = ++lastIndex;
+                    InsertItemToCenterListView(info);
                 }
                 UIContext.Center_ListViewNF_MusicList.EndUpdate();
                 MusicInfos.AddRange(infos);
@@ -133,14 +135,14 @@ namespace Zony.Lib.Plugin.Common
         /// <summary>
         /// 一个安全添加歌曲信息的方法，并且填充 UI
         /// </summary>
-        /// <param name="infos">需要添加的歌曲信息</param>
+        /// <param name="info">需要添加的歌曲信息</param>
         public void InsertMusicInfoAndFillListView(MusicInfoModel info)
         {
             lock (MusicInfos)
             {
-                int _lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
+                int lastIndex = MusicInfos.Count == 0 ? 0 : MusicInfos[MusicInfos.Count - 1].Index;
                 info.Status = MusicInfoEnum.Ready;
-                info.Index = _lastIndex++;
+                info.Index = ++lastIndex;
                 MusicInfos.Add(info);
                 InsertItemToCenterListView(info);
             }
@@ -152,7 +154,7 @@ namespace Zony.Lib.Plugin.Common
         /// <param name="info">要添加的音乐信息</param>
         public void InsertItemToCenterListView(MusicInfoModel info)
         {
-            UIContext.Center_ListViewNF_MusicList.Items.Insert(info.Index, new ListViewItem(new string[]
+            UIContext.Center_ListViewNF_MusicList.Items.Insert(info.Index, new ListViewItem(new[]
                 {
                     info.Song,
                     info.Artist,

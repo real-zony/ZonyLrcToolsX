@@ -8,21 +8,21 @@ namespace ZonyLrcTools.Encoders
 
         public byte[] Encoding(string sourceStr)
         {
-            var _encoding = TextEncoding.GetEncoding(EncodePageName);
-            var _sourceBytes = TextEncoding.UTF8.GetBytes(sourceStr);
-            return TextEncoding.Convert(TextEncoding.UTF8, _encoding, _sourceBytes);
+            var encoding = TextEncoding.GetEncoding(EncodePageName);
+            var sourceBytes = TextEncoding.UTF8.GetBytes(sourceStr);
+            return TextEncoding.Convert(TextEncoding.UTF8, encoding, sourceBytes);
         }
 
         public byte[] Encoding(byte[] sourceBytes)
         {
-            var _encoding = TextEncoding.GetEncoding(EncodePageName);
-            return TextEncoding.Convert(TextEncoding.UTF8, _encoding, sourceBytes);
+            var encoding = TextEncoding.GetEncoding(EncodePageName);
+            return TextEncoding.Convert(TextEncoding.UTF8, encoding, sourceBytes);
         }
 
         public byte[] Encoding(byte[] sourceBytes, TextEncoding sourceEncode)
         {
-            var _encoding = TextEncoding.GetEncoding(EncodePageName);
-            return TextEncoding.Convert(sourceEncode, _encoding, sourceBytes);
+            var encoding = TextEncoding.GetEncoding(EncodePageName);
+            return TextEncoding.Convert(sourceEncode, encoding, sourceBytes);
         }
     }
 }

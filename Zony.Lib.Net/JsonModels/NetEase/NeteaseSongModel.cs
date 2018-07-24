@@ -8,14 +8,17 @@ namespace Zony.Lib.Net.JsonModels.NetEase
         /// 歌曲名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
         /// 歌曲 SID
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
         /// 歌手
         /// </summary>
         public List<NetEaseArtistModel> artists { get; set; }
+
         /// <summary>
         /// 专辑
         /// </summary>

@@ -5,20 +5,20 @@ namespace Zony.Lib.Infrastructures.EventBus.Factories.Internals
 
     internal class FactoryUnregistrar : IDisposable
     {
-        private readonly IEventBus m_eventBus;
-        private readonly Type m_eventType;
-        private readonly IEventHandlerFactory m_factory;
+        private readonly IEventBus _eventBus;
+        private readonly Type _eventType;
+        private readonly IEventHandlerFactory _factory;
 
         public FactoryUnregistrar(IEventBus eventBus, Type eventType, IEventHandlerFactory factory)
         {
-            m_eventBus = eventBus;
-            m_eventType = eventType;
-            m_factory = factory;
+            _eventBus = eventBus;
+            _eventType = eventType;
+            _factory = factory;
         }
 
         public void Dispose()
         {
-            m_eventBus.Unregister(m_eventType, m_factory);
+            _eventBus.Unregister(_eventType, _factory);
         }
     }
 }

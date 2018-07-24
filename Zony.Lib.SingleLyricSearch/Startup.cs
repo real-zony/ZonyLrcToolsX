@@ -19,13 +19,12 @@ namespace Zony.Lib.SongListDownload
     public class Startup : IPluginExtensions, IPlugin
     {
         private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
-        private ToolStripItem _pluginButton;
 
         public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
         public void InitializePlugin(IPluginManager plugManager)
         {
-            _pluginButton = GlobalContext.Instance.UIContext.AddPluginButton("网易云歌单歌词下载", _button_Click);
+            GlobalContext.Instance.UIContext.AddPluginButton("网易云歌单歌词下载", _button_Click);
         }
 
         private async void _button_Click(object sender, System.EventArgs e)
@@ -33,17 +32,17 @@ namespace Zony.Lib.SongListDownload
             GlobalContext.Instance.UIContext.DisableTopButtons();
             ClearAllContainer();
 
-            int _id = GetMusicDetailId();
-            if (_id == 0)
+            int id = GetMusicDetailId();
+            if (id == 0)
             {
                 GlobalContext.Instance.UIContext.EnableTopButtons();
                 return;
             }
-            NetEaseResultModel _jsonModel = RequestNetEase(_id);
-            List<MusicInfoModel> _infos = ConvertJsonModelToMusicInfoModel(_jsonModel);
-            await FillListView(_infos);
+            NetEaseResultModel jsonModel = RequestNetEase(id);
+            List<MusicInfoModel> infos = ConvertJsonModelToMusicInfoModel(jsonModel);
+            await FillListView(infos);
 
-            GlobalContext.Instance.MusicInfos.AddRange(_infos);
+            GlobalContext.Instance.MusicInfos.AddRange(infos);
             GlobalContext.Instance.UIContext.EnableTopButtons();
         }
 
@@ -58,18 +57,18 @@ namespace Zony.Lib.SongListDownload
             if (jsonObject.result == null) return null;
             if (jsonObject.result.tracks == null) return null;
 
-            List<MusicInfoModel> _result = new List<MusicInfoModel>();
-            foreach (var _info in jsonObject.result.tracks)
+            List<MusicInfoModel> result = new List<MusicInfoModel>();
+            foreach (var info in jsonObject.result.tracks)
             {
-                _result.Add(new MusicInfoModel()
+                result.Add(new MusicInfoModel
                 {
-                    Song = _info.name,
-                    Artist = _info.artists[0].name,
-                    Album = _info.album.name
+                    Song = info.name,
+                    Artist = info.artists[0].name,
+                    Album = info.album.name
                 });
             }
 
-            return _result;
+            return result;
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace Zony.Lib.SongListDownload
         /// <param name="id">歌单 ID</param>
         private NetEaseResultModel RequestNetEase(int id)
         {
-            var _jsonResult = _httpClient.Get("http://music.163.com/api/playlist/detail", new
+            var jsonResult = _httpClient.Get("http://music.163.com/api/playlist/detail", new
             {
                 id,
                 offset = 0,
@@ -88,7 +87,7 @@ namespace Zony.Lib.SongListDownload
                 csrf_token = string.Empty
             }, "http://music.163.com");
 
-            return JsonConvert.DeserializeObject<NetEaseResultModel>(_jsonResult);
+            return JsonConvert.DeserializeObject<NetEaseResultModel>(jsonResult);
         }
 
         /// <summary>
@@ -96,20 +95,18 @@ namespace Zony.Lib.SongListDownload
         /// </summary>
         private int GetMusicDetailId()
         {
-            var _inputBox = new InputBox("请输入歌单 URL 或者歌单 ID", "网页版歌URL，例如:\r\n" +
+            var inputBox = new InputBox("请输入歌单 URL 或者歌单 ID", "网页版歌URL，例如:\r\n" +
                                          "http://music.163.com/#/playlist?id=716152005\r\n或者输入Id:716152005");
-            _inputBox.ShowDialog();
+            inputBox.ShowDialog();
 
-            if (string.IsNullOrWhiteSpace(_inputBox.ResultText)) return 0;
+            if (string.IsNullOrWhiteSpace(inputBox.ResultText)) return 0;
 
-            if (int.TryParse(_inputBox.ResultText, out int _inputId)) return _inputId;
-            else
-            {
-                var _regex = new Regex(@"(?<=id=)\d+");
-                var _match = _regex.Match(_inputBox.ResultText);
-                if (!_match.Success) return 0;
-                return int.Parse(_match.Value);
-            }
+            if (int.TryParse(inputBox.ResultText, out int inputId)) return inputId;
+
+            var regex = new Regex(@"(?<=id=)\d+");
+            var match = regex.Match(inputBox.ResultText);
+            if (!match.Success) return 0;
+            return int.Parse(match.Value);
         }
 
         #region > UI 相关 <
@@ -124,7 +121,7 @@ namespace Zony.Lib.SongListDownload
                 for (int index = 0; index < infos.Count; index++)
                 {
                     infos[index].Index = index;
-                    GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Add(new ListViewItem(new string[]
+                    GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Add(new ListViewItem(new[]
                     {
                     infos[index].Song,
                     infos[index].Artist,

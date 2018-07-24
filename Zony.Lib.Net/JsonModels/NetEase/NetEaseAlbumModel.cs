@@ -6,6 +6,7 @@
         /// 专辑名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
         /// 专辑图像地址
         /// </summary>

@@ -13,16 +13,16 @@ namespace ZonyLrcTools.Events
 
     public class ProgramExitEvent : IEventHandler<ProgramExitEventData>,ITransientDependency
     {
-        private readonly IConfigurationManager m_configMgr;
+        private readonly IConfigurationManager _configMgr;
 
         public ProgramExitEvent(IConfigurationManager configMgr)
         {
-            m_configMgr = configMgr;
+            _configMgr = configMgr;
         }
 
         public void HandleEvent(ProgramExitEventData eventData)
         {
-            m_configMgr.SaveConfiguration();
+            _configMgr.SaveConfiguration();
             GlobalContext.Instance.LyricDownloadState = false;
         }
     }

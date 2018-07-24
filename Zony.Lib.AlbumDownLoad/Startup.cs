@@ -13,7 +13,7 @@ namespace Zony.Lib.AlbumDownLoad
     [PluginInfo("专辑图像下载插件", "Zony", "1.1.1.0", "http://www.myzony.com", "从网易云音乐下载专辑图像")]
     public class Startup : IPluginAlbumDownloader, IPlugin
     {
-        private readonly HttpMethodUtils m_netUtils = new HttpMethodUtils();
+        private readonly HttpMethodUtils _mNetUtils = new HttpMethodUtils();
 
         public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
@@ -21,12 +21,12 @@ namespace Zony.Lib.AlbumDownLoad
         {
             imageData = null;
 
-            var _songModel = GetMusicInfoByNetease(info.Artist, info.Song);
-            if (_songModel.id == 0) return false;
+            var songModel = GetMusicInfoByNetease(info.Artist, info.Song);
+            if (songModel.id == 0) return false;
 
-            string _albumImg = GetAblumImageUrl(_songModel.id);
+            string albumImg = GetAblumImageUrl(songModel.id);
 
-            imageData = new WebClient().DownloadData(_albumImg);
+            imageData = new WebClient().DownloadData(albumImg);
             return true;
         }
 
@@ -37,15 +37,15 @@ namespace Zony.Lib.AlbumDownLoad
         /// <param name="songName">歌曲名</param>
         private NetEaseSongModel GetMusicInfoByNetease(string artist, string songName)
         {
-            string _artist = m_netUtils.URL_Encoding(artist, Encoding.UTF8);
-            string _title = m_netUtils.URL_Encoding(songName, Encoding.UTF8);
-            string _searchKey = $"{_artist}+{_title}";
+            string encodingAritst = _mNetUtils.URL_Encoding(artist, Encoding.UTF8);
+            string encodingTitle = _mNetUtils.URL_Encoding(songName, Encoding.UTF8);
+            string searchKey = $"{encodingAritst}+{encodingTitle}";
 
-            var _result = m_netUtils.Post<NetEaseResultModel>(url: @"http://music.163.com/api/search/get/web",
-                                                parameters: new NetEaseSearchRequestModel(_searchKey),
+            var result = _mNetUtils.Post<NetEaseResultModel>(url: @"http://music.163.com/api/search/get/web",
+                                                parameters: new NetEaseSearchRequestModel(searchKey),
                                                 referer: "http://music.163.com",
                                                 mediaTypeValue: "application/x-www-form-urlencoded");
-            return _result.result.songs[0];
+            return result.result.songs[0];
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace Zony.Lib.AlbumDownLoad
         /// <returns></returns>
         private string GetAblumImageUrl(int sid)
         {
-            string _requestUrl = $"http://music.163.com/api/song/detail/";
-            var _result = m_netUtils.GetAsync<NetEaseSongDetailResultModel>(_requestUrl, new
+            string requestUrl = $"http://music.163.com/api/song/detail/";
+            var result = _mNetUtils.GetAsync<NetEaseSongDetailResultModel>(requestUrl, new
             {
                 id = sid,
                 ids = $"%5B{sid}%5D"
             }).Result;
 
-            return _result?.songs?[0]?.album?.picUrl;
+            return result?.songs?[0]?.album?.picUrl;
         }
     }
 }

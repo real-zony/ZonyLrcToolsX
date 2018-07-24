@@ -14,11 +14,18 @@ namespace ZonyLrcTools.Common
         /// </summary>
         public readonly string ConfigurationFileName = $@"{Environment.CurrentDirectory}\config.json";
 
+        /// <summary>
+        /// 从默认配置文件加载设置
+        /// </summary>
         public void LoadConfiguration()
         {
             LoadConfiguration(ConfigurationFileName);
         }
 
+        /// <summary>
+        /// 加载设置
+        /// </summary>
+        /// <param name="filePath">设置文件路径</param>
         public void LoadConfiguration(string filePath)
         {
             if (!File.Exists(filePath))
@@ -27,26 +34,33 @@ namespace ZonyLrcTools.Common
                 return;
             }
 
-            FileStream _file = File.Open(filePath, FileMode.Open);
-            using (StreamReader _reader = new StreamReader(_file))
+            FileStream file = File.Open(filePath, FileMode.Open);
+            using (StreamReader reader = new StreamReader(file))
             {
-                ConfigModel = JsonConvert.DeserializeObject<ConfigurationModel>(_reader.ReadToEnd());
+                ConfigModel = JsonConvert.DeserializeObject<ConfigurationModel>(reader.ReadToEnd());
             }
         }
 
+        /// <summary>
+        /// 保存设置到默认配置文件
+        /// </summary>
         public void SaveConfiguration()
         {
             SaveConfiguration(ConfigurationFileName);
         }
 
+        /// <summary>
+        /// 保存设置
+        /// </summary>
+        /// <param name="filePath">设置文件路径</param>
         public void SaveConfiguration(string filePath)
         {
-            using (FileStream _file = File.Open(filePath, FileMode.OpenOrCreate))
+            using (FileStream file = File.Open(filePath, FileMode.OpenOrCreate))
             {
-                _file.SetLength(0);
-                using (StreamWriter _sr = new StreamWriter(_file))
+                file.SetLength(0);
+                using (StreamWriter sr = new StreamWriter(file))
                 {
-                    _sr.Write(JsonConvert.SerializeObject(ConfigModel));
+                    sr.Write(JsonConvert.SerializeObject(ConfigModel));
                 }
             }
         }

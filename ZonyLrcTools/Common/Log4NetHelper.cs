@@ -8,22 +8,22 @@ namespace ZonyLrcTools.Common
 {
     public static class Log4NetHelper
     {
-        private static ILog m_log;
+        private static ILog _log;
         private static ILog Log
         {
             get
             {
-                string _configPath = Environment.CurrentDirectory + "\\log4net.config";
-                log4net.Config.XmlConfigurator.Configure(new FileInfo(_configPath));
+                string configPath = Environment.CurrentDirectory + "\\log4net.config";
+                log4net.Config.XmlConfigurator.Configure(new FileInfo(configPath));
 
-                if (m_log == null) m_log = LogManager.GetLogger(AppConsts.AppName);
-                return m_log;
+                if (_log == null) _log = LogManager.GetLogger(AppConsts.AppName);
+                return _log;
             }
         }
 
-        public static void Exception(Exception E)
+        public static void Exception(Exception e)
         {
-            Log.Error(E);
+            Log.Error(e);
         }
 
         public static void Info(string message)

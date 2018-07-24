@@ -24,19 +24,19 @@ namespace Zony.Lib.TagLib
 
             try
             {
-                var _file = TagFile.Create(filePath);
-                info.Song = _file.Tag.Title;
-                info.Artist = _file.Tag.FirstPerformer;
-                if (!string.IsNullOrEmpty(_file.Tag.FirstAlbumArtist)) info.Artist = _file.Tag.FirstAlbumArtist;
-                info.Album = _file.Tag.Album;
+                var file = TagFile.Create(filePath);
+                info.Song = file.Tag.Title;
+                info.Artist = file.Tag.FirstPerformer;
+                if (!string.IsNullOrEmpty(file.Tag.FirstAlbumArtist)) info.Artist = file.Tag.FirstAlbumArtist;
+                info.Album = file.Tag.Album;
 
                 if (string.IsNullOrEmpty(info.Song)) info.Song = fileName;
                 if (string.IsNullOrEmpty(info.Artist)) info.Artist = fileName;
 
-                info.TagType = string.Join(@"/", _file.TagTypes);
-                info.IsAlbumImg = _file.Tag.Pictures.Length > 0 ? true : false;
-                info.IsBuildInLyric = string.IsNullOrEmpty(_file.Tag.Lyrics);
-                if (info.IsBuildInLyric) info.BuildInLyric = _file.Tag.Lyrics;
+                info.TagType = string.Join(@"/", file.TagTypes);
+                info.IsAlbumImg = file.Tag.Pictures.Length > 0;
+                info.IsBuildInLyric = string.IsNullOrEmpty(file.Tag.Lyrics);
+                if (info.IsBuildInLyric) info.BuildInLyric = file.Tag.Lyrics;
             }
             catch (Exception)
             {
@@ -59,15 +59,15 @@ namespace Zony.Lib.TagLib
         {
             List<MusicInfoModel> result = new List<MusicInfoModel>();
 
-            int _index = 0;
+            int index = 0;
             foreach (var key in musicFiles)
             {
                 foreach (var file in musicFiles[key.Key])
                 {
                     MusicInfoModel info = GetMusicInfo(file);
-                    info.Index = _index;
+                    info.Index = index;
                     result.Add(info);
-                    _index++;
+                    index++;
                 }
             }
 
@@ -82,19 +82,19 @@ namespace Zony.Lib.TagLib
                 int index = 0;
                 foreach (var key in musicFiles)
                 {
-                    foreach (var _file in musicFiles[key.Key])
+                    foreach (var file in musicFiles[key.Key])
                     {
-                        files.TryAdd(index, _file);
+                        files.TryAdd(index, file);
                         index++;
                     }
                 }
 
                 ConcurrentBag<MusicInfoModel> reuslt = new ConcurrentBag<MusicInfoModel>();
 
-                Parallel.For(0, files.Count, (_index) =>
+                Parallel.For(0, files.Count, i =>
                  {
-                     MusicInfoModel info = GetMusicInfo(files[_index]);
-                     info.Index = _index;
+                     MusicInfoModel info = GetMusicInfo(files[i]);
+                     info.Index = i;
                      reuslt.Add(info);
                  });
 
@@ -106,11 +106,11 @@ namespace Zony.Lib.TagLib
         {
             try
             {
-                TagFile _file = TagFile.Create(filePath);
-                if (_file.Tag.Pictures.Length == 0) return null;
+                TagFile file = TagFile.Create(filePath);
+                if (file.Tag.Pictures.Length == 0) return null;
 
-                MemoryStream _result = new MemoryStream(_file.Tag.Pictures[0].Data.Data);
-                return _result;
+                MemoryStream result = new MemoryStream(file.Tag.Pictures[0].Data.Data);
+                return result;
             }
             catch (Exception)
             {
@@ -120,16 +120,16 @@ namespace Zony.Lib.TagLib
 
         public bool SaveAlbumImage(string filePath, Stream imageStream)
         {
-            byte[] _buffer = new byte[1024 * 16];
-            using (MemoryStream _ms = new MemoryStream())
+            byte[] buffer = new byte[1024 * 16];
+            using (MemoryStream ms = new MemoryStream())
             {
-                int _readCount = 0;
-                while ((_readCount = imageStream.Read(_buffer, 0, _buffer.Length)) > 0)
+                int readCount;
+                while ((readCount = imageStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    _ms.Write(_buffer, 0, _readCount);
+                    ms.Write(buffer, 0, readCount);
                 }
 
-                return SaveAlbumImage(filePath, _ms.ToArray());
+                return SaveAlbumImage(filePath, ms.ToArray());
             }
         }
 
@@ -137,11 +137,11 @@ namespace Zony.Lib.TagLib
         {
             try
             {
-                TagFile _file = TagFile.Create(filePath);
+                var file = TagFile.Create(filePath);
 
-                var _picList = new List<TagPicture>() { new TagPicture(imgBytes) };
-                _file.Tag.Pictures = _picList.ToArray();
-                _file.Save();
+                var picList = new List<TagPicture> { new TagPicture(imgBytes) };
+                file.Tag.Pictures = picList.ToArray();
+                file.Save();
 
                 return true;
             }
@@ -151,26 +151,26 @@ namespace Zony.Lib.TagLib
             }
         }
 
-        public bool SaveMusicInfo(string filePath, MusicInfoModel musicInfo, out Exception E)
+        public bool SaveMusicInfo(string filePath, MusicInfoModel musicInfo, out Exception e)
         {
-            E = null;
+            e = null;
             if (musicInfo == null) return false;
 
             try
             {
-                TagFile _file = TagFile.Create(filePath);
+                TagFile file = TagFile.Create(filePath);
 
-                _file.Tag.Title = musicInfo.Song;
-                _file.Tag.Performers[0] = musicInfo.Artist;
-                _file.Tag.Album = musicInfo.Album;
+                file.Tag.Title = musicInfo.Song;
+                file.Tag.Performers[0] = musicInfo.Artist;
+                file.Tag.Album = musicInfo.Album;
 
-                _file.Save();
+                file.Save();
 
                 return true;
             }
-            catch (Exception InnerE)
+            catch (Exception innerE)
             {
-                E = InnerE;
+                e = innerE;
                 return false;
             }
         }

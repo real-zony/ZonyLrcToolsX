@@ -1,5 +1,4 @@
-﻿using System;
-using Zony.Lib.Infrastructures.EventBus.Handlers;
+﻿using Zony.Lib.Infrastructures.EventBus.Handlers;
 
 namespace Zony.Lib.Infrastructures.EventBus.Factories.Internals
 {
@@ -12,10 +11,6 @@ namespace Zony.Lib.Infrastructures.EventBus.Factories.Internals
 
         public void ReleaseHandler(IEventHandler handler)
         {
-            if (handler is IDisposable)
-            {
-                (handler as IDisposable).Dispose();
-            }
         }
     }
 }

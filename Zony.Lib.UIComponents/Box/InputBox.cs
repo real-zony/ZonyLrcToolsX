@@ -2,7 +2,7 @@
 
 namespace Zony.Lib.UIComponents.Box
 {
-    public partial class InputBox : Form
+    public sealed partial class InputBox : Form
     {
         public string ResultText { get; set; }
 
@@ -13,7 +13,7 @@ namespace Zony.Lib.UIComponents.Box
 
         public InputBox(string title, string text) : this()
         {
-            this.Text = title;
+            Text = title;
             label1.Text = text;
         }
 

@@ -11,7 +11,7 @@ namespace Zony.Lib.Infrastructures.EventBus
         IDisposable Register<TEventData>(Action<TEventData> action) where TEventData : IEventData;
         IDisposable Register<TEventData>(IEventHandler<TEventData> handler) where TEventData : IEventData;
         IDisposable Register<TEventData, THandler>() where TEventData : IEventData where THandler : IEventHandler<TEventData>, new();
-        IDisposable Register(Type eventType, IEventHandler Handlers);
+        IDisposable Register(Type eventType, IEventHandler handlers);
         IDisposable Register<TEventData>(IEventHandlerFactory handlerFactory) where TEventData : IEventData;
         IDisposable Register(Type eventType, IEventHandlerFactory handlerFactory);
         #endregion

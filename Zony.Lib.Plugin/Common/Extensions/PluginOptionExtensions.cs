@@ -10,6 +10,7 @@ namespace Zony.Lib.Plugin.Common.Extensions
         /// 从插件配置拿取配置属性
         /// </summary>
         /// <typeparam name="TReturn">拿去的配置属性类型</typeparam>
+        /// <param name="options"></param>
         /// <param name="pluginAssembly">插件程序集，通过 typeof().Assembly 取得</param>
         /// <param name="key">属性 Key</param>
         /// <returns></returns>

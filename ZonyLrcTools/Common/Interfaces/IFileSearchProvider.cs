@@ -13,6 +13,7 @@ namespace ZonyLrcTools.Common.Interfaces
         /// <param name="extensions">要搜索的后缀名集合</param>
         /// <returns></returns>
         Dictionary<string, List<string>> FindFiles(string directoryPath, IEnumerable<string> extensions);
+
         /// <summary>
         /// 从指定文件夹当中搜索所有指定后缀的文件
         /// </summary>

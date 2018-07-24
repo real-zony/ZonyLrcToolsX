@@ -1,6 +1,6 @@
 ﻿namespace Zony.Lib.UIComponents.Box
 {
-    partial class InputBox
+    sealed partial class InputBox
     {
         /// <summary>
         /// Required designer variable.

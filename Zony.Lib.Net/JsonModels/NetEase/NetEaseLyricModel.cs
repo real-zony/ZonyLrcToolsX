@@ -9,11 +9,14 @@
         /// 原始歌词
         /// </summary>
         public InnerLyric lrc { get; set; }
+
         public InnerLyric klyric { get; set; }
+
         /// <summary>
         /// 翻译歌词
         /// </summary>
         public InnerLyric tlyric { get; set; }
+
         /// <summary>
         /// 状态码
         /// </summary>
@@ -26,6 +29,7 @@
     public class InnerLyric
     {
         public string version { get; set; }
+
         public string lyric { get; set; }
     }
 }

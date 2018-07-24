@@ -10,22 +10,22 @@ namespace Zony.Lib.Infrastructures.EventBus.Factories
     public class IocHandlerFactory : IEventHandlerFactory
     {
         public Type HandlerType { get; private set; }
-        private readonly IIocResolver m_iocResolver;
+        private readonly IIocResolver _iocResolver;
 
         public IocHandlerFactory(IIocResolver iocResolver, Type handlerType)
         {
-            m_iocResolver = iocResolver;
+            _iocResolver = iocResolver;
             HandlerType = handlerType;
         }
 
         public IEventHandler GetHandler()
         {
-            return m_iocResolver.Resolve(HandlerType) as IEventHandler;
+            return _iocResolver.Resolve(HandlerType) as IEventHandler;
         }
 
         public void ReleaseHandler(IEventHandler handler)
         {
-            m_iocResolver.Release(handler);
+            _iocResolver.Release(handler);
         }
     }
 }

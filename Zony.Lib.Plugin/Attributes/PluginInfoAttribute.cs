@@ -12,18 +12,22 @@ namespace Zony.Lib.Plugin.Attributes
         /// 插件作者
         /// </summary>
         public string Author { get; private set; }
+
         /// <summary>
         /// 插件名称
         /// </summary>
         public string Name { get; private set; }
+
         /// <summary>
         /// 插件版本
         /// </summary>
         public Version Version { get; private set; }
+
         /// <summary>
         /// 插件相关网址
         /// </summary>
         public string Url { get; private set; }
+
         /// <summary>
         /// 插件的描述信息
         /// </summary>

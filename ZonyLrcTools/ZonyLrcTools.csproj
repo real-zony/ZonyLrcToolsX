@@ -68,10 +68,10 @@
     <Compile Include="Common\ConfigurationManager.cs" />
     <Compile Include="Common\ConfigurationModel.cs" />
     <Compile Include="Encoders\ANSIEncoder.cs" />
-    <Compile Include="Encoders\DefaultEncoderProvider.cs" />
+    <Compile Include="Encoders\Provider\DefaultEncoderProvider.cs" />
     <Compile Include="Encoders\GeneralEncoder.cs" />
     <Compile Include="Encoders\IEncoder.cs" />
-    <Compile Include="Encoders\IEncoderProvider.cs" />
+    <Compile Include="Encoders\Provider\IEncoderProvider.cs" />
     <Compile Include="Encoders\UTF_8BOMEncoder.cs" />
     <Compile Include="Events\AlbumDownloadEvent.cs" />
     <Compile Include="Events\CheckUpdateEvent.cs" />
@@ -134,7 +134,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="log4net.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -210,11 +212,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)\log4net.config $(TargetDir)
-copy $(ProjectDir)\Build\7z.exe $(TargetDir)
-copy $(ProjectDir)\Build\7z.dll $(TargetDir)
-copy $(ProjectDir)\Build\ZipList.txt $(TargetDir)
-$(TargetDir)7z.exe a -tzip ZonyLrcToolsX.zip @ZipList.txt
-move $(TargetDir)ZonyLrcToolsX.zip D:\Temp\ZonyLrcToolsX.zip</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

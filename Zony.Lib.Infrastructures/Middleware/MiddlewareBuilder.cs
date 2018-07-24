@@ -11,14 +11,11 @@ namespace Zony.Lib.Infrastructures.Middleware
 
         public RequestDelegate Build()
         {
-            RequestDelegate startDelegate = lyric =>
-            {
-                return Task.CompletedTask;
-            };
+            RequestDelegate startDelegate = lyric => Task.CompletedTask;
 
-            foreach (var _middle in _middlewares.Reverse())
+            foreach (var middle in _middlewares.Reverse())
             {
-                startDelegate = _middle(startDelegate);
+                startDelegate = middle(startDelegate);
             }
 
             return startDelegate;

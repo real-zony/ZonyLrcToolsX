@@ -1,6 +1,4 @@
-﻿using Zony.Lib.Plugin.Common;
-
-namespace Zony.Lib.Plugin.Interfaces
+﻿namespace Zony.Lib.Plugin.Interfaces
 {
     /// <summary>
     /// 高级扩展插件

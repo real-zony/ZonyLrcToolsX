@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.IO;
-using System.Linq;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
@@ -9,7 +8,6 @@ using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using Zony.Lib.UIComponents;
-using ZonyLrcTools.Common;
 
 namespace ZonyLrcTools.Events
 {
@@ -20,33 +18,32 @@ namespace ZonyLrcTools.Events
 
     public class SingleMusicInfoLoadEvent : IEventHandler<SingleMusicInfoLoadEventData>, ITransientDependency
     {
-        private readonly IPluginManager m_plugManager;
+        private readonly IPluginManager _plugManager;
 
         public SingleMusicInfoLoadEvent(IPluginManager plugManager)
         {
-            m_plugManager = plugManager;
+            _plugManager = plugManager;
         }
 
         public void HandleEvent(SingleMusicInfoLoadEventData eventData)
         {
-            ListViewNF _listView = GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList;
+            ListViewNF listView = GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList;
 
-            if (_listView.SelectedItems == null) return;
-            int _selectIndex = _listView.SelectedItems[0].Index;
+            int selectIndex = listView.SelectedItems[0].Index;
 
-            IPluginAcquireMusicInfo _acquire = m_plugManager.GetPlugin<IPluginAcquireMusicInfo>();
-            MusicInfoModel _info = GlobalContext.Instance.MusicInfos[_selectIndex];
-            Stream _imgStream = _acquire.LoadAlbumImage(_info.FilePath);
+            IPluginAcquireMusicInfo acquire = _plugManager.GetPlugin<IPluginAcquireMusicInfo>();
+            MusicInfoModel info = GlobalContext.Instance.MusicInfos[selectIndex];
+            Stream imgStream = acquire.LoadAlbumImage(info.FilePath);
 
             // 填充歌曲信息到 UI 
-            if (_imgStream != null)
+            if (imgStream != null)
             {
-                GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(_imgStream);
+                GlobalContext.Instance.UIContext.Right_PictureBox_AlbumImage.Image = Image.FromStream(imgStream);
             }
-            GlobalContext.Instance.UIContext.Right_TextBox_MusicTitle.Text = _info.Song;
-            GlobalContext.Instance.UIContext.Right_TextBox_MusicArtist.Text = _info.Artist;
-            GlobalContext.Instance.UIContext.Right_TextBox_MusicAblum.Text = _info.Album;
-            GlobalContext.Instance.UIContext.Right_TextBox_MusicBuildInLyric.Text = _info.BuildInLyric;
+            GlobalContext.Instance.UIContext.Right_TextBox_MusicTitle.Text = info.Song;
+            GlobalContext.Instance.UIContext.Right_TextBox_MusicArtist.Text = info.Artist;
+            GlobalContext.Instance.UIContext.Right_TextBox_MusicAblum.Text = info.Album;
+            GlobalContext.Instance.UIContext.Right_TextBox_MusicBuildInLyric.Text = info.BuildInLyric;
         }
     }
 }

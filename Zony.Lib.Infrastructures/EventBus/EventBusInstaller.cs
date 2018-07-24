@@ -11,12 +11,12 @@ namespace Zony.Lib.Infrastructures.EventBus
 {
     public class EventBusInstaller : IWindsorInstaller
     {
-        private readonly IIocResolver m_iocResolver;
-        private IEventBus m_eventBus;
+        private readonly IIocResolver _iocResolver;
+        private IEventBus _eventBus;
 
         public EventBusInstaller(IIocResolver iocResolver)
         {
-            m_iocResolver = iocResolver;
+            _iocResolver = iocResolver;
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
@@ -24,7 +24,7 @@ namespace Zony.Lib.Infrastructures.EventBus
             container.Register(Component.For<IEventBus>().UsingFactoryMethod(() => EventBus.Default).LifestyleSingleton());
             //container.Register(Component.For<IEventBus>().ImplementedBy<EventBus>().LifestyleSingleton());
 
-            m_eventBus = container.Resolve<IEventBus>();
+            _eventBus = container.Resolve<IEventBus>();
             container.Kernel.ComponentRegistered += Kernel_ComponentRegistered;
         }
 
@@ -41,7 +41,7 @@ namespace Zony.Lib.Infrastructures.EventBus
 
                 if (_genericArgs.Length == 1)
                 {
-                    m_eventBus.Register(_genericArgs[0], new IocHandlerFactory(m_iocResolver, handler.ComponentModel.Implementation));
+                    _eventBus.Register(_genericArgs[0], new IocHandlerFactory(_iocResolver, handler.ComponentModel.Implementation));
                 }
             }
         }

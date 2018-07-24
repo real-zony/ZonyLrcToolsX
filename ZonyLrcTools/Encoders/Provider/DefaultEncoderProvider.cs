@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Encoders
+﻿namespace ZonyLrcTools.Encoders.Provider
 {
     public class DefaultEncoderProvider : IEncoderProvider
     {

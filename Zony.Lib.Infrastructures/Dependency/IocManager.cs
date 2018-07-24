@@ -57,24 +57,24 @@ namespace Zony.Lib.Infrastructures.Dependency
 
         public void Register<T>(DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton) where T : class
         {
-            IocContainer.Register(applyLifestyle(Component.For<T>(), lifeStyle));
+            IocContainer.Register(ApplyLifestyle(Component.For<T>(), lifeStyle));
         }
 
         public void Register(Type type, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
         {
-            IocContainer.Register(applyLifestyle(Component.For(type), lifeStyle));
+            IocContainer.Register(ApplyLifestyle(Component.For(type), lifeStyle));
         }
 
         public void Register<TType, TImpl>(DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
     where TType : class
     where TImpl : class, TType
         {
-            IocContainer.Register(applyLifestyle(Component.For<TType, TImpl>().ImplementedBy<TImpl>(), lifeStyle));
+            IocContainer.Register(ApplyLifestyle(Component.For<TType, TImpl>().ImplementedBy<TImpl>(), lifeStyle));
         }
 
         public void Register(Type type, Type impl, DependencyLifeStyle lifeStyle = DependencyLifeStyle.Singleton)
         {
-            IocContainer.Register(applyLifestyle(Component.For(type, impl).ImplementedBy(impl), lifeStyle));
+            IocContainer.Register(ApplyLifestyle(Component.For(type, impl).ImplementedBy(impl), lifeStyle));
         }
 
         public void RegisterAssemblyByConvention(Assembly assembly)
@@ -84,10 +84,10 @@ namespace Zony.Lib.Infrastructures.Dependency
 
         public void RegisterAssemblyByConvention(Assembly assembly, ConventionalRegistrationConfig config)
         {
-            var _context = new ConventionalRegistrationContext(assembly, this, config);
+            var context = new ConventionalRegistrationContext(assembly, this, config);
             foreach (var registerer in _conventionalRegistrar)
             {
-                registerer.RegisterAssembly(_context);
+                registerer.RegisterAssembly(context);
             }
 
             if (config.InstallInstallers) IocContainer.Install(FromAssembly.Instance(assembly));
@@ -143,7 +143,7 @@ namespace Zony.Lib.Infrastructures.Dependency
             return IocContainer.ResolveAll(type).Cast<object>().ToArray();
         }
 
-        private static ComponentRegistration<T> applyLifestyle<T>(ComponentRegistration<T> registration, DependencyLifeStyle lifeStyle) where T : class
+        private static ComponentRegistration<T> ApplyLifestyle<T>(ComponentRegistration<T> registration, DependencyLifeStyle lifeStyle) where T : class
         {
             switch (lifeStyle)
             {

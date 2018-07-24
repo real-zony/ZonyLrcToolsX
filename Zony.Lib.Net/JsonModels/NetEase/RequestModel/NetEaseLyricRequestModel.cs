@@ -16,10 +16,10 @@
             lv = kv = tv = -1;
         }
 
-        public string os { get; private set; }
-        public int id { get; private set; }
-        public int lv { get; private set; }
-        public int kv { get; private set; }
-        public int tv { get; private set; }
+        public string os { get; }
+        public int id { get; }
+        public int lv { get; }
+        public int kv { get; }
+        public int tv { get; }
     }
 }

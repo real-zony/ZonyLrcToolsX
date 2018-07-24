@@ -37,25 +37,25 @@ namespace ZonyLrcTools.Events
         {
             if (GlobalContext.Instance.MusicInfos.Count == 0 || GlobalContext.Instance.UIContext.Center_ListViewNF_MusicList.Items.Count == 0) MessageBox.Show("你还没有添加歌曲文件!", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            var _albumPlugin = _pluginManager.GetPlugin<IPluginAlbumDownloader>(_configMgr.ConfigModel.PluginOptions);
-            var _tagPlugin = _pluginManager.GetPlugin<IPluginAcquireMusicInfo>(_configMgr.ConfigModel.PluginOptions);
+            var albumPlugin = _pluginManager.GetPlugin<IPluginAlbumDownloader>(_configMgr.ConfigModel.PluginOptions);
+            var tagPlugin = _pluginManager.GetPlugin<IPluginAcquireMusicInfo>(_configMgr.ConfigModel.PluginOptions);
 
             await Task.Run(() =>
             {
-                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions() { MaxDegreeOfParallelism = _configMgr.ConfigModel.DownloadThreadNumber }, (_info) =>
+                Parallel.ForEach(eventData.MusicInfos, new ParallelOptions { MaxDegreeOfParallelism = _configMgr.ConfigModel.DownloadThreadNumber }, info =>
                   {
-                      if (!_albumPlugin.DownlaodAblumImage(_info, out byte[] _imgData))
+                      if (!albumPlugin.DownlaodAblumImage(info, out byte[] imgData))
                       {
-                          GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Failed);
+                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
                           return;
                       }
-                      if (!_tagPlugin.SaveAlbumImage(_info.FilePath, _imgData))
+                      if (!tagPlugin.SaveAlbumImage(info.FilePath, imgData))
                       {
-                          GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Failed);
+                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
                           return;
                       }
 
-                      GlobalContext.Instance.SetItemStatus(_info.Index, AppConsts.Status_Music_Success);
+                      GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Success);
                   });
             });
         }

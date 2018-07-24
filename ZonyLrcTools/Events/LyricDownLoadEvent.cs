@@ -52,6 +52,7 @@ namespace ZonyLrcTools.Events
                     try
                     {
                         if (GlobalContext.Instance.LyricDownloadState) loopState.Break();
+
                         // 状态:略过歌词
                         if (!_configMgr.ConfigModel.IsReplaceLyricFile && CheckLyricExist(info.FilePath))
                         {
@@ -78,12 +79,14 @@ namespace ZonyLrcTools.Events
                             Info = info
                         });
                     }
-                    catch (NotFoundLyricException) // 状态:未找到歌词
+                    // 状态:未找到歌词
+                    catch (NotFoundLyricException)
                     {
                         info.Status = MusicInfoEnum.NotFound;
                         GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_NotFoundLyric);
                     }
-                    catch (ServiceUnavailableException) // 状态:服务不可用
+                    // 状态:服务不可用
+                    catch (ServiceUnavailableException)
                     {
                         info.Status = MusicInfoEnum.Unavailble;
                         GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
@@ -93,6 +96,7 @@ namespace ZonyLrcTools.Events
                         // 进度条自增
                         GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
                         GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value++;
+
                         // 如果已经下载完成，触发完成事件
                         if (GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value == GlobalContext.Instance.UIContext.Bottom_ProgressBar.Maximum) EventBus.Default.Trigger<UIComponentDownloadCompleteEventData>();
                     }

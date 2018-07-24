@@ -40,19 +40,16 @@ namespace ZonyLrcTools.Forms
         {
             BindButtonEvent();
 
-            // 搜索文件事件
             button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
-            // 单击歌曲加载信息事件
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
-            // 程序退出事件
             FormClosed += delegate { EventBus.Default.Trigger<ProgramExitEventData>(); };
-            // 歌词下载事件
+
             button_DownloadLyric.Click += delegate
             {
                 EventBus.Default.Trigger<UIClearProgressEventData>();
                 EventBus.Default.Trigger(new LyricDownLoadEventData(GlobalContext.Instance.GetConcurrentList()));
             };
-            // 专辑图像下载事件
+
             button_DownloadAlbumImage.Click += delegate
             {
                 EventBus.Default.Trigger<UIClearProgressEventData>();
@@ -77,7 +74,8 @@ namespace ZonyLrcTools.Forms
         {
             CheckForIllegalCrossThreadCalls = false;
 
-            GlobalContext.Instance.UIContext = new MainUIComponentContext()
+            // 初始化全局组件集
+            GlobalContext.Instance.UIContext = new MainUIComponentContext
             {
                 Center_ListViewNF_MusicList = listView_SongItems,
                 Right_PictureBox_AlbumImage = pictureBox_AlbumImg,
@@ -91,6 +89,7 @@ namespace ZonyLrcTools.Forms
                 Top_ToolStrip_Buttons = BuildToolStripButtons()
             };
 
+            // 加载插件
             PluginManager.LoadPlugins();
             PluginManager.GetPlugins<IPluginExtensions>().ForEach(x => x.InitializePlugin(PluginManager));
         }
@@ -160,7 +159,17 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private void CheckUpdate()
         {
-            if (ConfigurationManager.ConfigModel.IsCheckUpdate) EventBus.Default.Trigger<CheckUpdateEventData>();
+            if (ConfigurationManager.ConfigModel.IsCheckUpdate)
+            {
+                try
+                {
+                    EventBus.Default.Trigger<CheckUpdateEventData>();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
         }
     }
 }

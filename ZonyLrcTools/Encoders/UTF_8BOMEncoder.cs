@@ -9,8 +9,8 @@ namespace ZonyLrcTools.Encoders
 
         public byte[] Encoding(string sourceStr)
         {
-            byte[] _sourceBytes = TextEncoding.UTF8.GetBytes(sourceStr);
-            return GenerateBytes(_sourceBytes);
+            byte[] sourceBytes = TextEncoding.UTF8.GetBytes(sourceStr);
+            return GenerateBytes(sourceBytes);
         }
 
         public byte[] Encoding(byte[] sourceBytes)
@@ -20,8 +20,8 @@ namespace ZonyLrcTools.Encoders
 
         public byte[] Encoding(byte[] sourceBytes, TextEncoding sourceEncode)
         {
-            byte[] _convertBytes = TextEncoding.Convert(sourceEncode, TextEncoding.UTF8, sourceBytes);
-            return GenerateBytes(_convertBytes);
+            byte[] convertBytes = TextEncoding.Convert(sourceEncode, TextEncoding.UTF8, sourceBytes);
+            return GenerateBytes(convertBytes);
         }
 
         /// <summary>
@@ -30,13 +30,13 @@ namespace ZonyLrcTools.Encoders
         /// <param name="sourceBytes">转换好的数据字节</param>
         private byte[] GenerateBytes(byte[] sourceBytes)
         {
-            byte[] _tmpData = new byte[sourceBytes.Length + 3];
-            _tmpData[0] = 0xef;
-            _tmpData[1] = 0xbb;
-            _tmpData[2] = 0xbf;
+            byte[] tmpData = new byte[sourceBytes.Length + 3];
+            tmpData[0] = 0xef;
+            tmpData[1] = 0xbb;
+            tmpData[2] = 0xbf;
 
-            Array.Copy(sourceBytes, 0, _tmpData, 3, sourceBytes.Length);
-            return _tmpData;
+            Array.Copy(sourceBytes, 0, tmpData, 3, sourceBytes.Length);
+            return tmpData;
         }
     }
 }

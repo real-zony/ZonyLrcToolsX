@@ -46,9 +46,9 @@ namespace Zony.Lib.Infrastructures.EventBus
             return Register(typeof(TEventData), new TransientEventHandlerFactory<THandler>());
         }
 
-        public IDisposable Register(Type eventType, IEventHandler Handlers)
+        public IDisposable Register(Type eventType, IEventHandler handlers)
         {
-            return Register(eventType, new SingleInstanceHandlerFactory(Handlers));
+            return Register(eventType, new SingleInstanceHandlerFactory(handlers));
         }
 
         public IDisposable Register<TEventData>(IEventHandlerFactory handlerFactory) where TEventData : IEventData
@@ -71,13 +71,13 @@ namespace Zony.Lib.Infrastructures.EventBus
             {
                 factories.RemoveAll(factory =>
                 {
-                    var _singleInstanceFactory = factory as SingleInstanceHandlerFactory;
-                    if (_singleInstanceFactory == null) return false;
+                    var singleInstanceFactory = factory as SingleInstanceHandlerFactory;
+                    if (singleInstanceFactory == null) return false;
 
-                    var _actionHandler = _singleInstanceFactory.HandlerInstance as ActionEventHandler<TEventData>;
-                    if (_actionHandler == null) return false;
+                    var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEventData>;
+                    if (actionHandler == null) return false;
 
-                    return _actionHandler.Action == action;
+                    return actionHandler.Action == action;
                 });
             });
         }
@@ -137,13 +137,13 @@ namespace Zony.Lib.Infrastructures.EventBus
 
         public void Trigger(Type eventType, object eventSource, IEventData eventData)
         {
-            var _exceptions = new List<Exception>();
+            var exceptions = new List<Exception>();
 
-            TriggerHandlingException(eventType, eventSource, eventData, _exceptions);
+            TriggerHandlingException(eventType, eventSource, eventData, exceptions);
 
-            if (_exceptions.Any())
+            if (exceptions.Any())
             {
-                throw new AggregateException($"发生一个或者多个异常，调用失败，{eventType.Name}", _exceptions);
+                throw new AggregateException($"发生一个或者多个异常，调用失败，{eventType.Name}", exceptions);
             }
 
         }
@@ -193,27 +193,27 @@ namespace Zony.Lib.Infrastructures.EventBus
         {
             if (eventData != null) eventData.EventSource = eventSource;
 
-            foreach (var _handlerFactories in GetHandlerFactories(eventType))
+            foreach (var handlerFactories in GetHandlerFactories(eventType))
             {
-                foreach (var _handlerFactory in _handlerFactories.EventHandlerFactories)
+                foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    var _eventHandler = _handlerFactory.GetHandler();
+                    var eventHandler = handlerFactory.GetHandler();
 
                     try
                     {
-                        if (_eventHandler == null) throw new Exception($"注册的处理器类型 {_handlerFactories.EventType.Name} 未实现 IEventHandler 接口。");
+                        if (eventHandler == null) throw new Exception($"注册的处理器类型 {handlerFactories.EventType.Name} 未实现 IEventHandler 接口。");
 
-                        var _handlerType = typeof(IEventHandler<>).MakeGenericType(_handlerFactories.EventType);
-                        var _method = _handlerType.GetMethod("HandleEvent", new[] { _handlerFactories.EventType });
-                        _method.Invoke(_eventHandler, new object[] { eventData });
+                        var handlerType = typeof(IEventHandler<>).MakeGenericType(handlerFactories.EventType);
+                        var method = handlerType.GetMethod("HandleEvent", new[] { handlerFactories.EventType });
+                        method?.Invoke(eventHandler, new object[] { eventData });
                     }
-                    catch (Exception E)
+                    catch (Exception e)
                     {
-                        exceptions.Add(E);
+                        exceptions.Add(e);
                     }
                     finally
                     {
-                        _handlerFactory.ReleaseHandler(_eventHandler);
+                        handlerFactory.ReleaseHandler(eventHandler);
                     }
                 }
             }
@@ -233,14 +233,14 @@ namespace Zony.Lib.Infrastructures.EventBus
 
         private IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
         {
-            var _handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+            var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
 
-            foreach (var _handlerFactory in _handlerFactories.Where(x => x.Key == eventType))
+            foreach (var handlerFactory in _handlerFactories.Where(x => x.Key == eventType))
             {
-                _handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(_handlerFactory.Key, _handlerFactory.Value));
+                handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
             }
 
-            return _handlerFactoryList.ToArray();
+            return handlerFactoryList.ToArray();
         }
 
         private class EventTypeWithEventHandlerFactories
