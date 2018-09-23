@@ -48,6 +48,12 @@ namespace ZonyLrcTools.Events
                   {
                       try
                       {
+                          if (info.IsAlbumImg)
+                          {
+                              GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Ignore);
+                              return;
+                          }
+
                           if (!albumPlugin.DownlaodAblumImage(info, out byte[] imgData))
                           {
                               GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
