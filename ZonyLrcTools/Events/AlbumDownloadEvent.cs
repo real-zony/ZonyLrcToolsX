@@ -7,6 +7,8 @@ using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Common.Extensions;
+using Zony.Lib.Plugin.Enums;
+using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common.Interfaces;
@@ -44,18 +46,33 @@ namespace ZonyLrcTools.Events
             {
                 Parallel.ForEach(eventData.MusicInfos, new ParallelOptions { MaxDegreeOfParallelism = _configMgr.ConfigModel.DownloadThreadNumber }, info =>
                   {
-                      if (!albumPlugin.DownlaodAblumImage(info, out byte[] imgData))
+                      try
                       {
-                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
-                          return;
-                      }
-                      if (!tagPlugin.SaveAlbumImage(info.FilePath, imgData))
-                      {
-                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
-                          return;
-                      }
+                          if (!albumPlugin.DownlaodAblumImage(info, out byte[] imgData))
+                          {
+                              GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
+                              return;
+                          }
 
-                      GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Success);
+                          if (!tagPlugin.SaveAlbumImage(info.FilePath, imgData))
+                          {
+                              GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Failed);
+                              return;
+                          }
+
+                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Success);
+                      }
+                      catch (ServiceUnavailableException)
+                      {
+                          info.Status = MusicInfoEnum.Unavailble;
+                          GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
+                      }
+                      finally
+                      {
+                          // 进度条自增
+                          GlobalContext.Instance.SetBottomStatusText($"{AppConsts.Status_Bottom_DownLoadHead}{info.Song}");
+                          GlobalContext.Instance.UIContext.Bottom_ProgressBar.Value++;
+                      }
                   });
             });
         }

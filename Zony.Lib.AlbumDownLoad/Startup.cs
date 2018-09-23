@@ -5,6 +5,7 @@ using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Net.JsonModels.NetEase.RequestModel;
 using Zony.Lib.Plugin.Attributes;
+using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
 
@@ -26,6 +27,8 @@ namespace Zony.Lib.AlbumDownLoad
 
             string albumImg = GetAblumImageUrl(songModel.id);
 
+            if(albumImg == null) throw new ServiceUnavailableException("专辑图像下载：没有找到图像的 Url 地址.");
+
             imageData = new WebClient().DownloadData(albumImg);
             return true;
         }
@@ -45,6 +48,10 @@ namespace Zony.Lib.AlbumDownLoad
                                                 parameters: new NetEaseSearchRequestModel(searchKey),
                                                 referer: "http://music.163.com",
                                                 mediaTypeValue: "application/x-www-form-urlencoded");
+
+            var sidInfo = result?.result?.songs ?? throw new ServiceUnavailableException("专辑图像下载：请求 SID 时出错，没有 SID 数据.");
+            if (sidInfo.Count == 0) throw new ServiceUnavailableException("专题图像下载：请求 SID 时出错，SID 集合没有数据.");
+
             return result.result.songs[0];
         }
 

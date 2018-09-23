@@ -109,18 +109,19 @@ namespace ZonyLrcTools.Forms
         /// </summary>
         private Dictionary<string, ToolStripButton> BuildToolStripButtons()
         {
-            Dictionary<string, ToolStripButton> _resultDict = new Dictionary<string, ToolStripButton>();
+            Dictionary<string, ToolStripButton> resultDict = new Dictionary<string, ToolStripButton>
+            {
+                {AppConsts.Identity_Button_SearchFile, button_SearchFile},
+                {AppConsts.Identity_Button_StopDownLoad, button_StopDownload},
+                {AppConsts.Identity_Button_PluginManager, button_PluginsManager},
+                {AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric},
+                {AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadAlbumImage},
+                {AppConsts.Identity_Button_Donate, button_Donate},
+                {AppConsts.Identity_Button_Configuration, button_Setting},
+                {AppConsts.Identity_Button_About, button_About}
+            };
 
-            _resultDict.Add(AppConsts.Identity_Button_SearchFile, button_SearchFile);
-            _resultDict.Add(AppConsts.Identity_Button_StopDownLoad, button_StopDownload);
-            _resultDict.Add(AppConsts.Identity_Button_PluginManager, button_PluginsManager);
-            _resultDict.Add(AppConsts.Identity_Button_DownLoadLyric, button_DownloadLyric);
-            _resultDict.Add(AppConsts.Identity_Button_DownLoadAblumImage, button_DownloadAlbumImage);
-            _resultDict.Add(AppConsts.Identity_Button_Donate, button_Donate);
-            _resultDict.Add(AppConsts.Identity_Button_Configuration, button_Setting);
-            _resultDict.Add(AppConsts.Identity_Button_About, button_About);
-
-            return _resultDict;
+            return resultDict;
         }
 
         /// <summary>
