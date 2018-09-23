@@ -11,7 +11,7 @@ using Zony.Lib.Plugin.Models;
 
 namespace Zony.Lib.AlbumDownLoad
 {
-    [PluginInfo("专辑图像下载插件", "Zony", "1.1.1.0", "http://www.myzony.com", "从网易云音乐下载专辑图像")]
+    [PluginInfo("专辑图像下载插件", "Zony", "1.1.1.1", "http://www.myzony.com", "从网易云音乐下载专辑图像")]
     public class Startup : IPluginAlbumDownloader, IPlugin
     {
         private readonly HttpMethodUtils _mNetUtils = new HttpMethodUtils();
