@@ -8,4 +8,4 @@ TagLib标签库：[http://taglib.org/](http://taglib.org/)~~
 ## 程序截图
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/1117/113750_a9f9a2a3_24648.png "在这里输入图片标题")
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/1117/113738_07feb978_24648.png "在这里输入图片标题")
-![输入图片说明](http://git.oschina.net/uploads/images/2016/1117/113757_9ee113b2_24648.png "在这里输入图片标题")~~
+![输入图片说明](http://git.oschina.net/uploads/images/2016/1117/113757_9ee113b2_24648.png "在这里输入图片标题")
