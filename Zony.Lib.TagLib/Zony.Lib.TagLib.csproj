@@ -51,9 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
       <Project>{2716DF9F-443C-42DD-9454-18FF1A80AEC4}</Project>
       <Name>Zony.Lib.Infrastructures</Name>
@@ -62,6 +59,9 @@
       <Project>{043b9995-b8bf-4a36-bd57-304c6d6ce7e7}</Project>
       <Name>Zony.Lib.Plugin</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
