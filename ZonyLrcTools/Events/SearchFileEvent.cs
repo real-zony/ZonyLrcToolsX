@@ -14,6 +14,26 @@ namespace ZonyLrcTools.Events
 {
     public class SearchFileEventData : EventData
     {
+        /// <summary>
+        /// 文件搜索事件
+        /// </summary>
+        /// <param name="folderPath">是否追加插入文件信息</param>
+        /// <param name="isAppendData">待搜索的文件夹路径</param>
+        public SearchFileEventData(string folderPath, bool isAppendData = false)
+        {
+            IsAppendData = isAppendData;
+            FolderPath = folderPath;
+        }
+
+        /// <summary>
+        /// 是否追加插入文件信息
+        /// </summary>
+        public bool IsAppendData { get; }
+
+        /// <summary>
+        /// 待搜索的文件夹路径
+        /// </summary>
+        public string FolderPath { get; set; }
     }
 
     public class SearchFileEvent : IEventHandler<SearchFileEventData>, ITransientDependency
@@ -29,28 +49,20 @@ namespace ZonyLrcTools.Events
 
         public async void HandleEvent(SearchFileEventData eventData)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog
+            EventBus.Default.Trigger<UIComponentDisableEventData>();
+            if (!eventData.IsAppendData) EventBus.Default.Trigger<UIClearMusicInfosEventData>();
+
+            GlobalContext.Instance.SetBottomStatusText(AppConsts.Status_Bottom_SearchFilesing);
+
+            var files = await _searchProvider.FindFilesAsync(eventData.FolderPath, _settingManager.ConfigModel.ExtensionsName);
+            if (files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            MessageBox.Show(BuildCompleteMsg(files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            EventBus.Default.Trigger(new MusicInfoLoadEventData
             {
-                Description = "请选择歌曲所在目录.",
-            };
-
-            if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.SelectedPath))
-            {
-                EventBus.Default.Trigger<UIComponentDisableEventData>();
-                EventBus.Default.Trigger<UIClearMusicInfosEventData>();
-
-                GlobalContext.Instance.SetBottomStatusText(AppConsts.Status_Bottom_SearchFilesing);
-
-                var files = await _searchProvider.FindFilesAsync(dlg.SelectedPath, _settingManager.ConfigModel.ExtensionsName);
-                if (files.Count == 0) MessageBox.Show("没有找到任何文件。", AppConsts.Msg_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                MessageBox.Show(BuildCompleteMsg(files), "搜索完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                EventBus.Default.Trigger(new MusicInfoLoadEventData()
-                {
-                    MusicFilePaths = files
-                });
-            }
+                MusicFilePaths = files
+            });
         }
 
         /// <summary>

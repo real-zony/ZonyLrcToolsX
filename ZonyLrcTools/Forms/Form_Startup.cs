@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
@@ -40,7 +41,19 @@ namespace ZonyLrcTools.Forms
         {
             BindButtonEvent();
 
-            button_SearchFile.Click += GenerateClickDelegate<SearchFileEventData>();
+            button_SearchFile.Click += delegate
+            {
+                FolderBrowserDialog dlg = new FolderBrowserDialog
+                {
+                    Description = "请选择歌曲所在目录.",
+                };
+
+                if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.SelectedPath))
+                {
+                    EventBus.Default.Trigger(new SearchFileEventData(dlg.SelectedPath));
+                }
+            };
+
             listView_SongItems.Click += GenerateClickDelegate<SingleMusicInfoLoadEventData>();
             FormClosed += delegate { EventBus.Default.Trigger<ProgramExitEventData>(); };
 
@@ -172,5 +185,28 @@ namespace ZonyLrcTools.Forms
                 }
             }
         }
+
+        #region > 主 ListView 拖放事件 <
+
+        private void listView_SongItems_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+        }
+
+        private void listView_SongItems_DragDrop(object sender, DragEventArgs e)
+        {
+            foreach (var filePath in (string[])e.Data.GetData(DataFormats.FileDrop))
+            {
+                if (Directory.Exists(filePath))
+                {
+                    EventBus.Default.Trigger(new SearchFileEventData(filePath, true));
+                }
+            }
+        }
+
+        #endregion
     }
 }
