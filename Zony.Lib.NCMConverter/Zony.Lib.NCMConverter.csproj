@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA736E2E-68CA-4D6A-8116-EBF1FF0A6812}</ProjectGuid>
+    <ProjectGuid>{A1097CCF-8967-480C-841D-83E01390EE8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zony.Lib.NetEase</RootNamespace>
-    <AssemblyName>Zony.Lib.NetEase</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <RootNamespace>Zony.Lib.NCMConverter</RootNamespace>
+    <AssemblyName>Zony.Lib.NCMConverter</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,24 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Zony.Lib.Net\Zony.Lib.Net.csproj">
-      <Project>{B060D7BB-6CC1-4045-B038-9EA612435BA5}</Project>
-      <Name>Zony.Lib.Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Zony.Lib.Plugin\Zony.Lib.Plugin.csproj">
-      <Project>{043b9995-b8bf-4a36-bd57-304c6d6ce7e7}</Project>
-      <Name>Zony.Lib.Plugin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)\ZonyLrcTools\bin\$(ConfigurationName)\Plugins\ /y</PostBuildEvent>
-  </PropertyGroup>
 </Project>
