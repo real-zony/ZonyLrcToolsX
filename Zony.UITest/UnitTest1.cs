@@ -4,6 +4,7 @@ using Zony.Lib.Infrastructures.Middleware;
 using Zony.Lib.NetEase;
 using System.Threading.Tasks;
 using System;
+using Zony.Lib.NCMConverter.Convert;
 
 namespace Zony.UITest
 {
@@ -40,6 +41,13 @@ namespace Zony.UITest
             //var _c = new Startup();
             //var _b = new Startup();
             //_b.DownLoad("Cool Kids", "DJLoveInc", out byte[] data);
+        }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            var t = new NCMConverter();
+            t.ProcessFile(@"D:\Temp\Aimer - Brave Shine.ncm");
         }
     }
 }

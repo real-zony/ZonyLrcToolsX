@@ -35,14 +35,6 @@ namespace Zony.Lib.Infrastructures.Dependency
                                                             .WithService.Self()
                                                             .WithService.DefaultInterfaces()
                                                             .LifestyleSingleton());
-
-            // 注册拦截器
-            context.IocManager.IocContainer.Register(Classes.FromAssembly(context.Assembly)
-                                                            .IncludeNonPublicTypes()
-                                                            .BasedOn<IInterceptor>()
-                                                            .If(type => !type.GetTypeInfo().IsConstructedGenericType)
-                                                            .WithService.Self()
-                                                            .LifestyleTransient());
         }
     }
 }
