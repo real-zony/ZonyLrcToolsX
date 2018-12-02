@@ -30,6 +30,8 @@ namespace Zony.Lib.NCMConverter.UI
                     MessageBox.Show("请选择有效的文件夹路径！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                listView1.Items.Clear();
                 
                 var files = NCMExtenstion.FindNCMFiles(folderDlg.SelectedPath);
 
@@ -77,6 +79,7 @@ namespace Zony.Lib.NCMConverter.UI
                 if (parallelLoopResult.IsCompleted)
                 {
                     _filePaths.Clear();
+                    MessageBox.Show("文件转换完成！", "信息", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             });
         }
