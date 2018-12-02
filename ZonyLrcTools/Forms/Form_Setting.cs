@@ -67,5 +67,23 @@ namespace ZonyLrcTools.Forms
             ConfigurationManager.ConfigModel.IsCheckUpdate = checkBox_IsCheckUpdate.Checked;
             ConfigurationManager.ConfigModel.PluginOptions = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(textBox_PluginOptions.Text);
         }
+
+        private void button_selectProxiesFile_Click(object sender,
+            System.EventArgs e)
+        {
+            if (MessageBox.Show($"请选择有效的代理文件，每个代理条目以: \r\n" +
+                                " <代理服务器 IP>,<代理服务器端口>,<用户名>,<密码> 形式构成。\r\n" +
+                                $"每个代理条目以换行为分隔符，如果有多个代理条目请注意格式。",
+                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+            {
+                var fileDlg = new OpenFileDialog();
+                fileDlg.Filter = "*.txt|*.txt";
+                fileDlg.Title = "请选择存放有代理服务器列表的 TXT 文件";
+                if (fileDlg.ShowDialog() == DialogResult.OK)
+                {
+                    var proxies = string.Empty;
+                }
+            }
+        }
     }
 }
