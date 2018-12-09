@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,7 +14,7 @@ namespace Zony.Lib.Infrastructures.Lyrics
 
         public LyricItemCollection(string srcLyricText)
         {
-            if (string.IsNullOrEmpty(srcLyricText)) throw new ArgumentNullException("源歌词文本数据为空，请传入有效文本。");
+            if (string.IsNullOrEmpty(srcLyricText)) return;
 
             Regex regex = new Regex(@"\[\d+:\d+.\d+\].+\n");
             var result = regex.Matches(srcLyricText);

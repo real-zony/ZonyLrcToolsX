@@ -100,28 +100,6 @@ namespace Zony.Lib.NetEase
         }
 
         /// <summary>
-        /// 歌词时间轴修复
-        /// </summary>
-        /// <param name="srcLyricText">待修复的三位时间轴文本</param>
-        /// <returns>修复完成的二位时间轴文本</returns>
-        private IList<LyricItem> FixedLyricTimeFormat(string srcLyricText)
-        {
-            if (string.IsNullOrEmpty(srcLyricText)) return null;
-
-            var lyricItems = new List<LyricItem>();
-
-            Regex regex = new Regex(@"\[\d+:\d+.\d+\].+\n");
-            var result = regex.Matches(srcLyricText);
-
-            foreach (Match match in result)
-            {
-                lyricItems.Add(new LyricItem(match.Value));
-            }
-
-            return lyricItems;
-        }
-
-        /// <summary>
         /// 双语歌词合并
         /// </summary>
         /// <param name="srcLyric">原始歌词文本</param>
@@ -129,17 +107,10 @@ namespace Zony.Lib.NetEase
         /// <returns>构建完毕的歌词数据</returns>
         private string BuildLyricText(LyricItemCollection srcLyric, LyricItemCollection transLyric)
         {
-            Console.WriteLine("Start ...");
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             srcLyric.Sort();
             transLyric.Sort();
 
             var result =  srcLyric.Merge(transLyric, _isInline).ToString();
-
-            stopwatch.Stop();
-            Console.WriteLine($"Stop ... {stopwatch.ElapsedMilliseconds} ms");
             return result;
         }
 
