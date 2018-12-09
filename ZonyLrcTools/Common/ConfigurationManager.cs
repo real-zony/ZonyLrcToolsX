@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ZonyLrcTools.Common.Interfaces;
+using Zony.Lib.Infrastructures.Common;
+using Zony.Lib.Infrastructures.Common.Interfaces;
 
 namespace ZonyLrcTools.Common
 {

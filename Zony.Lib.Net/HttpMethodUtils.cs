@@ -5,14 +5,32 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Zony.Lib.Infrastructures.Common.Exceptions;
+using Zony.Lib.Infrastructures.Common.Interfaces;
+using Zony.Lib.Infrastructures.Dependency;
 
 namespace Zony.Lib.Net
 {
-    public class HttpMethodUtils
+    public class HttpMethodUtils : IDisposable
     {
         private readonly HttpClient _client;
 
-        public HttpMethodUtils() => _client = new HttpClient();
+        public HttpMethodUtils()
+        {
+            var config = IocManager.Instance.Resolve<IConfigurationManager>().ConfigModel;
+
+            if (config != null && !string.IsNullOrEmpty(config.ProxyIP) && config.ProxyPort != 0)
+            {
+                _client = new HttpClient(new HttpClientHandler
+                {
+                    Proxy =  new WebProxy(config.ProxyIP,config.ProxyPort)
+                });
+
+                return;
+            }
+
+            _client = new HttpClient();
+        }
 
         /// <summary>
         /// 对目标URL进行HTTP-GET请求
@@ -23,18 +41,25 @@ namespace Zony.Lib.Net
         /// <returns>服务器响应结果</returns>
         public string Get(string url, object parameters = null, string referer = null)
         {
-            var req = new HttpRequestMessage()
+            try
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
-            };
+                var req = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
+                };
 
-            if (referer != null) req.Headers.Referrer = new Uri(referer);
+                if (referer != null) req.Headers.Referrer = new Uri(referer);
 
-            using (var msg = _client.SendAsync(req).Result)
+                using (var msg = _client.SendAsync(req).GetAwaiter().GetResult())
+                {
+                    if (msg.StatusCode != HttpStatusCode.OK) return string.Empty;
+                    return msg.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+            }
+            catch (Exception)
             {
-                if (msg.StatusCode != HttpStatusCode.OK) return string.Empty;
-                return msg.Content.ReadAsStringAsync().Result;
+                throw new ProxyException("执行 HTTP 请求时出现异常.");
             }
         }
 
@@ -48,19 +73,26 @@ namespace Zony.Lib.Net
         /// <returns></returns>
         public async Task<TJsonModel> GetAsync<TJsonModel>(string url, object parameters = null, string referer = null)
         {
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
-            };
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"{url}{BaseFormBuildParameters(parameters)}")
+                };
 
-            if (referer != null) request.Headers.Referrer = new Uri(referer);
-            using (var msg = await _client.SendAsync(request))
+                if (referer != null) request.Headers.Referrer = new Uri(referer);
+                using (var msg = await _client.SendAsync(request))
+                {
+                    if (msg.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
+
+                    string jsonStr = await msg.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<TJsonModel>(jsonStr);
+                }
+            }
+            catch (Exception)
             {
-                if (msg.StatusCode != HttpStatusCode.OK) return default(TJsonModel);
-
-                string jsonStr = await msg.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<TJsonModel>(jsonStr);
+                throw new ProxyException("执行 HTTP 请求时出现异常.");
             }
         }
 
@@ -74,26 +106,33 @@ namespace Zony.Lib.Net
         /// <returns>服务器响应结果</returns>
         public string Post(string url, object parameters = null, string referer = null, string mediaTypeValue = null)
         {
-            string postData;
-
-            var req = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(url)
-            };
+                string postData;
 
-            if (referer != null) req.Headers.Referrer = new Uri(referer);
-            // 请求内容构造
-            if (mediaTypeValue == "application/json") postData = BaseJsonBuildParameters(parameters);
-            else postData = BaseFormBuildParameters(parameters);
-            req.Content = new StringContent(postData);
-            if (mediaTypeValue != null) req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
+                var req = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(url)
+                };
+
+                if (referer != null) req.Headers.Referrer = new Uri(referer);
+                // 请求内容构造
+                if (mediaTypeValue == "application/json") postData = BaseJsonBuildParameters(parameters);
+                else postData = BaseFormBuildParameters(parameters);
+                req.Content = new StringContent(postData);
+                if (mediaTypeValue != null) req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mediaTypeValue);
 
 
-            using (var res = _client.SendAsync(req).Result)
+                using (var res = _client.SendAsync(req).GetAwaiter().GetResult())
+                {
+                    if (res.StatusCode != HttpStatusCode.OK) return string.Empty;
+                    return res.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+            }
+            catch (Exception)
             {
-                if (res.StatusCode != HttpStatusCode.OK) return string.Empty;
-                return res.Content.ReadAsStringAsync().Result;
+                throw new ProxyException("执行 HTTP 请求时出现异常.");
             }
         }
 
@@ -212,6 +251,11 @@ namespace Zony.Lib.Net
             if (parameters == null) return string.Empty;
             if (parameters is string s) return s;
             return JsonConvert.SerializeObject(parameters);
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
         }
     }
 }

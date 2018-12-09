@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ZonyLrcTools.Common
+namespace Zony.Lib.Infrastructures.Common
 {
     [Serializable]
     public sealed class PluginStatusModel

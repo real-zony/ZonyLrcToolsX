@@ -19,27 +19,36 @@ namespace ZonyLrcTools.Events
     {
         public async void HandleEvent(CheckUpdateEventData eventData)
         {
-            var result = await new HttpMethodUtils().GetAsync<UpdateModel>(@"http://api.myzony.com/api/VersionCheck/CheckVersion");
-
-            if (result == null) return;
-            var newVersion = new Version(result.Version);
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-            string BuildMessageText()
+            try
             {
-                StringBuilder builder = new StringBuilder();
-                builder.Append("发现新版本，是否更新?").Append("\r\n");
-                builder.Append("更新信息:").Append("\r\n");
-                builder.Append(result.UpdateDescription.Replace("|", "\r\n"));
-                return builder.ToString();
-            }
-
-            if (newVersion > currentVersion)
-            {
-                if (MessageBox.Show(caption: "更新提示", text: BuildMessageText(), icon: MessageBoxIcon.Information, buttons: MessageBoxButtons.OKCancel) == DialogResult.OK)
+                using (var client = new HttpMethodUtils())
                 {
-                    Process.Start(result.Url);
+                    var result = await client.GetAsync<UpdateModel>(@"http://api.myzony.com/api/VersionCheck/CheckVersion");
+                    if (result == null) return;
+                    var newVersion = new Version(result.Version);
+                    var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+                    string BuildMessageText()
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        builder.Append("发现新版本，是否更新?").Append("\r\n");
+                        builder.Append("更新信息:").Append("\r\n");
+                        builder.Append(result.UpdateDescription.Replace("|", "\r\n"));
+                        return builder.ToString();
+                    }
+
+                    if (newVersion > currentVersion)
+                    {
+                        if (MessageBox.Show(caption: "更新提示", text: BuildMessageText(), icon: MessageBoxIcon.Information, buttons: MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        {
+                            Process.Start(result.Url);
+                        }
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
 

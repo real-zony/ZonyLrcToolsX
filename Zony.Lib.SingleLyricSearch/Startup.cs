@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Common.Exceptions;
 using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Plugin;
@@ -38,12 +40,20 @@ namespace Zony.Lib.SongListDownload
                 GlobalContext.Instance.UIContext.EnableTopButtons();
                 return;
             }
-            NetEaseResultModel jsonModel = RequestNetEase(id);
-            List<MusicInfoModel> infos = ConvertJsonModelToMusicInfoModel(jsonModel);
-            await FillListView(infos);
 
-            GlobalContext.Instance.MusicInfos.AddRange(infos);
-            GlobalContext.Instance.UIContext.EnableTopButtons();
+            try
+            {
+                NetEaseResultModel jsonModel = RequestNetEase(id);
+                List<MusicInfoModel> infos = ConvertJsonModelToMusicInfoModel(jsonModel);
+                await FillListView(infos);
+
+                GlobalContext.Instance.MusicInfos.AddRange(infos);
+                GlobalContext.Instance.UIContext.EnableTopButtons();
+            }
+            catch (ProxyException)
+            {
+                MessageBox.Show("代理服务器无法正常访问。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>

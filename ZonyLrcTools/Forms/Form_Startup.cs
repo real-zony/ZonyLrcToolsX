@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Common.Interfaces;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Plugin;
 using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
 using ZonyLrcTools.Events.UIEvents;
 using ZonyLrcTools.Properties;

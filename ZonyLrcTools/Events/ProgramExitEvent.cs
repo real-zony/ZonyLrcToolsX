@@ -1,7 +1,7 @@
-﻿using Zony.Lib.Infrastructures.Dependency;
+﻿using Zony.Lib.Infrastructures.Common.Interfaces;
+using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
-using ZonyLrcTools.Common.Interfaces;
 using Zony.Lib.Plugin.Common;
 
 namespace ZonyLrcTools.Events

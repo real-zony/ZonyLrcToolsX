@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Common.Interfaces;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
-using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Events;
 
 namespace ZonyLrcTools.Forms
@@ -51,6 +50,9 @@ namespace ZonyLrcTools.Forms
                 textBox_ExtensionsName.Text = string.Join(";", ConfigurationManager.ConfigModel.ExtensionsName.ToArray());
                 textBox_DownloadThreadNum.Text = ConfigurationManager.ConfigModel.DownloadThreadNumber.ToString();
                 textBox_PluginOptions.Text = JsonConvert.SerializeObject(ConfigurationManager.ConfigModel.PluginOptions);
+                textBox_proxyIP.Text = ConfigurationManager.ConfigModel.ProxyIP;
+                textBox_porxyPort.Text = ConfigurationManager.ConfigModel.ProxyPort.ToString();
+
                 checkBox_IsReplaceLyricFile.Checked = ConfigurationManager.ConfigModel.IsReplaceLyricFile;
                 checkBox_IsCheckUpdate.Checked = ConfigurationManager.ConfigModel.IsCheckUpdate;
             });
@@ -67,35 +69,8 @@ namespace ZonyLrcTools.Forms
             ConfigurationManager.ConfigModel.IsReplaceLyricFile = checkBox_IsReplaceLyricFile.Checked;
             ConfigurationManager.ConfigModel.IsCheckUpdate = checkBox_IsCheckUpdate.Checked;
             ConfigurationManager.ConfigModel.PluginOptions = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(textBox_PluginOptions.Text);
-        }
-
-        private async void button_selectProxiesFile_Click(object sender,
-            System.EventArgs e)
-        {
-            if (MessageBox.Show($"请选择有效的代理文件，每个代理条目以: \r\n" +
-                                " <代理服务器 IP>,<代理服务器端口>,<用户名>,<密码> 形式构成。\r\n" +
-                                $"每个代理条目以换行为分隔符，如果有多个代理条目请注意格式。",
-                    "提示", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-            {
-                var fileDlg = new OpenFileDialog();
-                fileDlg.Filter = "*.txt|*.txt";
-                fileDlg.Title = "请选择存放有代理服务器列表的 TXT 文件";
-                if (fileDlg.ShowDialog() == DialogResult.OK)
-                {
-                    if (!File.Exists(fileDlg.FileName)) MessageBox.Show("无效的文件路径.", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    var proxies = string.Empty;
-                    using (var proxyFile = File.Open(fileDlg.FileName, FileMode.Open))
-                    {
-                        using (var reader = new StreamReader(proxyFile))
-                        {
-                            proxies = await reader.ReadToEndAsync();
-                        }
-                    }
-
-
-                }
-            }
+            ConfigurationManager.ConfigModel.ProxyIP = textBox_proxyIP.Text;
+            ConfigurationManager.ConfigModel.ProxyPort = int.TryParse(textBox_porxyPort.Text, out int proxyPort) ? proxyPort : 0;
         }
     }
 }

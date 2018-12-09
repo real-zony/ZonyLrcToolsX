@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
+using Zony.Lib.Infrastructures.Common.Interfaces;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
 using Zony.Lib.Plugin.Common;
 using Zony.Lib.Plugin.Models;
 using ZonyLrcTools.Common.Extensions;
-using ZonyLrcTools.Common.Interfaces;
 using ZonyLrcTools.Encoders.Provider;
 
 namespace ZonyLrcTools.Events

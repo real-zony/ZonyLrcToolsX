@@ -1,6 +1,6 @@
 ﻿using Zony.Lib.Infrastructures.Dependency;
 
-namespace ZonyLrcTools.Common.Interfaces
+namespace Zony.Lib.Infrastructures.Common.Interfaces
 {
     /// <summary>
     /// 设置管理

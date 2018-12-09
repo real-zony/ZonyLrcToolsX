@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Zony.Lib.Infrastructures.Common.Exceptions;
+using Zony.Lib.Infrastructures.Common.Interfaces;
 using Zony.Lib.Infrastructures.Dependency;
 using Zony.Lib.Infrastructures.EventBus;
 using Zony.Lib.Infrastructures.EventBus.Handlers;
@@ -11,7 +13,6 @@ using Zony.Lib.Plugin.Enums;
 using Zony.Lib.Plugin.Exceptions;
 using Zony.Lib.Plugin.Interfaces;
 using Zony.Lib.Plugin.Models;
-using ZonyLrcTools.Common.Interfaces;
 
 namespace ZonyLrcTools.Events
 {
@@ -70,8 +71,13 @@ namespace ZonyLrcTools.Events
                       }
                       catch (ServiceUnavailableException)
                       {
-                          info.Status = MusicInfoEnum.Unavailble;
+                          info.Status = MusicInfoEnum.Unavailable;
                           GlobalContext.Instance.SetItemStatus(info.Index, AppConsts.Status_Music_Unavailablel);
+                      }
+                      catch (ProxyException)
+                      {
+                          info.Status = MusicInfoEnum.Unavailable;
+                          GlobalContext.Instance.SetItemStatus(info.Index,AppConsts.Status_Music_ProxyException);
                       }
                       finally
                       {

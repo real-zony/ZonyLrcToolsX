@@ -32,9 +32,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textBox_DownloadThreadNum = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox_porxyPort = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_proxyIP = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox_IsCheckUpdate = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -47,7 +47,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox_PluginOptions = new System.Windows.Forms.TextBox();
             this.button_SaveAndExit = new System.Windows.Forms.Button();
-            this.button_selectProxiesFile = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -67,12 +66,11 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button_selectProxiesFile);
             this.tabPage1.Controls.Add(this.textBox_DownloadThreadNum);
             this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.textBox2);
+            this.tabPage1.Controls.Add(this.textBox_porxyPort);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Controls.Add(this.textBox_proxyIP);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.checkBox_IsCheckUpdate);
             this.tabPage1.Controls.Add(this.checkBox1);
@@ -100,12 +98,12 @@
             this.label3.TabIndex = 1;
             this.label3.Text = "下载线程:";
             // 
-            // textBox2
+            // textBox_porxyPort
             // 
-            this.textBox2.Location = new System.Drawing.Point(70, 48);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(62, 21);
-            this.textBox2.TabIndex = 2;
+            this.textBox_porxyPort.Location = new System.Drawing.Point(70, 48);
+            this.textBox_porxyPort.Name = "textBox_porxyPort";
+            this.textBox_porxyPort.Size = new System.Drawing.Size(62, 21);
+            this.textBox_porxyPort.TabIndex = 2;
             // 
             // label2
             // 
@@ -116,12 +114,12 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "代理端口:";
             // 
-            // textBox1
+            // textBox_proxyIP
             // 
-            this.textBox1.Location = new System.Drawing.Point(70, 24);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(98, 21);
-            this.textBox1.TabIndex = 2;
+            this.textBox_proxyIP.Location = new System.Drawing.Point(70, 24);
+            this.textBox_proxyIP.Name = "textBox_proxyIP";
+            this.textBox_proxyIP.Size = new System.Drawing.Size(148, 21);
+            this.textBox_proxyIP.TabIndex = 2;
             // 
             // label1
             // 
@@ -240,16 +238,6 @@
             this.button_SaveAndExit.UseVisualStyleBackColor = true;
             this.button_SaveAndExit.Click += new System.EventHandler(this.button_SaveAndExit_Click);
             // 
-            // button_selectProxiesFile
-            // 
-            this.button_selectProxiesFile.Location = new System.Drawing.Point(174, 24);
-            this.button_selectProxiesFile.Name = "button_selectProxiesFile";
-            this.button_selectProxiesFile.Size = new System.Drawing.Size(44, 21);
-            this.button_selectProxiesFile.TabIndex = 3;
-            this.button_selectProxiesFile.Text = "...";
-            this.button_selectProxiesFile.UseVisualStyleBackColor = true;
-            this.button_selectProxiesFile.Click += new System.EventHandler(this.button_selectProxiesFile_Click);
-            // 
             // Form_Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -280,9 +268,9 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox_porxyPort;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox_proxyIP;
         private System.Windows.Forms.TextBox textBox_DownloadThreadNum;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button_SaveAndExit;
@@ -294,6 +282,5 @@
         private System.Windows.Forms.CheckBox checkBox_IsCheckUpdate;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox textBox_PluginOptions;
-        private System.Windows.Forms.Button button_selectProxiesFile;
     }
 }

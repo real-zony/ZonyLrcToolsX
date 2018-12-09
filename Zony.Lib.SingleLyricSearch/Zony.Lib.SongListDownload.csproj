@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zony.Lib.Infrastructures\Zony.Lib.Infrastructures.csproj">
+      <Project>{2716df9f-443c-42dd-9454-18ff1a80aec4}</Project>
+      <Name>Zony.Lib.Infrastructures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zony.Lib.Net\Zony.Lib.Net.csproj">
       <Project>{B060D7BB-6CC1-4045-B038-9EA612435BA5}</Project>
       <Name>Zony.Lib.Net</Name>

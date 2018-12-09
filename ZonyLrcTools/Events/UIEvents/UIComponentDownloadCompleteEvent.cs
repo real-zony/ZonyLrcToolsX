@@ -28,8 +28,9 @@ namespace ZonyLrcTools.Events.UIEvents
             builder.Append($"成功:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Success)}\n");
             builder.Append($"失败:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Failed)}\n");
             builder.Append($"未找到:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.NotFound)}\n");
-            builder.Append($"略过:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Igonre)}\n");
-            builder.Append($"服务限制:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Unavailble)}");
+            builder.Append($"略过:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Ignore)}\n");
+            builder.Append($"服务限制:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.Unavailable)}");
+            builder.Append($"代理服务器异常:{GlobalContext.Instance.MusicInfos.Count(z => z.Status == MusicInfoEnum.ProxyException)}");
 
             MessageBox.Show(builder.ToString(), "完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
