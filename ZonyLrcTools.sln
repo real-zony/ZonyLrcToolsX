@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.NCMConverter", "Zony.Lib.NCMConverter\Zony.Lib.NCMConverter.csproj", "{A1097CCF-8967-480C-841D-83E01390EE8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zony.Lib.MusicInfoEdit", "Zony.Lib.MusicInfoEdit\Zony.Lib.MusicInfoEdit.csproj", "{454C60E1-F1B8-4A34-82FE-7BC82B3EFF01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{A1097CCF-8967-480C-841D-83E01390EE8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1097CCF-8967-480C-841D-83E01390EE8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1097CCF-8967-480C-841D-83E01390EE8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{454C60E1-F1B8-4A34-82FE-7BC82B3EFF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{454C60E1-F1B8-4A34-82FE-7BC82B3EFF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{454C60E1-F1B8-4A34-82FE-7BC82B3EFF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{454C60E1-F1B8-4A34-82FE-7BC82B3EFF01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
