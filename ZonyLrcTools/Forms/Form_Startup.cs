@@ -86,6 +86,7 @@ namespace ZonyLrcTools.Forms
         private void ComponentInitialize()
         {
             CheckForIllegalCrossThreadCalls = false;
+            Text = $"{Text}  -  Version: {ProductVersion.ToString()}";
 
             // 初始化全局组件集
             GlobalContext.Instance.UIContext = new MainUIComponentContext
