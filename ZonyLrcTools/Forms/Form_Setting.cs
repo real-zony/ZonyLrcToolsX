@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,7 +69,7 @@ namespace ZonyLrcTools.Forms
             ConfigurationManager.ConfigModel.PluginOptions = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(textBox_PluginOptions.Text);
         }
 
-        private void button_selectProxiesFile_Click(object sender,
+        private async void button_selectProxiesFile_Click(object sender,
             System.EventArgs e)
         {
             if (MessageBox.Show($"请选择有效的代理文件，每个代理条目以: \r\n" +
@@ -81,7 +82,18 @@ namespace ZonyLrcTools.Forms
                 fileDlg.Title = "请选择存放有代理服务器列表的 TXT 文件";
                 if (fileDlg.ShowDialog() == DialogResult.OK)
                 {
+                    if (!File.Exists(fileDlg.FileName)) MessageBox.Show("无效的文件路径.", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     var proxies = string.Empty;
+                    using (var proxyFile = File.Open(fileDlg.FileName, FileMode.Open))
+                    {
+                        using (var reader = new StreamReader(proxyFile))
+                        {
+                            proxies = await reader.ReadToEndAsync();
+                        }
+                    }
+
+
                 }
             }
         }

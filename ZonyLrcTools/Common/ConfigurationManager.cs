@@ -71,17 +71,26 @@ namespace ZonyLrcTools.Common
         /// <returns></returns>
         private ConfigurationModel InitializeDefaultConfigurationModel()
         {
-            return new ConfigurationModel()
+            return new ConfigurationModel
             {
                 EncodingName = "UTF-8",
                 DownloadThreadNumber = 1,
                 IsReplaceLyricFile = true,
                 IsCheckUpdate = true,
                 IsAgree = false,
-                ExtensionsName = new List<string>() { "*.mp3", "*.ape", "*.flac", "*.m4a" },
+                ExtensionsName = new List<string> { "*.mp3", "*.ape", "*.flac", "*.m4a" },
                 ProxyIP = string.Empty,
                 ProxyPort = 0,
-                PluginOptions = new Dictionary<string, Dictionary<string, object>>() { { "Zony.Lib.NetEase", new Dictionary<string, object>() { { "ReplaceLF", false } } } }
+                PluginOptions = new Dictionary<string, Dictionary<string, object>>
+                {
+                    {
+                        "Zony.Lib.NetEase", new Dictionary<string, object>
+                        {
+                            { "ReplaceLF", false },
+                            { "Inline", true }
+                        } 
+                    }
+                }
             };
         }
     }

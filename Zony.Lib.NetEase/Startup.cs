@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using Zony.Lib.Infrastructures.Lyrics;
 using Zony.Lib.Net;
 using Zony.Lib.Net.JsonModels.NetEase;
 using Zony.Lib.Net.JsonModels.NetEase.RequestModel;
@@ -12,26 +14,29 @@ using Zony.Lib.Plugin.Interfaces;
 
 namespace Zony.Lib.NetEase
 {
-    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.2.0.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
+    [PluginInfo("网易云音乐歌词下载插件", "Zony", "2.2.1.0", "http://www.myzony.com", "可以从网易云音乐下载指定歌曲的歌词信息.")]
     public class Startup : IPluginDownLoader, IPlugin
     {
         private readonly HttpMethodUtils _httpClient = new HttpMethodUtils();
+
         private int _mFaildCount;
+        private bool _isInline;
+        private bool _isReplaceLf;
 
         public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
         public void DownLoad(string songName, string artistName, out byte[] data)
         {
+            _isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
+            _isInline = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "Inline");
+
             var param = BuildParameters(songName, artistName);
 
             try
             {
                 var json = GetLyricJsonObject(param);
-                var sourceLyric = FixedLyricTimeFormat(json.Item1);
-                var translateLyric = FixedLyricTimeFormat(json.Item2);
-                var result = BuildLyricText(sourceLyric, translateLyric);
-                bool isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
-                if (isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
+                var result = BuildLyricText(new LyricItemCollection(json.Item1), new LyricItemCollection(json.Item2));
+                if (_isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
                 else data = Encoding.UTF8.GetBytes(result);
             }
             catch (NotFoundLyricException)
@@ -55,11 +60,8 @@ namespace Zony.Lib.NetEase
         {
             var param = BuildParameters(songName, string.Empty);
             var json = GetLyricJsonObject(param);
-            var sourceLyric = FixedLyricTimeFormat(json.Item1);
-            var translateLyric = FixedLyricTimeFormat(json.Item2);
-            var result = BuildLyricText(sourceLyric, translateLyric);
-            bool isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
-            if (isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
+            var result = BuildLyricText(new LyricItemCollection(json.Item1), new LyricItemCollection(json.Item2));
+            if (_isReplaceLf) data = Encoding.UTF8.GetBytes(ReplaceLF(result));
             data = Encoding.UTF8.GetBytes(result);
         }
 
@@ -102,22 +104,21 @@ namespace Zony.Lib.NetEase
         /// </summary>
         /// <param name="srcLyricText">待修复的三位时间轴文本</param>
         /// <returns>修复完成的二位时间轴文本</returns>
-        private string FixedLyricTimeFormat(string srcLyricText)
+        private IList<LyricItem> FixedLyricTimeFormat(string srcLyricText)
         {
-            if (string.IsNullOrEmpty(srcLyricText)) return string.Empty;
+            if (string.IsNullOrEmpty(srcLyricText)) return null;
 
-            Regex regex = new Regex(@"\[\d+:\d+.\d+\]");
-            return regex.Replace(srcLyricText, match =>
+            var lyricItems = new List<LyricItem>();
+
+            Regex regex = new Regex(@"\[\d+:\d+.\d+\].+\n");
+            var result = regex.Matches(srcLyricText);
+
+            foreach (Match match in result)
             {
-                string[] strs = match.Value.Split('.');
-                if (strs.Length <= 1) return match.Value;
-                if (strs[1].Length == 3) return match.Value;
+                lyricItems.Add(new LyricItem(match.Value));
+            }
 
-                string value = strs[1].Remove(strs[1].Length - 2);
-                if (!int.TryParse(value, out int iValue)) return match.Value;
-
-                return $"{strs[0]}.{iValue:D2}]";
-            });
+            return lyricItems;
         }
 
         /// <summary>
@@ -126,60 +127,20 @@ namespace Zony.Lib.NetEase
         /// <param name="srcLyric">原始歌词文本</param>
         /// <param name="transLyric">翻译中文歌词文本</param>
         /// <returns>构建完毕的歌词数据</returns>
-        private string BuildLyricText(string srcLyric, string transLyric)
+        private string BuildLyricText(LyricItemCollection srcLyric, LyricItemCollection transLyric)
         {
-            if (transLyric == string.Empty) return srcLyric;
-            StringBuilder resultBuilder = new StringBuilder();
+            Console.WriteLine("Start ...");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            // 键值对获取方法
-            Dictionary<string, string> GenerateKeyValue(string lyric)
-            {
-                var regex = new Regex(@"\[\d+:\d+.\d+\].+");
-                var matches = regex.Matches(lyric);
-                var dict = new Dictionary<string, string>();
+            srcLyric.Sort();
+            transLyric.Sort();
 
-                foreach (var match in matches)
-                {
-                    var value = match.ToString();
-                    // 切割歌词，分隔时间轴与歌词内容
-                    int pos = value.IndexOf(']') + 1;
-                    string timeline = value.Substring(0, pos);
-                    string lyricText = value.Substring(pos, value.Length - pos);
-                    if (dict.ContainsKey(timeline))
-                    {
-                        dict[timeline] = $"{dict[timeline]},{lyricText}";
-                    }
-                    else dict.Add(timeline, lyricText);
-                }
+            var result =  srcLyric.Merge(transLyric, _isInline).ToString();
 
-                return dict;
-            }
-
-            // 获取原始歌词与翻译歌词的键值对
-            var srcDic = GenerateKeyValue(srcLyric);
-            var transDic = GenerateKeyValue(transLyric);
-
-            // 合并时间轴与歌词数据，以原始歌词为基准
-            int syncIndex = 0;
-            foreach (var src in srcDic)
-            {
-                bool isAppend = false; // 用于跳过不必要的循环，避免重复
-                for (int p = syncIndex; p < srcDic.Count; p++)
-                {
-                    var trans = transDic.ElementAtOrDefault(p);
-                    if (isAppend) break;
-                    if (trans.Key == src.Key) resultBuilder.Append($"{src.Key}{src.Value},{trans.Value}\n");
-                    else
-                    {
-                        resultBuilder.Append($"{src.Key}{src.Value}\n");
-                        resultBuilder.Append($"{trans.Key}{trans.Value}\n");
-                    }
-                    isAppend = true;
-                    syncIndex++;
-                }
-            }
-
-            return resultBuilder.ToString();
+            stopwatch.Stop();
+            Console.WriteLine($"Stop ... {stopwatch.ElapsedMilliseconds} ms");
+            return result;
         }
 
         /// <summary>

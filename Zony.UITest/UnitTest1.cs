@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using Zony.Lib.Infrastructures.Middleware;
-using Zony.Lib.NetEase;
-using System.Threading.Tasks;
 using System;
+using System.IO;
+using System.Text.RegularExpressions;
+using Zony.Lib.Infrastructures.Lyrics;
 using Zony.Lib.NCMConverter.Convert;
 
 namespace Zony.UITest
@@ -48,6 +49,13 @@ namespace Zony.UITest
         {
             var t = new NCMConverter();
             t.ProcessFile(@"D:\Temp\Aimer - Brave Shine.ncm");
+        }
+
+        [TestMethod]
+        public void TestMethod3()
+        {
+            var _b = new Zony.Lib.NetEase.Startup();
+            _b.DownLoad("爱し子よ", "ルルティア", out byte[] data);
         }
     }
 }
