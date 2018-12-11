@@ -87,9 +87,10 @@ namespace ZonyLrcTools.Common
                     {
                         "Zony.Lib.NetEase", new Dictionary<string, object>
                         {
-                            { "ReplaceLF", false },
-                            { "Inline", true }
-                        } 
+                            {"ReplaceLF", false},
+                            {"Inline", true},
+                            {"IsOpenTransLyric", true}
+                        }
                     }
                 }
             };

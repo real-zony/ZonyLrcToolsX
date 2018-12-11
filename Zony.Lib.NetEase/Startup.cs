@@ -20,6 +20,7 @@ namespace Zony.Lib.NetEase
         private int _mFaildCount;
         private bool _isInline;
         private bool _isReplaceLf;
+        private bool _isOpenTransLyric;
 
         public Dictionary<string, Dictionary<string, object>> PluginOptions { get; set; }
 
@@ -27,6 +28,7 @@ namespace Zony.Lib.NetEase
         {
             _isReplaceLf = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "ReplaceLF");
             _isInline = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "Inline");
+            _isOpenTransLyric = PluginOptions.GetOptionValue<bool>(typeof(Startup).Assembly, "IsOpenTransLyric");
 
             var param = BuildParameters(songName, artistName);
 
@@ -105,6 +107,12 @@ namespace Zony.Lib.NetEase
         /// <returns>构建完毕的歌词数据</returns>
         private string BuildLyricText(LyricItemCollection srcLyric, LyricItemCollection transLyric)
         {
+            if (!_isOpenTransLyric)
+            {
+                srcLyric.Sort();
+                return srcLyric.ToString();
+            }
+
             srcLyric.Sort();
             transLyric.Sort();
 
