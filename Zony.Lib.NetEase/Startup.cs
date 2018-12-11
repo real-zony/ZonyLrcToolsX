@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Zony.Lib.Infrastructures.Lyrics;

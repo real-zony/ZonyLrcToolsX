@@ -51,7 +51,7 @@ namespace Zony.Lib.Infrastructures.Lyrics
             Second = second;
             LyricText = lyricText;
             SortTimeLine = Minute * 60.00 + Second;
-            OriginalTimeline = $"[{Minute}:{Second:00.00}]";
+            OriginalTimeline = $"[{Minute:00}:{Second:00.00}]";
         }
 
         public static LyricItem operator +(LyricItem src,LyricItem dist)
@@ -72,7 +72,7 @@ namespace Zony.Lib.Infrastructures.Lyrics
             if (double.TryParse(timeline[1], out double second)) Second = second;
 
             SortTimeLine = Minute * 60.00 + Second;
-            OriginalTimeline = $"[{Minute}:{Second:00.00}]";
+            OriginalTimeline = $"[{Minute:00}:{Second:00.00}]";
             LyricText = new Regex(@"(?<=\[\d+:\d+.\d+\]).+").Match(originalData).Value;
         }
 
@@ -92,7 +92,7 @@ namespace Zony.Lib.Infrastructures.Lyrics
 
         public override string ToString()
         {
-            return $"[{Minute}:{Second:00.00}]{LyricText}";
+            return $"[{Minute:00}:{Second:00.00}]{LyricText}";
         }
     }
 }
