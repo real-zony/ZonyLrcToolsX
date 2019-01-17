@@ -86,7 +86,7 @@ namespace Zony.Lib.NetEase
         {
             NetEaseResultModel result = _httpClient.Post<NetEaseResultModel>(@"http://music.163.com/api/search/get/web", postParam, @"http://music.163.com", "application/x-www-form-urlencoded");
             if (result == null) throw new ServiceUnavailableException("在getLyricJsonObject当中无法获得请求的资源,_result");
-            if (result.result.songCount == 0)
+            if (result.result == null || result.result.songCount == 0)
             {
                 _mFaildCount++;
                 throw new NotFoundLyricException("歌曲未搜索到任何结果，无法获取SID.");
@@ -116,7 +116,7 @@ namespace Zony.Lib.NetEase
             srcLyric.Sort();
             transLyric.Sort();
 
-            var result =  srcLyric.Merge(transLyric, _isInline).ToString();
+            var result = srcLyric.Merge(transLyric, _isInline).ToString();
             return result;
         }
 
