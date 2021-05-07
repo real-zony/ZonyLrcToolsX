@@ -32,8 +32,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Infrastructure\Network\Exceptions" />
-    </ItemGroup>
-
 </Project>

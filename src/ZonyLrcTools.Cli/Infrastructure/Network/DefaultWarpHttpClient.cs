@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
@@ -14,15 +13,12 @@ namespace ZonyLrcTools.Cli.Infrastructure.Network
     public class DefaultWarpHttpClient : IWarpHttpClient, ITransientDependency
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<DefaultWarpHttpClient> _logger;
 
         public const string HttpClientNameConstant = "WarpClient";
 
-        public DefaultWarpHttpClient(IHttpClientFactory httpClientFactory,
-            ILogger<DefaultWarpHttpClient> logger)
+        public DefaultWarpHttpClient(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _logger = logger;
         }
 
         public async ValueTask<string> PostAsync(string url,

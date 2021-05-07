@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {
     /// <summary>
-    /// 每一行歌词的对象。
+    /// 歌词的行对象，是 <see cref="LyricItemCollection"/> 的最小单位。。
     /// </summary>
     public class LyricItem : IComparable<LyricItem>
     {
@@ -121,6 +121,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             return HashCode.Combine(LyricText, Minute, Second);
         }
 
+        /// <summary>
+        /// 获得歌词行的标准文本。
+        /// </summary>
         public override string ToString() => $"[{Minute:00}:{Second:00.00}]{LyricText}";
     }
 }

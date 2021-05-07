@@ -7,7 +7,7 @@ using ZonyLrcTools.Cli.Infrastructure.Extensions;
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {
     /// <summary>
-    /// 歌词数据，包含多条歌词对象(<see cref="LyricItem"/>)。
+    /// 歌词数据，包含多条歌词行对象(<see cref="LyricItem"/>)。
     /// </summary>
     public class LyricItemCollection : List<LyricItem>
     {

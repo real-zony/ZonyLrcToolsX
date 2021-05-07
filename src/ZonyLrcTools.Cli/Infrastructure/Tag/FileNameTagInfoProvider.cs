@@ -7,6 +7,9 @@ using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
+    /// <summary>
+    /// 基于正则表达式的标签解析器，从文件名当中解析歌曲的标签信息。
+    /// </summary>
     public class FileNameTagInfoProvider : ITagInfoProvider, ITransientDependency
     {
         public int Priority => 2;

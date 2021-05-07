@@ -6,6 +6,9 @@ using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
+    /// <summary>
+    /// 默认的标签加载器 <see cref="ITagLoader"/> 实现。
+    /// </summary>
     public class DefaultTagLoader : ITagLoader, ITransientDependency
     {
         protected readonly IEnumerable<ITagInfoProvider> TagInfoProviders;

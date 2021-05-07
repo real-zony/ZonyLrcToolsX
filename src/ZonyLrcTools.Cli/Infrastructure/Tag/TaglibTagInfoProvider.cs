@@ -5,6 +5,9 @@ using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
+    /// <summary>
+    /// 基于 TagLib 的标签信息解析器。
+    /// </summary>
     public class TaglibTagInfoProvider : ITagInfoProvider, ITransientDependency
     {
         public int Priority => 1;

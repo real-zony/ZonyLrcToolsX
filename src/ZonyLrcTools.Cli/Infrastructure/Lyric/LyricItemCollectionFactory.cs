@@ -5,6 +5,9 @@ using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {
+    /// <summary>
+    /// <see cref="ILyricItemCollectionFactory"/> 的默认实现。
+    /// </summary>
     public class LyricItemCollectionFactory : ILyricItemCollectionFactory, ITransientDependency
     {
         private readonly ToolOptions _options;

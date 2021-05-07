@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Threading
 {
+    /// <summary>
+    /// 针对 Task 的包装类，基于信号量 <see cref="SemaphoreSlim"/> 限定并行度。
+    /// </summary>
     public class WarpTask : IDisposable
     {
         private readonly CancellationTokenSource _cts = new();
