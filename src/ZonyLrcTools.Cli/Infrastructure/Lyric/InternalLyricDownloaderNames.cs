@@ -9,12 +9,12 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         /// 网易云音乐歌词下载器。
         /// </summary>
         public const string NetEase = nameof(NetEase);
-        
+
         /// <summary>
         /// QQ 音乐歌词下载器。
         /// </summary>
         public const string QQ = nameof(QQ);
-        
+
         /// <summary>
         /// 酷狗音乐歌词下载器。
         /// </summary>

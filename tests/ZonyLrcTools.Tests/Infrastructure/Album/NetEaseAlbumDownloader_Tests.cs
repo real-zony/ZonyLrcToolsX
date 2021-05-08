@@ -20,11 +20,11 @@ namespace ZonyLrcTools.Tests.Infrastructure.Album
             downloader.ShouldNotBeNull();
             var albumBytes = await downloader.DownloadAsync("东方红", null);
             albumBytes.Length.ShouldBeGreaterThan(0);
-            
+
             // 显示具体的图像。
             var tempAlbumPath = Path.Combine(Directory.GetCurrentDirectory(), "tempAlbum.png");
             File.Delete(tempAlbumPath);
-            
+
             await using var file = File.Create(tempAlbumPath);
             await using var ws = new BinaryWriter(file);
             ws.Write(albumBytes);

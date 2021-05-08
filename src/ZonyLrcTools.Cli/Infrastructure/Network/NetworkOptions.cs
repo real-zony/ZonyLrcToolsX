@@ -9,7 +9,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Network
         /// 是否启用了网络代理功能。
         /// </summary>
         public bool Enable { get; set; }
-        
+
         /// <summary>
         /// 代理服务器的 Ip。
         /// </summary>

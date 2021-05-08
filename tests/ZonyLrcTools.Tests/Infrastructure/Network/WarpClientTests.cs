@@ -40,7 +40,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Network
             var client = ServiceProvider.GetRequiredService<IWarpHttpClient>();
 
             var response = await client.GetAsync(@"https://www.baidu.com");
-            
+
             response.ShouldNotBeNull();
             response.ShouldContain("百度");
         }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic.JsonModel;
 using ZonyLrcTools.Cli.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
@@ -10,6 +11,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
 
+        private const string QQSearchMusicUrl = @"https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
+
         public QQLyricDownloader(IWarpHttpClient warpHttpClient,
             ILyricItemCollectionFactory lyricItemCollectionFactory)
         {
@@ -17,8 +20,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
             _lyricItemCollectionFactory = lyricItemCollectionFactory;
         }
 
-        protected override ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
+        protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
         {
+            var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(
+                QQSearchMusicUrl,
+                new SongSearchRequest(args.SongName, args.Artist));
             throw new System.NotImplementedException();
         }
 

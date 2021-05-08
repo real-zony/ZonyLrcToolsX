@@ -10,7 +10,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Exceptions
         public void LoadMessage_Test()
         {
             ErrorCodeHelper.LoadErrorMessage();
-            
+
             ErrorCodeHelper.ErrorMessages.ShouldNotBeNull();
             ErrorCodeHelper.ErrorMessages.Count.ShouldBe(11);
         }

@@ -48,7 +48,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic.JsonModel
 
         [JsonProperty("needNewCode")] public int UnknownParameter11 { get; set; }
 
-        public SongSearchRequest()
+        protected SongSearchRequest()
         {
             UnknownParameter1 = 24;
             ClientVersion = 1298;
