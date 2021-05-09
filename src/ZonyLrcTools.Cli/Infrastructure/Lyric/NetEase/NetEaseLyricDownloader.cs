@@ -19,6 +19,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 
         private const string NetEaseSearchMusicUrl = @"https://music.163.com/api/search/get/web";
         private const string NetEaseGetLyricUrl = @"https://music.163.com/api/song/lyric";
+
         private const string NetEaseRequestReferer = @"https://music.163.com";
         private const string NetEaseRequestContentType = @"application/x-www-form-urlencoded";
 
@@ -54,7 +55,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data)
+        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
         {
             await ValueTask.CompletedTask;
 

@@ -16,7 +16,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             var args = new LyricDownloaderArgs(songName, artist);
             await ValidateAsync(args);
             var downloadDataBytes = await DownloadDataAsync(args);
-            return await GenerateLyricAsync(downloadDataBytes);
+            return await GenerateLyricAsync(downloadDataBytes, args);
         }
 
         protected virtual ValueTask ValidateAsync(LyricDownloaderArgs args)
@@ -36,6 +36,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 
         protected abstract ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args);
 
-        protected abstract ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data);
+        protected abstract ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args);
     }
 }
