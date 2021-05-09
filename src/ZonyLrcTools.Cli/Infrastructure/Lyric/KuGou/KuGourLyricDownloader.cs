@@ -22,7 +22,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou
             throw new System.NotImplementedException();
         }
 
-        protected override ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data)
+        protected override ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
         {
             throw new System.NotImplementedException();
         }
