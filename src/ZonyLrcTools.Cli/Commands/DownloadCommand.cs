@@ -111,46 +111,77 @@ namespace ZonyLrcTools.Cli.Commands
             return result.ToImmutableList();
         }
 
+        private IEnumerable<ILyricDownloader> GetLyricDownloaderList()
+        {
+            var downloader = _options.LyricDownloaderOptions
+                .Where(op => op.Priority != -1)
+                .OrderBy(op => op.Priority)
+                .Join(_lyricDownloaderList,
+                    op => op.Name,
+                    loader => loader.DownloaderName,
+                    (op, loader) => loader);
+
+            return downloader;
+        }
+
         #region > 歌词下载逻辑 <
 
         private async ValueTask DownloadLyricFilesAsync(ImmutableList<MusicInfo> musicInfos)
         {
             _logger.LogInformation("开始下载歌词文件数据...");
 
-            var downloader = _lyricDownloaderList.FirstOrDefault(d => d.DownloaderName == InternalLyricDownloaderNames.NetEase);
+            var downloaderList = GetLyricDownloaderList();
             var warpTask = new WarpTask(ParallelNumber);
             var warpTaskList = musicInfos.Select(info =>
-                warpTask.RunAsync(() => Task.Run(async () => await DownloadLyricTaskLogicAsync(downloader, info))));
+                warpTask.RunAsync(() => Task.Run(async () => await DownloadLyricTaskLogicAsync(downloaderList, info))));
 
             await Task.WhenAll(warpTaskList);
 
             _logger.LogInformation($"歌词数据下载完成，成功: {musicInfos.Count} 失败{0}。");
         }
 
-        private async Task DownloadLyricTaskLogicAsync(ILyricDownloader downloader, MusicInfo info)
+        private async Task DownloadLyricTaskLogicAsync(IEnumerable<ILyricDownloader> downloaderList, MusicInfo info)
         {
-            try
+            async Task<bool> InternalDownloadLogicAsync(ILyricDownloader downloader)
             {
-                var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
-                var filePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!, $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
-                if (File.Exists(filePath))
+                try
                 {
-                    return;
+                    var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
+                    var filePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!, $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+                    if (File.Exists(filePath))
+                    {
+                        return true;
+                    }
+
+                    if (lyric.IsPruneMusic)
+                    {
+                        return true;
+                    }
+
+                    await using var stream = new FileStream(filePath, FileMode.Create);
+                    await using var sw = new StreamWriter(stream);
+                    await sw.WriteAsync(lyric.ToString());
+                    await sw.FlushAsync();
+                }
+                catch (ErrorCodeException ex)
+                {
+                    if (ex.ErrorCode == ErrorCodes.NoMatchingSong)
+                    {
+                        return false;
+                    }
+
+                    _logger.LogWarningInfo(ex);
                 }
 
-                if (lyric.IsPruneMusic)
-                {
-                    return;
-                }
-
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await using var sw = new StreamWriter(stream);
-                await sw.WriteAsync(lyric.ToString());
-                await sw.FlushAsync();
+                return true;
             }
-            catch (ErrorCodeException ex)
+
+            foreach (var downloader in downloaderList)
             {
-                _logger.LogWarningInfo(ex);
+                if (await InternalDownloadLogicAsync(downloader))
+                {
+                    break;
+                }
             }
         }
 
