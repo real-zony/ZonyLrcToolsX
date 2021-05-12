@@ -38,12 +38,14 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 | ToolOption.NetworkOptions.ProxyIp                 | HTTP 网络代理服务的 IP，在 `Enable` 为 false 时会忽略该属性值。 | 127.0.0.1                       |
 | ToolOption.NetworkOptions.ProxyPort               | HTTP 网络代理服务的 端口，在 `Enable` 为 false 时会忽略该属性值。 | 8080                            |
 | TagInfoProviderOptions.FileNameRegularExpressions | 文件名 Tag 标签信息读取器使用，使用正则表达式匹配歌曲名和歌手，请使用命名分组编写正则表达式。 | (?'artist'.+)\\s-\\s(?'name'.+) |
+| LyricDownloader.[n].Name                          | 指定歌词下载器的配置项标识，对应具体的歌词下载器。           | NetEase 或 QQ                   |
+| LyricDownloader.[n].Priority                      | 指定歌词下载器的优先级，按升序排列，如果值设置为 `-1` 则代表禁用。 | `1`                             |
 
 ## 捐赠
 
 ## 路线图
 
-- [ ] 支持跨平台的 CLI 工具。
+- [x] 支持跨平台的 CLI 工具。
 - [ ] 基于 Web GUI 的操作站点。
 - [ ] 支持插件系统(Lua 引擎)。
 
