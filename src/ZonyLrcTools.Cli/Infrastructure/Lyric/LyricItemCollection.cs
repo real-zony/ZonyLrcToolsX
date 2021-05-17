@@ -104,8 +104,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         public override string ToString()
         {
             var lyricBuilder = new StringBuilder();
-            ForEach(lyric => lyricBuilder.Append(lyric).Append("\r\n"));
-            return lyricBuilder.ToString().TrimEnd("\r\n");
+            ForEach(lyric => lyricBuilder.Append(lyric).Append(Option.LineBreak));
+            return lyricBuilder.ToString().TrimEnd(Option.LineBreak);
         }
     }
 }
