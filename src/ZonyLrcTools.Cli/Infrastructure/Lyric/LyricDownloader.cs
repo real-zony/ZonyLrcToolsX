@@ -11,6 +11,12 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
     {
         public abstract string DownloaderName { get; }
 
+        /// <summary>
+        /// 歌词数据下载的核心逻辑。
+        /// </summary>
+        /// <param name="songName">歌曲名称。</param>
+        /// <param name="artist">歌曲作者/艺术家。</param>
+        /// <returns>下载完成的歌曲数据。</returns>
         public virtual async ValueTask<LyricItemCollection> DownloadAsync(string songName, string artist)
         {
             var args = new LyricDownloaderArgs(songName, artist);
@@ -19,6 +25,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             return await GenerateLyricAsync(downloadDataBytes, args);
         }
 
+        /// <summary>
+        /// 通用的验证逻辑，验证基本参数是否正确。
+        /// </summary>
+        /// <param name="args">歌词下载时需要的参数信息。</param>
         protected virtual ValueTask ValidateAsync(LyricDownloaderArgs args)
         {
             if (string.IsNullOrEmpty(args.SongName))
@@ -34,8 +44,15 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             return ValueTask.CompletedTask;
         }
 
+        /// <summary>
+        /// 根据指定的歌曲参数，下载歌词数据。
+        /// </summary>
         protected abstract ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args);
 
+        /// <summary>
+        /// 根据指定的歌词二进制数据，生成歌词数据。
+        /// </summary>
+        /// <param name="data">歌词的原始二进制数据。</param>
         protected abstract ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args);
     }
 }
