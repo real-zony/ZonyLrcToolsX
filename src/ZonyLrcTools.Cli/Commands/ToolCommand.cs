@@ -10,13 +10,11 @@ using Serilog;
 using Serilog.Events;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
-using ZonyLrcTools.Cli.Infrastructure.Extensions;
 
 namespace ZonyLrcTools.Cli.Commands
 {
     [Command("lyric-tool")]
-    [Subcommand(typeof(ScanCommand),
-        typeof(DownloadCommand),
+    [Subcommand(typeof(DownloadCommand),
         typeof(UtilityCommand))]
     public class ToolCommand : ToolCommandBase
     {
