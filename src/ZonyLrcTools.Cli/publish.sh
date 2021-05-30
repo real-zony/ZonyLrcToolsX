@@ -13,7 +13,9 @@ for platform in "${Platforms[@]}"
 do
     dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true    
     
-    zip -r -j ./bin/Release/net5.0/"$platform"/publish/ZonyLrcTools_"$platform"_"$Version".zip ./bin/Release/net5.0/"$platform"/publish/
+    cd ./bin/Release/net5.0/"$platform"/publish/
+    zip -r ./ZonyLrcTools_"$platform"_"$Version".zip ./
+    cd ../../../../../
 
     mv ./bin/Release/net5.0/"$platform"/publish/ZonyLrcTools_"$platform"_"$Version".zip ./TempFiles
 done
