@@ -99,7 +99,7 @@ namespace ZonyLrcTools.Cli.Commands
                     Log.Logger.Error($"出现了未处理的异常，错误代码: {exception.ErrorCode}，错误信息: {ErrorCodeHelper.GetMessage(exception.ErrorCode)}\n调用栈:\n{exception.StackTrace}");
                     Environment.Exit(exception.ErrorCode);
                     return exception.ErrorCode;
-                case Exception unknownException:
+                case { } unknownException:
                     Log.Logger.Error($"出现了未处理的异常: {unknownException.Message}\n调用栈:\n{unknownException.StackTrace}");
                     Environment.Exit(-1);
                     return 1;
