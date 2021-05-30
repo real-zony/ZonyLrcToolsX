@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
@@ -37,11 +36,6 @@ namespace ZonyLrcTools.Cli.Commands
 
             _logger.LogInformation($"目录扫描完成，共扫描到 {result.Sum(f => f.FilePaths.Count)} 个音乐文件。");
             return 0;
-        }
-
-        public override List<string> CreateArgs()
-        {
-            return new();
         }
     }
 }

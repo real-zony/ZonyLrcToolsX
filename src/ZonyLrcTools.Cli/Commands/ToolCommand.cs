@@ -15,14 +15,11 @@ using ZonyLrcTools.Cli.Infrastructure.Extensions;
 namespace ZonyLrcTools.Cli.Commands
 {
     [Command("lyric-tool")]
-    [Subcommand(typeof(ScanCommand), typeof(DownloadCommand))]
+    [Subcommand(typeof(ScanCommand),
+        typeof(DownloadCommand),
+        typeof(UtilityCommand))]
     public class ToolCommand : ToolCommandBase
     {
-        public override List<string> CreateArgs()
-        {
-            return new();
-        }
-
         public static async Task<int> Main(string[] args)
         {
             ConfigureLogger();

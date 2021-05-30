@@ -61,8 +61,6 @@ namespace ZonyLrcTools.Cli.Commands
 
         #endregion
 
-        public override List<string> CreateArgs() => new();
-
         protected override async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
             var files = await ScanMusicFilesAsync();
