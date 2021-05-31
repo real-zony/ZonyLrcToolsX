@@ -29,6 +29,10 @@
       <Content Include="MusicFiles\曾经艺也 - 荀彧(纯音乐版).mp3">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="MusicFiles\Loren Gray - Queen.ncm" />
+      <Content Include="MusicFiles\Loren Gray - Queen.ncm">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

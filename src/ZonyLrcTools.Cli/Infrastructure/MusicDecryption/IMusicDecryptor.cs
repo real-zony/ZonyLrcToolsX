@@ -12,6 +12,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
         /// </summary>
         /// <param name="sourceBytes">源加密的歌曲数据。</param>
         /// <returns>解密完成的歌曲数据。</returns>
-        Task<byte[]> Convert(byte[] sourceBytes);
+        Task<DecryptionResult> ConvertMusic(byte[] sourceBytes);
     }
 }
