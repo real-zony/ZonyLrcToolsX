@@ -11,16 +11,6 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 
 ### 命令
 
-#### 文件扫描
-
-子命令为 `scan`，可用于扫描指定文件夹下的音乐文件数量(好像没什么卵用)，下面我以 Windows 的可执行程序为例。
-
-```shell
-./ZonyLrcTools.Cli.exe scan -d|dir <WAIT_SCAN_DIRECTORY>
-
-./ZonyLrcTools.cli.exe -h|--help
-```
-
 #### 歌曲下载
 
 子命令为 `download`，可用于下载歌词数据[^1]和专辑图像[^2]，支持多个下载器[^3]进行下载。
@@ -30,6 +20,16 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 
 ./ZonyLrcTools.Cli.exe download -h|--help
 ```
+
+#### 加密格式转换
+
+目前软件支持 NCM、QCM 格式的音乐文件转换(开发中...🚧)，命令如下。
+
+```shell
+./ZonyLrcTools.Cli.exe util -t=Ncm D:\CloudMusic
+```
+
+
 
 ### 配置文件
 
@@ -52,4 +52,3 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 - [x] 支持跨平台的 CLI 工具。
 - [ ] 基于 Web GUI 的操作站点。
 - [ ] 支持插件系统(Lua 引擎)。
-
