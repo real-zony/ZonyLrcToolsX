@@ -81,6 +81,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Exceptions
         /// </summary>
         public const int HttpResponseConvertJsonFailed = 50010;
 
+        /// <summary>
+        /// 文本: 目前仅支持 NCM 格式的歌曲转换操作。
+        /// </summary>
+        public const int OnlySupportNcmFormatFile = 50011;
+
         #endregion
     }
 }
