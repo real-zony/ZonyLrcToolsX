@@ -142,6 +142,8 @@ namespace ZonyLrcTools.Cli.Commands
         {
             async Task<bool> InternalDownloadLogicAsync(ILyricDownloader downloader)
             {
+                _logger.LogMusicInfoWithInformation(info);
+
                 try
                 {
                     var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
@@ -203,6 +205,8 @@ namespace ZonyLrcTools.Cli.Commands
 
         private async Task DownloadAlbumTaskLogicAsync(IAlbumDownloader downloader, MusicInfo info)
         {
+            _logger.LogMusicInfoWithInformation(info);
+            
             try
             {
                 var album = await downloader.DownloadAsync(info.Name, info.Artist);
