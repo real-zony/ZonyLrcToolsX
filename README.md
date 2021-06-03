@@ -23,7 +23,7 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 
 #### 加密格式转换
 
-目前软件支持 NCM、QCM 格式的音乐文件转换(开发中...🚧)，命令如下。
+目前软件支持 NCM、QCM(开发中...🚧) 格式的音乐文件转换，命令如下。
 
 ```shell
 ./ZonyLrcTools.Cli.exe util -t=Ncm D:\CloudMusic
