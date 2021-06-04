@@ -28,5 +28,10 @@ namespace ZonyLrcTools.Tests
         }
 
         protected virtual void BuildServiceProvider() => ServiceProvider = ServiceCollection.BuildServiceProvider();
+
+        protected TService GetService<TService>()
+        {
+            return ServiceProvider.GetRequiredService<TService>();
+        }
     }
 }
