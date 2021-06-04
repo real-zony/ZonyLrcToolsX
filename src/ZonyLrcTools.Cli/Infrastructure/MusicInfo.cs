@@ -13,12 +13,12 @@ namespace ZonyLrcTools.Cli.Infrastructure
         /// <summary>
         /// 歌曲的名称。
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 歌曲的作者。
         /// </summary>
-        public string Artist { get; }
+        public string Artist { get; set; }
 
         /// <summary>
         /// 构建一个新的 <see cref="MusicInfo"/> 对象。

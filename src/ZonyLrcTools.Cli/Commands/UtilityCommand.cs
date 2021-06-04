@@ -87,10 +87,12 @@ namespace ZonyLrcTools.Cli.Commands
                 var buffer = new Memory<byte>(new byte[2048]);
                 while (await file.ReadAsync(buffer) > 0)
                 {
+                    // TODO: Large Object Issue!!!!!
                     await memoryStream.WriteAsync(buffer);
                 }
             }
 
+            // TODO: Large Object Issue!!!!!
             var result = await _musicDecryptor.ConvertMusic(memoryStream.ToArray());
             var newFileName = Path.Combine(Path.GetDirectoryName(filePath),
                 $"{Path.GetFileNameWithoutExtension(filePath)}.{((JObject) result.ExtensionObjects["JSON"]).SelectToken("$.format").Value<string>()}");
