@@ -30,6 +30,10 @@
       <Content Include="Resources\error_msg.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="BlockWords.json" />
+      <Content Include="BlockWords.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

@@ -32,5 +32,10 @@ namespace ZonyLrcTools.Cli.Config
         /// 歌词下载器相关的配置属性。
         /// </summary>
         public IEnumerable<LyricDownloaderOption> LyricDownloaderOptions { get; set; }
+
+        /// <summary>
+        /// 屏蔽词功能相关配置。
+        /// </summary>
+        public BlockWordOption BlockWordOptions { get; set; }
     }
 }
