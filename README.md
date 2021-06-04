@@ -44,6 +44,8 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 | TagInfoProviderOptions.FileNameRegularExpressions | 文件名 Tag 标签信息读取器使用，使用正则表达式匹配歌曲名和歌手，请使用命名分组编写正则表达式。 | (?'artist'.+)\\s-\\s(?'name'.+) |
 | LyricDownloader.[n].Name                          | 指定歌词下载器的配置项标识，对应具体的歌词下载器。           | NetEase 或 QQ                   |
 | LyricDownloader.[n].Priority                      | 指定歌词下载器的优先级，按升序排列，如果值设置为 `-1` 则代表禁用。 | `1`                             |
+| BlockWordOptions.IsEnable                         | 是否启用屏蔽词词典。                                         | false                           |
+| BlockWordOptions.BlockWordDictionaryFile          | 屏蔽词词典的位置。                                           | `./BlockWords.json`             |
 
 ## 捐赠
 
