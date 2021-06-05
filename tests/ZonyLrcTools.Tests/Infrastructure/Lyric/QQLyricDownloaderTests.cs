@@ -10,14 +10,18 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
     public class QQLyricDownloaderTests : TestBase
     {
+        private readonly ILyricDownloader _lyricDownloader;
+
+        public QQLyricDownloaderTests()
+        {
+            _lyricDownloader = GetService<IEnumerable<ILyricDownloader>>()
+                .FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.QQ);
+        }
+        
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var downloaderList = ServiceProvider.GetRequiredService<IEnumerable<ILyricDownloader>>();
-            var qqDownloader = downloaderList.FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.QQ);
-
-            qqDownloader.ShouldNotBeNull();
-            var lyric = await qqDownloader.DownloadAsync("Hollow", "Janet Leon");
+            var lyric = await _lyricDownloader.DownloadAsync("Hollow", "Janet Leon");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }

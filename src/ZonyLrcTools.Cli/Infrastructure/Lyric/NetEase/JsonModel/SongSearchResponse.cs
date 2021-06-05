@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
@@ -9,9 +10,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
 
         [JsonProperty("code")] public int StatusCode { get; set; }
 
-        public int GetFirstSongId()
+        public int GetFirstMatchSongId(string songName)
         {
-            return Items.SongItems[0].Id;
+            var item = Items.SongItems.FirstOrDefault(x => x.Name == songName);
+            return item?.Id ?? Items.SongItems[0].Id;
         }
     }
 
