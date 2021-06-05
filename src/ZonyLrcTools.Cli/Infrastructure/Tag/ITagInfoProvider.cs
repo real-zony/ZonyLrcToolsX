@@ -8,11 +8,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     public interface ITagInfoProvider
     {
         /// <summary>
-        /// 解析时的优先级。
-        /// </summary>
-        int Priority { get; }
-
-        /// <summary>
         /// 标签解析器的唯一标识。
         /// </summary>
         string Name { get; }

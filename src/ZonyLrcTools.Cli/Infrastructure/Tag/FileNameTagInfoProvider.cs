@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -10,25 +11,28 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     /// <summary>
     /// 基于正则表达式的标签解析器，从文件名当中解析歌曲的标签信息。
     /// </summary>
-    public class FileNameTagInfoProvider : ITagInfoProvider, ITransientDependency
+    public class FileNameTagInfoProvider : ITagInfoProvider, ISingletonDependency
     {
-        public int Priority => 2;
-
         public string Name => ConstantName;
         public const string ConstantName = "FileName";
+        public const string RegularExpressionsOption = "RegularExpressions";
 
-        private readonly ToolOptions Options;
+        private readonly ToolOptions _options;
 
         public FileNameTagInfoProvider(IOptions<ToolOptions> options)
         {
-            Options = options.Value;
+            _options = options.Value;
         }
 
         public async ValueTask<MusicInfo> LoadAsync(string filePath)
         {
             await ValueTask.CompletedTask;
+            
+            var regex = _options.TagInfoProviderOptions
+                .First(t => t.Name == ConstantName)
+                .Extensions[RegularExpressionsOption];
 
-            var match = Regex.Match(Path.GetFileNameWithoutExtension(filePath), Options.TagInfoProviderOptions.FileNameRegularExpressions);
+            var match = Regex.Match(Path.GetFileNameWithoutExtension(filePath), regex);
 
             if (match.Groups.Count != 3)
             {

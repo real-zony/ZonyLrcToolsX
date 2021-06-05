@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
-    public class TagInfoProviderOptions
+    public class TagInfoProviderInstance
     {
-        /// <summary>
-        /// 用于从文件名当中提取歌曲名、歌手名。
-        /// </summary>
-        public string FileNameRegularExpressions { get; set; }
+        public string Name { get; set; }
+
+        public int Priority { get; set; }
+
+        public Dictionary<string, string> Extensions { get; set; }
     }
 }

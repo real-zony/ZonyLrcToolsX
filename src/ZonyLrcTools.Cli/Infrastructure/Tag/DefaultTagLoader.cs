@@ -11,7 +11,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     /// <summary>
     /// 默认的标签加载器 <see cref="ITagLoader"/> 实现。
     /// </summary>
-    public class DefaultTagLoader : ITagLoader, ITransientDependency
+    public class DefaultTagLoader : ITagLoader, ISingletonDependency
     {
         protected readonly IEnumerable<ITagInfoProvider> TagInfoProviders;
         protected readonly IBlockWordDictionary BlockWordDictionary;
@@ -33,7 +33,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
                 throw new ErrorCodeException(ErrorCodes.LoadTagInfoProviderError);
             }
 
-            foreach (var provider in TagInfoProviders.OrderBy(p => p.Priority))
+            foreach (var provider in TagInfoProviders)
             {
                 var info = await provider.LoadAsync(filePath);
                 if (info != null)

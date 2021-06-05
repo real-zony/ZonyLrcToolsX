@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Network;
@@ -19,9 +18,9 @@ namespace ZonyLrcTools.Cli.Config
         public LyricItemCollectionOption LyricOption { get; set; }
 
         /// <summary>
-        /// 标签加载器的加载配置项。
+        /// 标签加载器相关的配置属性。
         /// </summary>
-        public TagInfoProviderOptions TagInfoProviderOptions { get; set; }
+        public IEnumerable<TagInfoProviderInstance> TagInfoProviderOptions { get; set; }
 
         /// <summary>
         /// 网络代理相关的配置信息。
