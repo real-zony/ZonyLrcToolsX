@@ -13,7 +13,7 @@ ZonyLrcToolX 2.0 是一个基于 CEF 的跨平台歌词下载工具。
 
 #### 歌曲下载
 
-子命令为 `download`，可用于下载歌词数据[^1]和专辑图像[^2]，支持多个下载器[^3]进行下载。
+子命令为 `download`，可用于下载歌词数据和专辑图像，支持多个下载器进行下载。
 
 ```shell
 ./ZonyLrcTools.Cli.exe download -d|dir <WAIT_SCAN_DIRECTORY> [-l|--lyric] [-a|--album] [-n|--number]
