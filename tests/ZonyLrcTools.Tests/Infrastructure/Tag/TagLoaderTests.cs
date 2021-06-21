@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -15,7 +14,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Tag
             var tagLoader = ServiceProvider.GetRequiredService<ITagLoader>();
 
             tagLoader.ShouldNotBeNull();
-            var info = await tagLoader.LoadTagAsync(Path.Combine(Directory.GetCurrentDirectory(), "MusicFiles", "曾经艺也 - 荀彧(纯音乐版).mp3"));
+            var info = await tagLoader.LoadTagAsync(/*Path.Combine(Directory.GetCurrentDirectory(), "MusicFiles", "曾经艺也 - 荀彧(纯音乐版).mp3")*/@"C:\Users\Zony\Downloads\GALA.-\GALA - 追梦赤子心.mp3");
             info.ShouldNotBeNull();
             info.Name.ShouldBe("荀彧(纯音乐版)");
             info.Artist.ShouldBe("曾经艺也");
