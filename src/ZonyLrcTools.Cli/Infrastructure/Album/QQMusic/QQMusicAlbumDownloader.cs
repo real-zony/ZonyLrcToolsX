@@ -13,7 +13,16 @@ namespace ZonyLrcTools.Cli.Infrastructure.Album.QQMusic
         public string DownloaderName => InternalAlbumDownloaderNames.QQ;
 
         private readonly IWarpHttpClient _warpHttpClient;
-        private readonly Action<HttpRequestMessage> _defaultOption;
+
+        private readonly Action<HttpRequestMessage> _defaultOption = message =>
+        {
+            message.Headers.Referrer = new Uri(DefaultReferer);
+
+            if (message.Content != null)
+            {
+                message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
+            }
+        };
 
         private const string SearchApi = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
         private const string DefaultReferer = "https://y.qq.com";
@@ -21,15 +30,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.Album.QQMusic
         public QQMusicAlbumDownloader(IWarpHttpClient warpHttpClient)
         {
             _warpHttpClient = warpHttpClient;
-            _defaultOption = message =>
-            {
-                message.Headers.Referrer = new Uri(DefaultReferer);
-
-                if (message.Content != null)
-                {
-                    message.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
-                }
-            };
         }
 
         public async ValueTask<byte[]> DownloadAsync(string songName, string artist)
@@ -37,9 +37,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Album.QQMusic
             var requestParameter = new SongSearchRequest(songName, artist);
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(
                 SearchApi,
-                requestParameter);
+                requestParameter, _defaultOption);
 
-            return null;
+            return new byte[] {0x1, 0x2};
         }
     }
 }
