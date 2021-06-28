@@ -9,6 +9,10 @@ ZonyLrcToolX 4 是一个基于 CEF 的跨平台歌词下载工具。
 
 ## 用法
 
+Windows 用户请在软件目录当中，按住 Shift + 右键呼出菜单，然后选择 PowerShell (部分用户可能显示的是 *命令提示符*)，根据下述说明执行命令即可。
+
+macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命令即可。
+
 ### 命令
 
 #### 歌曲下载
@@ -29,8 +33,6 @@ ZonyLrcToolX 4 是一个基于 CEF 的跨平台歌词下载工具。
 ./ZonyLrcTools.Cli.exe util -t=Ncm D:\CloudMusic
 ```
 
-
-
 ### 配置文件
 
 程序的部分配置信息需要在 `appsettings.json` 进行更改，下面标注了各个配置的说明。
@@ -47,7 +49,11 @@ ZonyLrcToolX 4 是一个基于 CEF 的跨平台歌词下载工具。
 | BlockWordOptions.IsEnable                         | 是否启用屏蔽词词典。                                         | false                           |
 | BlockWordOptions.BlockWordDictionaryFile          | 屏蔽词词典的位置。                                           | `./BlockWords.json`             |
 
+### 屏蔽字典
+
 ## 捐赠
+
+暂无
 
 ## 路线图
 
