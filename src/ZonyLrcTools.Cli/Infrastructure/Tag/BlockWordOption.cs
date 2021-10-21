@@ -1,5 +1,8 @@
 ﻿namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
+    /// <summary>
+    /// 屏蔽词选项类。
+    /// </summary>
     public class BlockWordOption
     {
         /// <summary>

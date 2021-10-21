@@ -8,6 +8,7 @@ using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
+    /// <inheritdoc cref="ZonyLrcTools.Cli.Infrastructure.Tag.IBlockWordDictionary" />
     public class BlockWordDictionary : IBlockWordDictionary, ISingletonDependency
     {
         private readonly ToolOptions _options;
