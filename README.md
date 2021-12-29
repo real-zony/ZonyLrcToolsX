@@ -25,6 +25,15 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 ./ZonyLrcTools.Cli.exe download -h|--help
 ```
 
+**例子**
+
+```shell
+# 下载歌词
+./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -l -n 2
+# 下载专辑封面
+./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -a -n 2
+```
+
 #### 加密格式转换
 
 目前软件支持 NCM、QCM(开发中...🚧) 格式的音乐文件转换，命令如下。
