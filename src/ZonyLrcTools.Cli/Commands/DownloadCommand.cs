@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -172,6 +173,10 @@ namespace ZonyLrcTools.Cli.Commands
 
                     _logger.LogWarningInfo(ex);
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
+                }
 
                 return true;
             }
@@ -206,7 +211,7 @@ namespace ZonyLrcTools.Cli.Commands
         private async Task DownloadAlbumTaskLogicAsync(IAlbumDownloader downloader, MusicInfo info)
         {
             _logger.LogMusicInfoWithInformation(info);
-            
+
             try
             {
                 var album = await downloader.DownloadAsync(info.Name, info.Artist);

@@ -14,7 +14,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Tag
             var tagLoader = ServiceProvider.GetRequiredService<ITagLoader>();
 
             tagLoader.ShouldNotBeNull();
-            var info = await tagLoader.LoadTagAsync(/*Path.Combine(Directory.GetCurrentDirectory(), "MusicFiles", "曾经艺也 - 荀彧(纯音乐版).mp3")*/@"C:\Users\Zony\Downloads\GALA.-\GALA - 追梦赤子心.mp3");
+            var info = await tagLoader.LoadTagAsync(@"D:\はるまきごはん 煮ル果実 くらげP 蜂屋ななし じん かいりきベア  - ダンスロボットダンス (アレンジメドレー (キメラver) はるまきごはん×煮ル果実×和田たけあき×栗山夕璃（蜂屋.flac");
             info.ShouldNotBeNull();
             info.Name.ShouldBe("荀彧(纯音乐版)");
             info.Artist.ShouldBe("曾经艺也");
