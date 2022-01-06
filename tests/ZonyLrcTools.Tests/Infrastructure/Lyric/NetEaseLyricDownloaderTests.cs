@@ -34,5 +34,13 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             lyric.IsPruneMusic.ShouldBe(false);
             lyric.ToString().Contains("惑う心繋ぎ止める").ShouldBeTrue();
         }
+
+        [Fact]
+        public async Task DownloadAsync_Issue_82_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("シンデレラ (Giga First Night Remix)", "DECO 27 ギガP");
+            lyric.ShouldNotBeNull();
+            lyric.IsPruneMusic.ShouldBe(true);
+        }
     }
 }

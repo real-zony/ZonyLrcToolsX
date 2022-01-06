@@ -64,9 +64,14 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
                 return new LyricItemCollection(LyricItemCollectionOption.NullInstance);
             }
 
+            if (json.OriginalLyric.Text.Contains("纯音乐，请欣赏"))
+            {
+                return new LyricItemCollection(null);
+            }
+
             return _lyricItemCollectionFactory.Build(
                 json.OriginalLyric.Text,
-                json.TranslationLyric.Text);
+                json.TranslationLyric?.Text);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
