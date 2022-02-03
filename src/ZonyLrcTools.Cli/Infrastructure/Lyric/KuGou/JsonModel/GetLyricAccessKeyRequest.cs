@@ -4,17 +4,13 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou.JsonModel
 {
     public class GetLyricAccessKeyRequest
     {
-        [JsonProperty("ver")]
-        public int UnknownParameters1 { get;  }
+        [JsonProperty("ver")] public int UnknownParameters1 { get; }
 
-        [JsonProperty("man")]
-        public string UnknownParameters2 { get;  }
-        
-        [JsonProperty("client")]
-        public string UnknownParameters3 { get; }
+        [JsonProperty("man")] public string UnknownParameters2 { get; }
 
-        [JsonProperty("hash")]
-        public string FileHash { get; }
+        [JsonProperty("client")] public string UnknownParameters3 { get; }
+
+        [JsonProperty("hash")] public string FileHash { get; }
 
         public GetLyricAccessKeyRequest(string fileHash)
         {

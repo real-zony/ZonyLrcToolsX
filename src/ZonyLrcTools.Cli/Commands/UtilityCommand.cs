@@ -53,7 +53,7 @@ namespace ZonyLrcTools.Cli.Commands
             {
                 _logger.LogInformation("开始扫描文件夹，请稍等...");
 
-                var files = (await _fileScanner.ScanAsync(FilePath, new[] {"*.ncm"}))
+                var files = (await _fileScanner.ScanAsync(FilePath, new[] { "*.ncm" }))
                     .SelectMany(f => f.FilePaths)
                     .ToList();
 
@@ -95,7 +95,7 @@ namespace ZonyLrcTools.Cli.Commands
             // TODO: Large Object Issue!!!!!
             var result = await _musicDecryptor.ConvertMusic(memoryStream.ToArray());
             var newFileName = Path.Combine(Path.GetDirectoryName(filePath),
-                $"{Path.GetFileNameWithoutExtension(filePath)}.{((JObject) result.ExtensionObjects["JSON"]).SelectToken("$.format").Value<string>()}");
+                $"{Path.GetFileNameWithoutExtension(filePath)}.{((JObject)result.ExtensionObjects["JSON"]).SelectToken("$.format").Value<string>()}");
 
             await using var musicFileStream = File.Create(newFileName);
             await musicFileStream.WriteAsync(result.Data);

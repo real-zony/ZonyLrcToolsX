@@ -123,7 +123,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Network
             {
                 HttpStatusCode.OK => responseString,
                 HttpStatusCode.ServiceUnavailable => throw new ErrorCodeException(ErrorCodes.ServiceUnavailable),
-                _ => throw new ErrorCodeException(ErrorCodes.HttpRequestFailed, attachObj: new {requestParameters, responseString})
+                _ => throw new ErrorCodeException(ErrorCodes.HttpRequestFailed, attachObj: new { requestParameters, responseString })
             };
         }
 
@@ -136,7 +136,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Network
         /// <exception cref="ErrorCodeException">如果反序列化失败，则可能抛出本异常。</exception>
         private TResponse ConvertHttpResponseToObject<TResponse>(object requestParameters, string responseString)
         {
-            var throwException = new ErrorCodeException(ErrorCodes.HttpResponseConvertJsonFailed, attachObj: new {requestParameters, responseString});
+            var throwException = new ErrorCodeException(ErrorCodes.HttpResponseConvertJsonFailed, attachObj: new { requestParameters, responseString });
 
             try
             {

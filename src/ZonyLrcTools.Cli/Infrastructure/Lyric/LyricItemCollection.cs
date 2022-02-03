@@ -97,7 +97,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         private static Dictionary<int, bool> BuildMarkDictionary(LyricItemCollection items)
         {
             return items
-                .Select((item, index) => new {index, item})
+                .Select((item, index) => new { index, item })
                 .ToDictionary(item => item.index, item => false);
         }
 

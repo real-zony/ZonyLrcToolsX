@@ -90,7 +90,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 
         public static bool operator ==(LyricItem left, LyricItem right)
         {
-            return (int?) left?.SortScore == (int?) right?.SortScore;
+            return (int?)left?.SortScore == (int?)right?.SortScore;
         }
 
         public static bool operator !=(LyricItem item1, LyricItem item2)
@@ -113,7 +113,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((LyricItem) obj);
+            return Equals((LyricItem)obj);
         }
 
         public override int GetHashCode()

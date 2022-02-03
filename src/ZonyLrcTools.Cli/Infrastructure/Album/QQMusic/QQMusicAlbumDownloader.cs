@@ -39,7 +39,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Album.QQMusic
                 SearchApi,
                 requestParameter, _defaultOption);
 
-            return new byte[] {0x1, 0x2};
+            return new byte[] { 0x1, 0x2 };
         }
     }
 }

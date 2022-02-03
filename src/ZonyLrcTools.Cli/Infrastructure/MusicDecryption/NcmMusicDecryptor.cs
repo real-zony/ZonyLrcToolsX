@@ -14,8 +14,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
     /// </summary>
     public class NcmMusicDecryptor : IMusicDecryptor, ITransientDependency
     {
-        protected readonly byte[] AesCoreKey = {0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57};
-        protected readonly byte[] AesModifyKey = {0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28};
+        protected readonly byte[] AesCoreKey = { 0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57 };
+        protected readonly byte[] AesModifyKey = { 0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28 };
 
         public async Task<DecryptionResult> ConvertMusic(byte[] sourceBytes)
         {
@@ -72,7 +72,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
             {
                 ExtensionObjects = new Dictionary<string, object>
                 {
-                    {"JSON", musicInfoJson}
+                    { "JSON", musicInfoJson }
                 }
             };
         }
@@ -105,10 +105,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
             byte[] box = new byte[256];
             for (int i = 0; i < 256; ++i)
             {
-                box[i] = (byte) i;
+                box[i] = (byte)i;
             }
 
-            byte keyLength = (byte) key.Length;
+            byte keyLength = (byte)key.Length;
             byte c;
             byte lastByte = 0;
             byte keyOffset = 0;
@@ -117,7 +117,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
             for (int i = 0; i < 256; ++i)
             {
                 swap = box[i];
-                c = (byte) ((swap + lastByte + key[keyOffset++]) & 0xff);
+                c = (byte)((swap + lastByte + key[keyOffset++]) & 0xff);
 
                 if (keyOffset >= keyLength)
                 {
@@ -169,7 +169,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
 
                 for (int i = 0; i < n; i++)
                 {
-                    var j = (byte) ((i + 1) & 0xff);
+                    var j = (byte)((i + 1) & 0xff);
                     tb[i] ^= sBox[sBox[j] + sBox[(sBox[j] + j) & 0xff] & 0xff];
                 }
 

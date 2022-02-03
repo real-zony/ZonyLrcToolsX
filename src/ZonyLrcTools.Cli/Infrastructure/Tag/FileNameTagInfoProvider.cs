@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         public async ValueTask<MusicInfo> LoadAsync(string filePath)
         {
             await ValueTask.CompletedTask;
-            
+
             var regex = _options.TagInfoProviderOptions
                 .First(t => t.Name == ConstantName)
                 .Extensions[RegularExpressionsOption];

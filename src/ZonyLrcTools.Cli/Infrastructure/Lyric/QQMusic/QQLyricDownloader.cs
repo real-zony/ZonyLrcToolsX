@@ -70,7 +70,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
         {
-            if (response is not {StatusCode: 0} || response.Data.Song.SongItems == null)
+            if (response is not { StatusCode: 0 } || response.Data.Song.SongItems == null)
             {
                 throw new ErrorCodeException(ErrorCodes.TheReturnValueIsIllegal, attachObj: args);
             }
