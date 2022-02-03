@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
@@ -41,6 +41,14 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             var lyric = await _lyricDownloader.DownloadAsync("シンデレラ (Giga First Night Remix)", "DECO 27 ギガP");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(true);
+        }
+
+        [Fact]
+        public async Task DownloadAsync_Issue84_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("太空彈", "01");
+            lyric.ShouldNotBeNull();
+            lyric.IsPruneMusic.ShouldBe(false);
         }
     }
 }
