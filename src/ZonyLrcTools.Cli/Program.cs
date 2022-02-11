@@ -7,15 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 
-namespace ZonyLrcTools.Cli.Commands
+namespace ZonyLrcTools.Cli
 {
     [Command("lyric-tool")]
     [Subcommand(typeof(DownloadCommand),
         typeof(UtilityCommand))]
-    public class ToolCommand : ToolCommandBase
+    public class Program : ToolCommandBase
     {
         public static async Task<int> Main(string[] args)
         {
@@ -78,11 +79,11 @@ namespace ZonyLrcTools.Cli.Commands
                 .ConfigureServices((_, services) =>
                 {
                     services.AddSingleton(PhysicalConsole.Singleton);
-                    services.BeginAutoDependencyInject<ToolCommand>();
+                    services.BeginAutoDependencyInject<Program>();
                     services.ConfigureConfiguration();
                     services.ConfigureToolService();
                 })
-                .RunCommandLineApplicationAsync<ToolCommand>(args);
+                .RunCommandLineApplicationAsync<Program>(args);
         }
 
         private static int HandleException(Exception ex)

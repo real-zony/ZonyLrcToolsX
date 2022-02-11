@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using ZonyLrcTools.Cli;
 using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 
@@ -20,7 +21,7 @@ namespace ZonyLrcTools.Tests
         {
             var service = new ServiceCollection();
 
-            service.BeginAutoDependencyInject<ToolCommand>();
+            service.BeginAutoDependencyInject<Program>();
             service.ConfigureToolService();
             service.ConfigureConfiguration();
 
