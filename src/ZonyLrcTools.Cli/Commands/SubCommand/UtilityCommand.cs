@@ -11,7 +11,7 @@ using ZonyLrcTools.Cli.Infrastructure.IO;
 using ZonyLrcTools.Cli.Infrastructure.MusicDecryption;
 using ZonyLrcTools.Cli.Infrastructure.Threading;
 
-namespace ZonyLrcTools.Cli.Commands
+namespace ZonyLrcTools.Cli.Commands.SubCommand
 {
     public enum SupportFileType
     {

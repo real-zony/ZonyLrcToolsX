@@ -17,7 +17,7 @@ using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Cli.Infrastructure.Threading;
 
-namespace ZonyLrcTools.Cli.Commands
+namespace ZonyLrcTools.Cli.Commands.SubCommand
 {
     [Command("download", Description = "下载歌词文件或专辑图像。")]
     public class DownloadCommand : ToolCommandBase
