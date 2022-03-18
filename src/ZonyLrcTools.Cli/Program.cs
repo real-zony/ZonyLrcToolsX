@@ -75,7 +75,7 @@ namespace ZonyLrcTools.Cli
                 {
                     builder
                         .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json");
+                        .AddYamlFile("config.yaml");
                 })
                 .ConfigureServices((_, services) =>
                 {

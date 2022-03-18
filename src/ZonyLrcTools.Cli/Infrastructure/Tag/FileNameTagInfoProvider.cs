@@ -15,7 +15,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     {
         public string Name => ConstantName;
         public const string ConstantName = "FileName";
-        public const string RegularExpressionsOption = "RegularExpressions";
+        public const string RegularExpressionsOption = "regularExpressions";
 
         private readonly ToolOptions _options;
 
@@ -28,7 +28,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         {
             await ValueTask.CompletedTask;
 
-            var regex = _options.TagInfoProviderOptions
+            var regex = _options.Provider.Tag.Plugin
                 .First(t => t.Name == ConstantName)
                 .Extensions[RegularExpressionsOption];
 

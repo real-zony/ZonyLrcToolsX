@@ -13,6 +13,6 @@
         /// <summary>
         /// 屏蔽词字典文件，用于替换歌曲名或者歌手名称。
         /// </summary>
-        public string BlockWordDictionaryFile { get; set; }
+        public string FilePath { get; set; }
     }
 }

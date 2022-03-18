@@ -21,7 +21,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("Hollow", "Janet Leon");
+            var lyric = await _lyricDownloader.DownloadAsync("东风破", "胡歌");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }

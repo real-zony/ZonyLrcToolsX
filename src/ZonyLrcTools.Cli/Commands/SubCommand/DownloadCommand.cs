@@ -82,7 +82,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         private async Task<List<string>> ScanMusicFilesAsync()
         {
-            var files = (await _fileScanner.ScanAsync(Directory, _options.SupportFileExtensions.Split(';')))
+            var files = (await _fileScanner.ScanAsync(Directory, _options.SupportFileExtensions))
                 .SelectMany(t => t.FilePaths)
                 .ToList();
 
@@ -112,7 +112,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         private IEnumerable<ILyricDownloader> GetLyricDownloaderList()
         {
-            var downloader = _options.LyricDownloaderOptions
+            var downloader = _options.Provider.Lyric.Plugin
                 .Where(op => op.Priority != -1)
                 .OrderBy(op => op.Priority)
                 .Join(_lyricDownloaderList,

@@ -17,9 +17,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             _options = options.Value;
         }
 
-        public LyricItemCollection Build(string sourceLyric, string translateLyric = null)
+        public LyricItemCollection Build(string sourceLyric)
         {
-            var items = new LyricItemCollection(_options.LyricOption);
+            var items = new LyricItemCollection(_options.Provider.Lyric.Config);
             if (string.IsNullOrEmpty(sourceLyric))
             {
                 return items;

@@ -8,16 +8,16 @@ namespace ZonyLrcTools.Cli.Infrastructure.Network
         /// <summary>
         /// 是否启用了网络代理功能。
         /// </summary>
-        public bool Enable { get; set; }
+        public bool IsEnable { get; set; }
 
         /// <summary>
         /// 代理服务器的 Ip。
         /// </summary>
-        public string ProxyIp { get; set; }
+        public string Ip { get; set; }
 
         /// <summary>
         /// 代理服务器的 端口。
         /// </summary>
-        public int ProxyPort { get; set; }
+        public int Port { get; set; }
     }
 }

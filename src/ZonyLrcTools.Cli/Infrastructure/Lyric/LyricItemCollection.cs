@@ -16,9 +16,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         /// </summary>
         public bool IsPruneMusic => Count == 0;
 
-        public LyricItemCollectionOption Option { get; private set; }
+        public LyricConfigOption Option { get; private set; }
 
-        public LyricItemCollection(LyricItemCollectionOption option)
+        public LyricItemCollection(LyricConfigOption option)
         {
             Option = option;
         }
@@ -33,7 +33,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             var option = left.Option;
             var newCollection = new LyricItemCollection(option);
             var indexDiff = left.Count - right.Count;
-
             if (!option.IsOneLine)
             {
                 left.ForEach(item => newCollection.Add(item));

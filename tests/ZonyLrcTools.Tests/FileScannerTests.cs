@@ -15,7 +15,8 @@ namespace ZonyLrcTools.Tests
         public async Task ScanAsync_Test()
         {
             var tempMusicFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Temp.mp3");
-            File.Create(tempMusicFilePath);
+            var fs = File.Create(tempMusicFilePath);
+            fs.Close();
 
             var fileScanner = ServiceProvider.GetRequiredService<IFileScanner>();
             var result = await fileScanner.ScanAsync(

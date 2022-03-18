@@ -65,7 +65,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
             var sourceLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.lyric").Value<string>()));
             var translateLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.trans").Value<string>()));
 
-            return _lyricItemCollectionFactory.Build(sourceLyric, translateLyric);
+            return _lyricItemCollectionFactory.Build(sourceLyric);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)

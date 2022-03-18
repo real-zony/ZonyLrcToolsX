@@ -31,8 +31,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
 
                     return new HttpClientHandler
                     {
-                        UseProxy = option.NetworkOptions.Enable,
-                        Proxy = new WebProxy($"{option.NetworkOptions.ProxyIp}:{option.NetworkOptions.ProxyPort}")
+                        UseProxy = option.NetworkOptions.IsEnable,
+                        Proxy = new WebProxy($"{option.NetworkOptions.Ip}:{option.NetworkOptions.Port}")
                     };
                 });
 
@@ -46,10 +46,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddYamlFile("config.yaml")
                 .Build();
 
-            services.Configure<ToolOptions>(configuration.GetSection("ToolOption"));
+            services.Configure<ToolOptions>(configuration.GetSection("globalOption"));
 
             return services;
         }

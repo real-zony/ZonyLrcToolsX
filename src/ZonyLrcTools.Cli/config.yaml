@@ -1,0 +1,34 @@
+globalOption:
+  supportFileExtensions:
+    - '*.mp3'
+    - '*.flac'
+    - '*.wav'
+  networkOptions:
+    isEnable: false
+    ip: 127.0.0.1
+    port: 4780
+
+  provider:
+    tag:
+      plugin:
+        - name: Taglib
+          priority: 1
+        - name: FileName
+          priority: 2
+          extensions:
+            regularExpressions: "(?'artist'.+)\\s-\\s(?'name'.+)"
+      blockWord:
+        isEnable: false
+        filePath: 'BlockWords.json'
+    lyric:
+      plugin:
+        - name: NetEase
+          priority: 1
+        - name: QQ
+          priority: 2
+        - name: KuGou
+          priority: 3
+      config:
+        isOneLine: true
+        lineBreak: '\n'
+        isEnableTranslation: false

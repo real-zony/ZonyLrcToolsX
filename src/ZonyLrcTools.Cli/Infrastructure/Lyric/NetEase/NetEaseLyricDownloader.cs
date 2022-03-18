@@ -61,7 +61,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             var json = JsonConvert.DeserializeObject<GetLyricResponse>(Encoding.UTF8.GetString(data));
             if (json?.OriginalLyric == null)
             {
-                return new LyricItemCollection(LyricItemCollectionOption.NullInstance);
+                return new LyricItemCollection(null);
             }
 
             if (json.OriginalLyric.Text.Contains("纯音乐，请欣赏"))
@@ -70,8 +70,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             }
 
             return _lyricItemCollectionFactory.Build(
-                json.OriginalLyric.Text,
-                json.TranslationLyric?.Text);
+                json.OriginalLyric.Text);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)

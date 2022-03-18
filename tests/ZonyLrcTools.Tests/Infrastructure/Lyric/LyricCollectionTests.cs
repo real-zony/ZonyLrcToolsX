@@ -9,7 +9,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public void LyricCollectionLineBreak_Test()
         {
-            var lyricObject = new LyricItemCollection(new LyricItemCollectionOption
+            var lyricObject = new LyricItemCollection(new LyricConfigOption
             {
                 IsOneLine = false,
                 LineBreak = LineBreakType.MacOs
@@ -18,7 +18,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
                 new(0, 20, "你好世界!"),
                 new(0, 22, "Hello World!")
             };
-            
+
             lyricObject.ToString().ShouldContain(LineBreakType.MacOs);
         }
     }

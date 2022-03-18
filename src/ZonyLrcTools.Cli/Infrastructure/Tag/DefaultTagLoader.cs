@@ -48,7 +48,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
 
         protected void HandleBlockWord(MusicInfo info)
         {
-            if (Options.BlockWordOptions.IsEnable)
+            if (Options.Provider.Tag.BlockWord.IsEnable)
             {
                 info.Name = BlockWordDictionary.GetValue(info.Name) ?? info.Name;
                 info.Artist = BlockWordDictionary.GetValue(info.Name) ?? info.Artist;

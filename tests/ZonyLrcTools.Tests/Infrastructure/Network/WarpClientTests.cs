@@ -34,8 +34,8 @@ namespace ZonyLrcTools.Tests.Infrastructure.Network
         public async Task GetAsyncWithProxy_Test()
         {
             var option = ServiceProvider.GetRequiredService<IOptions<ToolOptions>>();
-            option.Value.NetworkOptions.ProxyIp = "127.0.0.1";
-            option.Value.NetworkOptions.ProxyPort = 4780;
+            option.Value.NetworkOptions.Ip = "127.0.0.1";
+            option.Value.NetworkOptions.Port = 4780;
 
             var client = ServiceProvider.GetRequiredService<IWarpHttpClient>();
 

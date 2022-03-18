@@ -21,7 +21,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
 
             _wordsDictionary = new Lazy<Dictionary<string, string>>(() =>
             {
-                var jsonData = File.ReadAllText(_options.BlockWordOptions.BlockWordDictionaryFile);
+                var jsonData = File.ReadAllText(_options.Provider.Tag.BlockWord.FilePath);
                 return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonData);
             });
         }
