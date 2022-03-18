@@ -13,7 +13,7 @@ Windows 用户请在软件目录当中，按住 Shift + 右键呼出菜单，然
 
 macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命令即可。
 
-### 命令
+### 子命令
 
 #### 歌曲下载
 
@@ -44,19 +44,56 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 
 ### 配置文件
 
-程序的部分配置信息需要在 `appsettings.json` 进行更改，下面标注了各个配置的说明。
+程序的所有需要在 `config.yaml` 进行更改，下面标注了各个配置的说明。
 
-| 属性                                              | 说明                                                         | 示例值                          |
-| ------------------------------------------------- | ------------------------------------------------------------ | ------------------------------- |
-| ToolOption.SupportFileExtensions                  | 允许扫描的歌曲文件后缀名，以 `;` 号隔开多个后缀。            | `*.mp3;*.flac`                  |
-| ToolOption.NetworkOptions.Enable                  | 是否启用 HTTP 网络代理服务，true 表示启用，false 表示禁用。  | false                           |
-| ToolOption.NetworkOptions.ProxyIp                 | HTTP 网络代理服务的 IP，在 `Enable` 为 false 时会忽略该属性值。 | 127.0.0.1                       |
-| ToolOption.NetworkOptions.ProxyPort               | HTTP 网络代理服务的 端口，在 `Enable` 为 false 时会忽略该属性值。 | 8080                            |
-| TagInfoProviderOptions.FileNameRegularExpressions | 文件名 Tag 标签信息读取器使用，使用正则表达式匹配歌曲名和歌手，请使用命名分组编写正则表达式。 | (?'artist'.+)\\s-\\s(?'name'.+) |
-| LyricDownloader.[n].Name                          | 指定歌词下载器的配置项标识，对应具体的歌词下载器。           | NetEase 或 QQ                   |
-| LyricDownloader.[n].Priority                      | 指定歌词下载器的优先级，按升序排列，如果值设置为 `-1` 则代表禁用。 | `1`                             |
-| BlockWordOptions.IsEnable                         | 是否启用屏蔽词词典。                                         | false                           |
-| BlockWordOptions.BlockWordDictionaryFile          | 屏蔽词词典的位置。                                           | `./BlockWords.json`             |
+```yaml
+globalOption:
+  # 允许扫描的歌曲文件后缀名。
+  supportFileExtensions:
+    - '*.mp3'
+    - '*.flac'
+    - '*.wav'
+  # 网络代理服务设置，仅支持 HTTP 代理。
+  networkOptions:
+    isEnable: false # 是否启用代理。
+    ip: 127.0.0.1   # 代理服务 IP 地址。
+    port: 4780      # 代理服务端口号。
+  
+  # 下载器的相关参数配置。
+  provider:
+    # 标签扫描器的相关参数配置。
+    tag:
+      # 支持的标签扫描器。
+      plugin:
+        - name: Taglib    # 基于 Taglib 库的标签扫描器。
+          priority: 1     # 优先级，升序排列。
+        - name: FileName  # 基于文件名的标签扫描器。
+          priority: 2
+          # 基于文件名扫描器的扩展参数。
+          extensions:
+            # 正则表达式，用于匹配文件名中的作者信息和歌曲信息，可根据
+            # 自己的需求进行调整。
+            regularExpressions: "(?'artist'.+)\\s-\\s(?'name'.+)"
+      # 歌曲标签屏蔽字典替换功能。
+      blockWord:
+        isEnable: false             # 是否启用屏蔽字典。
+        filePath: 'BlockWords.json' # 屏蔽字典的路径。
+    # 歌词下载器的相关参数配置。
+    lyric:
+      # 支持的歌词下载器。
+      plugin:
+        - name: NetEase   # 基于网易云音乐的歌词下载器。
+          priority: 1     # 优先级，升序排列。
+        - name: QQ        # 基于 QQ 音乐的歌词下载器。
+          priority: 2
+        - name: KuGou     # 基于酷狗音乐的歌词下载器。
+          priority: 3
+      # 歌词下载的一些共有配置参数。
+      config:
+        isOneLine: true             # 双语歌词是否合并为一行展示。
+        lineBreak: '\n'             # 换行符的类型。
+        isEnableTranslation: false  # 是否启用翻译歌词。
+```
 
 ### 屏蔽字典
 

@@ -1,34 +1,46 @@
 globalOption:
+  # 允许扫描的歌曲文件后缀名。
   supportFileExtensions:
     - '*.mp3'
     - '*.flac'
     - '*.wav'
+  # 网络代理服务设置，仅支持 HTTP 代理。
   networkOptions:
-    isEnable: false
-    ip: 127.0.0.1
-    port: 4780
-
+    isEnable: false # 是否启用代理。
+    ip: 127.0.0.1   # 代理服务 IP 地址。
+    port: 4780      # 代理服务端口号。
+  
+  # 下载器的相关参数配置。
   provider:
+    # 标签扫描器的相关参数配置。
     tag:
+      # 支持的标签扫描器。
       plugin:
-        - name: Taglib
-          priority: 1
-        - name: FileName
+        - name: Taglib    # 基于 Taglib 库的标签扫描器。
+          priority: 1     # 优先级，升序排列。
+        - name: FileName  # 基于文件名的标签扫描器。
           priority: 2
+          # 基于文件名扫描器的扩展参数。
           extensions:
+            # 正则表达式，用于匹配文件名中的作者信息和歌曲信息，可根据
+            # 自己的需求进行调整。
             regularExpressions: "(?'artist'.+)\\s-\\s(?'name'.+)"
+      # 歌曲标签屏蔽字典替换功能。
       blockWord:
-        isEnable: false
-        filePath: 'BlockWords.json'
+        isEnable: false             # 是否启用屏蔽字典。
+        filePath: 'BlockWords.json' # 屏蔽字典的路径。
+    # 歌词下载器的相关参数配置。
     lyric:
+      # 支持的歌词下载器。
       plugin:
-        - name: NetEase
-          priority: 1
-        - name: QQ
+        - name: NetEase   # 基于网易云音乐的歌词下载器。
+          priority: 1     # 优先级，升序排列。
+        - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
-        - name: KuGou
+        - name: KuGou     # 基于酷狗音乐的歌词下载器。
           priority: 3
+      # 歌词下载的一些共有配置参数。
       config:
-        isOneLine: true
-        lineBreak: '\n'
-        isEnableTranslation: false
+        isOneLine: true             # 双语歌词是否合并为一行展示。
+        lineBreak: '\n'             # 换行符的类型。
+        isEnableTranslation: false  # 是否启用翻译歌词。
