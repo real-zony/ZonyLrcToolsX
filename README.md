@@ -111,7 +111,7 @@ globalOption:
 
 ## 捐赠
 
-![alipay.jpg](./docs/img/alipay.jpg)![wechat.jpg](./docs/img/wechat.jpg)
+<img src="./docs/img/alipay.jpg" width="200"/><img src="./docs/img/wechat.jpg" width="200"/>
 
 ## 路线图
 
