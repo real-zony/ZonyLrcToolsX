@@ -17,11 +17,11 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             _lyricDownloader = GetService<IEnumerable<ILyricDownloader>>()
                 .FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.QQ);
         }
-        
+
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("东风破", "胡歌");
+            var lyric = await _lyricDownloader.DownloadAsync("东风破", "周杰伦");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }

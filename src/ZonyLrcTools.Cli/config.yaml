@@ -43,4 +43,4 @@ globalOption:
       config:
         isOneLine: true             # 双语歌词是否合并为一行展示。
         lineBreak: '\n'             # 换行符的类型。
-        isEnableTranslation: false  # 是否启用翻译歌词。
+        isEnableTranslation: true  # 是否启用翻译歌词。

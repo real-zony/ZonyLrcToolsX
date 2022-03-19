@@ -19,19 +19,45 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 
         public LyricItemCollection Build(string sourceLyric)
         {
-            var items = new LyricItemCollection(_options.Provider.Lyric.Config);
+            var lyric = new LyricItemCollection(_options.Provider.Lyric.Config);
             if (string.IsNullOrEmpty(sourceLyric))
             {
-                return items;
+                return lyric;
             }
 
-            var regex = new Regex(@"\[\d+:\d+.\d+\].+\n?");
-            foreach (Match match in regex.Matches(sourceLyric))
+            InternalBuildLyricObject(lyric, sourceLyric);
+
+            return lyric;
+        }
+
+        public LyricItemCollection Build(string sourceLyric, string translationLyric)
+        {
+            var lyric = new LyricItemCollection(_options.Provider.Lyric.Config);
+            if (string.IsNullOrEmpty(sourceLyric))
             {
-                items.Add(new LyricItem(match.Value));
+                return lyric;
             }
 
-            return items;
+            lyric = InternalBuildLyricObject(lyric, sourceLyric);
+
+            if (_options.Provider.Lyric.Config.IsEnableTranslation && !string.IsNullOrEmpty(translationLyric))
+            {
+                var translatedLyric = InternalBuildLyricObject(new LyricItemCollection(_options.Provider.Lyric.Config), translationLyric);
+                return lyric + translatedLyric;
+            }
+
+            return lyric;
+        }
+
+        private LyricItemCollection InternalBuildLyricObject(LyricItemCollection lyric, string sourceText)
+        {
+            var regex = new Regex(@"\[\d+:\d+.\d+\].+\n?");
+            foreach (Match match in regex.Matches(sourceText))
+            {
+                lyric.Add(new LyricItem(match.Value));
+            }
+
+            return lyric;
         }
     }
 }

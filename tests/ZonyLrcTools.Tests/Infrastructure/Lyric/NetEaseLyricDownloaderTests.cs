@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
@@ -49,6 +48,18 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             var lyric = await _lyricDownloader.DownloadAsync("太空彈", "01");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
+        }
+
+        // About the new feature mentioned in issue #87.
+        // Github Issue: https://github.com/real-zony/ZonyLrcToolsX/issues/87
+        [Fact]
+        public async Task DownloadAsync_Issue85_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("Looking at Me", "Sabrina Carpenter");
+
+            lyric.ShouldNotBeNull();
+            lyric.IsPruneMusic.ShouldBeFalse();
+            lyric.ToString().ShouldContain("你看起来失了呼吸");
         }
     }
 }
