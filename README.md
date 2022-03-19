@@ -111,7 +111,7 @@ globalOption:
 
 ## 捐赠
 
-暂无
+![alipay.jpg](./docs/img/alipay.jpg)![wechat.jpg](./docs/img/wechat.jpg)
 
 ## 路线图
 
