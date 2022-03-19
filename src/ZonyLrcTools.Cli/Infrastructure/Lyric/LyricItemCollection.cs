@@ -73,10 +73,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 
             // 遍历未处理的歌词项，将其添加到返回集合当中。
             var leftWaitProcessIndex = leftMarkDict
-                .Where(item => item.Value)
+                .Where(item => !item.Value)
                 .Select(pair => pair.Key);
             var rightWaitProcessIndex = rightMarkDict
-                .Where(item => item.Value)
+                .Where(item => !item.Value)
                 .Select(pair => pair.Key);
 
             leftWaitProcessIndex.Foreach(index => newCollection.Add(left[index]));
