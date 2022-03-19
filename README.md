@@ -1,4 +1,4 @@
-简体中文 | [English](./en_US.md)
+简体中文 | [English](./docs/en_US.md)
 
 ## 简介
 
