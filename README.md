@@ -9,7 +9,7 @@ ZonyLrcToolX 4 是一个基于 CEF 的跨平台歌词下载工具。
 
 ## 用法
 
-Windows 用户请在软件目录当中，按住 Shift + 右键呼出菜单，然后选择 PowerShell (部分用户可能显示的是 *命令提示符*)，根据下述说明执行命令即可。
+Windows 用户请在软件目录当中，按住 Shift + 右键呼出菜单，然后选择 PowerShell/命令提示符/Windows 终端，根据下述说明执行命令即可。
 
 macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命令即可。
 
