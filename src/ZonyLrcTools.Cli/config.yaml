@@ -42,5 +42,5 @@ globalOption:
       # 歌词下载的一些共有配置参数。
       config:
         isOneLine: true             # 双语歌词是否合并为一行展示。
-        lineBreak: '\n'             # 换行符的类型。
+        lineBreak: "\n"             # 换行符的类型，记得使用双引号指定。
         isEnableTranslation: true  # 是否启用翻译歌词。
