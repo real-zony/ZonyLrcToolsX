@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
+using ZonyLrcTools.Cli.Config;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {

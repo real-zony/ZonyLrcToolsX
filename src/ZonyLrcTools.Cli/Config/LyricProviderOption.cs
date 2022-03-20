@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Cli.Infrastructure.Lyric
+﻿namespace ZonyLrcTools.Cli.Config
 {
     public class LyricProviderOption
     {

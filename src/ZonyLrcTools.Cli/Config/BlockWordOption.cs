@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Cli.Infrastructure.Tag
+﻿namespace ZonyLrcTools.Cli.Config
 {
     /// <summary>
     /// 屏蔽词选项类。

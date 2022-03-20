@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using ZonyLrcTools.Cli.Infrastructure.Lyric;
 
-namespace ZonyLrcTools.Cli.Infrastructure.Lyric;
+namespace ZonyLrcTools.Cli.Config;
 
 public class LyricOption
 {
