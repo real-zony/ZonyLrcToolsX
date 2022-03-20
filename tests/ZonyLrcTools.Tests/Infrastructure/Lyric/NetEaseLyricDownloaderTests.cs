@@ -61,5 +61,13 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             lyric.IsPruneMusic.ShouldBeFalse();
             lyric.ToString().ShouldContain("你看起来失了呼吸");
         }
+
+        [Fact]
+        public async Task DownloaderAsync_Issue88_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("茫茫草原", "姚璎格");
+
+            lyric.ShouldNotBeNull();
+        }
     }
 }

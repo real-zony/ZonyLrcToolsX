@@ -103,7 +103,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
             var warpTask = new WarpTask(ParallelNumber);
             var warpTaskList = files.Select(file => warpTask.RunAsync(() => Task.Run(async () => await _tagLoader.LoadTagAsync(file))));
-            var result = await Task.WhenAll(warpTaskList);
+            var result = (await Task.WhenAll(warpTaskList)).Where(m => !string.IsNullOrEmpty(m.Name) || !string.IsNullOrEmpty(m.Artist));
 
             _logger.LogInformation($"已成功加载 {files.Count} 个音乐文件的标签信息。");
 
