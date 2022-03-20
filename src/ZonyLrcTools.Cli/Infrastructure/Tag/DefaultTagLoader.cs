@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
@@ -15,14 +16,18 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     {
         protected readonly IEnumerable<ITagInfoProvider> TagInfoProviders;
         protected readonly IBlockWordDictionary BlockWordDictionary;
+        protected readonly ILogger<DefaultTagLoader> _logger;
+
         protected ToolOptions Options;
 
         public DefaultTagLoader(IEnumerable<ITagInfoProvider> tagInfoProviders,
             IBlockWordDictionary blockWordDictionary,
-            IOptions<ToolOptions> options)
+            IOptions<ToolOptions> options,
+            ILogger<DefaultTagLoader> logger)
         {
             TagInfoProviders = tagInfoProviders;
             BlockWordDictionary = blockWordDictionary;
+            _logger = logger;
             Options = options.Value;
         }
 
@@ -42,6 +47,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
                     return info;
                 }
             }
+
+            _logger.LogWarning($"{filePath} 没有找到正确的标签信息，请考虑调整正则表达式。");
 
             return null;
         }
