@@ -21,6 +21,11 @@ namespace ZonyLrcTools.Cli.Infrastructure
         public string Artist { get; set; }
 
         /// <summary>
+        /// 是否下载成功?
+        /// </summary>
+        public bool IsSuccessful { get; set; } = true;
+
+        /// <summary>
         /// 构建一个新的 <see cref="MusicInfo"/> 对象。
         /// </summary>
         /// <param name="filePath">歌曲对应的物理文件路径。</param>

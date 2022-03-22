@@ -178,6 +178,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 catch (Exception ex)
                 {
                     _logger.LogError($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
+                    info.IsSuccessful = false;
                 }
 
                 return true;
@@ -207,7 +208,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
             await Task.WhenAll(warpTaskList);
 
-            _logger.LogInformation($"专辑数据下载完成，成功: {musicInfos.Count} 失败{0}。");
+            _logger.LogInformation($"专辑数据下载完成，成功: {musicInfos.Count(m => m.IsSuccessful)} 失败{musicInfos.Count(m => !m.IsSuccessful)}。");
         }
 
         private async Task DownloadAlbumTaskLogicAsync(IAlbumDownloader downloader, MusicInfo info)
