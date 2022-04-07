@@ -16,9 +16,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
     {
         protected readonly IEnumerable<ITagInfoProvider> TagInfoProviders;
         protected readonly IBlockWordDictionary BlockWordDictionary;
-        protected readonly ILogger<DefaultTagLoader> _logger;
+        protected readonly ILogger<DefaultTagLoader> Logger;
 
         protected ToolOptions Options;
+        
+        private readonly IEnumerable<ITagInfoProvider> _sortedTagInfoProviders;
 
         public DefaultTagLoader(IEnumerable<ITagInfoProvider> tagInfoProviders,
             IBlockWordDictionary blockWordDictionary,
@@ -27,18 +29,15 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         {
             TagInfoProviders = tagInfoProviders;
             BlockWordDictionary = blockWordDictionary;
-            _logger = logger;
+            Logger = logger;
             Options = options.Value;
+
+            _sortedTagInfoProviders = GetTagInfoProviders();
         }
 
         public virtual async ValueTask<MusicInfo> LoadTagAsync(string filePath)
         {
-            if (!TagInfoProviders.Any())
-            {
-                throw new ErrorCodeException(ErrorCodes.LoadTagInfoProviderError);
-            }
-
-            foreach (var provider in TagInfoProviders)
+            foreach (var provider in _sortedTagInfoProviders)
             {
                 var info = await provider.LoadAsync(filePath);
                 if (info != null)
@@ -48,9 +47,22 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
                 }
             }
 
-            _logger.LogWarning($"{filePath} 没有找到正确的标签信息，请考虑调整正则表达式。");
+            Logger.LogWarning($"{filePath} 没有找到正确的标签信息，请考虑调整正则表达式。");
 
             return null;
+        }
+
+        private IEnumerable<ITagInfoProvider> GetTagInfoProviders()
+        {
+            if (!TagInfoProviders.Any())
+            {
+                throw new ErrorCodeException(ErrorCodes.LoadTagInfoProviderError);
+            }
+            
+            return Options.Provider.Tag.Plugin
+                .Where(x => x.Priority != -1)
+                .OrderBy(x => x.Priority)
+                .Join(TagInfoProviders,x=>x.Name,y=>y.Name,(x,y)=>y);
         }
 
         protected void HandleBlockWord(MusicInfo info)
