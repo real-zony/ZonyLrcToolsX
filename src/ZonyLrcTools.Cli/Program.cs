@@ -92,7 +92,7 @@ namespace ZonyLrcTools.Cli
             switch (ex)
             {
                 case ErrorCodeException exception:
-                    Log.Logger.Error($"出现了未处理的异常，错误代码: {exception.ErrorCode}，错误信息: {ErrorCodeHelper.GetMessage(exception.ErrorCode)}\n调用栈:\n{exception.StackTrace}");
+                    Log.Logger.Error($"出现了未处理的异常。\n错误代码: {exception.ErrorCode}\n错误信息: {ErrorCodeHelper.GetMessage(exception.ErrorCode)}\n原始信息:{exception.Message}\n调用栈:{exception.StackTrace}");
                     Environment.Exit(exception.ErrorCode);
                     return exception.ErrorCode;
                 case { } unknownException:
