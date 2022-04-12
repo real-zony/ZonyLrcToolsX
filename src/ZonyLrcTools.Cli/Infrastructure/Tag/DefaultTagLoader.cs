@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         protected readonly ILogger<DefaultTagLoader> Logger;
 
         protected ToolOptions Options;
-        
+
         private readonly IEnumerable<ITagInfoProvider> _sortedTagInfoProviders;
 
         public DefaultTagLoader(IEnumerable<ITagInfoProvider> tagInfoProviders,
@@ -39,16 +40,22 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         {
             foreach (var provider in _sortedTagInfoProviders)
             {
-                var info = await provider.LoadAsync(filePath);
-                if (info != null)
+                try
                 {
-                    HandleBlockWord(info);
-                    return info;
+                    var info = await provider.LoadAsync(filePath);
+                    if (info != null)
+                    {
+                        HandleBlockWord(info);
+                        return info;
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignored
                 }
             }
 
             Logger.LogWarning($"{filePath} 没有找到正确的标签信息，请考虑调整正则表达式。");
-
             return null;
         }
 
@@ -58,11 +65,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
             {
                 throw new ErrorCodeException(ErrorCodes.LoadTagInfoProviderError);
             }
-            
+
             return Options.Provider.Tag.Plugin
                 .Where(x => x.Priority != -1)
                 .OrderBy(x => x.Priority)
-                .Join(TagInfoProviders,x=>x.Name,y=>y.Name,(x,y)=>y);
+                .Join(TagInfoProviders, x => x.Name, y => y.Name, (x, y) => y);
         }
 
         protected void HandleBlockWord(MusicInfo info)
