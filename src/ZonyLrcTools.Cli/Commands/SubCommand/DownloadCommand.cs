@@ -92,9 +92,32 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 throw new ErrorCodeException(ErrorCodes.NoFilesWereScanned);
             }
 
+            files = RemoveExistLyricFiles(files);
+
             _logger.LogInformation($"已经扫描到了 {files.Count} 个音乐文件。");
 
             return files;
+        }
+
+        private List<string> RemoveExistLyricFiles(List<string> filePaths)
+        {
+            if (!_options.Provider.Lyric.Config.IsSkipExistLyricFiles)
+            {
+                return filePaths;
+            }
+
+            return filePaths
+                .Where(path =>
+                {
+                    if (!File.Exists(Path.ChangeExtension(path, ".lrc")))
+                    {
+                        return true;
+                    }
+
+                    _logger.LogWarning($"已经存在歌词文件 {path}，跳过。");
+                    return false;
+                })
+                .ToList();
         }
 
         private async Task<ImmutableList<MusicInfo>> LoadMusicInfoAsync(IReadOnlyCollection<string> files)
@@ -125,7 +148,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             return downloader;
         }
 
-        #region > 歌词下载逻辑 <
+        #region > Lyric download logic <
 
         private async ValueTask DownloadLyricFilesAsync(ImmutableList<MusicInfo> musicInfos)
         {
@@ -150,10 +173,12 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 try
                 {
                     var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
-                    var filePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!, $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
-                    if (File.Exists(filePath))
+                    var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
+                        $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
+
+                    if (File.Exists(lyricFilePath))
                     {
-                        return true;
+                        File.Delete(lyricFilePath);
                     }
 
                     if (lyric.IsPruneMusic)
@@ -161,7 +186,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                         return true;
                     }
 
-                    await using var stream = new FileStream(filePath, FileMode.Create);
+                    await using var stream = new FileStream(lyricFilePath, FileMode.Create);
                     await using var sw = new StreamWriter(stream);
                     await sw.WriteAsync(lyric.ToString());
                     await sw.FlushAsync();
@@ -195,7 +220,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         #endregion
 
-        #region > 专辑图像下载逻辑 <
+        #region > Ablum image download logic <
 
         private async ValueTask DownloadAlbumAsync(ImmutableList<MusicInfo> musicInfos)
         {

@@ -34,7 +34,7 @@ globalOption:
       # 支持的歌词下载器。
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
-          priority: 1     # 优先级，升序排列。
+          priority: 1     # 优先级，升序排列，改为 -1 时禁用。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
@@ -43,4 +43,5 @@ globalOption:
       config:
         isOneLine: true             # 双语歌词是否合并为一行展示。
         lineBreak: "\n"             # 换行符的类型，记得使用双引号指定。
-        isEnableTranslation: true  # 是否启用翻译歌词。
+        isEnableTranslation: true   # 是否启用翻译歌词。
+        isSkipExistLyricFiles: false # 如果歌词文件已经存在，是否跳过这些文件。
