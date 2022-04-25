@@ -59,7 +59,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             await ValueTask.CompletedTask;
 
             var json = JsonConvert.DeserializeObject<GetLyricResponse>(Encoding.UTF8.GetString(data));
-            if (json?.OriginalLyric == null)
+            if (json?.OriginalLyric == null || string.IsNullOrEmpty(json.OriginalLyric.Text))
             {
                 return new LyricItemCollection(null);
             }
