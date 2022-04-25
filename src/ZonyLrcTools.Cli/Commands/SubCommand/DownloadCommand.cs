@@ -166,10 +166,8 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         private async Task DownloadLyricTaskLogicAsync(IEnumerable<ILyricDownloader> downloaderList, MusicInfo info)
         {
-            async Task<bool> InternalDownloadLogicAsync(ILyricDownloader downloader)
+            async Task InternalDownloadLogicAsync(ILyricDownloader downloader)
             {
-                _logger.LogMusicInfoWithInformation(info);
-
                 try
                 {
                     var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
@@ -183,7 +181,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
                     if (lyric.IsPruneMusic)
                     {
-                        return true;
+                        info.IsSuccessful = true;
                     }
 
                     await using var stream = new FileStream(lyricFilePath, FileMode.Create);
@@ -195,7 +193,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 {
                     if (ex.ErrorCode == ErrorCodes.NoMatchingSong)
                     {
-                        return false;
+                        info.IsSuccessful = false;
                     }
 
                     _logger.LogWarningInfo(ex);
@@ -205,15 +203,20 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                     _logger.LogError($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
                     info.IsSuccessful = false;
                 }
-
-                return true;
+                finally
+                {
+                    info.IsSuccessful = true;
+                }
             }
 
             foreach (var downloader in downloaderList)
             {
-                if (await InternalDownloadLogicAsync(downloader))
+                await InternalDownloadLogicAsync(downloader);
+
+                if (info.IsSuccessful)
                 {
-                    break;
+                    _logger.LogSuccessful(info);
+                    return;
                 }
             }
         }
@@ -238,7 +241,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         private async Task DownloadAlbumTaskLogicAsync(IAlbumDownloader downloader, MusicInfo info)
         {
-            _logger.LogMusicInfoWithInformation(info);
+            _logger.LogSuccessful(info);
 
             try
             {

@@ -41,13 +41,13 @@ namespace ZonyLrcTools.Cli.Infrastructure.Extensions
         }
 
         /// <summary>
-        /// 使用 <see cref="LogLevel.Information"/> 级别打印歌曲信息。
+        /// 使用 <see cref="LogLevel.Information"/> 级别打印歌曲下载成功信息。
         /// </summary>
         /// <param name="logger">日志记录器的实例。</param>
         /// <param name="musicInfo">需要打印的歌曲信息。</param>
-        public static void LogMusicInfoWithInformation(this ILogger logger, MusicInfo musicInfo)
+        public static void LogSuccessful(this ILogger logger, MusicInfo musicInfo)
         {
-            logger.LogInformation($"歌曲名: {musicInfo.Name}, 艺术家: {musicInfo.Artist}, 歌曲路径: {musicInfo.FilePath}");
+            logger.LogInformation($"歌曲名: {musicInfo.Name}, 艺术家: {musicInfo.Artist}, 下载成功.");
         }
     }
 }
