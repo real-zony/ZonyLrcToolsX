@@ -12,6 +12,10 @@ ZonyLrcToolX 4 是一个基于 CEF 的跨平台歌词下载工具。
 🚧 当前版本正在开发当中。  
 🚧 如果你想查看可以工作的代码，请切换到 dev 分支。
 
+## 下载
+
+工具会执行每日构建动作，请访问 **[Release](https://github.com/real-zony/ZonyLrcToolsX/releases)** 页面进行下载。
+
 ## 用法
 
 Windows 用户请在软件目录当中，按住 Shift + 右键呼出菜单，然后选择 PowerShell/命令提示符/Windows 终端，根据下述说明执行命令即可。
@@ -90,16 +94,17 @@ globalOption:
       # 支持的歌词下载器。
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
-          priority: 1     # 优先级，升序排列。
+          priority: 1     # 优先级，升序排列，改为 -1 时禁用。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
           priority: 3
       # 歌词下载的一些共有配置参数。
       config:
-        isOneLine: true             # 双语歌词是否合并为一行展示。
-        lineBreak: '\n'             # 换行符的类型。
-        isEnableTranslation: false  # 是否启用翻译歌词。
+        isOneLine: true               # 双语歌词是否合并为一行展示。
+        lineBreak: "\n"               # 换行符的类型，记得使用双引号指定。
+        isEnableTranslation: true     # 是否启用翻译歌词。
+        isSkipExistLyricFiles: false  # 如果歌词文件已经存在，是否跳过这些文件。
 ```
 
 ### 屏蔽字典
