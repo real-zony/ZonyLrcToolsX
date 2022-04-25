@@ -7,10 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Commands.SubCommand;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Cli.Infrastructure.Logging;
 
 namespace ZonyLrcTools.Cli
 {
@@ -53,7 +55,7 @@ namespace ZonyLrcTools.Cli
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Error)
                 .Enrich.FromLogContext()
-                .WriteTo.Async(c => c.Console())
+                .WriteTo.Async(c => c.Console(theme: CustomConsoleTheme.Code))
                 .WriteTo.Logger(lc =>
                 {
                     lc.Filter.ByIncludingOnly(lc => lc.Level == LogEventLevel.Warning)
