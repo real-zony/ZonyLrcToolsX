@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C29FB05C-54B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF8ADB2F-E46C-4DEE-8316-652D9FE1A69B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ui", "ui", "{D6E0DAF5-8171-44C0-817E-2FF9CF574E4F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools.Cli", "src\ZonyLrcTools.Cli\ZonyLrcTools.Cli.csproj", "{55D74323-ABFA-4A73-A3BF-F3E8D5DE6DE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools.Tests", "tests\ZonyLrcTools.Tests\ZonyLrcTools.Tests.csproj", "{FFBD3200-568F-455B-8390-5E76C51D522C}"
