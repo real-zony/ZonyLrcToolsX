@@ -161,7 +161,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
             await Task.WhenAll(warpTaskList);
 
-            _logger.LogInformation($"歌词数据下载完成，成功: {musicInfos.Count} 失败{0}。");
+            _logger.LogInformation($"歌词数据下载完成，成功: {musicInfos.Count} 失败{musicInfos.Count - musicInfos.Count(m => m.IsSuccessful)}。");
         }
 
         private async Task DownloadLyricTaskLogicAsync(IEnumerable<ILyricDownloader> downloaderList, MusicInfo info)
