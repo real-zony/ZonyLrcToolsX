@@ -43,7 +43,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
                 try
                 {
                     var info = await provider.LoadAsync(filePath);
-                    if (info != null)
+                    if (info != null && !string.IsNullOrEmpty(info.Name))
                     {
                         HandleBlockWord(info);
                         return info;
