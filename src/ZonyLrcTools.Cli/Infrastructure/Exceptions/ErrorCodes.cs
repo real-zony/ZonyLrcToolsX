@@ -27,6 +27,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Exceptions
         /// </summary>
         public const int NoFilesWereScanned = 10004;
 
+        /// <summary>
+        /// 文本: 指定的编码不受支持，请检查配置，所有受支持的编码名称。
+        /// </summary>
+        public const int NotSupportedFileEncoding = 10005;
+
         #endregion
 
         #region > 警告信息 <

@@ -31,4 +31,9 @@ public class LyricConfigOption
     /// 如果歌词文件已经存在，是否跳过这些文件
     /// </summary>
     public bool IsSkipExistLyricFiles { get; set; } = false;
+
+    /// <summary>
+    /// 歌词文件的编码格式。
+    /// </summary>
+    public string FileEncoding { get; set; } = "utf-8";
 }

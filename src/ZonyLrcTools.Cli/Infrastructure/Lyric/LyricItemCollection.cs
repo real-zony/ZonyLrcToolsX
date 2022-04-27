@@ -107,5 +107,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             ForEach(lyric => lyricBuilder.Append(lyric).Append(Option.LineBreak));
             return lyricBuilder.ToString().TrimEnd(Option.LineBreak);
         }
+
+        public byte[] GetUtf8Bytes()
+        {
+            return Encoding.UTF8.GetBytes(ToString());
+        }
     }
 }

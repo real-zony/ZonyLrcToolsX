@@ -45,3 +45,4 @@ globalOption:
         lineBreak: "\n"               # 换行符的类型，记得使用双引号指定。
         isEnableTranslation: true     # 是否启用翻译歌词。
         isSkipExistLyricFiles: false  # 如果歌词文件已经存在，是否跳过这些文件。
+        fileEncoding: 'utf-8'         # 歌词文件的编码格式。

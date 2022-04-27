@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
@@ -185,9 +186,10 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                     }
 
                     await using var stream = new FileStream(lyricFilePath, FileMode.Create);
-                    await using var sw = new StreamWriter(stream);
-                    await sw.WriteAsync(lyric.ToString());
-                    await sw.FlushAsync();
+                    await using var sw = new BinaryWriter(stream);
+
+                    sw.Write(EncodingConvert(lyric));
+                    await stream.FlushAsync();
                 }
                 catch (ErrorCodeException ex)
                 {
@@ -219,6 +221,17 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                     return;
                 }
             }
+        }
+
+        private byte[] EncodingConvert(LyricItemCollection lyric)
+        {
+            var supportEncodings = Encoding.GetEncodings();
+            if (supportEncodings.All(x => x.Name != _options.Provider.Lyric.Config.FileEncoding))
+            {
+                throw new ErrorCodeException(ErrorCodes.NotSupportedFileEncoding);
+            }
+
+            return Encoding.Convert(Encoding.UTF8, Encoding.GetEncoding(_options.Provider.Lyric.Config.FileEncoding), lyric.GetUtf8Bytes());
         }
 
         #endregion
