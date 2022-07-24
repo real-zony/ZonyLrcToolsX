@@ -69,5 +69,13 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 
             lyric.ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task UnknownIssue_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("主題歌Arrietty's Song", "Cécile Corbel");
+
+            lyric.ShouldNotBeNull();
+        }
     }
 }

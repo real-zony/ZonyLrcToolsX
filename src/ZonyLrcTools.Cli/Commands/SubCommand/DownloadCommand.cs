@@ -50,7 +50,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         [Option("-d|--dir", CommandOptionType.SingleValue, Description = "指定需要扫描的目录。")]
         [DirectoryExists]
-        public string Directory { get; set; }
+        public string SongsDirectory { get; set; }
 
         [Option("-l|--lyric", CommandOptionType.NoValue, Description = "指定程序需要下载歌词文件。")]
         public bool DownloadLyric { get; set; }
@@ -60,6 +60,8 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         [Option("-n|--number", CommandOptionType.SingleValue, Description = "指定下载时候的线程数量。(默认值 2)")]
         public int ParallelNumber { get; set; } = 2;
+
+        [Option] public string ErrorMessage { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "error.log");
 
         #endregion
 
@@ -83,7 +85,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         private async Task<List<string>> ScanMusicFilesAsync()
         {
-            var files = (await _fileScanner.ScanAsync(Directory, _options.SupportFileExtensions))
+            var files = (await _fileScanner.ScanAsync(SongsDirectory, _options.SupportFileExtensions))
                 .SelectMany(t => t.FilePaths)
                 .ToList();
 
@@ -180,9 +182,11 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                         File.Delete(lyricFilePath);
                     }
 
+                    info.IsSuccessful = true;
+
                     if (lyric.IsPruneMusic)
                     {
-                        info.IsSuccessful = true;
+                        return;
                     }
 
                     await using var stream = new FileStream(lyricFilePath, FileMode.Create);
@@ -204,10 +208,6 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 {
                     _logger.LogError($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
                     info.IsSuccessful = false;
-                }
-                finally
-                {
-                    info.IsSuccessful = true;
                 }
             }
 
