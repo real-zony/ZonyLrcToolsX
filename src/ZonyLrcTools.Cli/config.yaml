@@ -34,11 +34,11 @@ globalOption:
       # 支持的歌词下载器。
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
-          priority: -1     # 优先级，升序排列，改为 -1 时禁用。
+          priority: 1     # 优先级，升序排列，改为 -1 时禁用。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
-          priority: -1
+          priority: 3
       # 歌词下载的一些共有配置参数。
       config:
         isOneLine: true               # 双语歌词是否合并为一行展示。
