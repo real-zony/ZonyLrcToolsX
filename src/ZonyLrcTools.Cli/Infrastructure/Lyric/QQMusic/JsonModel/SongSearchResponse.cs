@@ -17,11 +17,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic.JsonModel
 
     public class QQMusicInnerSongModel
     {
-        [JsonProperty("list")] public List<QQMusicInnerSongItem> SongItems { get; set; }
+        [JsonProperty("itemlist")] public List<QQMusicInnerSongItem> SongItems { get; set; }
     }
 
     public class QQMusicInnerSongItem
     {
-        [JsonProperty("songmid")] public string SongId { get; set; }
+        [JsonProperty("mid")] public string SongId { get; set; }
     }
 }

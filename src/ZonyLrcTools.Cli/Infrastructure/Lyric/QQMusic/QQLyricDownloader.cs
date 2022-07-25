@@ -17,7 +17,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
 
-        private const string QQSearchMusicUrl = @"https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
+        // private const string QQSearchMusicUrl = @"https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
+        private const string QQSearchMusicUrl = @"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg";
         private const string QQGetLyricUrl = @"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg";
 
         private const string QQMusicRequestReferer = @"https://y.qq.com/";
