@@ -4,7 +4,7 @@ on:
   push:
     branches: [ dev ]
     paths:
-      - "versions"
+      - "versions/**"
   pull_request:
     branches: [ dev ]
 
