@@ -24,6 +24,7 @@ jobs:
     - name: Publish
       working-directory: ./src/ZonyLrcTools.Cli
       run: |
+        ls -a
         chmod +x ./publish.sh
         ./publish.sh
       shell: bash

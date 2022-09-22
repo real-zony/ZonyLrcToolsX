@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "${VERSION}"
 Platforms=('win-x64' 'linux-x64' 'osx-x64')
 
 if ! [ -d './TempFiles' ];
