@@ -19,8 +19,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    # - name: Restore dependencies
-    #   run: dotnet restore
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Publish
       working-directory: ./src/ZonyLrcTools.Cli
       run: |
@@ -29,6 +29,8 @@ jobs:
       shell: bash
       env:
         VERSION: ${{ steps.date.outputs.date }}
+    - name: ls
+      run: ls -a
     # - name: Upload Release
     #   uses: ncipollo/release-action@v1
     #   with:
