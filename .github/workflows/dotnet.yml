@@ -29,7 +29,7 @@ jobs:
         ./publish.sh
       shell: bash
       env:
-        VERSION: ${{ steps.date.outputs.date }}
+        PUBLISH_VERSION: ${{ steps.date.outputs.date }}
     - name: ls
       run: ls -a
     # - name: Upload Release
