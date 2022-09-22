@@ -31,12 +31,10 @@ jobs:
       shell: bash
       env:
         PUBLISH_VERSION: ${{ steps.date.outputs.date }}
-    - name: ls
-      run: ls -a
-    # - name: Upload Release
-    #   uses: ncipollo/release-action@v1
-    #   with:
-    #     artifacts: "*.zip"
-    #     token: ${{ secrets.GITHUBACTIONS }}
-    #     tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
-    #     commit: dev
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./TempFiles/*.zip"
+        token: ${{ secrets.GITHUBACTIONS }}
+        tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
+        commit: dev
