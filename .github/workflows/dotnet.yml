@@ -12,10 +12,7 @@ jobs:
     steps:
     - name: Get build version
       id: date
-      run: | 
-        echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
-      env:
-        VERSION: ${{ steps.date.outputs.date }}
+      run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
     - name: Checkout Code
       uses: actions/checkout@v3
     - name: Setup .NET
@@ -30,6 +27,8 @@ jobs:
         chmod +x ./publish.sh
         ./publish.sh
       shell: bash
+      env:
+        VERSION: ${{ steps.date.outputs.date }}
     # - name: Upload Release
     #   uses: ncipollo/release-action@v1
     #   with:
