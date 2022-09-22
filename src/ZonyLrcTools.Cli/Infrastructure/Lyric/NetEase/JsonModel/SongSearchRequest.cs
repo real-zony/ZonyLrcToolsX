@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 
@@ -53,6 +54,10 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
 
         public SongSearchRequest(string musicName, string artistName) : this()
         {
+            // Remove all the brackets and the content inside them.
+            var regex = new Regex(@"\([^)]*\)");
+            musicName = regex.Replace(musicName, string.Empty);
+
             SearchKey = HttpUtility.UrlEncode($"{musicName}+{artistName}", Encoding.UTF8);
         }
     }

@@ -39,7 +39,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         {
             var lyric = await _lyricDownloader.DownloadAsync("シンデレラ (Giga First Night Remix)", "DECO 27 ギガP");
             lyric.ShouldNotBeNull();
-            lyric.IsPruneMusic.ShouldBe(true);
+            lyric.IsPruneMusic.ShouldBe(false);
         }
 
         [Fact]
