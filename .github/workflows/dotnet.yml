@@ -12,7 +12,10 @@ jobs:
     steps:
     - name: Get build version
       id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
+      run: | 
+        echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
+      env:
+        VERSION: ${{ steps.date.outputs.date }}
     - name: Checkout Code
       uses: actions/checkout@v3
     - name: Setup .NET
