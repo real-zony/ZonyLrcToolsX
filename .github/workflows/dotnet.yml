@@ -33,6 +33,20 @@ jobs:
       shell: bash
       env:
         PUBLISH_VERSION: ${{ steps.date.outputs.date }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-files
+        path: ./TempFiles
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: release-files
+        path: ./TempFiles
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
