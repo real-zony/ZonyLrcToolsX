@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "$github.run_number"
+echo "${steps.date.outputs.date}"
 # Platforms=('win-x64' 'linux-x64' 'osx-x64')
 
 # if ! [ -d './TempFiles' ];
