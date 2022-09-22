@@ -11,24 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get build version
+      run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
       run: |
-        echo "::set-output name=date::$(date +'%Y%m%d')"
-        echo "${{github.run_number}}"
-    # - name: Checkout Code
-    #   uses: actions/checkout@v3
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v2
-    #   with:
-    #     dotnet-version: 6.0.x
-    # - name: Restore dependencies
-    #   run: dotnet restore
-    # - name: Build
-    #   run: |
-    #     cd ./src/ZonyLrcTools.Cli
-    #     dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
-    # - name: Zip Files
-    #   uses: thedoctor0/zip-release@main
-    #   with:
-    #     type: 'zip'
-    #     path: './bin/Release/net6.0/win-x64/publish'
-    #     filename: ''
+        cd ./src/ZonyLrcTools.Cli
+        dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
+    - name: Zip Files
+      uses: thedoctor0/zip-release@main
+      with:
+        type: 'zip'
+        path: './bin/Release/net6.0/win-x64/publish'
+        filename: '${{ steps.date.outputs.date }}.zip'
+    - name: echo
+      run: | 
+        cd "./bin/Release/net6.0/win-x64/publish"
+        ls -a
