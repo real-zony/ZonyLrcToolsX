@@ -37,7 +37,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: release-files
-        path: ./TempFiles
+        path: |
+          ./TempFiles
+          ./versions/release.md
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -54,4 +56,4 @@ jobs:
         token: ${{ secrets.GITHUBACTIONS }}
         tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
         commit: dev
-        bodyFile: versions/release.md
+        bodyFile: ./TempFiles/release.md
