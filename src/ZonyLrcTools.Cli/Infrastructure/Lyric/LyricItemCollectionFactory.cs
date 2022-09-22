@@ -43,6 +43,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
             if (_options.Provider.Lyric.Config.IsEnableTranslation && !string.IsNullOrEmpty(translationLyric))
             {
                 var translatedLyric = InternalBuildLyricObject(new LyricItemCollection(_options.Provider.Lyric.Config), translationLyric);
+                if (_options.Provider.Lyric.Config.IsOnlyOutputTranslation)
+                {
+                    return translatedLyric;
+                }
+
                 return lyric + translatedLyric;
             }
 

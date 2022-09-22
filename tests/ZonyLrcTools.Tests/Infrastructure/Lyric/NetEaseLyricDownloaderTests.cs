@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
+using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyric
@@ -83,6 +86,16 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         {
             var lyric = await _lyricDownloader.DownloadAsync("君への嘘", "VALSHE");
             lyric.ShouldNotBeEmpty();
+        }
+
+        [Fact]
+        public async Task DownloadAsync_Issue114_Test()
+        {
+            var options = ServiceProvider.GetRequiredService<IOptions<ToolOptions>>();
+            options.Value.Provider.Lyric.Config.IsOnlyOutputTranslation = true;
+            
+            var lyric = await _lyricDownloader.DownloadAsync("Bones", "Image Dragons");
+            lyric.ToString().ShouldNotContain("Gimme, gimme, gimme some time to think");
         }
     }
 }

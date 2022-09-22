@@ -36,4 +36,9 @@ public class LyricConfigOption
     /// 歌词文件的编码格式。
     /// </summary>
     public string FileEncoding { get; set; } = "utf-8";
+
+    /// <summary>
+    /// 是否只输出翻译歌词。
+    /// </summary>
+    public bool IsOnlyOutputTranslation { get; set; } = false;
 }
