@@ -19,36 +19,15 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: |
-        cd ./src/ZonyLrcTools.Cli
-        dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
-        dotnet publish -r linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
-        dotnet publish -r osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
-    - name: Zip files for win-x64
-      uses: thedoctor0/zip-release@main
-      with:
-        type: 'zip'
-        path: './src/ZonyLrcTools.Cli/bin/Release/net6.0/win-x64/publish'
-        filename: 'ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}_win-x64.zip'
-    - name: Zip files for linux-x64
-      uses: thedoctor0/zip-release@main
-      with:
-        type: 'zip'
-        path: './src/ZonyLrcTools.Cli/bin/Release/net6.0/linux-x64/publish'
-        filename: 'ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}_linux-x64.zip'
-    - name: Zip files for osx-x64
-      uses: thedoctor0/zip-release@main
-      with:
-        type: 'zip'
-        path: './src/ZonyLrcTools.Cli/bin/Release/net6.0/osx-x64/publish'
-        filename: 'ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}_osx-x64.zip'
-    - name: Upload Release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "*.zip"
-        token: ${{ secrets.GITHUBACTIONS }}
-        tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
-        commit: dev
+    # - name: Restore dependencies
+    #   run: dotnet restore
+    - name: Publish
+      working-directory: ./src/ZonyLrcTools.Cli
+      run: publish.sh
+    # - name: Upload Release
+    #   uses: ncipollo/release-action@v1
+    #   with:
+    #     artifacts: "*.zip"
+    #     token: ${{ secrets.GITHUBACTIONS }}
+    #     tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
+    #     commit: dev
