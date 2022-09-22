@@ -49,11 +49,15 @@ jobs:
       with:
         name: release-files
         path: ./TempFiles
-    - name: Upload Release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "./TempFiles/*.zip"
-        token: ${{ secrets.GITHUBACTIONS }}
-        tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
-        commit: dev
-        bodyFile: ./TempFiles/release.md
+    - name: echo
+      run: |
+        ls -a
+        ls -a ./TempFiles
+#    - name: Upload Release
+#      uses: ncipollo/release-action@v1
+#      with:
+#        artifacts: "./TempFiles/*.zip"
+#        token: ${{ secrets.GITHUBACTIONS }}
+#        tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
+#        commit: dev
+#        bodyFile: ./TempFiles/release.md
