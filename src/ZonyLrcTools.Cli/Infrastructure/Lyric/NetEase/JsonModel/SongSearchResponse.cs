@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -10,10 +11,20 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
 
         [JsonProperty("code")] public int StatusCode { get; set; }
 
-        public int GetFirstMatchSongId(string songName)
+        public int GetFirstMatchSongId(string songName, long? duration)
         {
-            var item = Items.SongItems.FirstOrDefault(x => x.Name == songName);
-            return item?.Id ?? Items.SongItems[0].Id;
+            var perfectMatch = Items.SongItems.FirstOrDefault(x => x.Name == songName);
+            if (perfectMatch != null)
+            {
+                return perfectMatch.Id;
+            }
+
+            if (duration is null or 0)
+            {
+                return Items.SongItems.First().Id;
+            }
+
+            return Items.SongItems.OrderBy(t => Math.Abs(t.Duration - duration.Value)).First().Id;
         }
     }
 
@@ -49,6 +60,12 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
         /// </summary>
         [JsonProperty("album")]
         public SongAlbumModel Album { get; set; }
+
+        /// <summary>
+        /// 歌曲的实际长度。
+        /// </summary>
+        [JsonProperty("duration")]
+        public long Duration { get; set; }
     }
 
     public class SongArtistModel

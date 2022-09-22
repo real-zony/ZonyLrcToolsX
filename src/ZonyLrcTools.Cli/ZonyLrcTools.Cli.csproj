@@ -10,6 +10,7 @@
       <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="4.0.1" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+      <PackageReference Include="NAudio" Version="2.1.0" />
       <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Refit" Version="6.3.2" />

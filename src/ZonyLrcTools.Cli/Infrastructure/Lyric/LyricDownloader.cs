@@ -16,10 +16,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         /// </summary>
         /// <param name="songName">歌曲名称。</param>
         /// <param name="artist">歌曲作者/艺术家。</param>
+        /// <param name="duration">歌曲的时长。</param>
         /// <returns>下载完成的歌曲数据。</returns>
-        public virtual async ValueTask<LyricItemCollection> DownloadAsync(string songName, string artist)
+        public virtual async ValueTask<LyricItemCollection> DownloadAsync(string songName, string artist, long? duration = null)
         {
-            var args = new LyricDownloaderArgs(songName, artist);
+            var args = new LyricDownloaderArgs(songName, artist, duration ?? 0);
             await ValidateAsync(args);
             var downloadDataBytes = await DownloadDataAsync(args);
             return await GenerateLyricAsync(downloadDataBytes, args);

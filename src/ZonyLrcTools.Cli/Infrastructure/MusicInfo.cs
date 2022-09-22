@@ -1,3 +1,5 @@
+using System;
+
 namespace ZonyLrcTools.Cli.Infrastructure
 {
     /// <summary>
@@ -9,6 +11,11 @@ namespace ZonyLrcTools.Cli.Infrastructure
         /// 歌曲对应的物理文件路径。
         /// </summary>
         public string FilePath { get; }
+
+        /// <summary>
+        /// 歌曲的实际歌曲长度。
+        /// </summary>
+        public long? TotalTime { get; set; }
 
         /// <summary>
         /// 歌曲的名称。

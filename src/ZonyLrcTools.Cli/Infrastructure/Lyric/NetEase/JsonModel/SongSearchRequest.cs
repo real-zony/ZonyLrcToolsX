@@ -49,7 +49,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
             Type = 1;
             Offset = 0;
             IsTotal = true;
-            Limit = 5;
+            Limit = 10;
         }
 
         public SongSearchRequest(string musicName, string artistName) : this()

@@ -48,7 +48,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 
             var lyricResponse = await _warpHttpClient.GetAsync(
                 NetEaseGetLyricUrl,
-                new GetLyricRequest(searchResult.GetFirstMatchSongId(args.SongName)),
+                new GetLyricRequest(searchResult.GetFirstMatchSongId(args.SongName, args.Duration)),
                 msg => msg.Headers.Referrer = new Uri(NetEaseRequestReferer));
 
             return Encoding.UTF8.GetBytes(lyricResponse);

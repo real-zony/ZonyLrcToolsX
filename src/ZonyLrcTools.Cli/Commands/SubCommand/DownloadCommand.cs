@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NAudio.Wave;
+using TagLib.Mpeg;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure;
 using ZonyLrcTools.Cli.Infrastructure.Album;
@@ -17,6 +19,7 @@ using ZonyLrcTools.Cli.Infrastructure.IO;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Cli.Infrastructure.Threading;
+using File = System.IO.File;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand
 {
@@ -131,7 +134,11 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             var warpTaskList = files.Select(file => warpTask.RunAsync(() => Task.Run(async () => await _tagLoader.LoadTagAsync(file))));
             var result = (await Task.WhenAll(warpTaskList))
                 .Where(m => m != null)
-                .Where(m => !string.IsNullOrEmpty(m.Name) || !string.IsNullOrEmpty(m.Artist));
+                .Where(m => !string.IsNullOrEmpty(m.Name) || !string.IsNullOrEmpty(m.Artist))
+                .ToList();
+
+            // Load music total time info.
+            result.Foreach(m => { m.TotalTime = (long?)new AudioFileReader(m.FilePath).TotalTime.TotalMilliseconds; });
 
             _logger.LogInformation($"已成功加载 {files.Count} 个音乐文件的标签信息。");
 
@@ -173,7 +180,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             {
                 try
                 {
-                    var lyric = await downloader.DownloadAsync(info.Name, info.Artist);
+                    var lyric = await downloader.DownloadAsync(info.Name, info.Artist, info.TotalTime);
                     var lyricFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
                         $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
 
