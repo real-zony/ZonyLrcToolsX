@@ -3,6 +3,8 @@ name: .NET
 on:
   push:
     branches: [ dev ]
+    paths:
+      - "versions"
   pull_request:
     branches: [ dev ]
 
@@ -38,3 +40,4 @@ jobs:
         token: ${{ secrets.GITHUBACTIONS }}
         tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
         commit: dev
+        bodyFile: versions/release.md
