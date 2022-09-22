@@ -1,5 +1,4 @@
-﻿using ZonyLrcTools.Cli.Infrastructure.Lyric;
-using ZonyLrcTools.Cli.Infrastructure.Tag;
+﻿using ZonyLrcTools.Cli.Infrastructure.Tag;
 
 namespace ZonyLrcTools.Cli.Config;
 

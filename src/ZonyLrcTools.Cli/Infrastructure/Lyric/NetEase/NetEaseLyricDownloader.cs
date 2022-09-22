@@ -2,7 +2,9 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel;
 using ZonyLrcTools.Cli.Infrastructure.Network;
@@ -15,6 +17,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
+        private readonly ToolOptions _options;
 
         private const string NetEaseSearchMusicUrl = @"https://music.163.com/api/search/get/web";
         private const string NetEaseGetLyricUrl = @"https://music.163.com/api/song/lyric";
@@ -23,17 +26,19 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
         private const string NetEaseRequestContentType = @"application/x-www-form-urlencoded";
 
         public NetEaseLyricDownloader(IWarpHttpClient warpHttpClient,
-            ILyricItemCollectionFactory lyricItemCollectionFactory)
+            ILyricItemCollectionFactory lyricItemCollectionFactory,
+            IOptions<ToolOptions> options)
         {
             _warpHttpClient = warpHttpClient;
             _lyricItemCollectionFactory = lyricItemCollectionFactory;
+            _options = options.Value;
         }
 
         protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
         {
             var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(
                 NetEaseSearchMusicUrl,
-                new SongSearchRequest(args.SongName, args.Artist),
+                new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth),
                 true,
                 msg =>
                 {

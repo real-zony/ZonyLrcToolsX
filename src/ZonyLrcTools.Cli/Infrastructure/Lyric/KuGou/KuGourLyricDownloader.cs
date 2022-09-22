@@ -1,7 +1,9 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou.JsonModel;
 using ZonyLrcTools.Cli.Infrastructure.Network;
@@ -14,22 +16,25 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou
 
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
+        private readonly ToolOptions _options;
 
         private const string KuGouSearchMusicUrl = @"https://songsearch.kugou.com/song_search_v2";
         private const string KuGouGetLyricAccessKeyUrl = @"http://lyrics.kugou.com/search";
         private const string KuGouGetLyricUrl = @"http://lyrics.kugou.com/download";
 
         public KuGourLyricDownloader(IWarpHttpClient warpHttpClient,
-            ILyricItemCollectionFactory lyricItemCollectionFactory)
+            ILyricItemCollectionFactory lyricItemCollectionFactory,
+            IOptions<ToolOptions> options)
         {
             _warpHttpClient = warpHttpClient;
             _lyricItemCollectionFactory = lyricItemCollectionFactory;
+            _options = options.Value;
         }
 
         protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
         {
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(KuGouSearchMusicUrl,
-                new SongSearchRequest(args.SongName, args.Artist));
+                new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth));
 
             ValidateSongSearchResponse(searchResult, args);
 

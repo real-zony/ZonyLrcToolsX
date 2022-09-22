@@ -35,10 +35,13 @@ globalOption:
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
           priority: 1     # 优先级，升序排列，改为 -1 时禁用。
+          depth: 30       # 搜索深度，值越大搜索结果越多，但搜索时间越长。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
+          # depth: 10       # 暂时不支持。
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
           priority: 3
+          depth: 10
       # 歌词下载的一些共有配置参数。
       config:
         isOneLine: true                 # 双语歌词是否合并为一行展示。

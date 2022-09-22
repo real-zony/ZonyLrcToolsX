@@ -12,11 +12,17 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou.JsonModel
 
         [JsonProperty("keyword")] public string Keyword { get; }
 
-        public SongSearchRequest(string musicName, string artistName)
+        [JsonProperty("pagesize")] public int PageSize { get; }
+
+        [JsonProperty("page")] public int Page { get; }
+
+        public SongSearchRequest(string musicName, string artistName, int pageSize = 30)
         {
             Filter = 2;
             Platform = "WebFilter";
             Keyword = HttpUtility.UrlEncode($"{musicName}+{artistName}", Encoding.UTF8);
+            PageSize = pageSize;
+            Page = 1;
         }
     }
 }

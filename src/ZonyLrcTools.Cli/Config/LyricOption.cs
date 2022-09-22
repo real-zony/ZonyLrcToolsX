@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 
 namespace ZonyLrcTools.Cli.Config;
@@ -8,6 +9,11 @@ public class LyricOption
     public IEnumerable<LyricProviderOption> Plugin { get; set; }
 
     public LyricConfigOption Config { get; set; }
+
+    public LyricProviderOption GetLyricProviderOption(string name)
+    {
+        return Plugin.FirstOrDefault(x => x.Name == name);
+    }
 }
 
 public class LyricConfigOption

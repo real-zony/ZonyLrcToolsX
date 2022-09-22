@@ -9,7 +9,6 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NAudio.Wave;
-using TagLib.Mpeg;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure;
 using ZonyLrcTools.Cli.Infrastructure.Album;

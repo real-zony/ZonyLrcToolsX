@@ -54,13 +54,14 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
             Limit = 10;
         }
 
-        public SongSearchRequest(string musicName, string artistName) : this()
+        public SongSearchRequest(string musicName, string artistName, int limit = 10) : this()
         {
             // Remove all the brackets and the content inside them.
             var regex = new Regex(@"\([^)]*\)");
             musicName = regex.Replace(musicName, string.Empty);
 
             SearchKey = HttpUtility.UrlEncode($"{musicName}+{artistName}", Encoding.UTF8);
+            Limit = limit;
         }
     }
 }
