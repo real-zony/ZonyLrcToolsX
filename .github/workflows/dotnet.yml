@@ -31,3 +31,10 @@ jobs:
         type: 'zip'
         path: './src/ZonyLrcTools.Cli/bin/Release/net6.0/win-x64/publish'
         filename: 'ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}.zip'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./src/ZonyLrcTools.Cli/bin/Release/net6.0/win-x64/publish/ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}.zip"
+        token: ${{ secrets.GITHUBACTIONS }}
+        tag: ZonyLrcToolsX_Alpha.${{ steps.date.outputs.date }}
+        commit: dev
