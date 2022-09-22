@@ -67,17 +67,19 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         protected override async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
-            var files = await ScanMusicFilesAsync();
-            var musicInfos = await LoadMusicInfoAsync(files);
-
             if (DownloadLyric)
             {
-                await DownloadLyricFilesAsync(musicInfos);
+                await DownloadLyricFilesAsync(
+                    await LoadMusicInfoAsync(
+                        RemoveExistLyricFiles(
+                            await ScanMusicFilesAsync())));
             }
 
             if (DownloadAlbum)
             {
-                await DownloadAlbumAsync(musicInfos);
+                await DownloadAlbumAsync(
+                    await LoadMusicInfoAsync(
+                        await ScanMusicFilesAsync()));
             }
 
             return 0;
@@ -94,8 +96,6 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 _logger.LogError("没有找到任何音乐文件。");
                 throw new ErrorCodeException(ErrorCodes.NoFilesWereScanned);
             }
-
-            files = RemoveExistLyricFiles(files);
 
             _logger.LogInformation($"已经扫描到了 {files.Count} 个音乐文件。");
 

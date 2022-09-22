@@ -77,5 +77,12 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 
             lyric.ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task DownloaderAsync_Issue101_Test()
+        {
+            var lyric = await _lyricDownloader.DownloadAsync("君への嘘", "VALSHE");
+            lyric.ShouldNotBeEmpty();
+        }
     }
 }
