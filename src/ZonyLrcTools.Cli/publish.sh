@@ -1,5 +1,6 @@
 #!/bin/bash
 dotnet publish -r "linux-x64" -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true
+cat /home/runner/work/ZonyLrcToolsX/ZonyLrcToolsX/src/ZonyLrcTools.Cli/obj/Release/net6.0/linux-x64/ZonyLrcTools.Cli.AssemblyInfo.cs
 # Platforms=('win-x64' 'linux-x64' 'osx-x64')
 
 # if ! [ -d './TempFiles' ];
