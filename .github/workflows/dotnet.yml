@@ -27,6 +27,7 @@ jobs:
         ls -a
         chmod +x ./publish.sh
         ./publish.sh
+        mv ./TempFiles ../../
       shell: bash
       env:
         PUBLISH_VERSION: ${{ steps.date.outputs.date }}
