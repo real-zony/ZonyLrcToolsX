@@ -23,7 +23,10 @@ jobs:
     #   run: dotnet restore
     - name: Publish
       working-directory: ./src/ZonyLrcTools.Cli
-      run: publish.sh
+      run: |
+        chmod +x ./publish.sh
+        ./publish.sh
+      shell: bash
     # - name: Upload Release
     #   uses: ncipollo/release-action@v1
     #   with:
