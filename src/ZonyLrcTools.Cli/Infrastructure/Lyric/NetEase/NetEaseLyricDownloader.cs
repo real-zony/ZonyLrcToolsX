@@ -70,8 +70,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
             }
 
             return _lyricItemCollectionFactory.Build(
-                json.OriginalLyric.Text,
-                json.TranslationLyric.Text);
+                json.OriginalLyric?.Text,
+                json.TranslationLyric?.Text);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
