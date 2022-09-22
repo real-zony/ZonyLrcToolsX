@@ -8,9 +8,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
     {
         public GetLyricRequest(long songId)
         {
-            OS = "osx";
+            OS = "ios";
             Id = songId;
-            Lv = Kv = Tv = -1;
+            Lv = Kv = Tv = Rv = -1;
         }
 
         /// <summary>
@@ -30,5 +30,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
         [JsonProperty("kv")] public int Kv { get; }
 
         [JsonProperty("tv")] public int Tv { get; }
+
+        [JsonProperty("rv")] public int Rv { get; set; }
+
+        [JsonProperty("crypto")] public string Protocol { get; set; } = "api";
     }
 }

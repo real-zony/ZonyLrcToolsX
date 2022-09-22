@@ -43,6 +43,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
         [JsonProperty("limit")]
         public int Limit { get; set; }
 
+        [JsonProperty("crypto")] public string Crypto { get; set; } = "weapi";
+
         public SongSearchRequest()
         {
             CsrfToken = string.Empty;

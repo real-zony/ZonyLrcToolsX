@@ -23,6 +23,12 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel
         public InnerLyric TranslationLyric { get; set; }
 
         /// <summary>
+        /// 如果存在罗马音歌词，则本项内容为罗马音歌词。
+        /// </summary>
+        [JsonProperty("romalrc")]
+        public InnerLyric RomaLyric { get; set; }
+
+        /// <summary>
         /// 状态码。
         /// </summary>
         [JsonProperty("code")]
