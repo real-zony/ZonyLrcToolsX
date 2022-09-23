@@ -3,8 +3,8 @@ name: .NET
 on:
   push:
     branches: [ dev ]
-  #    paths:
-  #      - "versions/**"
+    paths:
+      - "versions/**"
   pull_request:
     branches: [ dev ]
 

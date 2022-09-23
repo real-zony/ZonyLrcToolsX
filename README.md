@@ -57,6 +57,8 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 
 程序的所有的配置信息，都在 `config.yaml` 进行更改，下面标注了各个配置的说明。
 
+其中是否开启的可选项为 `true` 或者 `false`，等同于中文的是和否。
+
 ```yaml
 globalOption:
   # 允许扫描的歌曲文件后缀名。
@@ -95,17 +97,26 @@ globalOption:
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
           priority: 1     # 优先级，升序排列，改为 -1 时禁用。
+          depth: 30       # 搜索深度，值越大搜索结果越多，但搜索时间越长。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
+          # depth: 10       # 暂时不支持。
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
           priority: 3
+          depth: 10
       # 歌词下载的一些共有配置参数。
       config:
-        isOneLine: true               # 双语歌词是否合并为一行展示。
-        lineBreak: "\n"               # 换行符的类型，记得使用双引号指定。
-        isEnableTranslation: true     # 是否启用翻译歌词。
-        isSkipExistLyricFiles: false  # 如果歌词文件已经存在，是否跳过这些文件。
+        isOneLine: true                 # 双语歌词是否合并为一行展示。
+        lineBreak: "\n"                 # 换行符的类型，记得使用双引号指定。
+        isEnableTranslation: true       # 是否启用翻译歌词。
+        isOnlyOutputTranslation: false  # 是否只输出翻译歌词。
+        isSkipExistLyricFiles: false    # 如果歌词文件已经存在，是否跳过这些文件。
+        fileEncoding: 'utf-8'           # 歌词文件的编码格式。
 ```
+
+#### 支持的编码格式
+
+详细信息请参考: [MSDN Encoding 列表](https://learn.microsoft.com/en-us/dotnet/api/System.Text.Encoding.GetEncodings?view=net-6.0#examples)，使用 `identifier and name` 作为参数值填入 `config.yaml` 文件当中的 `fileEncoding`。
 
 ### 屏蔽字典
 
@@ -122,6 +133,10 @@ globalOption:
 ## 捐赠
 
 <img src="./docs/img/alipay.jpg" width="200"/><img src="./docs/img/wechat.jpg" width="200"/>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=real-zony/ZonyLrcToolsX&type=Timeline)](https://star-history.com/#real-zony/ZonyLrcToolsX&Timeline)
 
 ## 路线图
 
