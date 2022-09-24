@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NAudio.Wave;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure;
 using ZonyLrcTools.Cli.Infrastructure.Album;
@@ -137,7 +136,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 .ToList();
 
             // Load music total time info.
-            result.Foreach(m => { m.TotalTime = (long?)new AudioFileReader(m.FilePath).TotalTime.TotalMilliseconds; });
+            // result.Foreach(m => { m.TotalTime = (long?)new AudioFileReader(m.FilePath).TotalTime.TotalMilliseconds; });
 
             _logger.LogInformation($"已成功加载 {files.Count} 个音乐文件的标签信息。");
 
