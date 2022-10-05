@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ZonyLrcTools.LocalServer;
 
 var app = RegisterAndConfigureServices();
@@ -12,25 +13,42 @@ async Task ListenServices()
 WebApplication? RegisterAndConfigureServices()
 {
     var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+    builder.WebHost.ConfigureKestrel(k => k.ListenAnyIP(50002));
 
     builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
 
-    var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    var insideApp = builder.Build();
+    insideApp.UseSpaStaticFiles(new StaticFileOptions
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        RequestPath = "",
+        FileProvider = new Microsoft.Extensions.FileProviders
+            .ManifestEmbeddedFileProvider(
+                typeof(Program).Assembly, "UiStaticResources"
+            )
+    });
+
+    insideApp.UseAuthorization();
+    insideApp.MapControllers();
+    insideApp.Lifetime.ApplicationStarted.Register(OpenBrowser);
+
+    return insideApp;
+}
+
+void OpenBrowser()
+{
+    const string url = "http://localhost:50002/index.html";
+
+    if (OperatingSystem.IsWindows())
+    {
+        Process.Start("explorer.exe", url);
     }
-
-    app.UseAuthorization();
-    app.MapControllers();
-
-    return app;
+    else if (OperatingSystem.IsMacOS())
+    {
+        Process.Start("open", url);
+    }
+    else if (OperatingSystem.IsLinux())
+    {
+        Process.Start("xdg-open", url);
+    }
 }

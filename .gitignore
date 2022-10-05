@@ -450,3 +450,5 @@ fabric.properties
 .idea/
 /.idea
 /src/ZonyLrcTools.Cli/TempFiles/
+
+src/ZonyLrcTools.LocalServer/UiStaticResources/*
