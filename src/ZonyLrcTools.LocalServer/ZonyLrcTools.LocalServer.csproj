@@ -7,11 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="SuperSocket.WebSocket" Version="2.0.0-beta.11" />
+        <PackageReference Include="SuperSocket.WebSocket.Server" Version="2.0.0-beta.11" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Controllers" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ZonyLrcTools.Cli\ZonyLrcTools.Cli.csproj" />
     </ItemGroup>
 
 </Project>
