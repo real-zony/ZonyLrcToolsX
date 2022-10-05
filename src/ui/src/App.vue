@@ -50,6 +50,9 @@
 </template>
 
 <script>
+import Socket from "@/communication/socket";
+import {mapMutations} from "vuex"
+
 export default {
   data: () => ({
     drawer: null,
@@ -59,5 +62,19 @@ export default {
       ['mdi-information', '关于', '/about'],
     ],
   }),
+  created() {
+    Socket.$on("message", this.handleGetMessage);
+  },
+  beforeDestroy() {
+    Socket.$off("message", this.handleGetMessage);
+  },
+  methods: {
+    ...mapMutations({
+      setWsRes: "ws/setWsRes",
+    }),
+    handleGetMessage(msg) {
+      this.setWsRes(JSON.parse(msg));
+    }
+  }
 }
 </script>

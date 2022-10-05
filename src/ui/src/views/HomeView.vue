@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import Socket from '@/communication/socket'
 
 export default {
   name: 'Home',
@@ -62,9 +64,21 @@ export default {
   },
   methods: {
     openDir() {
-
+      Socket.send({
+        type: 'openDir',
+        data: {},
+      })
     }
   },
-  computed: {}
+  computed: {
+    ...mapState({
+      wsRes: state => state.ws.wsRes
+    })
+  },
+  watch: {
+    wsRes(val) {
+      console.log('echo from server: ', val)
+    }
+  }
 }
 </script>
