@@ -2,6 +2,8 @@
 using Xunit;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
+using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Lyrics;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
@@ -10,7 +12,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public void LyricCollectionLineBreak_Test()
         {
-            var lyricObject = new LyricItemCollection(new LyricConfigOption
+            var lyricObject = new LyricItemCollection(new GlobalLyricsConfigOptions
             {
                 IsOneLine = false,
                 LineBreak = LineBreakType.MacOs

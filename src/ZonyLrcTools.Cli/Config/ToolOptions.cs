@@ -3,6 +3,7 @@ using YamlDotNet.Serialization;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Network;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Config
 {
@@ -21,6 +22,6 @@ namespace ZonyLrcTools.Cli.Config
         /// <summary>
         /// 定义下载器的相关配置信息。
         /// </summary>
-        public ProviderOption Provider { get; set; }
+        public ProviderOptions Provider { get; set; }
     }
 }

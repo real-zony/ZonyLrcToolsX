@@ -1,9 +1,9 @@
-﻿namespace ZonyLrcTools.Cli.Config
+﻿namespace ZonyLrcTools.Common.Configuration
 {
     /// <summary>
     /// 屏蔽词选项类。
     /// </summary>
-    public class BlockWordOption
+    public class BlockWordOptions
     {
         /// <summary>
         /// 是否启用本功能。

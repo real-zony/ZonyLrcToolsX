@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Extensions;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {
@@ -17,11 +18,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         /// </summary>
         public bool IsPruneMusic => Count == 0;
 
-        public LyricConfigOption Option { get; private set; }
+        public GlobalLyricsConfigOptions Options { get; private set; }
 
-        public LyricItemCollection(LyricConfigOption option)
+        public LyricItemCollection(GlobalLyricsConfigOptions options)
         {
-            Option = option;
+            Options = options;
         }
 
         public static LyricItemCollection operator +(LyricItemCollection left, LyricItemCollection right)
@@ -31,7 +32,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
                 return left;
             }
 
-            var option = left.Option;
+            var option = left.Options;
             var newCollection = new LyricItemCollection(option);
             var indexDiff = left.Count - right.Count;
             if (!option.IsOneLine)
@@ -104,8 +105,8 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
         public override string ToString()
         {
             var lyricBuilder = new StringBuilder();
-            ForEach(lyric => lyricBuilder.Append(lyric).Append(Option.LineBreak));
-            return lyricBuilder.ToString().TrimEnd(Option.LineBreak);
+            ForEach(lyric => lyricBuilder.Append(lyric).Append(Options.LineBreak));
+            return lyricBuilder.ToString().TrimEnd(Options.LineBreak);
         }
 
         public byte[] GetUtf8Bytes()

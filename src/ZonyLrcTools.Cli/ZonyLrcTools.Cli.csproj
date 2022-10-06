@@ -43,4 +43,8 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj" />
+    </ItemGroup>
+
 </Project>

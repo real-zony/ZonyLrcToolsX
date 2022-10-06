@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools.Tests", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools.LocalServer", "src\ZonyLrcTools.LocalServer\ZonyLrcTools.LocalServer.csproj", "{2875A08A-FFD6-4863-B815-5384DCFE88FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonyLrcTools.Common", "src\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj", "{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{2875A08A-FFD6-4863-B815-5384DCFE88FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2875A08A-FFD6-4863-B815-5384DCFE88FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2875A08A-FFD6-4863-B815-5384DCFE88FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +48,6 @@ Global
 		{55D74323-ABFA-4A73-A3BF-F3E8D5DE6DE8} = {C29FB05C-54B1-4020-94D2-87E192EB2F98}
 		{FFBD3200-568F-455B-8390-5E76C51D522C} = {AF8ADB2F-E46C-4DEE-8316-652D9FE1A69B}
 		{2875A08A-FFD6-4863-B815-5384DCFE88FC} = {C29FB05C-54B1-4020-94D2-87E192EB2F98}
+		{9B42E4CA-61AA-4798-8D2B-2D8A7035EB67} = {C29FB05C-54B1-4020-94D2-87E192EB2F98}
 	EndGlobalSection
 EndGlobal

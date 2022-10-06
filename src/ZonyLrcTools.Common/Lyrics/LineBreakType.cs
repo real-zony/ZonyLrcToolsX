@@ -1,4 +1,4 @@
-namespace ZonyLrcTools.Cli.Infrastructure.Lyric
+namespace ZonyLrcTools.Common.Lyrics
 {
     /// <summary>
     /// 换行符格式定义。

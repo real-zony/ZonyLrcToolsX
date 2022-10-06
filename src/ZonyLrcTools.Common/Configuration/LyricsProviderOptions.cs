@@ -1,6 +1,6 @@
-﻿namespace ZonyLrcTools.Cli.Config
+﻿namespace ZonyLrcTools.Common.Configuration
 {
-    public class LyricProviderOption
+    public class LyricsProviderOptions
     {
         /// <summary>
         /// 歌词下载器的唯一标识。

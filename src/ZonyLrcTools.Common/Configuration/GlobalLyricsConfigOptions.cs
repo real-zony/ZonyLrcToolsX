@@ -1,22 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using ZonyLrcTools.Cli.Infrastructure.Lyric;
+﻿using ZonyLrcTools.Common.Lyrics;
 
-namespace ZonyLrcTools.Cli.Config;
+namespace ZonyLrcTools.Common.Configuration;
 
-public class LyricOption
-{
-    public IEnumerable<LyricProviderOption> Plugin { get; set; }
-
-    public LyricConfigOption Config { get; set; }
-
-    public LyricProviderOption GetLyricProviderOption(string name)
-    {
-        return Plugin.FirstOrDefault(x => x.Name == name);
-    }
-}
-
-public class LyricConfigOption
+public class GlobalLyricsConfigOptions
 {
     /// <summary>
     /// 双语歌词是否合并为一行。
