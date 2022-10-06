@@ -1,6 +1,5 @@
 ﻿using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Lyrics;
 

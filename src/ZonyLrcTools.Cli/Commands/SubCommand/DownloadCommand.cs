@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Infrastructure;
-using ZonyLrcTools.Cli.Infrastructure.Album;
-using ZonyLrcTools.Cli.Infrastructure.Extensions;
-using ZonyLrcTools.Cli.Infrastructure.IO;
-using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
-using ZonyLrcTools.Cli.Infrastructure.Threading;
+using ZonyLrcTools.Common;
+using ZonyLrcTools.Common.Album;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Extensions;
+using ZonyLrcTools.Common.Infrastructure.IO;
+using ZonyLrcTools.Common.Infrastructure.Threading;
+using ZonyLrcTools.Common.Lyrics;
 using File = System.IO.File;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand

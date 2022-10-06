@@ -12,6 +12,11 @@
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
       <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="TagLibSharp" Version="2.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Lyrics\Providers" />
     </ItemGroup>
 
 </Project>

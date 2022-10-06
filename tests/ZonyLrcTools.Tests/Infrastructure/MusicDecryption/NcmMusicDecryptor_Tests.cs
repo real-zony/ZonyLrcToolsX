@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.MusicDecryption;
+using ZonyLrcTools.Common.MusicDecryption;
 
 namespace ZonyLrcTools.Tests.Infrastructure.MusicDecryption
 {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Album;
+using ZonyLrcTools.Common.Album;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Album
 {

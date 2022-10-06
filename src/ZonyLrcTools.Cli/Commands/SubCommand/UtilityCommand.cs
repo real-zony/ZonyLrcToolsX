@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using ZonyLrcTools.Cli.Infrastructure.IO;
-using ZonyLrcTools.Cli.Infrastructure.MusicDecryption;
-using ZonyLrcTools.Cli.Infrastructure.Threading;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.IO;
+using ZonyLrcTools.Common.Infrastructure.Threading;
+using ZonyLrcTools.Common.MusicDecryption;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand
 {

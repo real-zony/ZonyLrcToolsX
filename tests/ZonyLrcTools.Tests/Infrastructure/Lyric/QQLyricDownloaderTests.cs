@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Lyric;
+using ZonyLrcTools.Common.Lyrics;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
