@@ -30,7 +30,7 @@ WebApplication? RegisterAndConfigureServices()
 
     insideApp.UseAuthorization();
     insideApp.MapControllers();
-    insideApp.Lifetime.ApplicationStarted.Register(OpenBrowser);
+    // insideApp.Lifetime.ApplicationStarted.Register(OpenBrowser);
 
     return insideApp;
 }

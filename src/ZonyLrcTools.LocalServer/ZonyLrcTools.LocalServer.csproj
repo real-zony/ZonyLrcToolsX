@@ -25,6 +25,10 @@
         <EmbeddedResource Include="UiStaticResources\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj" />
+    </ItemGroup>
+
 <!--    <ItemGroup>-->
 <!--        <ProjectReference Include="..\ZonyLrcTools.Cli\ZonyLrcTools.Cli.csproj" />-->
 <!--    </ItemGroup>-->

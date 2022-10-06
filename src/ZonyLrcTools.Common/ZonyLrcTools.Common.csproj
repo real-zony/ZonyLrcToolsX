@@ -16,7 +16,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Lyrics\Providers\Kugeci" />
       <Folder Include="Lyrics\Providers\KuWo" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Lyrics\Providers\Kugeci\KugeciDownloader.cs" />
     </ItemGroup>
 
 </Project>

@@ -21,15 +21,15 @@
         </template>
       </v-data-table>
       <div class="output mt-8">
-        <v-textarea disabled outlined label="日志信息" value="输出"/>
+        <v-textarea disabled outlined label="日志信息" :value='outputText'/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
 import Socket from '@/communication/socket'
+import eventBus from "@/communication/eventbus";
 
 export default {
   name: 'Home',
@@ -52,14 +52,9 @@ export default {
           size: 159,
           status: 'success',
           action: 4.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          size: 237,
-          status: 'error',
-          action: 4.3,
-        },
+        }
       ],
+      outputText: ''
     }
   },
   methods: {
@@ -70,15 +65,25 @@ export default {
       })
     }
   },
-  computed: {
-    ...mapState({
-      wsRes: state => state.ws.wsRes
-    })
-  },
-  watch: {
-    wsRes(val) {
-      console.log('echo from server: ', val)
-    }
+  computed: {},
+  mounted() {
+    // eventBus.$on('getFile', (msgData) => {
+    //   console.log(msgData);
+    // });
+    eventBus.$on('getFileInfo', (msgData) => {
+      this.items = [...this.items, ...msgData.data.map(item => {
+        return {
+          name: item.name,
+          size: item.size,
+          status: 'success',
+          action: 4.0,
+        }
+      })]
+    });
+
+    eventBus.$on('output', (msgData) => {
+      this.outputText = this.outputText.concat(msgData.data.text).concat('\n');
+    });
   }
 }
 </script>

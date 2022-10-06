@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import eventBus from "@/communication/eventbus";
 
 // const wsUrl = process.env.VUE_APP_WS_URL;
 const wsUrl = "ws://127.0.0.1:50001"
@@ -13,10 +14,11 @@ const emitter = new Vue({
         }, connect() {
             socket = new WebSocket(wsUrl);
             socket.onmessage = (msg) => {
-                this.$emit('message', msg.data);
+                let event = JSON.parse(msg.data);
+                eventBus.$emit(event.action, event);
             };
             socket.onerror = (err) => {
-                this.$emit('error', err);
+                eventBus.$emit('error', err);
             };
             socket.onclose = () => {
                 emitter.connect()
