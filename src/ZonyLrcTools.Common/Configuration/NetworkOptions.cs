@@ -1,4 +1,4 @@
-namespace ZonyLrcTools.Cli.Infrastructure.Network
+namespace ZonyLrcTools.Common.Configuration
 {
     /// <summary>
     /// 工具网络相关的设定。

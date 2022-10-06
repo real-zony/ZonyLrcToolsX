@@ -4,8 +4,8 @@ using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Network;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
 {
@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
             services.AddHttpClient(DefaultWarpHttpClient.HttpClientNameConstant)
                 .ConfigurePrimaryHttpMessageHandler(provider =>
                 {
-                    var option = provider.GetRequiredService<IOptions<ToolOptions>>().Value;
+                    var option = provider.GetRequiredService<IOptions<GlobalOptions>>().Value;
 
                     return new HttpClientHandler
                     {
@@ -49,7 +49,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
                 .AddYamlFile("config.yaml")
                 .Build();
 
-            services.Configure<ToolOptions>(configuration.GetSection("globalOption"));
+            services.Configure<GlobalOptions>(configuration.GetSection("globalOption"));
 
             return services;
         }

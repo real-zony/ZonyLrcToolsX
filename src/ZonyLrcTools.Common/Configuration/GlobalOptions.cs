@@ -1,13 +1,6 @@
-using System.Collections.Generic;
-using YamlDotNet.Serialization;
-using ZonyLrcTools.Cli.Infrastructure.Lyric;
-using ZonyLrcTools.Cli.Infrastructure.Network;
-using ZonyLrcTools.Cli.Infrastructure.Tag;
-using ZonyLrcTools.Common.Configuration;
-
-namespace ZonyLrcTools.Cli.Config
+namespace ZonyLrcTools.Common.Configuration
 {
-    public class ToolOptions
+    public class GlobalOptions
     {
         /// <summary>
         /// 支持的音乐文件后缀集合。

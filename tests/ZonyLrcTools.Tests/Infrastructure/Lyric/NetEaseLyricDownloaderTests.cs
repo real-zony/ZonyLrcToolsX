@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
@@ -91,7 +91,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue114_Test()
         {
-            var options = ServiceProvider.GetRequiredService<IOptions<ToolOptions>>();
+            var options = ServiceProvider.GetRequiredService<IOptions<GlobalOptions>>();
             options.Value.Provider.Lyric.Config.IsOnlyOutputTranslation = true;
             
             var lyric = await _lyricDownloader.DownloadAsync("Bones", "Image Dragons");

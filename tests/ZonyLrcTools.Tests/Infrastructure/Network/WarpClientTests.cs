@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Network;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Network
 {
@@ -33,7 +33,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Network
         [Fact]
         public async Task GetAsyncWithProxy_Test()
         {
-            var option = ServiceProvider.GetRequiredService<IOptions<ToolOptions>>();
+            var option = ServiceProvider.GetRequiredService<IOptions<GlobalOptions>>();
             option.Value.NetworkOptions.Ip = "127.0.0.1";
             option.Value.NetworkOptions.Port = 4780;
 

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
@@ -17,9 +17,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         public const string ConstantName = "FileName";
         public const string RegularExpressionsOption = "regularExpressions";
 
-        private readonly ToolOptions _options;
+        private readonly GlobalOptions _options;
 
-        public FileNameTagInfoProvider(IOptions<ToolOptions> options)
+        public FileNameTagInfoProvider(IOptions<GlobalOptions> options)
         {
             _options = options.Value;
         }

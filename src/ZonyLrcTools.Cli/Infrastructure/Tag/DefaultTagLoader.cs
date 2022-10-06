@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
@@ -19,13 +19,13 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         protected readonly IBlockWordDictionary BlockWordDictionary;
         protected readonly ILogger<DefaultTagLoader> Logger;
 
-        protected ToolOptions Options;
+        protected GlobalOptions Options;
 
         private readonly IEnumerable<ITagInfoProvider> _sortedTagInfoProviders;
 
         public DefaultTagLoader(IEnumerable<ITagInfoProvider> tagInfoProviders,
             IBlockWordDictionary blockWordDictionary,
-            IOptions<ToolOptions> options,
+            IOptions<GlobalOptions> options,
             ILogger<DefaultTagLoader> logger)
         {
             TagInfoProviders = tagInfoProviders;

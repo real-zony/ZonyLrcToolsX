@@ -4,10 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel;
 using ZonyLrcTools.Cli.Infrastructure.Network;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 {
@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
-        private readonly ToolOptions _options;
+        private readonly GlobalOptions _options;
 
         private const string NetEaseSearchMusicUrl = @"https://music.163.com/api/search/get/web";
         private const string NetEaseGetLyricUrl = @"https://music.163.com/api/song/lyric";
@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase
 
         public NetEaseLyricDownloader(IWarpHttpClient warpHttpClient,
             ILyricItemCollectionFactory lyricItemCollectionFactory,
-            IOptions<ToolOptions> options)
+            IOptions<GlobalOptions> options)
         {
             _warpHttpClient = warpHttpClient;
             _lyricItemCollectionFactory = lyricItemCollectionFactory;

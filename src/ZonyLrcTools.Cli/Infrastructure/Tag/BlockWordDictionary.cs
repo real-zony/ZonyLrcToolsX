@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {
     /// <inheritdoc cref="ZonyLrcTools.Cli.Infrastructure.Tag.IBlockWordDictionary" />
     public class BlockWordDictionary : IBlockWordDictionary, ISingletonDependency
     {
-        private readonly ToolOptions _options;
+        private readonly GlobalOptions _options;
 
         private readonly Lazy<Dictionary<string, string>> _wordsDictionary;
 
-        public BlockWordDictionary(IOptions<ToolOptions> options)
+        public BlockWordDictionary(IOptions<GlobalOptions> options)
         {
             _options = options.Value;
 

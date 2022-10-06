@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure;
 using ZonyLrcTools.Cli.Infrastructure.Album;
 using ZonyLrcTools.Cli.Infrastructure.Exceptions;
@@ -17,6 +16,7 @@ using ZonyLrcTools.Cli.Infrastructure.IO;
 using ZonyLrcTools.Cli.Infrastructure.Lyric;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Cli.Infrastructure.Threading;
+using ZonyLrcTools.Common.Configuration;
 using File = System.IO.File;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand
@@ -30,11 +30,11 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         private readonly IEnumerable<ILyricDownloader> _lyricDownloaderList;
         private readonly IEnumerable<IAlbumDownloader> _albumDownloaderList;
 
-        private readonly ToolOptions _options;
+        private readonly GlobalOptions _options;
 
         public DownloadCommand(ILogger<DownloadCommand> logger,
             IFileScanner fileScanner,
-            IOptions<ToolOptions> options,
+            IOptions<GlobalOptions> options,
             ITagLoader tagLoader,
             IEnumerable<ILyricDownloader> lyricDownloaderList,
             IEnumerable<IAlbumDownloader> albumDownloaderList)

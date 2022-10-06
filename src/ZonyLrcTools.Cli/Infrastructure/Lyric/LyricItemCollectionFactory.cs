@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Config;
 using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {
@@ -10,9 +10,9 @@ namespace ZonyLrcTools.Cli.Infrastructure.Lyric
     /// </summary>
     public class LyricItemCollectionFactory : ILyricItemCollectionFactory, ITransientDependency
     {
-        private readonly ToolOptions _options;
+        private readonly GlobalOptions _options;
 
-        public LyricItemCollectionFactory(IOptions<ToolOptions> options)
+        public LyricItemCollectionFactory(IOptions<GlobalOptions> options)
         {
             _options = options.Value;
         }
