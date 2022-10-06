@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Lyrics\Providers" />
+      <Folder Include="Lyrics\Providers\KuWo" />
     </ItemGroup>
 
 </Project>
