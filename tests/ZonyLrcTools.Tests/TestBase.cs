@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using ZonyLrcTools.Cli;
 using ZonyLrcTools.Cli.Commands;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Tests
 {

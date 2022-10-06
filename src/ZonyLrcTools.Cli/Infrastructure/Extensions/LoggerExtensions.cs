@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Extensions
 {

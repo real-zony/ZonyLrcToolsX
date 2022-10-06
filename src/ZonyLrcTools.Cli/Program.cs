@@ -11,9 +11,10 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Commands.SubCommand;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Logging;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli
 {
@@ -86,6 +87,7 @@ namespace ZonyLrcTools.Cli
                 {
                     services.AddSingleton(PhysicalConsole.Singleton);
                     services.BeginAutoDependencyInject<Program>();
+                    services.BeginAutoDependencyInject<IWarpHttpClient>();
                     services.ConfigureConfiguration();
                     services.ConfigureToolService();
                 })

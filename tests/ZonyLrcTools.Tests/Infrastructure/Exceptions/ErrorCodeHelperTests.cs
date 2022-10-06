@@ -1,6 +1,6 @@
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Exceptions
 {

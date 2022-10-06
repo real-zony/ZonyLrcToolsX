@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Extensions;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.IO
 {

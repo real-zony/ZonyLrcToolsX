@@ -3,10 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.NetEase.JsonModel;
-using ZonyLrcTools.Cli.Infrastructure.Network;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Album.NetEase
 {

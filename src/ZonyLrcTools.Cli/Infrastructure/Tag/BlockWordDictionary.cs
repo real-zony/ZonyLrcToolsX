@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {

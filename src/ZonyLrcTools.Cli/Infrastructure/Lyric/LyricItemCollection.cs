@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZonyLrcTools.Cli.Infrastructure.Extensions;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Extensions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric
 {

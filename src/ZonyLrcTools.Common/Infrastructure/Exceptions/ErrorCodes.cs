@@ -1,4 +1,4 @@
-namespace ZonyLrcTools.Cli.Infrastructure.Exceptions
+namespace ZonyLrcTools.Common.Infrastructure.Exceptions
 {
     /// <summary>
     /// 错误码。

@@ -3,10 +3,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou.JsonModel;
-using ZonyLrcTools.Cli.Infrastructure.Network;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Lyric.KuGou
 {

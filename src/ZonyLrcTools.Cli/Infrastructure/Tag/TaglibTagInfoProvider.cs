@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Tag
 {

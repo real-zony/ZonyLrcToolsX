@@ -2,9 +2,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
 using ZonyLrcTools.Cli.Infrastructure.Lyric.QQMusic.JsonModel;
-using ZonyLrcTools.Cli.Infrastructure.Network;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Album.QQMusic
 {

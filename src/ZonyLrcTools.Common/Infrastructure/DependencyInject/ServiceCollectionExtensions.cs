@@ -1,13 +1,11 @@
-using System.IO;
 using System.Net;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Infrastructure.Network;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
-namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
+namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
 {
     /// <summary>
     /// Service 注入的扩展方法。

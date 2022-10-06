@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Cli.Infrastructure.MusicDecryption
 {

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Exceptions;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
-namespace ZonyLrcTools.Cli.Infrastructure.Network
+namespace ZonyLrcTools.Common.Infrastructure.Network
 {
     public class DefaultWarpHttpClient : IWarpHttpClient, ITransientDependency
     {

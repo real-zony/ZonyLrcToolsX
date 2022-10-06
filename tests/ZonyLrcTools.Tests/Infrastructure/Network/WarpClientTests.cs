@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Network;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Network
 {

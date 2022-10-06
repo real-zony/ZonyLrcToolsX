@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using ZonyLrcTools.Cli.Infrastructure.DependencyInject;
-using ZonyLrcTools.Cli.Infrastructure.Network;
 using ZonyLrcTools.Cli.Infrastructure.Updater.JsonModel;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.Common.Infrastructure.Network;
 
 namespace ZonyLrcTools.Cli.Infrastructure.Updater;
 

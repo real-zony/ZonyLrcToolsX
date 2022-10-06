@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ZonyLrcTools.Cli.Infrastructure.Exceptions
+namespace ZonyLrcTools.Common.Infrastructure.Exceptions
 {
     /// <summary>
     /// 错误码相关的帮助类。

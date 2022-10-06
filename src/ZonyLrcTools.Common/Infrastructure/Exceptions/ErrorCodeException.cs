@@ -1,6 +1,4 @@
-using System;
-
-namespace ZonyLrcTools.Cli.Infrastructure.Exceptions
+namespace ZonyLrcTools.Common.Infrastructure.Exceptions
 {
     /// <summary>
     /// 带错误码的异常实现。

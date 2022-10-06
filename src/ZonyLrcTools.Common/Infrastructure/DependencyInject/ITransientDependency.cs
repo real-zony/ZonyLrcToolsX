@@ -1,4 +1,4 @@
-﻿namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
+﻿namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
 {
     /// <summary>
     /// 继承了本接口的类都会以瞬时的形式注入到 IoC 容器当中。

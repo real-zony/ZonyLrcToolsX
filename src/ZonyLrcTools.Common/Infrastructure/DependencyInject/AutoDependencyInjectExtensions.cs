@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using ZonyLrcTools.Cli.Infrastructure.Extensions;
+using ZonyLrcTools.Common.Infrastructure.Extensions;
 
-namespace ZonyLrcTools.Cli.Infrastructure.DependencyInject
+namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
 {
     public static class AutoDependencyInjectExtensions
     {

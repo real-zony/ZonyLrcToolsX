@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-namespace ZonyLrcTools.Cli.Infrastructure.Network
+﻿namespace ZonyLrcTools.Common.Infrastructure.Network
 {
     /// <summary>
     /// 基于 <see cref="IHttpClientFactory"/> 封装的 HTTP 请求客户端。

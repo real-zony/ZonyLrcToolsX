@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace ZonyLrcTools.Cli.Infrastructure.Extensions
+namespace ZonyLrcTools.Common.Infrastructure.Extensions
 {
     /// <summary>
     /// Linq 相关的扩展方法。
