@@ -2,6 +2,6 @@ namespace ZonyLrcTools.Common.Updater.JsonModel;
 
 public enum NewVersionItemType
 {
-    Important,
+    Important = 1,
     NormalBinaryFile
 }

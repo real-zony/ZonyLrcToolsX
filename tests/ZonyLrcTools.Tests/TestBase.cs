@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using ZonyLrcTools.Cli;
 using ZonyLrcTools.Cli.Commands;
+using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Tests
@@ -22,6 +23,7 @@ namespace ZonyLrcTools.Tests
             var service = new ServiceCollection();
 
             service.BeginAutoDependencyInject<Program>();
+            service.BeginAutoDependencyInject<MusicInfo>();
             service.ConfigureToolService();
             service.ConfigureConfiguration();
 

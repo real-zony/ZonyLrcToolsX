@@ -7,9 +7,9 @@ using ZonyLrcTools.Common.Updater.JsonModel;
 
 namespace ZonyLrcTools.Common.Updater;
 
-public class DefaultUpdater : ISingletonDependency
+public class DefaultUpdater : IUpdater, ISingletonDependency
 {
-    public const string UpdateUrl = "https://api.zony.me/lrc-tools/update";
+    public const string UpdateUrl = "https://api.myzony.com/lrc-tools/update";
 
     private readonly IWarpHttpClient _warpHttpClient;
     private readonly ILogger<DefaultUpdater> _logger;
@@ -23,7 +23,7 @@ public class DefaultUpdater : ISingletonDependency
 
     public async Task CheckUpdateAsync()
     {
-        var response = await _warpHttpClient.GetAsync<NewVersionResponse>(UpdateUrl);
+        var response = await _warpHttpClient.GetAsync<NewVersionResponse?>(UpdateUrl);
         if (response == null)
         {
             return;
@@ -35,13 +35,13 @@ public class DefaultUpdater : ISingletonDependency
             return;
         }
 
-        var importantItem = response.Items.FirstOrDefault(x => x.ItemType == NewVersionItemType.Important);
+        var importantItem = response.Items?.FirstOrDefault(x => x.ItemType == NewVersionItemType.Important);
         if (importantItem != null)
         {
             _logger.LogWarning($"发现了新版本，请点击下面的链接进行更新：{importantItem.Url}");
             _logger.LogWarning($"最新版本号:{response.NewVersion}，当前版本号: ${currentVersion}");
             _logger.LogWarning($"更新内容:{response.NewVersionDescription}");
-            
+
             if (OperatingSystem.IsWindows())
             {
                 Process.Start("explorer.exe", importantItem.Url);

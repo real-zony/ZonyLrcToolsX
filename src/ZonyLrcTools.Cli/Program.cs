@@ -11,6 +11,7 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Commands.SubCommand;
+using ZonyLrcTools.Cli.Infrastructure;
 using ZonyLrcTools.Cli.Infrastructure.Logging;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
@@ -90,6 +91,7 @@ namespace ZonyLrcTools.Cli
                     services.BeginAutoDependencyInject<IWarpHttpClient>();
                     services.ConfigureConfiguration();
                     services.ConfigureToolService();
+                    services.AddHostedService<UpdaterHostedService>();
                 })
                 .RunCommandLineApplicationAsync<Program>(args);
         }
