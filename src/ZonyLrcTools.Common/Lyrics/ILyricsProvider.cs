@@ -12,7 +12,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <param name="artist">歌曲的作者。</param>
         /// <param name="duration">歌曲的时长。</param>
         /// <returns>歌曲的歌词数据对象。</returns>
-        ValueTask<LyricItemCollection> DownloadAsync(string songName, string artist, long? duration = null);
+        ValueTask<LyricsItemCollection> DownloadAsync(string songName, string artist, long? duration = null);
 
         /// <summary>
         /// 下载器的名称。

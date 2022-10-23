@@ -42,7 +42,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
             return Encoding.UTF8.GetBytes(lyricJsonString);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 

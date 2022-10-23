@@ -10,7 +10,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public void LyricCollectionLineBreak_Test()
         {
-            var lyricObject = new LyricItemCollection(new GlobalLyricsConfigOptions
+            var lyricObject = new LyricsItemCollection(new GlobalLyricsConfigOptions
             {
                 IsOneLine = false,
                 LineBreak = LineBreakType.MacOs

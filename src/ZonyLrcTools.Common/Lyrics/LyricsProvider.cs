@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <param name="artist">歌曲作者/艺术家。</param>
         /// <param name="duration">歌曲的时长。</param>
         /// <returns>下载完成的歌曲数据。</returns>
-        public virtual async ValueTask<LyricItemCollection> DownloadAsync(string songName, string artist, long? duration = null)
+        public virtual async ValueTask<LyricsItemCollection> DownloadAsync(string songName, string artist, long? duration = null)
         {
             var args = new LyricsProviderArgs(songName, artist, duration ?? 0);
             await ValidateAsync(args);
@@ -53,6 +53,6 @@ namespace ZonyLrcTools.Common.Lyrics
         /// 根据指定的歌词二进制数据，生成歌词数据。
         /// </summary>
         /// <param name="data">歌词的原始二进制数据。</param>
-        protected abstract ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args);
+        protected abstract ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args);
     }
 }

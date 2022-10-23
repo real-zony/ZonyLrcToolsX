@@ -57,19 +57,19 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 
             var json = JsonConvert.DeserializeObject<GetLyricResponse>(Encoding.UTF8.GetString(data));
             if (json?.OriginalLyric == null || string.IsNullOrEmpty(json.OriginalLyric.Text))
             {
-                return new LyricItemCollection(null);
+                return new LyricsItemCollection(null);
             }
 
             if (json.OriginalLyric.Text.Contains("纯音乐，请欣赏"))
             {
-                return new LyricItemCollection(null);
+                return new LyricsItemCollection(null);
             }
 
             return _lyricsItemCollectionFactory.Build(

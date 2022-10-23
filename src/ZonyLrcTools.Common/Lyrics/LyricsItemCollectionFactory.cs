@@ -17,9 +17,9 @@ namespace ZonyLrcTools.Common.Lyrics
             _options = options.Value;
         }
 
-        public LyricItemCollection Build(string sourceLyric)
+        public LyricsItemCollection Build(string sourceLyric)
         {
-            var lyric = new LyricItemCollection(_options.Provider.Lyric.Config);
+            var lyric = new LyricsItemCollection(_options.Provider.Lyric.Config);
             if (string.IsNullOrEmpty(sourceLyric))
             {
                 return lyric;
@@ -30,9 +30,9 @@ namespace ZonyLrcTools.Common.Lyrics
             return lyric;
         }
 
-        public LyricItemCollection Build(string sourceLyric, string translationLyric)
+        public LyricsItemCollection Build(string sourceLyric, string translationLyric)
         {
-            var lyric = new LyricItemCollection(_options.Provider.Lyric.Config);
+            var lyric = new LyricsItemCollection(_options.Provider.Lyric.Config);
             if (string.IsNullOrEmpty(sourceLyric))
             {
                 return lyric;
@@ -42,7 +42,7 @@ namespace ZonyLrcTools.Common.Lyrics
 
             if (_options.Provider.Lyric.Config.IsEnableTranslation && !string.IsNullOrEmpty(translationLyric))
             {
-                var translatedLyric = InternalBuildLyricObject(new LyricItemCollection(_options.Provider.Lyric.Config), translationLyric);
+                var translatedLyric = InternalBuildLyricObject(new LyricsItemCollection(_options.Provider.Lyric.Config), translationLyric);
                 if (_options.Provider.Lyric.Config.IsOnlyOutputTranslation)
                 {
                     return translatedLyric;
@@ -54,15 +54,15 @@ namespace ZonyLrcTools.Common.Lyrics
             return lyric;
         }
 
-        private LyricItemCollection InternalBuildLyricObject(LyricItemCollection lyric, string sourceText)
+        private LyricsItemCollection InternalBuildLyricObject(LyricsItemCollection lyrics, string sourceText)
         {
             var regex = new Regex(@"\[\d+:\d+.\d+\].+\n?");
             foreach (Match match in regex.Matches(sourceText))
             {
-                lyric.Add(new LyricsItem(match.Value));
+                lyrics.Add(new LyricsItem(match.Value));
             }
 
-            return lyric;
+            return lyrics;
         }
     }
 }

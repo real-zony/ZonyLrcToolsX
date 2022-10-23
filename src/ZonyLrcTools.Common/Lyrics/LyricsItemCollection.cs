@@ -7,7 +7,7 @@ namespace ZonyLrcTools.Common.Lyrics
     /// <summary>
     /// 歌词数据，包含多条歌词行对象(<see cref="LyricsItem"/>)。
     /// </summary>
-    public class LyricItemCollection : List<LyricsItem>
+    public class LyricsItemCollection : List<LyricsItem>
     {
         /// <summary>
         /// 是否为纯音乐，当没有任何歌词数据的时候，属性值为 True。
@@ -16,12 +16,12 @@ namespace ZonyLrcTools.Common.Lyrics
 
         public GlobalLyricsConfigOptions Options { get; private set; }
 
-        public LyricItemCollection(GlobalLyricsConfigOptions options)
+        public LyricsItemCollection(GlobalLyricsConfigOptions options)
         {
             Options = options;
         }
 
-        public static LyricItemCollection operator +(LyricItemCollection left, LyricItemCollection right)
+        public static LyricsItemCollection operator +(LyricsItemCollection left, LyricsItemCollection right)
         {
             if (right.IsPruneMusic)
             {
@@ -29,7 +29,7 @@ namespace ZonyLrcTools.Common.Lyrics
             }
 
             var option = left.Options;
-            var newCollection = new LyricItemCollection(option);
+            var newCollection = new LyricsItemCollection(option);
             var indexDiff = left.Count - right.Count;
             if (!option.IsOneLine)
             {
@@ -91,7 +91,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// 这个索引字典用于标识每个索引的歌词是否被处理，为 True 则为已处理，为 False 为未处理。
         /// </remarks>
         /// <param name="items">等待构建的歌词集合实例。</param>
-        private static Dictionary<int, bool> BuildMarkDictionary(LyricItemCollection items)
+        private static Dictionary<int, bool> BuildMarkDictionary(LyricsItemCollection items)
         {
             return items
                 .Select((item, index) => new { index, item })

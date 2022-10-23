@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace ZonyLrcTools.Common.Lyrics
 {
     /// <summary>
-    /// 歌词的行对象，是 <see cref="LyricItemCollection"/> 的最小单位。。
+    /// 歌词的行对象，是 <see cref="LyricsItemCollection"/> 的最小单位。。
     /// </summary>
     public class LyricsItem : IComparable<LyricsItem>
     {

@@ -4,16 +4,17 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Extensions;
+using ZonyLrcTools.Common.Infrastructure.Logging;
 
 namespace ZonyLrcTools.Common.Infrastructure.IO
 {
     public class FileScanner : IFileScanner, ITransientDependency
     {
-        public ILogger<FileScanner> Logger { get; set; }
+        private readonly IWarpLogger _logger;
 
-        public FileScanner()
+        public FileScanner(IWarpLogger logger)
         {
-            Logger = NullLogger<FileScanner>.Instance;
+            _logger = logger;
         }
 
         public Task<List<FileScannerResult>> ScanAsync(string path, IEnumerable<string> extensions)
@@ -58,7 +59,7 @@ namespace ZonyLrcTools.Common.Infrastructure.IO
             }
             catch (Exception e)
             {
-                Logger.LogWarningWithErrorCode(ErrorCodes.ScanFileError, e);
+                _logger.LogWarningWithErrorCode(ErrorCodes.ScanFileError, e);
             }
         }
     }

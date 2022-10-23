@@ -47,7 +47,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
             var lyricJsonObj = JObject.Parse(Encoding.UTF8.GetString(data));
