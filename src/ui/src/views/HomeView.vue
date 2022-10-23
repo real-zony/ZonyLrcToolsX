@@ -60,6 +60,10 @@ export default {
         type: 'openDir',
         data: {},
       })
+    },
+    loadItems() {
+      this.items = []
+      axios.get()
     }
   },
   computed: {},
