@@ -9,18 +9,18 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
     public class KuGouLyricDownloaderTests : TestBase
     {
-        private readonly ILyricDownloader _lyricDownloader;
+        private readonly ILyricsProvider _lyricsProvider;
 
         public KuGouLyricDownloaderTests()
         {
-            _lyricDownloader = GetService<IEnumerable<ILyricDownloader>>()
-                .FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.KuGou);
+            _lyricsProvider = GetService<IEnumerable<ILyricsProvider>>()
+                .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.KuGou);
         }
 
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("东方红", null);
+            var lyric = await _lyricsProvider.DownloadAsync("东方红", null);
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }

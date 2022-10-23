@@ -1,6 +1,6 @@
 namespace ZonyLrcTools.Common.Lyrics
 {
-    public interface ILyricTextResolver
+    public interface ILyricsTextResolver
     {
         LyricItemCollection Resolve(string lyricText);
     }

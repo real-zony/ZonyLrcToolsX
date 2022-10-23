@@ -7,12 +7,12 @@ using ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel;
 
 namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
 {
-    public class QQLyricDownloader : LyricDownloader
+    public class QQLyricsProvider : LyricsProvider
     {
-        public override string DownloaderName => InternalLyricDownloaderNames.QQ;
+        public override string DownloaderName => InternalLyricsProviderNames.QQ;
 
         private readonly IWarpHttpClient _warpHttpClient;
-        private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
+        private readonly ILyricsItemCollectionFactory _lyricsItemCollectionFactory;
 
         // private const string QQSearchMusicUrl = @"https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
         private const string QQSearchMusicUrl = @"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg";
@@ -20,14 +20,14 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
 
         private const string QQMusicRequestReferer = @"https://y.qq.com/";
 
-        public QQLyricDownloader(IWarpHttpClient warpHttpClient,
-            ILyricItemCollectionFactory lyricItemCollectionFactory)
+        public QQLyricsProvider(IWarpHttpClient warpHttpClient,
+            ILyricsItemCollectionFactory lyricsItemCollectionFactory)
         {
             _warpHttpClient = warpHttpClient;
-            _lyricItemCollectionFactory = lyricItemCollectionFactory;
+            _lyricsItemCollectionFactory = lyricsItemCollectionFactory;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
+        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(
                 QQSearchMusicUrl,
@@ -42,7 +42,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
             return Encoding.UTF8.GetBytes(lyricJsonString);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 
@@ -56,17 +56,17 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
 
             if (lyricJsonString.Contains("此歌曲为没有填词的纯音乐，请您欣赏"))
             {
-                return _lyricItemCollectionFactory.Build(null);
+                return _lyricsItemCollectionFactory.Build(null);
             }
 
             var lyricJsonObj = JObject.Parse(lyricJsonString);
             var sourceLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.lyric").Value<string>()));
             var translateLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.trans").Value<string>()));
 
-            return _lyricItemCollectionFactory.Build(sourceLyric, translateLyric);
+            return _lyricsItemCollectionFactory.Build(sourceLyric, translateLyric);
         }
 
-        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
+        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
             if (response is not { StatusCode: 0 } || response.Data.Song.SongItems == null)
             {

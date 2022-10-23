@@ -5,9 +5,9 @@ using ZonyLrcTools.Common.Infrastructure.Extensions;
 namespace ZonyLrcTools.Common.Lyrics
 {
     /// <summary>
-    /// 歌词数据，包含多条歌词行对象(<see cref="LyricItem"/>)。
+    /// 歌词数据，包含多条歌词行对象(<see cref="LyricsItem"/>)。
     /// </summary>
-    public class LyricItemCollection : List<LyricItem>
+    public class LyricItemCollection : List<LyricsItem>
     {
         /// <summary>
         /// 是否为纯音乐，当没有任何歌词数据的时候，属性值为 True。

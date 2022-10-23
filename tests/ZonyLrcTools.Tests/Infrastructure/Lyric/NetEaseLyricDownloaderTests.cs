@@ -12,18 +12,18 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
     public class NetEaseLyricDownloaderTests : TestBase
     {
-        private readonly ILyricDownloader _lyricDownloader;
+        private readonly ILyricsProvider _lyricsProvider;
 
         public NetEaseLyricDownloaderTests()
         {
-            _lyricDownloader = GetService<IEnumerable<ILyricDownloader>>()
-                .FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.NetEase);
+            _lyricsProvider = GetService<IEnumerable<ILyricsProvider>>()
+                .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.NetEase);
         }
 
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("Hollow", "Janet Leon");
+            var lyric = await _lyricsProvider.DownloadAsync("Hollow", "Janet Leon");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }
@@ -31,7 +31,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue_75_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("Daybreak", "samfree,初音ミク");
+            var lyric = await _lyricsProvider.DownloadAsync("Daybreak", "samfree,初音ミク");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
             lyric.ToString().Contains("惑う心繋ぎ止める").ShouldBeTrue();
@@ -40,7 +40,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue_82_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("シンデレラ (Giga First Night Remix)", "DECO 27 ギガP");
+            var lyric = await _lyricsProvider.DownloadAsync("シンデレラ (Giga First Night Remix)", "DECO 27 ギガP");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }
@@ -48,7 +48,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue84_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("太空彈", "01");
+            var lyric = await _lyricsProvider.DownloadAsync("太空彈", "01");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }
@@ -58,7 +58,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue85_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("Looking at Me", "Sabrina Carpenter");
+            var lyric = await _lyricsProvider.DownloadAsync("Looking at Me", "Sabrina Carpenter");
 
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBeFalse();
@@ -68,7 +68,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloaderAsync_Issue88_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("茫茫草原", "姚璎格");
+            var lyric = await _lyricsProvider.DownloadAsync("茫茫草原", "姚璎格");
 
             lyric.ShouldNotBeNull();
         }
@@ -76,7 +76,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task UnknownIssue_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("主題歌Arrietty's Song", "Cécile Corbel");
+            var lyric = await _lyricsProvider.DownloadAsync("主題歌Arrietty's Song", "Cécile Corbel");
 
             lyric.ShouldNotBeNull();
         }
@@ -84,7 +84,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloaderAsync_Issue101_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("君への嘘", "VALSHE");
+            var lyric = await _lyricsProvider.DownloadAsync("君への嘘", "VALSHE");
             lyric.ShouldNotBeEmpty();
         }
 
@@ -94,7 +94,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
             var options = ServiceProvider.GetRequiredService<IOptions<GlobalOptions>>();
             options.Value.Provider.Lyric.Config.IsOnlyOutputTranslation = true;
             
-            var lyric = await _lyricDownloader.DownloadAsync("Bones", "Image Dragons");
+            var lyric = await _lyricsProvider.DownloadAsync("Bones", "Image Dragons");
             lyric.ToString().ShouldNotContain("Gimme, gimme, gimme some time to think");
         }
     }

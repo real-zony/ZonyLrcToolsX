@@ -1,6 +1,6 @@
 namespace ZonyLrcTools.Common.Lyrics
 {
-    public class LyricDownloaderArgs
+    public class LyricsProviderArgs
     {
         public string SongName { get; set; }
 
@@ -8,7 +8,7 @@ namespace ZonyLrcTools.Common.Lyrics
 
         public long Duration { get; set; }
 
-        public LyricDownloaderArgs(string songName, string artist, long duration)
+        public LyricsProviderArgs(string songName, string artist, long duration)
         {
             SongName = songName;
             Artist = artist;

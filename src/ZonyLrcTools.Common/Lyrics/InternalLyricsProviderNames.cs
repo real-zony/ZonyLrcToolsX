@@ -3,7 +3,7 @@ namespace ZonyLrcTools.Common.Lyrics
     /// <summary>
     /// 定义了程序默认提供的歌词下载器。
     /// </summary>
-    public static class InternalLyricDownloaderNames
+    public static class InternalLyricsProviderNames
     {
         /// <summary>
         /// 网易云音乐歌词下载器。

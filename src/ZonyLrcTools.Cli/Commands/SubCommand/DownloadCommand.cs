@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         private readonly ILogger<DownloadCommand> _logger;
         private readonly IFileScanner _fileScanner;
         private readonly ITagLoader _tagLoader;
-        private readonly IEnumerable<ILyricDownloader> _lyricDownloaderList;
+        private readonly IEnumerable<ILyricsProvider> _lyricDownloaderList;
         private readonly IEnumerable<IAlbumDownloader> _albumDownloaderList;
 
         private readonly GlobalOptions _options;
@@ -36,7 +36,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             IFileScanner fileScanner,
             IOptions<GlobalOptions> options,
             ITagLoader tagLoader,
-            IEnumerable<ILyricDownloader> lyricDownloaderList,
+            IEnumerable<ILyricsProvider> lyricDownloaderList,
             IEnumerable<IAlbumDownloader> albumDownloaderList)
         {
             _logger = logger;
@@ -143,7 +143,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             return result.ToImmutableList();
         }
 
-        private IEnumerable<ILyricDownloader> GetLyricDownloaderList()
+        private IEnumerable<ILyricsProvider> GetLyricDownloaderList()
         {
             var downloader = _options.Provider.Lyric.Plugin
                 .Where(op => op.Priority != -1)
@@ -172,9 +172,9 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             _logger.LogInformation($"歌词数据下载完成，成功: {musicInfos.Count(m => m.IsSuccessful)} 失败{musicInfos.Count(m => m.IsSuccessful == false)}。");
         }
 
-        private async Task DownloadLyricTaskLogicAsync(IEnumerable<ILyricDownloader> downloaderList, MusicInfo info)
+        private async Task DownloadLyricTaskLogicAsync(IEnumerable<ILyricsProvider> downloaderList, MusicInfo info)
         {
-            async Task InternalDownloadLogicAsync(ILyricDownloader downloader)
+            async Task InternalDownloadLogicAsync(ILyricsProvider downloader)
             {
                 try
                 {

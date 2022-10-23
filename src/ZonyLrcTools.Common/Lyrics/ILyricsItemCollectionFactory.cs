@@ -3,7 +3,7 @@ namespace ZonyLrcTools.Common.Lyrics
     /// <summary>
     /// 构建 <see cref="LyricItemCollection"/> 对象的工厂。
     /// </summary>
-    public interface ILyricItemCollectionFactory
+    public interface ILyricsItemCollectionFactory
     {
         /// <summary>
         /// 根据指定的歌曲数据构建新的 <see cref="LyricItemCollection"/> 实例。

@@ -3,7 +3,7 @@ namespace ZonyLrcTools.Common.Lyrics
     /// <summary>
     /// 歌词数据下载器，用于匹配并下载歌曲的歌词。
     /// </summary>
-    public interface ILyricDownloader
+    public interface ILyricsProvider
     {
         /// <summary>
         /// 下载歌词数据。

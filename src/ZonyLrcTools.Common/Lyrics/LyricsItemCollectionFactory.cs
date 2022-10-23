@@ -6,13 +6,13 @@ using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 namespace ZonyLrcTools.Common.Lyrics
 {
     /// <summary>
-    /// <see cref="ILyricItemCollectionFactory"/> 的默认实现。
+    /// <see cref="ILyricsItemCollectionFactory"/> 的默认实现。
     /// </summary>
-    public class LyricItemCollectionFactory : ILyricItemCollectionFactory, ITransientDependency
+    public class LyricsItemCollectionFactory : ILyricsItemCollectionFactory, ITransientDependency
     {
         private readonly GlobalOptions _options;
 
-        public LyricItemCollectionFactory(IOptions<GlobalOptions> options)
+        public LyricsItemCollectionFactory(IOptions<GlobalOptions> options)
         {
             _options = options.Value;
         }
@@ -59,7 +59,7 @@ namespace ZonyLrcTools.Common.Lyrics
             var regex = new Regex(@"\[\d+:\d+.\d+\].+\n?");
             foreach (Match match in regex.Matches(sourceText))
             {
-                lyric.Add(new LyricItem(match.Value));
+                lyric.Add(new LyricsItem(match.Value));
             }
 
             return lyric;

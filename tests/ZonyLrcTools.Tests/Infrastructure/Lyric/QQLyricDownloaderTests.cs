@@ -9,18 +9,18 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
 {
     public class QQLyricDownloaderTests : TestBase
     {
-        private readonly ILyricDownloader _lyricDownloader;
+        private readonly ILyricsProvider _lyricsProvider;
 
         public QQLyricDownloaderTests()
         {
-            _lyricDownloader = GetService<IEnumerable<ILyricDownloader>>()
-                .FirstOrDefault(t => t.DownloaderName == InternalLyricDownloaderNames.QQ);
+            _lyricsProvider = GetService<IEnumerable<ILyricsProvider>>()
+                .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.QQ);
         }
 
         [Fact]
         public async Task DownloadAsync_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("东风破", "周杰伦");
+            var lyric = await _lyricsProvider.DownloadAsync("东风破", "周杰伦");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }
@@ -30,7 +30,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyric
         [Fact]
         public async Task DownloadAsync_Issue85_Test()
         {
-            var lyric = await _lyricDownloader.DownloadAsync("Looking at Me", "Sabrina Carpenter");
+            var lyric = await _lyricsProvider.DownloadAsync("Looking at Me", "Sabrina Carpenter");
 
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBeFalse();

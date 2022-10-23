@@ -8,28 +8,28 @@ using ZonyLrcTools.Common.Lyrics.Providers.KuGou.JsonModel;
 
 namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
 {
-    public class KuGourLyricDownloader : LyricDownloader
+    public class KuGourLyricsProvider : LyricsProvider
     {
-        public override string DownloaderName => InternalLyricDownloaderNames.KuGou;
+        public override string DownloaderName => InternalLyricsProviderNames.KuGou;
 
         private readonly IWarpHttpClient _warpHttpClient;
-        private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
+        private readonly ILyricsItemCollectionFactory _lyricsItemCollectionFactory;
         private readonly GlobalOptions _options;
 
         private const string KuGouSearchMusicUrl = @"https://songsearch.kugou.com/song_search_v2";
         private const string KuGouGetLyricAccessKeyUrl = @"http://lyrics.kugou.com/search";
         private const string KuGouGetLyricUrl = @"http://lyrics.kugou.com/download";
 
-        public KuGourLyricDownloader(IWarpHttpClient warpHttpClient,
-            ILyricItemCollectionFactory lyricItemCollectionFactory,
+        public KuGourLyricsProvider(IWarpHttpClient warpHttpClient,
+            ILyricsItemCollectionFactory lyricsItemCollectionFactory,
             IOptions<GlobalOptions> options)
         {
             _warpHttpClient = warpHttpClient;
-            _lyricItemCollectionFactory = lyricItemCollectionFactory;
+            _lyricsItemCollectionFactory = lyricsItemCollectionFactory;
             _options = options.Value;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
+        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(KuGouSearchMusicUrl,
                 new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth));
@@ -47,7 +47,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
             var lyricJsonObj = JObject.Parse(Encoding.UTF8.GetString(data));
@@ -57,10 +57,10 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
             }
 
             var lyricText = Encoding.UTF8.GetString(Convert.FromBase64String(lyricJsonObj.SelectToken("$.content").Value<string>()));
-            return _lyricItemCollectionFactory.Build(lyricText);
+            return _lyricsItemCollectionFactory.Build(lyricText);
         }
 
-        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
+        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
             if (response.ErrorCode != 0 && response.Status != 1 || response.Data.List == null)
             {

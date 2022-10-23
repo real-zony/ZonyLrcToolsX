@@ -9,12 +9,12 @@ using ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel;
 
 namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
 {
-    public class NetEaseLyricDownloader : LyricDownloader
+    public class NetEaseLyricsProvider : LyricsProvider
     {
-        public override string DownloaderName => InternalLyricDownloaderNames.NetEase;
+        public override string DownloaderName => InternalLyricsProviderNames.NetEase;
 
         private readonly IWarpHttpClient _warpHttpClient;
-        private readonly ILyricItemCollectionFactory _lyricItemCollectionFactory;
+        private readonly ILyricsItemCollectionFactory _lyricsItemCollectionFactory;
         private readonly GlobalOptions _options;
 
         private const string NetEaseSearchMusicUrl = @"https://music.163.com/api/search/get/web";
@@ -23,16 +23,16 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
         private const string NetEaseRequestReferer = @"https://music.163.com";
         private const string NetEaseRequestContentType = @"application/x-www-form-urlencoded";
 
-        public NetEaseLyricDownloader(IWarpHttpClient warpHttpClient,
-            ILyricItemCollectionFactory lyricItemCollectionFactory,
+        public NetEaseLyricsProvider(IWarpHttpClient warpHttpClient,
+            ILyricsItemCollectionFactory lyricsItemCollectionFactory,
             IOptions<GlobalOptions> options)
         {
             _warpHttpClient = warpHttpClient;
-            _lyricItemCollectionFactory = lyricItemCollectionFactory;
+            _lyricsItemCollectionFactory = lyricsItemCollectionFactory;
             _options = options.Value;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricDownloaderArgs args)
+        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(
                 NetEaseSearchMusicUrl,
@@ -57,7 +57,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
             return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricDownloaderArgs args)
+        protected override async ValueTask<LyricItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 
@@ -72,12 +72,12 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
                 return new LyricItemCollection(null);
             }
 
-            return _lyricItemCollectionFactory.Build(
+            return _lyricsItemCollectionFactory.Build(
                 json.OriginalLyric?.Text,
                 json.TranslationLyric?.Text);
         }
 
-        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricDownloaderArgs args)
+        protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
             if (response?.StatusCode != SongSearchResponseStatusCode.Success)
             {
