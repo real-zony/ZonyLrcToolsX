@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Common;
+using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 
-namespace ZonyLrcTools.Cli.Infrastructure.Tag
+namespace ZonyLrcTools.Common.TagInfo
 {
     /// <summary>
     /// 默认的标签加载器 <see cref="ITagLoader"/> 实现。
@@ -37,7 +33,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
             _sortedTagInfoProviders = GetTagInfoProviders();
         }
 
-        public virtual async ValueTask<MusicInfo> LoadTagAsync(string filePath)
+        public virtual async ValueTask<MusicInfo?> LoadTagAsync(string filePath)
         {
             foreach (var provider in _sortedTagInfoProviders)
             {

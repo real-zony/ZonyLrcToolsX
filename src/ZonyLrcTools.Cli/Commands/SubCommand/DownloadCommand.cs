@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Options;
-using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Common;
 using ZonyLrcTools.Common.Album;
 using ZonyLrcTools.Common.Configuration;
@@ -14,7 +13,6 @@ using ZonyLrcTools.Common.Infrastructure.IO;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 using ZonyLrcTools.Common.Infrastructure.Threading;
 using ZonyLrcTools.Common.Lyrics;
-using File = System.IO.File;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand
 {
@@ -22,24 +20,22 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
     public class DownloadCommand : ToolCommandBase
     {
         private readonly ILyricsDownloader _lyricsDownloader;
-        private readonly IFileScanner _fileScanner;
+        private readonly IMusicInfoLoader _musicInfoLoader;
         private readonly IEnumerable<IAlbumDownloader> _albumDownloaderList;
-        private readonly ITagLoader _tagLoader;
-        private readonly IWarpLogger _logger;
 
+        private readonly IWarpLogger _logger;
         private readonly GlobalOptions _options;
 
-        public DownloadCommand(IFileScanner fileScanner,
-            IOptions<GlobalOptions> options,
+        public DownloadCommand(IOptions<GlobalOptions> options,
             IEnumerable<IAlbumDownloader> albumDownloaderList,
-            ITagLoader tagLoader,
-            ILyricsDownloader lyricsDownloader, IWarpLogger logger)
+            ILyricsDownloader lyricsDownloader,
+            IWarpLogger logger,
+            IMusicInfoLoader musicInfoLoader)
         {
-            _fileScanner = fileScanner;
             _albumDownloaderList = albumDownloaderList;
-            _tagLoader = tagLoader;
             _lyricsDownloader = lyricsDownloader;
             _logger = logger;
+            _musicInfoLoader = musicInfoLoader;
             _options = options.Value;
         }
 
@@ -64,37 +60,17 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         {
             if (DownloadLyric)
             {
-                await _lyricsDownloader.DownloadAsync(
-                    await LoadMusicInfoAsync(
-                        RemoveExistLyricFiles(
-                            await ScanMusicFilesAsync())), ParallelNumber);
+                await _lyricsDownloader.DownloadAsync(await _musicInfoLoader.LoadAsync(SongsDirectory, ParallelNumber), ParallelNumber);
             }
 
             if (DownloadAlbum)
             {
-                await DownloadAlbumAsync(
-                    await LoadMusicInfoAsync(
-                        await ScanMusicFilesAsync()));
+                // await DownloadAlbumAsync(
+                //     await LoadMusicInfoAsync(
+                //         await ScanMusicFilesAsync()));
             }
 
             return 0;
-        }
-
-        private async Task<List<string>> ScanMusicFilesAsync()
-        {
-            var files = (await _fileScanner.ScanAsync(SongsDirectory, _options.SupportFileExtensions))
-                .SelectMany(t => t.FilePaths)
-                .ToList();
-
-            if (files.Count == 0)
-            {
-                await _logger.ErrorAsync("没有找到任何音乐文件。");
-                throw new ErrorCodeException(ErrorCodes.NoFilesWereScanned);
-            }
-
-            await _logger.InfoAsync($"已经扫描到了 {files.Count} 个音乐文件。");
-
-            return files;
         }
 
         private List<string> RemoveExistLyricFiles(List<string> filePaths)
@@ -116,21 +92,6 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                     return false;
                 })
                 .ToList();
-        }
-
-        private async Task<List<MusicInfo>> LoadMusicInfoAsync(IReadOnlyCollection<string> files)
-        {
-            await _logger.InfoAsync("开始加载音乐文件的标签信息...");
-
-            var warpTask = new WarpTask(ParallelNumber);
-            var warpTaskList = files.Select(file => warpTask.RunAsync(() => Task.Run(async () => await _tagLoader.LoadTagAsync(file))));
-            var result = (await Task.WhenAll(warpTaskList))
-                .Where(m => m != null)
-                .Where(m => !string.IsNullOrEmpty(m.Name) || !string.IsNullOrEmpty(m.Artist))
-                .ToList();
-
-            await _logger.InfoAsync($"已成功加载 {files.Count} 个音乐文件的标签信息。");
-            return result;
         }
 
         #region > Ablum image download logic <

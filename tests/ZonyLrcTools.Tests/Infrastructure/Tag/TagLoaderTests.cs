@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 using ZonyLrcTools.Cli.Infrastructure.Tag;
+using ZonyLrcTools.Common.TagInfo;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Tag
 {
