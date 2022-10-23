@@ -40,6 +40,7 @@ public class DefaultLyricsDownloader : ILyricsDownloader, ISingletonDependency
         CancellationToken cancellationToken = default)
     {
         await _logger.InfoAsync("开始下载歌词文件数据...");
+        
         if (parallelCount <= 0)
         {
             parallelCount = 1;
@@ -66,7 +67,6 @@ public class DefaultLyricsDownloader : ILyricsDownloader, ISingletonDependency
         await Task.WhenAll(downloadTasks);
 
         await _logger.InfoAsync($"歌词数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
-
         return needDownloadMusicInfos;
     }
 

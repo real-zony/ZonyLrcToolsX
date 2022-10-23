@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,8 +64,10 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         {
             if (DownloadLyric)
             {
-                var musicInfos = await LoadMusicInfoAsync(RemoveExistLyricFiles(await ScanMusicFilesAsync()));
-                await _lyricsDownloader.DownloadAsync(musicInfos.ToList(), ParallelNumber);
+                await _lyricsDownloader.DownloadAsync(
+                    await LoadMusicInfoAsync(
+                        RemoveExistLyricFiles(
+                            await ScanMusicFilesAsync())), ParallelNumber);
             }
 
             if (DownloadAlbum)
@@ -117,7 +118,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 .ToList();
         }
 
-        private async Task<ImmutableList<MusicInfo>> LoadMusicInfoAsync(IReadOnlyCollection<string> files)
+        private async Task<List<MusicInfo>> LoadMusicInfoAsync(IReadOnlyCollection<string> files)
         {
             await _logger.InfoAsync("开始加载音乐文件的标签信息...");
 
@@ -128,17 +129,13 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
                 .Where(m => !string.IsNullOrEmpty(m.Name) || !string.IsNullOrEmpty(m.Artist))
                 .ToList();
 
-            // Load music total time info.
-            // result.Foreach(m => { m.TotalTime = (long?)new AudioFileReader(m.FilePath).TotalTime.TotalMilliseconds; });
-
             await _logger.InfoAsync($"已成功加载 {files.Count} 个音乐文件的标签信息。");
-
-            return result.ToImmutableList();
+            return result;
         }
 
         #region > Ablum image download logic <
 
-        private async ValueTask DownloadAlbumAsync(ImmutableList<MusicInfo> musicInfos)
+        private async ValueTask DownloadAlbumAsync(List<MusicInfo> musicInfos)
         {
             await _logger.InfoAsync("开始下载专辑图像数据...");
 
