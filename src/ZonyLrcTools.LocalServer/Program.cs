@@ -1,8 +1,16 @@
 using System.Diagnostics;
-using ZonyLrcTools.LocalServer;
+using System.Reflection;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
+using ZonyLrcTools.LocalServer.EventBus;
+
+#region Main Flow
 
 var app = RegisterAndConfigureServices();
 await ListenServices();
+
+#endregion
+
+#region Configure Services
 
 async Task ListenServices()
 {
@@ -17,6 +25,7 @@ WebApplication? RegisterAndConfigureServices()
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
+    builder.Services.BeginAutoDependencyInject<Program>();
 
     var insideApp = builder.Build();
     insideApp.UseSpaStaticFiles(new StaticFileOptions
@@ -24,13 +33,14 @@ WebApplication? RegisterAndConfigureServices()
         RequestPath = "",
         FileProvider = new Microsoft.Extensions.FileProviders
             .ManifestEmbeddedFileProvider(
-                typeof(Program).Assembly, "UiStaticResources"
+                Assembly.GetExecutingAssembly(), "UiStaticResources"
             )
     });
 
-    insideApp.UseAuthorization();
     insideApp.MapControllers();
-    // insideApp.Lifetime.ApplicationStarted.Register(OpenBrowser);
+#if !DEBUG
+        insideApp.Lifetime.ApplicationStarted.Register(OpenBrowser);
+#endif
 
     return insideApp;
 }
@@ -52,3 +62,5 @@ void OpenBrowser()
         Process.Start("xdg-open", url);
     }
 }
+
+#endregion

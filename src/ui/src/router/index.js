@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
+import SettingView from "@/views/SettingView"
 
 Vue.use(VueRouter)
 
@@ -13,12 +15,12 @@ const routes = [
     {
         path: '/about',
         name: 'about',
-        component: () => import( '../views/AboutView.vue')
+        component: AboutView
     },
     {
         path: '/setting',
         name: 'setting',
-        component: () => import('../views/SettingView.vue')
+        component: SettingView
     }
 ]
 

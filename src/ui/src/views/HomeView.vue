@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+
+    <!-- Operation Buttons Group -->
     <div class="button-group">
       <v-btn @click="openDir">
         扫描文件
@@ -8,6 +10,7 @@
 
       <v-btn class="ml-5" disabled>开始下载</v-btn>
     </div>
+
     <div class="file-list mt-5">
       <v-data-table
           :headers="headers"
@@ -20,6 +23,7 @@
           <v-icon v-else>mdi-minus</v-icon>
         </template>
       </v-data-table>
+
       <div class="output mt-8">
         <v-textarea disabled outlined label="日志信息" :value='outputText'/>
       </div>
@@ -46,14 +50,7 @@ export default {
         {text: '状态', value: 'status'},
         {text: '操作', value: 'action'},
       ],
-      items: [
-        {
-          name: 'Frozen Yogurt',
-          size: 159,
-          status: 'success',
-          action: 4.0,
-        }
-      ],
+      items: [],
       outputText: ''
     }
   },
@@ -70,17 +67,17 @@ export default {
     // eventBus.$on('getFile', (msgData) => {
     //   console.log(msgData);
     // });
-    eventBus.$on('getFileInfo', (msgData) => {
-      this.items = [...this.items, ...msgData.data.map(item => {
-        return {
-          name: item.name,
-          size: item.size,
-          status: 'success',
-          action: 4.0,
-        }
-      })]
-    });
-
+    // eventBus.$on('getFileInfo', (msgData) => {
+    //   this.items = [...this.items, ...msgData.data.map(item => {
+    //     return {
+    //       name: item.name,
+    //       size: item.size,
+    //       status: 'success',
+    //       action: 4.0,
+    //     }
+    //   })]
+    // });
+    //
     eventBus.$on('output', (msgData) => {
       this.outputText = this.outputText.concat(msgData.data.text).concat('\n');
     });
