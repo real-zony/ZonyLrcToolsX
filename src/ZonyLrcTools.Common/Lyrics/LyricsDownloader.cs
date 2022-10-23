@@ -9,33 +9,33 @@ using ZonyLrcTools.Common.Infrastructure.Threading;
 
 namespace ZonyLrcTools.Common.Lyrics;
 
-public class DefaultLyricsDownloader : ILyricsDownloader, ISingletonDependency
+public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
 {
-    private readonly IEnumerable<ILyricsProvider> _lyricDownloaderList;
-    private readonly GlobalOptions _options;
+    private readonly IEnumerable<ILyricsProvider> _lyricsProviders;
     private readonly IWarpLogger _logger;
+    private readonly GlobalOptions _options;
 
     public IEnumerable<ILyricsProvider> AvailableProviders => new Lazy<IEnumerable<ILyricsProvider>>(() =>
     {
         return _options.Provider.Lyric.Plugin
             .Where(op => op.Priority != -1)
             .OrderBy(op => op.Priority)
-            .Join(_lyricDownloaderList,
+            .Join(_lyricsProviders,
                 op => op.Name,
                 loader => loader.DownloaderName,
-                (op, loader) => loader);
+                (_, loader) => loader);
     }).Value;
 
-    public DefaultLyricsDownloader(IEnumerable<ILyricsProvider> lyricDownloaderList,
+    public LyricsDownloader(IEnumerable<ILyricsProvider> lyricsProviders,
         IOptions<GlobalOptions> options,
         IWarpLogger logger)
     {
-        _lyricDownloaderList = lyricDownloaderList;
+        _lyricsProviders = lyricsProviders;
         _logger = logger;
         _options = options.Value;
     }
 
-    public async Task<List<MusicInfo>> DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
+    public async Task DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
         int parallelCount = 2,
         CancellationToken cancellationToken = default)
     {
@@ -67,7 +67,6 @@ public class DefaultLyricsDownloader : ILyricsDownloader, ISingletonDependency
         await Task.WhenAll(downloadTasks);
 
         await _logger.InfoAsync($"歌词数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
-        return needDownloadMusicInfos;
     }
 
     private async Task DownloadAndWriteLyricsAsync(ILyricsProvider provider, MusicInfo info)

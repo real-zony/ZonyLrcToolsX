@@ -12,8 +12,8 @@ namespace ZonyLrcTools.Tests.Infrastructure.Album
     {
         public async Task DownloadDataAsync_Test()
         {
-            var downloader = ServiceProvider.GetRequiredService<IEnumerable<IAlbumDownloader>>()
-                .FirstOrDefault(x => x.DownloaderName == InternalAlbumDownloaderNames.QQ);
+            var downloader = ServiceProvider.GetRequiredService<IEnumerable<IAlbumProvider>>()
+                .FirstOrDefault(x => x.DownloaderName == InternalAlbumProviderNames.QQ);
 
             downloader.ShouldNotBeNull();
             var albumBytes = await downloader.DownloadAsync("东方红", null);

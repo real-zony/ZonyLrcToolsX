@@ -5,9 +5,9 @@ using ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel;
 
 namespace ZonyLrcTools.Common.Album.QQMusic
 {
-    public class QQMusicAlbumDownloader : IAlbumDownloader, ITransientDependency
+    public class QQMusicAlbumProvider : IAlbumProvider, ITransientDependency
     {
-        public string DownloaderName => InternalAlbumDownloaderNames.QQ;
+        public string DownloaderName => InternalAlbumProviderNames.QQ;
 
         private readonly IWarpHttpClient _warpHttpClient;
 
@@ -24,7 +24,7 @@ namespace ZonyLrcTools.Common.Album.QQMusic
         private const string SearchApi = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp";
         private const string DefaultReferer = "https://y.qq.com";
 
-        public QQMusicAlbumDownloader(IWarpHttpClient warpHttpClient)
+        public QQMusicAlbumProvider(IWarpHttpClient warpHttpClient)
         {
             _warpHttpClient = warpHttpClient;
         }

@@ -7,9 +7,9 @@ using ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel;
 
 namespace ZonyLrcTools.Common.Album.NetEase
 {
-    public class NetEaseAlbumDownloader : IAlbumDownloader, ITransientDependency
+    public class NetEaseAlbumProvider : IAlbumProvider, ITransientDependency
     {
-        public string DownloaderName => InternalAlbumDownloaderNames.NetEase;
+        public string DownloaderName => InternalAlbumProviderNames.NetEase;
 
         private readonly IWarpHttpClient _warpHttpClient;
         private readonly Action<HttpRequestMessage> _defaultOption;
@@ -18,7 +18,7 @@ namespace ZonyLrcTools.Common.Album.NetEase
         private const string GetMusicInfoApi = @"https://music.163.com/api/song/detail";
         private const string DefaultReferer = @"https://music.163.com";
 
-        public NetEaseAlbumDownloader(IWarpHttpClient warpHttpClient)
+        public NetEaseAlbumProvider(IWarpHttpClient warpHttpClient)
         {
             _warpHttpClient = warpHttpClient;
             _defaultOption = message =>

@@ -2,7 +2,7 @@
 
 public interface ILyricsDownloader
 {
-    Task<List<MusicInfo>> DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
+    Task DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
         int parallelCount = 2,
         CancellationToken cancellationToken = default);
 

@@ -3,7 +3,7 @@
     /// <summary>
     /// 定义了程序默认提供的专辑图像下载器。
     /// </summary>
-    public static class InternalAlbumDownloaderNames
+    public static class InternalAlbumProviderNames
     {
         /// <summary>
         /// 网易云音乐专辑图像下载器。

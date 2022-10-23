@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.IO;
 using ZonyLrcTools.Common.Infrastructure.Logging;
@@ -8,7 +9,7 @@ using ZonyLrcTools.Common.TagInfo;
 
 namespace ZonyLrcTools.Common;
 
-public class MusicInfoLoader : IMusicInfoLoader
+public class MusicInfoLoader : IMusicInfoLoader, ITransientDependency
 {
     private readonly IWarpLogger _logger;
     private readonly IFileScanner _fileScanner;
@@ -30,7 +31,7 @@ public class MusicInfoLoader : IMusicInfoLoader
         int parallelCount = 2,
         CancellationToken cancellationToken = default)
     {
-        var files = (await _fileScanner.ScanMusicFilesAsync(dirPath, _options.SupportFileExtensions)).ToList();
+        var files = RemoveExistLyricFiles(await _fileScanner.ScanMusicFilesAsync(dirPath, _options.SupportFileExtensions));
 
         if (files.Count == 0)
         {
@@ -65,5 +66,26 @@ public class MusicInfoLoader : IMusicInfoLoader
         await _logger.InfoAsync($"已成功加载 {filePaths.Count} 个音乐文件的标签信息。");
 
         return result;
+    }
+
+    private List<string> RemoveExistLyricFiles(IEnumerable<string> filePaths)
+    {
+        if (!_options.Provider.Lyric.Config.IsSkipExistLyricFiles)
+        {
+            return filePaths.ToList();
+        }
+
+        return filePaths
+            .Where(path =>
+            {
+                if (!File.Exists(Path.ChangeExtension(path, ".lrc")))
+                {
+                    return true;
+                }
+
+                _logger.WarnAsync($"已经存在歌词文件 {path}，跳过。").GetAwaiter().GetResult();
+                return false;
+            })
+            .ToList();
     }
 }
