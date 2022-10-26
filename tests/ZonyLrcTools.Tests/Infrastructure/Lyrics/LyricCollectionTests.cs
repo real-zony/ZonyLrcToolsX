@@ -3,7 +3,7 @@ using Xunit;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Lyrics;
 
-namespace ZonyLrcTools.Tests.Infrastructure.Lyric
+namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
 {
     public class LyricCollectionTests : TestBase
     {

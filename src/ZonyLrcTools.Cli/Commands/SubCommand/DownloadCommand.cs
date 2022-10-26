@@ -5,7 +5,6 @@ using ZonyLrcTools.Common.Album;
 using ZonyLrcTools.Common.Lyrics;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand

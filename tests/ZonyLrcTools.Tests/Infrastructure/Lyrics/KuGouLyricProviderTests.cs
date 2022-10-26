@@ -5,13 +5,13 @@ using Shouldly;
 using Xunit;
 using ZonyLrcTools.Common.Lyrics;
 
-namespace ZonyLrcTools.Tests.Infrastructure.Lyric
+namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
 {
-    public class KuGouLyricDownloaderTests : TestBase
+    public class KuGouLyricProviderTests : TestBase
     {
         private readonly ILyricsProvider _lyricsProvider;
 
-        public KuGouLyricDownloaderTests()
+        public KuGouLyricProviderTests()
         {
             _lyricsProvider = GetService<IEnumerable<ILyricsProvider>>()
                 .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.KuGou);

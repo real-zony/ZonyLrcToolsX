@@ -8,13 +8,13 @@ using Xunit;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Lyrics;
 
-namespace ZonyLrcTools.Tests.Infrastructure.Lyric
+namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
 {
-    public class NetEaseLyricDownloaderTests : TestBase
+    public class NetEaseLyricsProviderTests : TestBase
     {
         private readonly ILyricsProvider _lyricsProvider;
 
-        public NetEaseLyricDownloaderTests()
+        public NetEaseLyricsProviderTests()
         {
             _lyricsProvider = GetService<IEnumerable<ILyricsProvider>>()
                 .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.NetEase);

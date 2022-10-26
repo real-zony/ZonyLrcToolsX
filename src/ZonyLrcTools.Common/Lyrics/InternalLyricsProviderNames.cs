@@ -19,5 +19,10 @@ namespace ZonyLrcTools.Common.Lyrics
         /// 酷狗音乐歌词下载器。
         /// </summary>
         public const string KuGou = nameof(KuGou);
+
+        /// <summary>
+        /// 酷我音乐歌词下载器。
+        /// </summary>
+        public const string KuWo = nameof(KuWo);
     }
 }
