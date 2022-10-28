@@ -24,7 +24,7 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 
 ### 子命令
 
-#### 歌曲下载
+#### 歌词下载
 
 子命令为 `download`，可用于下载歌词数据和专辑图像，支持多个下载器进行下载。
 
@@ -39,6 +39,7 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 ```shell
 # 下载歌词
 ./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -l -n 2
+
 # 下载专辑封面
 ./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -a -n 2
 ```
@@ -71,6 +72,7 @@ globalOption:
     isEnable: false # 是否启用代理。
     ip: 127.0.0.1   # 代理服务 IP 地址。
     port: 4780      # 代理服务端口号。
+    updateUrl: https://api.myzony.com/lrc-tools/update # 更新检查地址。
   
   # 下载器的相关参数配置。
   provider:
@@ -97,12 +99,15 @@ globalOption:
       plugin:
         - name: NetEase   # 基于网易云音乐的歌词下载器。
           priority: 1     # 优先级，升序排列，改为 -1 时禁用。
-          depth: 30       # 搜索深度，值越大搜索结果越多，但搜索时间越长。
+          depth: 10       # 搜索深度，值越大搜索结果越多，但搜索时间越长。
         - name: QQ        # 基于 QQ 音乐的歌词下载器。
           priority: 2
-          # depth: 10       # 暂时不支持。
+          # depth: 10     # 暂时不支持。
         - name: KuGou     # 基于酷狗音乐的歌词下载器。
           priority: 3
+          depth: 10
+        - name: KuWo      # 基于酷我音乐的歌词下载器。
+          priority: 4
           depth: 10
       # 歌词下载的一些共有配置参数。
       config:
@@ -117,6 +122,15 @@ globalOption:
 #### 支持的编码格式
 
 详细信息请参考: [MSDN Encoding 列表](https://learn.microsoft.com/en-us/dotnet/api/System.Text.Encoding.GetEncodings?view=net-6.0#examples)，使用 `identifier and name` 作为参数值填入 `config.yaml` 文件当中的 `fileEncoding`。
+
+#### 支持的歌词源
+
+| 歌词源     | 默认优先级 |
+| ---------- | ---------- |
+| 网易云音乐 | 1          |
+| QQ 音乐    | 2          |
+| 酷狗音乐   | 3          |
+| 酷我音乐   | 4          |
 
 ### 屏蔽字典
 
@@ -141,5 +155,5 @@ globalOption:
 ## 路线图
 
 - [x] 支持跨平台的 CLI 工具。
-- [ ] 基于 Web GUI 的操作站点。
+- [x] 基于 Web GUI 的操作站点。
 - [ ] 支持插件系统(Lua 引擎)。
