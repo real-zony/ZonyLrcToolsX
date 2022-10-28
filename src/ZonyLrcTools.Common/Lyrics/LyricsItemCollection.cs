@@ -14,9 +14,9 @@ namespace ZonyLrcTools.Common.Lyrics
         /// </summary>
         public bool IsPruneMusic => Count == 0;
 
-        public GlobalLyricsConfigOptions Options { get; private set; }
+        public GlobalLyricsConfigOptions? Options { get; private set; }
 
-        public LyricsItemCollection(GlobalLyricsConfigOptions options)
+        public LyricsItemCollection(GlobalLyricsConfigOptions? options)
         {
             Options = options;
         }

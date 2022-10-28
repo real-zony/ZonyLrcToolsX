@@ -21,6 +21,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
         }
 
         [Fact]
+        [Trait("LyricsProvider ", "NetEase")]
         public async Task DownloadAsync_Test()
         {
             var lyric = await _lyricsProvider.DownloadAsync("Hollow", "Janet Leon");
@@ -93,7 +94,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
         {
             var options = ServiceProvider.GetRequiredService<IOptions<GlobalOptions>>();
             options.Value.Provider.Lyric.Config.IsOnlyOutputTranslation = true;
-            
+
             var lyric = await _lyricsProvider.DownloadAsync("Bones", "Image Dragons");
             lyric.ToString().ShouldNotContain("Gimme, gimme, gimme some time to think");
         }

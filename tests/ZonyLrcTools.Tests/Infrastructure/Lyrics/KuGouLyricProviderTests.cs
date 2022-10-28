@@ -18,6 +18,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
         }
 
         [Fact]
+        [Trait("LyricsProvider", "KuGou")]
         public async Task DownloadAsync_Test()
         {
             var lyric = await _lyricsProvider.DownloadAsync("东方红", null);

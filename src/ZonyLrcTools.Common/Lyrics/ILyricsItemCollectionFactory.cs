@@ -10,7 +10,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// </summary>
         /// <param name="sourceLyric">原始歌词数据。</param>
         /// <returns>构建完成的 <see cref="LyricsItemCollection"/> 对象。</returns>
-        LyricsItemCollection Build(string sourceLyric);
+        LyricsItemCollection Build(string? sourceLyric);
 
         /// <summary>
         /// 根据指定的歌曲数据构建新的 <see cref="LyricsItemCollection"/> 实例。

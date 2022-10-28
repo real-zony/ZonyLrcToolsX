@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using System.Text;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ZonyLrcTools.Common.Configuration;
@@ -32,7 +31,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
             _options = options.Value;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
+        protected override async ValueTask<object> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(
                 NetEaseSearchMusicUrl,
@@ -49,19 +48,17 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
 
             ValidateSongSearchResponse(searchResult, args);
 
-            var lyricResponse = await _warpHttpClient.GetAsync(
+            return await _warpHttpClient.GetAsync(
                 NetEaseGetLyricUrl,
                 new GetLyricRequest(searchResult.GetFirstMatchSongId(args.SongName, args.Duration)),
                 msg => msg.Headers.Referrer = new Uri(NetEaseRequestReferer));
-
-            return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 
-            var json = JsonConvert.DeserializeObject<GetLyricResponse>(Encoding.UTF8.GetString(data));
+            var json = JsonConvert.DeserializeObject<GetLyricResponse>((lyricsObject as string)!);
             if (json?.OriginalLyric == null || string.IsNullOrEmpty(json.OriginalLyric.Text))
             {
                 return new LyricsItemCollection(null);
@@ -73,8 +70,8 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
             }
 
             return _lyricsItemCollectionFactory.Build(
-                json.OriginalLyric?.Text,
-                json.TranslationLyric?.Text);
+                json.OriginalLyric.Text,
+                json.TranslationLyric.Text);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)

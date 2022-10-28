@@ -1,4 +1,3 @@
-using System.Text;
 using System.Web;
 using Newtonsoft.Json.Linq;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
@@ -27,7 +26,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
             _lyricsItemCollectionFactory = lyricsItemCollectionFactory;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
+        protected override async ValueTask<object> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(
                 QQSearchMusicUrl,
@@ -35,18 +34,16 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
 
             ValidateSongSearchResponse(searchResult, args);
 
-            var lyricJsonString = await _warpHttpClient.GetAsync(QQGetLyricUrl,
+            return await _warpHttpClient.GetAsync(QQGetLyricUrl,
                 new GetLyricRequest(searchResult.Data.Song.SongItems.FirstOrDefault()?.SongId),
                 op => op.Headers.Referrer = new Uri(QQMusicRequestReferer));
-
-            return Encoding.UTF8.GetBytes(lyricJsonString);
         }
 
-        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
 
-            var lyricJsonString = Encoding.UTF8.GetString(data);
+            var lyricJsonString = (lyricsObject as string)!;
             lyricJsonString = lyricJsonString.Replace(@"MusicJsonCallback(", string.Empty).TrimEnd(')');
 
             if (lyricJsonString.Contains("\"code\":-1901"))

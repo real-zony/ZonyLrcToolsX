@@ -18,13 +18,14 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
         }
 
         [Fact]
+        [Trait("LyricsProvider", "QQ")]
         public async Task DownloadAsync_Test()
         {
             var lyric = await _lyricsProvider.DownloadAsync("东风破", "周杰伦");
             lyric.ShouldNotBeNull();
             lyric.IsPruneMusic.ShouldBe(false);
         }
-        
+
         // About the new feature mentioned in issue #87.
         // Github Issue: https://github.com/real-zony/ZonyLrcToolsX/issues/87
         [Fact]

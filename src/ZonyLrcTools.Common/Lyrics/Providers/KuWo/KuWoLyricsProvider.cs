@@ -32,7 +32,7 @@ public class KuWoLyricsProvider : LyricsProvider
         _options = options.Value;
     }
 
-    protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
+    protected override async ValueTask<object> DownloadDataAsync(LyricsProviderArgs args)
     {
         var songSearchResponse = await _warpHttpClient.GetAsync<SongSearchResponse>(KuWoSearchMusicUrl,
             new SongSearchRequest(args.SongName, args.Artist, pageSize: _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth),
@@ -46,18 +46,16 @@ public class KuWoLyricsProvider : LyricsProvider
 
         ValidateSongSearchResponse(songSearchResponse, args);
 
-        var songLyricsResponse = await _warpHttpClient.GetAsync<GetLyricsResponse>(KuWoSearchLyricsUrl,
+        return await _warpHttpClient.GetAsync<GetLyricsResponse>(KuWoSearchLyricsUrl,
             new GetLyricsRequest(songSearchResponse.GetMatchedMusicId(args.SongName, args.Artist, args.Duration)),
             op =>
             {
                 op.Headers.UserAgent.Add(UserAgent);
                 op.Headers.Referrer = new Uri("https://m.kuwo.cn/yinyue/");
             });
-
-        return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(songLyricsResponse.Lyrics));
     }
 
-    protected override ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+    protected override ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
     {
         throw new NotImplementedException();
     }

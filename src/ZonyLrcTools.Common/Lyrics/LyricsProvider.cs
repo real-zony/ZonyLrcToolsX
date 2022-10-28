@@ -21,8 +21,8 @@ namespace ZonyLrcTools.Common.Lyrics
         {
             var args = new LyricsProviderArgs(songName, artist, duration ?? 0);
             await ValidateAsync(args);
-            var downloadDataBytes = await DownloadDataAsync(args);
-            return await GenerateLyricAsync(downloadDataBytes, args);
+            var downloadDataObject = await DownloadDataAsync(args);
+            return await GenerateLyricAsync(downloadDataObject, args);
         }
 
         /// <summary>
@@ -47,12 +47,13 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <summary>
         /// 根据指定的歌曲参数，下载歌词数据。
         /// </summary>
-        protected abstract ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args);
+        protected abstract ValueTask<object> DownloadDataAsync(LyricsProviderArgs args);
 
         /// <summary>
-        /// 根据指定的歌词二进制数据，生成歌词数据。
+        /// 根据指定的歌词对象，生成歌词数据，常用于处理不同格式的歌词数据。
         /// </summary>
-        /// <param name="data">歌词的原始二进制数据。</param>
-        protected abstract ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args);
+        /// <param name="lyricsObject">当 <see cref="DownloadDataAsync"/> 完成后，传递的歌词数据对象。</param>
+        /// <param name="args">生成歌词时，提供的歌曲信息参数。</param>
+        protected abstract ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args);
     }
 }

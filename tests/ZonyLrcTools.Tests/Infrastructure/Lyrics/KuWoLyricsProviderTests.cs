@@ -18,6 +18,7 @@ public class KuWoLyricsProviderTests : TestBase
     }
 
     [Fact]
+    [Trait("LyricsProvider ", "KuGou")]
     public async Task DownloadAsync_Test()
     {
         var lyric = await _kuwoLyricsProvider.DownloadAsync("告白气球", "周杰伦");

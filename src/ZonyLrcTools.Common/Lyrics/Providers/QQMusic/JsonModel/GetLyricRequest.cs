@@ -6,7 +6,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel
     {
         [JsonProperty("nobase64")] public int IsNoBase64Encoding { get; set; }
 
-        [JsonProperty("songmid")] public string SongId { get; set; }
+        [JsonProperty("songmid")] public string? SongId { get; set; }
 
         [JsonProperty("platform")] public string ClientPlatform { get; set; }
 
@@ -20,7 +20,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel
         {
         }
 
-        public GetLyricRequest(string songId)
+        public GetLyricRequest(string? songId)
         {
             IsNoBase64Encoding = 1;
             SongId = songId;

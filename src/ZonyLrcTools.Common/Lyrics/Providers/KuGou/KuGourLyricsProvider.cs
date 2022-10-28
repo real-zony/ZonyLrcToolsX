@@ -29,7 +29,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
             _options = options.Value;
         }
 
-        protected override async ValueTask<byte[]> DownloadDataAsync(LyricsProviderArgs args)
+        protected override async ValueTask<object> DownloadDataAsync(LyricsProviderArgs args)
         {
             var searchResult = await _warpHttpClient.GetAsync<SongSearchResponse>(KuGouSearchMusicUrl,
                 new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth));
@@ -41,16 +41,14 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
                 new GetLyricAccessKeyRequest(searchResult.Data.List[0].FileHash));
 
             var accessKeyObject = accessKeyResponse.AccessKeyDataObjects[0];
-            var lyricResponse = await _warpHttpClient.GetAsync(KuGouGetLyricUrl,
+            return await _warpHttpClient.GetAsync(KuGouGetLyricUrl,
                 new GetLyricRequest(accessKeyObject.Id, accessKeyObject.AccessKey));
-
-            return Encoding.UTF8.GetBytes(lyricResponse);
         }
 
-        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(byte[] data, LyricsProviderArgs args)
+        protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(object data, LyricsProviderArgs args)
         {
             await ValueTask.CompletedTask;
-            var lyricJsonObj = JObject.Parse(Encoding.UTF8.GetString(data));
+            var lyricJsonObj = JObject.Parse((data as string)!);
             if (lyricJsonObj.SelectToken("$.status").Value<int>() != 200)
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
