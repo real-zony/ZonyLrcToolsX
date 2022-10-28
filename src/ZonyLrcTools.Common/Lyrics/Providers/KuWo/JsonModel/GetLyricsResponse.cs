@@ -6,11 +6,16 @@ public class GetLyricsResponse
 {
     [JsonProperty("status")] public int Status { get; set; }
 
-    [JsonProperty("lrclist")] public ICollection<GetLyricsItem> Lyrics { get; set; }
+    [JsonProperty("data")] public GetLyricsResponseInnerData Data { get; set; }
 
     [JsonProperty("msg")] public string? ErrorMessage { get; set; }
 
     [JsonProperty("msgs")] public string? ErrorMessage2 { get; set; }
+}
+
+public class GetLyricsResponseInnerData
+{
+    [JsonProperty("lrclist")] public ICollection<GetLyricsItem> Lyrics { get; set; }
 }
 
 public class GetLyricsItem

@@ -55,16 +55,33 @@ public class KuWoLyricsProvider : LyricsProvider
             });
     }
 
-    protected override ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
+    protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
     {
-        throw new NotImplementedException();
+        await ValueTask.CompletedTask;
+
+        var lyricsResponse = (GetLyricsResponse)lyricsObject;
+        var items = lyricsResponse.Data.Lyrics.Select(l =>
+        {
+            var position = double.Parse(l.Position);
+            var positionSpan = TimeSpan.FromSeconds(position);
+            return new LyricsItem(positionSpan.Minutes, double.Parse($"{positionSpan.Seconds}.{positionSpan.Milliseconds}"), l.Text);
+        });
+
+        var lyricsItemCollection = new LyricsItemCollection(_options.Provider.Lyric.Config);
+        lyricsItemCollection.AddRange(items);
+        return lyricsItemCollection;
     }
 
-    protected void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
+    protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
     {
         if (response.Code != 200)
         {
             throw new ErrorCodeException(ErrorCodes.TheReturnValueIsIllegal, response.ErrorMessage, args);
+        }
+
+        if (response.InnerData.SongItems.Count == 0)
+        {
+            throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
         }
     }
 }

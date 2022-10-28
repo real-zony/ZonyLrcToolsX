@@ -9,7 +9,7 @@ globalOption:
     isEnable: false # 是否启用代理。
     ip: 127.0.0.1   # 代理服务 IP 地址。
     port: 4780      # 代理服务端口号。
-    updateUrl: https://api.zony.me/lrc-tools/update # 更新检查地址。
+    updateUrl: https://api.myzony.com/lrc-tools/update # 更新检查地址。
   
   # 下载器的相关参数配置。
   provider:
