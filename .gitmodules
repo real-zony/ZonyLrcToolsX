@@ -1,0 +1,3 @@
+[submodule "vendor/MusicDecrypto"]
+	path = vendor/MusicDecrypto
+	url = https://github.com/davidxuang/MusicDecrypto
