@@ -1,24 +1,16 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using ZonyLrcTools.Common.Infrastructure.Exceptions;
+using MusicDecrypto.Library;
 using ZonyLrcTools.Common.Infrastructure.IO;
 using ZonyLrcTools.Common.Infrastructure.Threading;
 using ZonyLrcTools.Common.MusicDecryption;
 
 namespace ZonyLrcTools.Cli.Commands.SubCommand
 {
-    public enum SupportFileType
-    {
-        Ncm = 1,
-        Qcm = 2
-    }
-
     /// <summary>
     /// 工具类相关命令。
     /// </summary>
@@ -28,13 +20,9 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         private readonly ILogger<UtilityCommand> _logger;
         private readonly IMusicDecryptor _musicDecryptor;
 
-        [Required(ErrorMessage = "音乐格式为必须参数，请指定 -t 参数。")]
-        [Option("-t|--type", CommandOptionType.SingleValue, Description = "需要转换的文件格式，参数[Ncm、Qcm]。", ShowInHelpText = true)]
-        public SupportFileType Type { get; set; }
-
-        [Required(ErrorMessage = "文件路径为必须按参数，请传入有效路径。")]
-        [Argument(0, "FilePath", "指定需要转换的音乐文件路径，支持目录和文件路径。")]
-        public string FilePath { get; set; }
+        [Required(ErrorMessage = "请指定需要解密的歌曲文件或文件夹路径。")]
+        [Option("-s|--source", CommandOptionType.SingleValue, Description = "需要解密的歌曲文件或文件夹路径。", ShowInHelpText = true)]
+        public string Source { get; set; }
 
         private readonly IFileScanner _fileScanner;
 
@@ -49,57 +37,41 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         protected override async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
-            if (Directory.Exists(FilePath))
+            if (Directory.Exists(Source))
             {
                 _logger.LogInformation("开始扫描文件夹，请稍等...");
 
-                var files = (await _fileScanner.ScanAsync(FilePath, new[] { "*.ncm" }))
+                var files = (await _fileScanner.ScanAsync(Source, DecryptoFactory.KnownExtensions))
                     .SelectMany(f => f.FilePaths)
                     .ToList();
 
                 _logger.LogInformation($"扫描完成，共 {files.Count} 个文件，准备转换。");
 
                 var wrapTask = new WarpTask(4);
-                var tasks = files.Select(path => wrapTask.RunAsync(() => Convert(path)));
+                var tasks = files.Select(path => wrapTask.RunAsync(async () =>
+                {
+                    _logger.LogInformation($"开始转换文件：{path}");
+                    var result = await _musicDecryptor.ConvertMusicAsync(path);
+                    if (result.IsSuccess)
+                    {
+                        _logger.LogInformation($"转换完成，文件保存在：{result.OutputFilePath}");
+                    }
+                    else
+                    {
+                        _logger.LogError($"转换失败，原因：{result.ErrorMessage}");
+                    }
+                }));
 
                 await Task.WhenAll(tasks);
             }
-            else if (File.Exists(FilePath))
+            else if (File.Exists(Source))
             {
-                await Convert(FilePath);
+                await _musicDecryptor.ConvertMusicAsync(Source);
             }
 
             _logger.LogInformation("所有文件已经转换完成...");
 
             return 0;
-        }
-
-        private async Task Convert(string filePath)
-        {
-            if (Type != SupportFileType.Ncm)
-            {
-                throw new ErrorCodeException(ErrorCodes.OnlySupportNcmFormatFile);
-            }
-
-            var memoryStream = new MemoryStream();
-            await using var file = File.Open(filePath, FileMode.Open);
-            {
-                var buffer = new Memory<byte>(new byte[2048]);
-                while (await file.ReadAsync(buffer) > 0)
-                {
-                    // TODO: Large Object Issue!!!!!
-                    await memoryStream.WriteAsync(buffer);
-                }
-            }
-
-            // TODO: Large Object Issue!!!!!
-            var result = await _musicDecryptor.ConvertMusic(memoryStream.ToArray());
-            var newFileName = Path.Combine(Path.GetDirectoryName(filePath),
-                $"{Path.GetFileNameWithoutExtension(filePath)}.{((JObject)result.ExtensionObjects["JSON"]).SelectToken("$.format").Value<string>()}");
-
-            await using var musicFileStream = File.Create(newFileName);
-            await musicFileStream.WriteAsync(result.Data);
-            await musicFileStream.FlushAsync();
         }
     }
 }

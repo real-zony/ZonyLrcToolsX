@@ -98,5 +98,12 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             var lyric = await _lyricsProvider.DownloadAsync("Bones", "Image Dragons");
             lyric.ToString().ShouldNotContain("Gimme, gimme, gimme some time to think");
         }
+
+        [Fact]
+        public async Task DownloadAsync_Issue123_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("橄榄树", "苏曼");
+            lyric.ToString().ShouldNotBeNullOrEmpty();
+        }
     }
 }

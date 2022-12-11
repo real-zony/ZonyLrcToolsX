@@ -113,6 +113,7 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         }
     }
 
+    // Convert UTF-8 to selected encoding.
     private byte[] Utf8ToSelectedEncoding(LyricsItemCollection lyrics)
     {
         var supportEncodings = Encoding.GetEncodings();

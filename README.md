@@ -29,29 +29,31 @@ macOS 和 Linux 用户请打开终端，切换到软件目录，一样执行命�
 子命令为 `download`，可用于下载歌词数据和专辑图像，支持多个下载器进行下载。
 
 ```shell
-./ZonyLrcTools.Cli.exe download -d|dir <WAIT_SCAN_DIRECTORY> [-l|--lyric] [-a|--album] [-n|--number]
+.\ZonyLrcTools.Cli.exe download -d|dir <WAIT_SCAN_DIRECTORY> [-l|--lyric] [-a|--album] [-n|--number]
 
-./ZonyLrcTools.Cli.exe download -h|--help
+.\ZonyLrcTools.Cli.exe download -h|--help
 ```
 
 **例子**
 
 ```shell
 # 下载歌词
-./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -l -n 2
+.\ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -l -n 2
 
 # 下载专辑封面
-./ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -a -n 2
+.\ZonyLrcTools.Cli.exe download -d "C:\歌曲目录" -a -n 2
 ```
 
 #### 加密格式转换
 
 子命令为 `util`，可用于转换部分加密歌曲，**仅供个人研究学习使用，思路与源码都来自于网络**。
 
-目前软件支持 NCM、QCM(开发中...🚧) 格式的音乐文件转换，命令如下。
+具体支持的格式请参考项目 [MusicDecrypto](https://github.com/davidxuang/MusicDecrypto/blob/master/MusicDecrypto.Library/DecryptoFactory.cs#L23)，本工具仅做一个集成，替换掉原本自己的一些实现。现在不需要指定对应的类型参数，程序会自动根据文件后缀选择适合的解密算法。
+
+命令只需要一个参数 `-s`，指定需要转换的文件夹或者是文件路径。
 
 ```shell
-./ZonyLrcTools.Cli.exe util -t=Ncm D:\CloudMusic
+.\ZonyLrcTools.Cli.exe util -s D:\CloudMusic
 ```
 
 ### 配置文件

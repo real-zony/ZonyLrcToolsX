@@ -20,4 +20,8 @@
       <Compile Remove="Lyrics\Providers\Kugeci\KugeciDownloader.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\vendor\MusicDecrypto\MusicDecrypto.Library\MusicDecrypto.Library.csproj" />
+    </ItemGroup>
+
 </Project>

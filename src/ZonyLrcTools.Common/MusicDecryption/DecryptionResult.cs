@@ -1,14 +1,29 @@
 ﻿namespace ZonyLrcTools.Common.MusicDecryption
 {
-    public class DecryptionResult
+    public sealed class DecryptionResult
     {
-        public byte[] Data { get; protected set; }
+        public bool IsSuccess { get; set; } = false;
 
-        public Dictionary<string, object> ExtensionObjects { get; set; }
+        public string? OutputFilePath { get; set; } = default;
 
-        public DecryptionResult(byte[] data)
+        public string? ErrorMessage { get; set; } = default;
+
+        public static DecryptionResult Failed(string errorMessage)
         {
-            Data = data;
+            return new DecryptionResult
+            {
+                IsSuccess = false,
+                ErrorMessage = errorMessage
+            };
+        }
+
+        public static DecryptionResult Success(string outputFilePath)
+        {
+            return new DecryptionResult
+            {
+                IsSuccess = true,
+                OutputFilePath = outputFilePath
+            };
         }
     }
 }
