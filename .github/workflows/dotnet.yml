@@ -17,6 +17,8 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
