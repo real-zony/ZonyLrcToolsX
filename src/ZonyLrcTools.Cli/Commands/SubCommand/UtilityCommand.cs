@@ -41,7 +41,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
             {
                 _logger.LogInformation("开始扫描文件夹，请稍等...");
 
-                var files = (await _fileScanner.ScanAsync(Source, DecryptoFactory.KnownExtensions))
+                var files = (await _fileScanner.ScanAsync(Source, DecryptoFactory.KnownExtensions.Select(x => $"*{x}")))
                     .SelectMany(f => f.FilePaths)
                     .ToList();
 
