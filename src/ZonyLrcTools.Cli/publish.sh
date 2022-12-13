@@ -10,7 +10,7 @@ rm -rf ./TempFiles/*
 
 for platform in "${Platforms[@]}"
 do
-    dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true || exit 1
+    dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true --self-contained true || exit 1
 
     cd ./bin/Release/net7.0/"$platform"/publish/ || exit 1
     zip -r ./ZonyLrcTools_"$platform"_"${PUBLISH_VERSION}".zip ./ || exit 1
