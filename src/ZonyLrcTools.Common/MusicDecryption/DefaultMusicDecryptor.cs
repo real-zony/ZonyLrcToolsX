@@ -24,7 +24,7 @@ namespace ZonyLrcTools.Common.MusicDecryption
                 await file.CopyToAsync(buffer);
 
                 using var decrypto = DecryptoFactory.Create(buffer, Path.GetFileName(filePath), message => { });
-                var outFileName = decrypto.Decrypt().NewName;
+                var outFileName = (await decrypto.DecryptAsync()).NewName;
                 var outFilePath = Path.Combine(Path.GetDirectoryName(filePath)!, outFileName);
 
                 if (!File.Exists(outFilePath))

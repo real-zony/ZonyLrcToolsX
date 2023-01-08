@@ -11,6 +11,7 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+      <PackageReference Include="MusicDecrypto.Library" Version="2.2.0" />
       <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
       <PackageReference Include="TagLibSharp" Version="2.3.0" />
@@ -18,10 +19,6 @@
 
     <ItemGroup>
       <Compile Remove="Lyrics\Providers\Kugeci\KugeciDownloader.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\vendor\MusicDecrypto\MusicDecrypto.Library\MusicDecrypto.Library.csproj" />
     </ItemGroup>
 
 </Project>
