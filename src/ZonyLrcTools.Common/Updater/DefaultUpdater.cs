@@ -36,7 +36,7 @@ public class DefaultUpdater : IUpdater, ISingletonDependency
         }
 
         var importantItem = response.Items?.FirstOrDefault(x => x.ItemType == NewVersionItemType.Important);
-        if (importantItem != null)
+        if (importantItem?.Url != null)
         {
             _logger.LogWarning($"发现了新版本，请点击下面的链接进行更新：{importantItem.Url}");
             _logger.LogWarning($"最新版本号:{response.NewVersion}，当前版本号: ${currentVersion}");
