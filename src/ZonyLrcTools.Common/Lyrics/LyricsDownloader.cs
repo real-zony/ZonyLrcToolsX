@@ -67,6 +67,7 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         await Task.WhenAll(downloadTasks);
 
         await _logger.InfoAsync($"歌词数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
+        await LogFailedSongFilesInfo(Path.Combine(Directory.GetCurrentDirectory(), $"歌词下载失败列表_{DateTime.Now:yyyyMMddHHmmss}.txt"), needDownloadMusicInfos);
     }
 
     private async Task DownloadAndWriteLyricsAsync(ILyricsProvider provider, MusicInfo info)
@@ -123,5 +124,18 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         }
 
         return Encoding.Convert(Encoding.UTF8, Encoding.GetEncoding(_options.Provider.Lyric.Config.FileEncoding), lyrics.GetUtf8Bytes());
+    }
+
+    private async Task LogFailedSongFilesInfo(string outFilePath, List<MusicInfo> musicInfos)
+    {
+        var failedSongFiles = new StringBuilder();
+        failedSongFiles.AppendLine("歌曲名,歌手,路径");
+
+        foreach (var failedSongFile in musicInfos.Where(m => m.IsSuccessful == false))
+        {
+            failedSongFiles.AppendLine($"{failedSongFile.Name},{failedSongFile.Artist},{failedSongFile.FilePath}");
+        }
+
+        await File.WriteAllTextAsync(outFilePath, failedSongFiles.ToString());
     }
 }
