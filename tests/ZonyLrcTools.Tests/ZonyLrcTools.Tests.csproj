@@ -33,6 +33,9 @@
       <Content Include="MusicFiles\Loren Gray - Queen.ncm">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Update="TestData\test.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
