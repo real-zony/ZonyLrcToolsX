@@ -45,7 +45,7 @@ namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
 
         public static List<Type> GetDefaultExposedTypes(Type type)
         {
-            var serviceTypes = new List<Type>();
+            var serviceTypes = new List<Type> { type };
 
             foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
             {
@@ -59,7 +59,6 @@ namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
                 if (type.Name.EndsWith(interfaceName))
                 {
                     serviceTypes.Add(interfaceType);
-                    serviceTypes.Add(type);
                 }
             }
 
