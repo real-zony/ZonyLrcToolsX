@@ -118,6 +118,13 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
     private byte[] Utf8ToSelectedEncoding(LyricsItemCollection lyrics)
     {
         var supportEncodings = Encoding.GetEncodings();
+
+        // If the encoding is UTF-8 BOM, add the BOM to the front of the lyrics.
+        if (_options.Provider.Lyric.Config.FileEncoding == "utf-8-bom")
+        {
+            return Encoding.UTF8.GetPreamble().Concat(lyrics.GetUtf8Bytes()).ToArray();
+        }
+
         if (supportEncodings.All(x => x.Name != _options.Provider.Lyric.Config.FileEncoding))
         {
             throw new ErrorCodeException(ErrorCodes.NotSupportedFileEncoding);

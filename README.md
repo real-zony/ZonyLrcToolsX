@@ -125,6 +125,8 @@ globalOption:
 
 详细信息请参考: [MSDN Encoding 列表](https://learn.microsoft.com/en-us/dotnet/api/System.Text.Encoding.GetEncodings?view=net-6.0#examples)，使用 `identifier and name` 作为参数值填入 `config.yaml` 文件当中的 `fileEncoding`。
 
+> 针对 UTF-8 BOM 格式，程序进行了特殊处理，请在 `fileEncoding` 里面填写 "utf-8-bom" 以支持。
+
 #### 支持的歌词源
 
 | 歌词源     | 默认优先级 |
