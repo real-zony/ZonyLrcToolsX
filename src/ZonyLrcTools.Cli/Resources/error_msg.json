@@ -4,7 +4,8 @@
     "10002": "需要扫描的目录不存在，请确认路径是否正确。",
     "10003": "不能获取文件的后缀信息。",
     "10004": "没有扫描到任何音乐文件。",
-    "10005": "指定的编码不受支持，请检查配置，所有受支持的编码名称，请参考: https://docs.microsoft.com/en-us/dotnet/api/system.text.encodinginfo.codepage?view=net-6.0#system-text-encodinginfo-codepage。"
+    "10005": "指定的编码不受支持，请检查配置，所有受支持的编码名称，请参考: https://docs.microsoft.com/en-us/dotnet/api/system.text.encodinginfo.codepage?view=net-6.0#system-text-encodinginfo-codepage。",
+    "10006": "无法从网易云音乐获取歌曲列表。"
   },
   "Warning": {
     "50001": "扫描文件时出现了错误。",
