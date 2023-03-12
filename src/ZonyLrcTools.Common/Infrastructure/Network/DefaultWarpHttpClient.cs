@@ -23,13 +23,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
             bool isQueryStringParam = false,
             Action<HttpRequestMessage> requestOption = null)
         {
-            var parametersStr = isQueryStringParam ? BuildQueryString(parameters) : BuildJsonBodyString(parameters);
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
-            requestMessage.Content = new StringContent(parametersStr);
-
-            requestOption?.Invoke(requestMessage);
-
-            using var responseMessage = await BuildHttpClient().SendAsync(requestMessage);
+            using var responseMessage = await PostReturnHttpResponseAsync(url, parameters, isQueryStringParam, requestOption);
             var responseContentString = await responseMessage.Content.ReadAsStringAsync();
 
             return ValidateHttpResponse(responseMessage, parameters, responseContentString);
@@ -42,6 +36,20 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         {
             var responseString = await PostAsync(url, parameters, isQueryStringParam, requestOption);
             return ConvertHttpResponseToObject<TResponse>(parameters, responseString);
+        }
+
+        public async ValueTask<HttpResponseMessage> PostReturnHttpResponseAsync(string url,
+            object parameters = null,
+            bool isQueryStringParam = false,
+            Action<HttpRequestMessage> requestOption = null)
+        {
+            var parametersStr = isQueryStringParam ? BuildQueryString(parameters) : BuildJsonBodyString(parameters);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            requestMessage.Content = new StringContent(parametersStr);
+
+            requestOption?.Invoke(requestMessage);
+
+            return await BuildHttpClient().SendAsync(requestMessage);
         }
 
         public async ValueTask<string> GetAsync(string url,

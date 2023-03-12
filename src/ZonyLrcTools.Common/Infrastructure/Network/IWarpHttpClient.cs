@@ -32,6 +32,11 @@
             bool isQueryStringParam = false,
             Action<HttpRequestMessage> requestOption = null);
 
+        ValueTask<HttpResponseMessage> PostReturnHttpResponseAsync(string url,
+            object parameters = null,
+            bool isQueryStringParam = false,
+            Action<HttpRequestMessage> requestOption = null);
+
         /// <summary>
         /// 根据指定的配置执行 GET 请求，并以 <see cref="string"/> 作为返回值。
         /// </summary>
