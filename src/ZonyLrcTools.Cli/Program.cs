@@ -16,6 +16,8 @@ using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Network;
 
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace ZonyLrcTools.Cli
 {
     [Command("lyric-tool")]
@@ -63,12 +65,12 @@ namespace ZonyLrcTools.Cli
                 .WriteTo.Async(c => c.Console(theme: CustomConsoleTheme.Code))
                 .WriteTo.Logger(lc =>
                 {
-                    lc.Filter.ByIncludingOnly(lc => lc.Level == LogEventLevel.Warning)
+                    lc.Filter.ByIncludingOnly(warningLog => warningLog.Level == LogEventLevel.Warning)
                         .WriteTo.Async(c => c.File("Logs/warnings.txt"));
                 })
                 .WriteTo.Logger(lc =>
                 {
-                    lc.Filter.ByIncludingOnly(lc => lc.Level == LogEventLevel.Error)
+                    lc.Filter.ByIncludingOnly(errLog => errLog.Level == LogEventLevel.Error)
                         .WriteTo.Async(c => c.File("Logs/errors.txt"));
                 })
                 .CreateLogger();

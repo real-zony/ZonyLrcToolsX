@@ -72,6 +72,11 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
         protected override async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
+            if (!DownloadAlbum && !DownloadLyric)
+            {
+                throw new ArgumentException("请至少指定一个下载选项，例如 -l(下载歌词) 或 -a(下载专辑图像)。");
+            }
+
             if (DownloadLyric)
             {
                 await _lyricsDownloader.DownloadAsync(await GetMusicInfosAsync(Scanner), ParallelNumber);

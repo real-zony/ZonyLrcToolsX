@@ -20,6 +20,7 @@ public static class NetEaseMusicEncryptionHelper
     public const string Nonce = "0CoJUm6Qyw8W8jud";
     public const string PubKey = "010001";
     public const string Vi = "0102030405060708";
+    public static readonly byte[] ID_XOR_KEY_1 = "3go8&$8*3*3h0k(2)2"u8.ToArray();
 
     public static string RsaEncode(string text)
     {
@@ -89,5 +90,20 @@ public static class NetEaseMusicEncryptionHelper
         }
 
         return sb.ToString();
+    }
+
+    public static string CloudMusicDllEncode(string deviceId)
+    {
+        var xored = new byte[deviceId.Length];
+        for (var i = 0; i < deviceId.Length; i++)
+        {
+            xored[i] = (byte)(deviceId[i] ^ ID_XOR_KEY_1[i % ID_XOR_KEY_1.Length]);
+        }
+
+        using (var md5 = MD5.Create())
+        {
+            var digest = md5.ComputeHash(xored);
+            return Convert.ToBase64String(digest);
+        }
     }
 }

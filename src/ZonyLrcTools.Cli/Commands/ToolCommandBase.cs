@@ -11,7 +11,7 @@ namespace ZonyLrcTools.Cli.Commands
     {
         protected virtual Task<int> OnExecuteAsync(CommandLineApplication app)
         {
-            if (Environment.UserInteractive)
+            if (!Environment.UserInteractive)
             {
                 Console.WriteLine("请使用终端运行此程序，如果你不知道如何操作，请访问 https://soft.myzony.com 或添加 QQ 群 337656932 寻求帮助。");
                 Console.ReadKey();
