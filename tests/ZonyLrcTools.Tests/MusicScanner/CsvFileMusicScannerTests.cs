@@ -12,7 +12,7 @@ public class CsvFileMusicScannerTests : TestBase
     public async Task GetMusicInfoFromCsvFileAsync_Test()
     {
         var musicScanner = GetService<CsvFileMusicScanner>();
-        var musicInfo = await musicScanner.GetMusicInfoFromCsvFileAsync(Path.Combine("TestData", "test.csv"), new ManualDownloadOptions());
+        var musicInfo = await musicScanner.GetMusicInfoFromCsvFileAsync(Path.Combine("TestData", "test.csv"), "DownloadedLrc", "{Artist} - {Name}.lrc");
 
         musicInfo.ShouldNotBeNull();
         musicInfo.Count.ShouldBeGreaterThan(0);

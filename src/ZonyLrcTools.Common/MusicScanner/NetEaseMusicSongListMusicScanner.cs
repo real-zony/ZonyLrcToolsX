@@ -17,7 +17,7 @@ public class NetEaseMusicSongListMusicScanner : ITransientDependency
         _warpHttpClient = warpHttpClient;
     }
 
-    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListId, ManualDownloadOptions options)
+    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListId, string outputDirectory, string pattern)
     {
         var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
         var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
@@ -47,7 +47,7 @@ public class NetEaseMusicSongListMusicScanner : ITransientDependency
             .Select(song =>
             {
                 var artistName = song.Artists?.FirstOrDefault()?.Name ?? string.Empty;
-                var fakeFilePath = Path.Combine(options.OutputDirectory, options.OutputFileNamePattern.Replace("{Name}", song.Name).Replace("{Artist}", artistName));
+                var fakeFilePath = Path.Combine(outputDirectory, pattern.Replace("{Name}", song.Name).Replace("{Artist}", artistName));
 
                 var info = new MusicInfo(fakeFilePath, song.Name!, artistName);
                 return info;

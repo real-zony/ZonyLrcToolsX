@@ -11,7 +11,7 @@ public class NetEaseMusicSongListMusicScannerTests : TestBase
     public async Task GetMusicInfoFromNetEaseMusicSongListAsync_Test()
     {
         var musicScanner = GetService<NetEaseMusicSongListMusicScanner>();
-        var musicInfo = await musicScanner.GetMusicInfoFromNetEaseMusicSongListAsync("7224428149", new ManualDownloadOptions());
+        var musicInfo = await musicScanner.GetMusicInfoFromNetEaseMusicSongListAsync("7224428149", "DownloadedLrc", "{Artist} - {Name}.lrc");
 
         musicInfo.ShouldNotBeNull();
         musicInfo.Count.ShouldBeGreaterThan(10);

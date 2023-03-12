@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 using ZonyLrcTools.Cli.Commands;
 using ZonyLrcTools.Cli.Commands.SubCommand;
 using ZonyLrcTools.Cli.Infrastructure;
@@ -33,6 +32,7 @@ namespace ZonyLrcTools.Cli
 
             try
             {
+                Log.Logger.Information("Starting...");
                 return await BuildHostedService(args);
             }
             catch (Exception ex)
