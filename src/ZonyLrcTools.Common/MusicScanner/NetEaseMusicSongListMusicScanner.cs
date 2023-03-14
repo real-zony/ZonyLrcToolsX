@@ -12,6 +12,9 @@ using ZonyLrcTools.Common.MusicScanner.JsonModel;
 
 namespace ZonyLrcTools.Common.MusicScanner;
 
+/// <summary>
+/// 网易云歌单音乐扫描器，用于从网易云歌单获取需要下载的歌词列表。
+/// </summary>
 public class NetEaseMusicSongListMusicScanner : ISingletonDependency
 {
     private readonly IWarpHttpClient _warpHttpClient;
@@ -21,6 +24,9 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     private string Cookie { get; set; } = string.Empty;
     private string CsrfToken { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 构建一个新的 <see cref="NetEaseMusicSongListMusicScanner"/> 对象。
+    /// </summary>
     public NetEaseMusicSongListMusicScanner(IWarpHttpClient warpHttpClient,
         ILogger<NetEaseMusicSongListMusicScanner> logger)
     {
@@ -28,6 +34,13 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         _logger = logger;
     }
 
+    /// <summary>
+    /// 从网易云歌单获取需要下载的歌曲列表，调用这个 API 需要用户登录，否则获取的歌单数据不全。
+    /// </summary>
+    /// <param name="songListId">网易云音乐歌单的 ID。</param>
+    /// <param name="outputDirectory">歌词文件的输出路径。</param>
+    /// <param name="pattern">输出的歌词文件格式，默认是 "{Artist} - {Title}.lrc" 的形式。</param>
+    /// <returns>返回获取到的歌曲列表。</returns>
     public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListId, string outputDirectory, string pattern)
     {
         if (string.IsNullOrEmpty(Cookie))
@@ -73,6 +86,13 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             }).ToList();
     }
 
+    /// <summary>
+    /// 用于加密请求参数，具体加密算法请参考网易云音乐的 JS 代码。
+    /// </summary>
+    /// <param name="srcParams"></param>
+    /// <param name="secretKey"></param>
+    /// <param name="encSecKey"></param>
+    /// <returns></returns>
     private Dictionary<string, string> HandleRequest(object srcParams, string secretKey, string encSecKey)
     {
         return new Dictionary<string, string>
@@ -86,6 +106,9 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         };
     }
 
+    /// <summary>
+    /// 通过二维码登录网易云音乐，登录成功后返回 Cookie 和 CSRF Token。
+    /// </summary>
     private async Task<(string? csrfToken, CookieContainer? cookieContainer)> LoginViqQrCodeAsync()
     {
         // Get unikey.
@@ -126,6 +149,14 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         return (null, null);
     }
 
+    /// <summary>
+    /// 使用 <paramref name="uniKey"/> 检测是否登录成功。
+    /// </summary>
+    /// <param name="uniKey">由网易云 API 生成的唯一 Key，用于登录。</param>
+    /// <returns>
+    /// 当登录成功的时候，元组 <c>isSuccess</c> 会为 true，<c>cookieContainer</c> 会包含登录成功后的 Cookie。<br/>
+    /// 如果登录失败，<c>isSuccess</c> 会为 false，<c>cookieContainer</c> 会为 null。 
+    /// </returns>
     private async Task<(bool isSuccess, CookieContainer? cookieContainer)> CheckIsLoginAsync(string uniKey)
     {
         var responseMessage = await PostAsync($"{Host}/weapi/login/qrcode/client/login", new
@@ -156,6 +187,14 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         return (true, cookieContainer);
     }
 
+    /// <summary>
+    /// 封装了网易云音乐的加密请求方式。
+    /// </summary>
+    /// <param name="url">需要请求的网易云音乐 API 地址。</param>
+    /// <param name="params">API 请求参数。</param>
+    /// <returns>
+    /// 正常情况下会返回一个 <see cref="HttpResponseMessage"/> 对象。
+    /// </returns>
     private async Task<HttpResponseMessage> PostAsync(string url, object @params)
     {
         var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
