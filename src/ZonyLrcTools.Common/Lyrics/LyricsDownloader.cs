@@ -67,7 +67,7 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         await Task.WhenAll(downloadTasks);
 
         await _logger.InfoAsync($"歌词数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
-        await LogFailedSongFilesInfo(Path.Combine(Directory.GetCurrentDirectory(), $"歌词下载失败列表_{DateTime.Now:yyyyMMddHHmmss}.txt"), needDownloadMusicInfos);
+        await LogFailedSongFilesInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"歌词下载失败列表_{DateTime.Now:yyyyMMddHHmmss}.txt"), needDownloadMusicInfos);
     }
 
     private async Task DownloadAndWriteLyricsAsync(ILyricsProvider provider, MusicInfo info)

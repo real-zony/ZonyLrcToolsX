@@ -1,9 +1,9 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
-using ZonyLrcTools.Cli.Infrastructure.Tag;
 using ZonyLrcTools.Common.TagInfo;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Tag
@@ -16,7 +16,7 @@ namespace ZonyLrcTools.Tests.Infrastructure.Tag
             var tagLoader = ServiceProvider.GetRequiredService<ITagLoader>();
 
             tagLoader.ShouldNotBeNull();
-            var info = await tagLoader.LoadTagAsync(Path.Combine(Directory.GetCurrentDirectory(), "MusicFiles", "曾经艺也 - 荀彧(纯音乐版).mp3"));
+            var info = await tagLoader.LoadTagAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MusicFiles", "曾经艺也 - 荀彧(纯音乐版).mp3"));
             info.ShouldNotBeNull();
             info.Name.ShouldBe("荀彧(纯音乐版)");
             info.Artist.ShouldBe("曾经艺也");
