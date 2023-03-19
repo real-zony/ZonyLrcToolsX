@@ -43,7 +43,7 @@ namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
         public static IServiceCollection ConfigureConfiguration(this IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddYamlFile("config.yaml")
                 .Build();
 

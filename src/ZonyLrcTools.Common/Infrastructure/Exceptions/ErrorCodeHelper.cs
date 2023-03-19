@@ -26,7 +26,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Exceptions
                 return;
             }
 
-            var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "error_msg.json");
+            var jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "error_msg.json");
             using var jsonReader = new JsonTextReader(File.OpenText(jsonPath));
             var jsonObj = JObject.Load(jsonReader);
 

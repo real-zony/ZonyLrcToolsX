@@ -83,7 +83,7 @@ namespace ZonyLrcTools.Cli
                 .ConfigureHostConfiguration(builder =>
                 {
                     builder
-                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                         .AddYamlFile("config.yaml");
                 })
                 .ConfigureServices((_, services) =>
