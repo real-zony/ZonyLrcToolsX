@@ -17,10 +17,8 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          submodules: true
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
       - name: Restore dependencies
@@ -38,6 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
+          retention-days: 1
           name: release-files
           path: |
             ./TempFiles
@@ -45,6 +44,7 @@ jobs:
     outputs:
       version: ${{ steps.date.outputs.date }}
   release:
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     steps:
