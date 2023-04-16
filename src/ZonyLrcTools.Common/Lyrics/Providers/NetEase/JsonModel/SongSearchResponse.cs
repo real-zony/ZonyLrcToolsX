@@ -10,11 +10,6 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 
         public int GetFirstMatchSongId(string songName, long? duration)
         {
-            if (Items == null || Items.SongItems == null)
-            {
-                Console.Write("xx");
-            }
-            
             var perfectMatch = Items.SongItems.FirstOrDefault(x => x.Name == songName);
             if (perfectMatch != null)
             {

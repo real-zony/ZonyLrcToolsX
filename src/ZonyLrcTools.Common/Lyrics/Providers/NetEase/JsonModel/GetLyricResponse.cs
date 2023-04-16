@@ -20,7 +20,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
         /// 如果存在翻译歌词，则本项内容为翻译歌词。
         /// </summary>
         [JsonProperty("tlyric")]
-        public InnerLyric TranslationLyric { get; set; }
+        public InnerLyric? TranslationLyric { get; set; }
 
         /// <summary>
         /// 如果存在罗马音歌词，则本项内容为罗马音歌词。

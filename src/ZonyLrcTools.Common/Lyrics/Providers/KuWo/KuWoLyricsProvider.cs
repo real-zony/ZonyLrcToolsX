@@ -60,6 +60,11 @@ public class KuWoLyricsProvider : LyricsProvider
         await ValueTask.CompletedTask;
 
         var lyricsResponse = (GetLyricsResponse)lyricsObject;
+        if (lyricsResponse.Data.Lyrics == null)
+        {
+            return new LyricsItemCollection(null);
+        }
+
         var items = lyricsResponse.Data.Lyrics.Select(l =>
         {
             var position = double.Parse(l.Position);

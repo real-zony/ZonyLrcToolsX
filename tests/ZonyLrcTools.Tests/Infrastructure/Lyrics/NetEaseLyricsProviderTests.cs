@@ -120,5 +120,14 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             var result = await Should.ThrowAsync<ErrorCodeException>(_lyricsProvider.DownloadAsync("創世記", "りりィ").AsTask);
             result.ErrorCode.ShouldBe(ErrorCodes.NoMatchingSong);
         }
+
+        [Fact]
+        public async Task DownloadAsync_Source_Null_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("Concerto for Piano and Orchestra No. 12 in A major, K414 - 1. Allegro",
+                "Wolfgang Amadeus Mozart");
+
+            lyric.IsPruneMusic.ShouldBeTrue();
+        }
     }
 }
