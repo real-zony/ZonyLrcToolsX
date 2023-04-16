@@ -40,6 +40,11 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
             var accessKeyResponse = await _warpHttpClient.GetAsync<GetLyricAccessKeyResponse>(KuGouGetLyricAccessKeyUrl,
                 new GetLyricAccessKeyRequest(searchResult.Data.List[0].FileHash));
 
+            if (accessKeyResponse.AccessKeyDataObjects.Count == 0)
+            {
+                throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
+            }
+
             var accessKeyObject = accessKeyResponse.AccessKeyDataObjects[0];
             return await _warpHttpClient.GetAsync(KuGouGetLyricUrl,
                 new GetLyricRequest(accessKeyObject.Id, accessKeyObject.AccessKey));
@@ -60,7 +65,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
-            if (response.ErrorCode != 0 && response.Status != 1 || response.Data.List == null)
+            if ((response.ErrorCode != 0 && response.Status != 1) || response.Data.List.Count == 0)
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }

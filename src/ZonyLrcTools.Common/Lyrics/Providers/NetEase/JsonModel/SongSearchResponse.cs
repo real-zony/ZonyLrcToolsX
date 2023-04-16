@@ -4,7 +4,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 {
     public class SongSearchResponse
     {
-        [JsonProperty("result")] public InnerListItemModel Items { get; set; }
+        [JsonProperty("result")] public InnerListItemModel? Items { get; set; }
 
         [JsonProperty("code")] public int StatusCode { get; set; }
 
@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 
     public class InnerListItemModel
     {
-        [JsonProperty("songs")] public IList<SongModel> SongItems { get; set; }
+        [JsonProperty("songs")] public IList<SongModel>? SongItems { get; set; }
 
         [JsonProperty("songCount")] public int SongCount { get; set; }
     }

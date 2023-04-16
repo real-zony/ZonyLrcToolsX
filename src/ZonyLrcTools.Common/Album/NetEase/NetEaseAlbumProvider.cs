@@ -41,7 +41,7 @@ namespace ZonyLrcTools.Common.Album.NetEase
                 true,
                 _defaultOption);
 
-            if (searchResult is not { StatusCode: 200 } || searchResult.Items?.SongCount <= 0)
+            if (searchResult is not { StatusCode: 200 } || searchResult.Items is not { SongCount: > 0 })
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong);
             }

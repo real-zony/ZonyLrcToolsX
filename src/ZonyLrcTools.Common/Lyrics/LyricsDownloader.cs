@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Options;
+using Polly;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
@@ -36,7 +37,7 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
     }
 
     public async Task DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
-        int parallelCount = 2,
+        int parallelCount = 1,
         CancellationToken cancellationToken = default)
     {
         await _logger.InfoAsync("开始下载歌词文件数据...");

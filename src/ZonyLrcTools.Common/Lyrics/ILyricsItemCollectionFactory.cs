@@ -18,6 +18,6 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <param name="sourceLyric">原始歌词数据。</param>
         /// <param name="translationLyric">翻译歌词数据。</param>
         /// <returns>构建完成的 <see cref="LyricsItemCollection"/> 对象。</returns>
-        LyricsItemCollection Build(string sourceLyric, string translationLyric);
+        LyricsItemCollection Build(string sourceLyric, string? translationLyric);
     }
 }

@@ -25,4 +25,13 @@ public class KuWoLyricsProviderTests : TestBase
         lyric.ShouldNotBeNull();
         lyric.IsPruneMusic.ShouldBeFalse();
     }
+
+    [Fact]
+    public async Task DownloadAsync_Source_Null_Test()
+    {
+        var lyric = await _kuwoLyricsProvider.DownloadAsync("Concerto for Piano and Orchestra No. 12 in A major, K414 - 1. Allegro",
+            "Wolfgang Amadeus Mozart");
+
+        lyric.IsPruneMusic.ShouldBeTrue();
+    }
 }

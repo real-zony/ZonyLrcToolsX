@@ -60,7 +60,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
             var regex = new Regex(@"\([^)]*\)");
             musicName = regex.Replace(musicName, string.Empty);
 
-            SearchKey = HttpUtility.UrlEncode($"{musicName}+{artistName}", Encoding.UTF8);
+            SearchKey = $"{musicName}+{artistName}";
             Limit = limit;
         }
     }

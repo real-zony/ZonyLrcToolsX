@@ -15,7 +15,7 @@ public class GetLyricsResponse
 
 public class GetLyricsResponseInnerData
 {
-    [JsonProperty("lrclist")] public ICollection<GetLyricsItem> Lyrics { get; set; }
+    [JsonProperty("lrclist")] public ICollection<GetLyricsItem>? Lyrics { get; set; }
 }
 
 public class GetLyricsItem

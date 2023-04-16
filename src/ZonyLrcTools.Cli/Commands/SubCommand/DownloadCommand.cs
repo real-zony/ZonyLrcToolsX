@@ -47,7 +47,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         public bool DownloadAlbum { get; set; }
 
         [Option("-n|--number", CommandOptionType.SingleValue, Description = "指定下载时候的线程数量。(默认值 2)")]
-        public int ParallelNumber { get; set; } = 2;
+        public int ParallelNumber { get; set; } = 1;
 
         #endregion
 
