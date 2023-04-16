@@ -8,7 +8,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
     {
         public GetLyricRequest(long songId)
         {
-            OS = "ios";
+            OS = "pc";
             Id = songId;
             Lv = Kv = Tv = Rv = -1;
         }

@@ -105,5 +105,12 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             var lyric = await _lyricsProvider.DownloadAsync("橄榄树", "苏曼");
             lyric.ToString().ShouldNotBeNullOrEmpty();
         }
+        
+        [Fact]
+        public async Task DownloadAsync_Issue133_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("Everything", "Yinyues");
+            lyric.ToString().ShouldNotBeNullOrEmpty();
+        }
     }
 }

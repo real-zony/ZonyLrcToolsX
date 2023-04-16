@@ -37,5 +37,12 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             lyric.IsPruneMusic.ShouldBeFalse();
             lyric.ToString().ShouldContain("你好像快要不能呼吸");
         }
+        
+        [Fact]
+        public async Task DownloadAsync_Issue133_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("天ノ弱", "漆柚");
+            lyric.ToString().ShouldNotBeNullOrEmpty();
+        }
     }
 }

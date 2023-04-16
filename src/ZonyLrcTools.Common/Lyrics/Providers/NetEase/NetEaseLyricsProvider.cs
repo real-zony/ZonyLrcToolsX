@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Encryption;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Network;
 using ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel;
@@ -16,8 +17,8 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
         private readonly ILyricsItemCollectionFactory _lyricsItemCollectionFactory;
         private readonly GlobalOptions _options;
 
-        private const string NetEaseSearchMusicUrl = @"https://music.163.com/api/search/get/web";
-        private const string NetEaseGetLyricUrl = @"https://music.163.com/api/song/lyric";
+        private const string NetEaseSearchMusicUrl = @"https://music.163.com/weapi/cloudsearch/get/web";
+        private const string NetEaseGetLyricUrl = @"https://music.163.com/weapi/song/lyric?csrf_token=";
 
         private const string NetEaseRequestReferer = @"https://music.163.com";
         private const string NetEaseRequestContentType = @"application/x-www-form-urlencoded";
@@ -33,25 +34,30 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
 
         protected override async ValueTask<object> DownloadDataAsync(LyricsProviderArgs args)
         {
-            var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(
-                NetEaseSearchMusicUrl,
-                new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth),
-                true,
-                msg =>
+            var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
+            var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
+
+            var searchResult = await _warpHttpClient.PostAsync<SongSearchResponse>(NetEaseSearchMusicUrl,
+                requestOption: request =>
                 {
-                    msg.Headers.Referrer = new Uri(NetEaseRequestReferer);
-                    if (msg.Content != null)
-                    {
-                        msg.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(NetEaseRequestContentType);
-                    }
+                    request.Headers.Referrer = new Uri(NetEaseRequestReferer);
+                    request.Content = new FormUrlEncodedContent(HandleRequest(
+                        new SongSearchRequest(args.SongName, args.Artist, _options.Provider.Lyric.GetLyricProviderOption(DownloaderName).Depth),
+                        secretKey,
+                        encSecKey));
                 });
 
             ValidateSongSearchResponse(searchResult, args);
 
-            return await _warpHttpClient.GetAsync(
-                NetEaseGetLyricUrl,
-                new GetLyricRequest(searchResult.GetFirstMatchSongId(args.SongName, args.Duration)),
-                msg => msg.Headers.Referrer = new Uri(NetEaseRequestReferer));
+            return  await _warpHttpClient.PostAsync(NetEaseGetLyricUrl,
+                requestOption: request =>
+                {
+                    request.Headers.Referrer = new Uri(NetEaseRequestReferer);
+                    request.Content = new FormUrlEncodedContent(HandleRequest(
+                        new GetLyricRequest(searchResult.GetFirstMatchSongId(args.SongName, args.Duration)),
+                        secretKey,
+                        encSecKey));
+                });
         }
 
         protected override async ValueTask<LyricsItemCollection> GenerateLyricAsync(object lyricsObject, LyricsProviderArgs args)
@@ -85,6 +91,19 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }
+        }
+
+        private Dictionary<string, string> HandleRequest(object srcParams, string secretKey, string encSecKey)
+        {
+            return new Dictionary<string, string>
+            {
+                {
+                    "params", NetEaseMusicEncryptionHelper.AesEncode(
+                        NetEaseMusicEncryptionHelper.AesEncode(
+                            JsonConvert.SerializeObject(srcParams), NetEaseMusicEncryptionHelper.Nonce), secretKey)
+                },
+                { "encSecKey", encSecKey }
+            };
         }
     }
 }
