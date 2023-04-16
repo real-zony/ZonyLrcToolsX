@@ -21,7 +21,6 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
         private const string NetEaseGetLyricUrl = @"https://music.163.com/weapi/song/lyric?csrf_token=";
 
         private const string NetEaseRequestReferer = @"https://music.163.com";
-        private const string NetEaseRequestContentType = @"application/x-www-form-urlencoded";
 
         public NetEaseLyricsProvider(IWarpHttpClient warpHttpClient,
             ILyricsItemCollectionFactory lyricsItemCollectionFactory,
@@ -49,7 +48,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
 
             ValidateSongSearchResponse(searchResult, args);
 
-            return  await _warpHttpClient.PostAsync(NetEaseGetLyricUrl,
+            return await _warpHttpClient.PostAsync(NetEaseGetLyricUrl,
                 requestOption: request =>
                 {
                     request.Headers.Referrer = new Uri(NetEaseRequestReferer);
@@ -87,7 +86,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
                 throw new ErrorCodeException(ErrorCodes.TheReturnValueIsIllegal, attachObj: args);
             }
 
-            if (response.Items?.SongCount <= 0)
+            if (response.Items is not { SongCount: > 0 })
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }

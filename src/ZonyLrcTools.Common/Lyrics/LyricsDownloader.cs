@@ -107,7 +107,6 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         {
             _logger.LogWarningInfo(ex);
             info.IsSuccessful = false;
-            throw;
         }
         catch (Exception ex)
         {

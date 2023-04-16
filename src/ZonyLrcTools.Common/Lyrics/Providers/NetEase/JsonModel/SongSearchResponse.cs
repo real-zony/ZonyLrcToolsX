@@ -4,12 +4,17 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 {
     public class SongSearchResponse
     {
-        [JsonProperty("result")] public InnerListItemModel Items { get; set; }
+        [JsonProperty("result")] public InnerListItemModel? Items { get; set; }
 
         [JsonProperty("code")] public int StatusCode { get; set; }
 
         public int GetFirstMatchSongId(string songName, long? duration)
         {
+            if (Items == null || Items.SongItems == null)
+            {
+                Console.Write("xx");
+            }
+            
             var perfectMatch = Items.SongItems.FirstOrDefault(x => x.Name == songName);
             if (perfectMatch != null)
             {
@@ -27,7 +32,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 
     public class InnerListItemModel
     {
-        [JsonProperty("songs")] public IList<SongModel> SongItems { get; set; }
+        [JsonProperty("songs")] public IList<SongModel>? SongItems { get; set; }
 
         [JsonProperty("songCount")] public int SongCount { get; set; }
     }

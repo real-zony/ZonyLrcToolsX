@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Shouldly;
 using Xunit;
 using ZonyLrcTools.Common.Configuration;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Lyrics;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
@@ -105,12 +106,19 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             var lyric = await _lyricsProvider.DownloadAsync("橄榄树", "苏曼");
             lyric.ToString().ShouldNotBeNullOrEmpty();
         }
-        
+
         [Fact]
         public async Task DownloadAsync_Issue133_Test()
         {
             var lyric = await _lyricsProvider.DownloadAsync("Everything", "Yinyues");
             lyric.ToString().ShouldNotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task DownloadAsync_NullException_Test()
+        {
+            var result = await Should.ThrowAsync<ErrorCodeException>(_lyricsProvider.DownloadAsync("創世記", "りりィ").AsTask);
+            result.ErrorCode.ShouldBe(ErrorCodes.NoMatchingSong);
         }
     }
 }
