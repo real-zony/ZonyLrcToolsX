@@ -129,5 +129,27 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
 
             lyric.IsPruneMusic.ShouldBeTrue();
         }
+
+        [Fact]
+        public async Task DownloadAsync_Issue_20230429_01_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("Don't Go Away", "By2 Twins+《Twins》");
+
+            lyric.ShouldContain(x => x.LyricText.Contains("吴庆隆"));
+        }
+
+        [Fact]
+        public async Task DownloadAsync_Issue_20230429_02_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("Hanging On (2009)", "Britt Nicole");
+            lyric.ShouldContain(x => x.LyricText.Contains("You see my anxious heart"));
+        }
+
+        [Fact]
+        public async Task DownloadAsync_Issue_20230429_03_Test()
+        {
+            var lyric = await _lyricsProvider.DownloadAsync("Your Heart Is A Muscle (2012)", "Carly Rae Jepsen");
+            lyric.IsPruneMusic.ShouldBeFalse();
+        }
     }
 }
