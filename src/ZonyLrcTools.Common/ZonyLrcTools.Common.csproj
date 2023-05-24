@@ -12,7 +12,7 @@
       <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
       <PackageReference Include="MusicDecrypto.Library" Version="2.2.0" />
-      <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.0.0" />
+      <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="Polly" Version="7.2.3" />
       <PackageReference Include="QRCoder" Version="1.4.3" />
