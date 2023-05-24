@@ -1,9 +1,11 @@
+using System.Text.RegularExpressions;
+
 namespace ZonyLrcTools.Common
 {
     /// <summary>
     /// 歌曲信息的承载类，携带歌曲的相关数据。
     /// </summary>
-    public class MusicInfo
+    public partial class MusicInfo
     {
         /// <summary>
         /// 歌曲对应的物理文件路径。
@@ -38,9 +40,17 @@ namespace ZonyLrcTools.Common
         /// <param name="artist">歌曲的作者。</param>
         public MusicInfo(string filePath, string name, string artist)
         {
-            FilePath = filePath;
+            FilePath = Path.Combine(Path.GetDirectoryName(filePath)!, HandleInvalidFilePath(Path.GetFileName(filePath)));
             Name = name;
             Artist = artist;
         }
+
+        private string HandleInvalidFilePath(string srcText)
+        {
+            return InvalidFilePathRegex().Replace(srcText, "");
+        }
+
+        [GeneratedRegex(@"[<>:""/\\|?*]")]
+        private static partial Regex InvalidFilePathRegex();
     }
 }
