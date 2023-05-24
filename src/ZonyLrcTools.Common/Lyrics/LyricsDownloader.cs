@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Microsoft.Extensions.Options;
-using Polly;
 using ZonyLrcTools.Common.Configuration;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
@@ -134,12 +134,18 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         return Encoding.Convert(Encoding.UTF8, Encoding.GetEncoding(_options.Provider.Lyric.Config.FileEncoding), lyrics.GetUtf8Bytes());
     }
 
-    private async Task LogFailedSongFilesInfo(string outFilePath, List<MusicInfo> musicInfos)
+    private async Task LogFailedSongFilesInfo(string outFilePath, IEnumerable<MusicInfo> musicInfos)
     {
+        var failedSongList = musicInfos.Where(m => m.IsSuccessful == false).ToImmutableList();
+        if (!failedSongList.Any())
+        {
+            return;
+        }
+
         var failedSongFiles = new StringBuilder();
         failedSongFiles.AppendLine("歌曲名,歌手,路径");
 
-        foreach (var failedSongFile in musicInfos.Where(m => m.IsSuccessful == false))
+        foreach (var failedSongFile in failedSongList)
         {
             failedSongFiles.AppendLine($"{failedSongFile.Name},{failedSongFile.Artist},{failedSongFile.FilePath}");
         }
