@@ -67,7 +67,10 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
 
         await Task.WhenAll(downloadTasks);
 
-        await _logger.InfoAsync($"歌词数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
+        var successfulCount = needDownloadMusicInfos.Count(m => m is { IsSuccessful: true, IsPruneMusic: false });
+        var skippedCount = needDownloadMusicInfos.Count(m => m is { IsSuccessful: true, IsPruneMusic: true });
+        var failedCount = needDownloadMusicInfos.Count(m => m.IsSuccessful == false);
+        await _logger.InfoAsync($"歌词数据下载完成，成功: {successfulCount} 跳过(纯音乐): {skippedCount} 失败{failedCount}。");
         await LogFailedSongFilesInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"歌词下载失败列表_{DateTime.Now:yyyyMMddHHmmss}.txt"), needDownloadMusicInfos);
     }
 
@@ -80,6 +83,7 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
             if (lyrics.IsPruneMusic)
             {
                 info.IsSuccessful = true;
+                info.IsPruneMusic = true;
                 return;
             }
 

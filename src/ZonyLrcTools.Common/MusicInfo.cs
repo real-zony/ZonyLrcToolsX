@@ -33,6 +33,11 @@ namespace ZonyLrcTools.Common
         public bool IsSuccessful { get; set; } = true;
 
         /// <summary>
+        /// 是否时纯音乐?
+        /// </summary>
+        public bool IsPruneMusic { get; set; } = false;
+
+        /// <summary>
         /// 构建一个新的 <see cref="MusicInfo"/> 对象。
         /// </summary>
         /// <param name="filePath">歌曲对应的物理文件路径。</param>
