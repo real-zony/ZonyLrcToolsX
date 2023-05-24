@@ -35,7 +35,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
             ValidateSongSearchResponse(searchResult, args);
 
             return await _warpHttpClient.GetAsync(QQGetLyricUrl,
-                new GetLyricRequest(searchResult.Data.Song.SongItems.FirstOrDefault()?.SongId),
+                new GetLyricRequest(searchResult.Data?.Song?.SongItems?.FirstOrDefault()?.SongId),
                 op => op.Headers.Referrer = new Uri(QQMusicRequestReferer));
         }
 
@@ -57,15 +57,15 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic
             }
 
             var lyricJsonObj = JObject.Parse(lyricJsonString);
-            var sourceLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.lyric").Value<string>()));
-            var translateLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.trans").Value<string>()));
+            var sourceLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.lyric")!.Value<string>()));
+            var translateLyric = HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(lyricJsonObj.SelectToken("$.trans")!.Value<string>()));
 
             return _lyricsItemCollectionFactory.Build(sourceLyric, translateLyric);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
-            if (response is not { StatusCode: 0 } || response.Data.Song.SongItems == null)
+            if (response is not { StatusCode: 0 } || response.Data?.Song?.SongItems == null)
             {
                 throw new ErrorCodeException(ErrorCodes.TheReturnValueIsIllegal, attachObj: args);
             }

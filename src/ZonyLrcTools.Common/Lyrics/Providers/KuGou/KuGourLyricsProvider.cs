@@ -38,9 +38,9 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
 
             // 获得特殊的 AccessToken 与 Id，真正请求歌词数据。
             var accessKeyResponse = await _warpHttpClient.GetAsync<GetLyricAccessKeyResponse>(KuGouGetLyricAccessKeyUrl,
-                new GetLyricAccessKeyRequest(searchResult.Data.List[0].FileHash));
+                new GetLyricAccessKeyRequest(searchResult.Data?.List?[0].FileHash));
 
-            if (accessKeyResponse.AccessKeyDataObjects.Count == 0)
+            if (accessKeyResponse.AccessKeyDataObjects == null || accessKeyResponse.AccessKeyDataObjects.Count == 0)
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }
@@ -54,18 +54,18 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou
         {
             await ValueTask.CompletedTask;
             var lyricJsonObj = JObject.Parse((data as string)!);
-            if (lyricJsonObj.SelectToken("$.status").Value<int>() != 200)
+            if (lyricJsonObj.SelectToken("$.status")?.Value<int>() != 200)
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }
 
-            var lyricText = Encoding.UTF8.GetString(Convert.FromBase64String(lyricJsonObj.SelectToken("$.content").Value<string>()));
+            var lyricText = Encoding.UTF8.GetString(Convert.FromBase64String(lyricJsonObj.SelectToken("$.content")?.Value<string>() ?? string.Empty));
             return _lyricsItemCollectionFactory.Build(lyricText);
         }
 
         protected virtual void ValidateSongSearchResponse(SongSearchResponse response, LyricsProviderArgs args)
         {
-            if ((response.ErrorCode != 0 && response.Status != 1) || response.Data.List.Count == 0)
+            if ((response.ErrorCode != 0 && response.Status != 1) || response.Data?.List?.Count == 0)
             {
                 throw new ErrorCodeException(ErrorCodes.NoMatchingSong, attachObj: args);
             }

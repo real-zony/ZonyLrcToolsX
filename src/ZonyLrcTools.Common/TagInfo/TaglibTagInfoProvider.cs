@@ -14,7 +14,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         public string Name => ConstantName;
         public const string ConstantName = "Taglib";
 
-        public async ValueTask<MusicInfo> LoadAsync(string filePath)
+        public async ValueTask<MusicInfo?> LoadAsync(string filePath)
         {
             try
             {
@@ -30,12 +30,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
 
                 await ValueTask.CompletedTask;
 
-                if (songName == null && songArtist == null)
-                {
-                    return null;
-                }
-
-                return new MusicInfo(filePath, songName, songArtist);
+                return songName == null ? null : new MusicInfo(filePath, songName, songArtist);
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@ public class GetLyricsResponse
 {
     [JsonProperty("status")] public int Status { get; set; }
 
-    [JsonProperty("data")] public GetLyricsResponseInnerData Data { get; set; }
+    [JsonProperty("data")] public GetLyricsResponseInnerData? Data { get; set; }
 
     [JsonProperty("msg")] public string? ErrorMessage { get; set; }
 
@@ -20,7 +20,7 @@ public class GetLyricsResponseInnerData
 
 public class GetLyricsItem
 {
-    [JsonProperty("lineLyric")] public string Text { get; set; }
+    [JsonProperty("lineLyric")] public string? Text { get; set; }
 
-    [JsonProperty("time")] public string Position { get; set; }
+    [JsonProperty("time")] public string Position { get; set; } = null!;
 }

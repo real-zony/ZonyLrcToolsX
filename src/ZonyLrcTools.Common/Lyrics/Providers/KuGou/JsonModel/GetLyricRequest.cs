@@ -12,11 +12,11 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou.JsonModel
 
         [JsonProperty("charset")] public string UnknownParameters4 { get; }
 
-        [JsonProperty("id")] public string Id { get; }
+        [JsonProperty("id")] public string? Id { get; }
 
-        [JsonProperty("accesskey")] public string AccessKey { get; }
+        [JsonProperty("accesskey")] public string? AccessKey { get; }
 
-        public GetLyricRequest(string id, string accessKey)
+        public GetLyricRequest(string? id, string? accessKey)
         {
             UnknownParameters1 = 1;
             UnknownParameters2 = "iphone";

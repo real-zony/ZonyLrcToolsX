@@ -4,7 +4,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 {
     public class SongSearchResponse
     {
-        [JsonProperty("result")] public InnerListItemModel? Items { get; set; }
+        [JsonProperty("result")] public InnerListItemModel Items { get; set; } = null!;
 
         [JsonProperty("code")] public int StatusCode { get; set; }
 
@@ -27,7 +27,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 
     public class InnerListItemModel
     {
-        [JsonProperty("songs")] public IList<SongModel>? SongItems { get; set; }
+        [JsonProperty("songs")] public IList<SongModel> SongItems { get; set; } = null!;
 
         [JsonProperty("songCount")] public int SongCount { get; set; }
     }
@@ -38,7 +38,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
         /// 歌曲的名称。
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 歌曲的 Sid (Song Id)。
@@ -50,13 +50,13 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
         /// 歌曲的演唱者。
         /// </summary>
         [JsonProperty("artists")]
-        public IList<SongArtistModel> Artists { get; set; }
+        public IList<SongArtistModel>? Artists { get; set; }
 
         /// <summary>
         /// 歌曲的专辑信息。
         /// </summary>
         [JsonProperty("album")]
-        public SongAlbumModel Album { get; set; }
+        public SongAlbumModel? Album { get; set; }
 
         /// <summary>
         /// 歌曲的实际长度。
@@ -71,7 +71,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
         /// 歌手/艺术家的名称。
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 
     public class SongAlbumModel
@@ -80,12 +80,12 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
         /// 专辑的名称。
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// 专辑图像的 Url 地址。
         /// </summary>
         [JsonProperty("img1v1Url")]
-        public string PictureUrl { get; set; }
+        public string? PictureUrl { get; set; }
     }
 }

@@ -10,9 +10,9 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou.JsonModel
 
         [JsonProperty("client")] public string UnknownParameters3 { get; }
 
-        [JsonProperty("hash")] public string FileHash { get; }
+        [JsonProperty("hash")] public string? FileHash { get; }
 
-        public GetLyricAccessKeyRequest(string fileHash)
+        public GetLyricAccessKeyRequest(string? fileHash)
         {
             UnknownParameters1 = 1;
             UnknownParameters2 = "yes";

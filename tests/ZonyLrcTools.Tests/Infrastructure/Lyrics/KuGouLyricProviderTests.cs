@@ -32,12 +32,11 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
         {
             await Should.ThrowAsync<ErrorCodeException>(_lyricsProvider.DownloadAsync("天ノ弱", "漆柚").AsTask);
         }
-        
+
         [Fact]
         public async Task DownloadAsync_Index_Exception_Test()
         {
-            var lyric = await _lyricsProvider.DownloadAsync("40'z", "ZOOLY");
-            lyric.ToString().ShouldNotBeNullOrEmpty();
+            await Should.ThrowAsync<ErrorCodeException>(async () => await _lyricsProvider.DownloadAsync("40'z", "ZOOLY"));
         }
     }
 }

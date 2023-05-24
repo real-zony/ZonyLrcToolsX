@@ -8,13 +8,13 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuGou.JsonModel
 
         [JsonProperty("errcode")] public int ErrorCode { get; set; }
 
-        [JsonProperty("candidates")] public List<GetLyricAccessKeyDataObject> AccessKeyDataObjects { get; set; }
+        [JsonProperty("candidates")] public List<GetLyricAccessKeyDataObject>? AccessKeyDataObjects { get; set; }
     }
 
     public class GetLyricAccessKeyDataObject
     {
-        [JsonProperty("accesskey")] public string AccessKey { get; set; }
+        [JsonProperty("accesskey")] public string? AccessKey { get; set; }
 
-        [JsonProperty("id")] public string Id { get; set; }
+        [JsonProperty("id")] public string? Id { get; set; }
     }
 }

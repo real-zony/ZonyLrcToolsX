@@ -14,9 +14,9 @@
         /// <param name="requestOption">请求时的配置动作。</param>
         /// <returns>服务端的响应结果。</returns>
         ValueTask<string> PostAsync(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null);
+            Action<HttpRequestMessage>? requestOption = null);
 
         /// <summary>
         /// 根据指定的配置执行 POST 请求，并将结果反序列化为 <see cref="TResponse"/> 对象。
@@ -28,14 +28,14 @@
         /// <typeparam name="TResponse">需要将响应结果反序列化的目标类型。</typeparam>
         /// <returns>服务端的响应结果。</returns>
         ValueTask<TResponse> PostAsync<TResponse>(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null);
+            Action<HttpRequestMessage>? requestOption = null);
 
         ValueTask<HttpResponseMessage> PostReturnHttpResponseAsync(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null);
+            Action<HttpRequestMessage>? requestOption = null);
 
         /// <summary>
         /// 根据指定的配置执行 GET 请求，并以 <see cref="string"/> 作为返回值。
@@ -45,8 +45,8 @@
         /// <param name="requestOption">请求时的配置动作。</param>
         /// <returns>服务端的响应结果。</returns>
         ValueTask<string> GetAsync(string url,
-            object parameters = null,
-            Action<HttpRequestMessage> requestOption = null);
+            object? parameters = null,
+            Action<HttpRequestMessage>? requestOption = null);
 
         /// <summary>
         /// 根据指定的配置执行 GET 请求，并将结果反序列化为 <see cref="TResponse"/> 对象。
@@ -58,7 +58,7 @@
         /// <returns>服务端的响应结果。</returns>
         ValueTask<TResponse> GetAsync<TResponse>(
             string url,
-            object parameters = null,
-            Action<HttpRequestMessage> requestOption = null);
+            object? parameters = null,
+            Action<HttpRequestMessage>? requestOption = null);
     }
 }

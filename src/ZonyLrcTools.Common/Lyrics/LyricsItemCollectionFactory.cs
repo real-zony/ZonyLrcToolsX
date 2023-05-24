@@ -30,7 +30,7 @@ namespace ZonyLrcTools.Common.Lyrics
             return lyric;
         }
 
-        public LyricsItemCollection Build(string sourceLyric, string? translationLyric)
+        public LyricsItemCollection Build(string? sourceLyric, string? translationLyric)
         {
             var lyric = new LyricsItemCollection(_options.Provider.Lyric.Config);
             if (string.IsNullOrEmpty(sourceLyric))

@@ -25,7 +25,7 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
             _options = options.Value;
         }
 
-        public async ValueTask<MusicInfo> LoadAsync(string filePath)
+        public async ValueTask<MusicInfo?> LoadAsync(string filePath)
         {
             await ValueTask.CompletedTask;
 

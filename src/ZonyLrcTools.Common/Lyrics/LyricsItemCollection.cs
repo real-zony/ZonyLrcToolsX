@@ -14,7 +14,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// </summary>
         public bool IsPruneMusic => Count == 0;
 
-        public GlobalLyricsConfigOptions? Options { get; private set; }
+        public GlobalLyricsConfigOptions? Options { get; }
 
         public LyricsItemCollection(GlobalLyricsConfigOptions? options)
         {
@@ -29,6 +29,11 @@ namespace ZonyLrcTools.Common.Lyrics
             }
 
             var option = left.Options;
+            if (option == null)
+            {
+                throw new NullReferenceException("LyricsItemCollection.Options");
+            }
+
             var newCollection = new LyricsItemCollection(option);
             var indexDiff = left.Count - right.Count;
             if (!option.IsOneLine)
@@ -100,6 +105,11 @@ namespace ZonyLrcTools.Common.Lyrics
 
         public override string ToString()
         {
+            if (Options == null)
+            {
+                throw new NullReferenceException("LyricsItemCollection.Options");
+            }
+
             var lyricBuilder = new StringBuilder();
             ForEach(lyric => lyricBuilder.Append(lyric).Append(Options.LineBreak));
             return lyricBuilder.ToString().TrimEnd(Options.LineBreak);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
+using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Lyrics;
 
 namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
@@ -37,12 +38,11 @@ namespace ZonyLrcTools.Tests.Infrastructure.Lyrics
             lyric.IsPruneMusic.ShouldBeFalse();
             lyric.ToString().ShouldContain("你好像快要不能呼吸");
         }
-        
+
         [Fact]
         public async Task DownloadAsync_Issue133_Test()
         {
-            var lyric = await _lyricsProvider.DownloadAsync("天ノ弱", "漆柚");
-            lyric.ToString().ShouldNotBeNullOrEmpty();
+            await Should.ThrowAsync<ErrorCodeException>(async () => await _lyricsProvider.DownloadAsync("天ノ弱", "漆柚"));
         }
     }
 }

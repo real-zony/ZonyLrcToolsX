@@ -18,6 +18,6 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
         /// </summary>
         /// <param name="filePath">歌曲文件的路径。</param>
         /// <returns>加载完成的歌曲信息。</returns>
-        ValueTask<MusicInfo> LoadAsync(string filePath);
+        ValueTask<MusicInfo?> LoadAsync(string filePath);
     }
 }

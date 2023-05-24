@@ -33,7 +33,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Exceptions
             var errors = jsonObj.SelectTokens("$.Error.*");
             var warnings = jsonObj.SelectTokens("$.Warning.*");
             errors.Union(warnings).Select(m => m.Parent).OfType<JProperty>().ToList()
-                .ForEach(m => ErrorMessages.Add(int.Parse(m.Name), m.Value.Value<string>()));
+                .ForEach(m => ErrorMessages.Add(int.Parse(m.Name), m.Value.Value<string>() ?? string.Empty));
         }
 
         public static string GetMessage(int errorCode) => ErrorMessages[errorCode];

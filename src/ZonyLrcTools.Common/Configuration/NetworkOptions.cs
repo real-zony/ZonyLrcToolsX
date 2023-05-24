@@ -13,7 +13,7 @@ namespace ZonyLrcTools.Common.Configuration
         /// <summary>
         /// 代理服务器的 Ip。
         /// </summary>
-        public string Ip { get; set; }
+        public string Ip { get; set; } = null!;
 
         /// <summary>
         /// 代理服务器的 端口。

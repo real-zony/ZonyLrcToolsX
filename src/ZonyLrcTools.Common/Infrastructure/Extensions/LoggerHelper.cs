@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Extensions
         /// <param name="logger">日志记录器实例。</param>
         /// <param name="errorCode">错误码，具体请参考 <see cref="ErrorCodes"/> 类的定义。</param>
         /// <param name="e">异常实例，可为空。</param>
-        public static void LogWarningWithErrorCode(this IWarpLogger logger, int errorCode, Exception e = null)
+        public static void LogWarningWithErrorCode(this IWarpLogger logger, int errorCode, Exception? e = null)
         {
             logger.WarnAsync($"错误代码: {errorCode}\n堆栈异常: {e?.StackTrace}").GetAwaiter().GetResult();
         }

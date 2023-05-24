@@ -19,8 +19,8 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel
         public string Platform { get; protected set; }
 
         [JsonProperty("key")]
-        public string Keyword { get; protected set; }
-        
+        public string Keyword { get; protected set; } = null!;
+
         protected SongSearchRequest()
         {
             Format = "json";

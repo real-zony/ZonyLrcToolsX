@@ -13,6 +13,6 @@
         /// </remarks>
         /// <param name="key">原始单词。</param>
         /// <returns>原始单词对应的屏蔽词。</returns>
-        string GetValue(string key);
+        string? GetValue(string key);
     }
 }

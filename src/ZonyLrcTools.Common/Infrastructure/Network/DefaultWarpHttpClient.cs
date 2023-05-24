@@ -19,9 +19,9 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         }
 
         public async ValueTask<string> PostAsync(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null)
         {
             using var responseMessage = await PostReturnHttpResponseAsync(url, parameters, isQueryStringParam, requestOption);
             var responseContentString = await responseMessage.Content.ReadAsStringAsync();
@@ -30,18 +30,18 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         }
 
         public async ValueTask<TResponse> PostAsync<TResponse>(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null)
         {
             var responseString = await PostAsync(url, parameters, isQueryStringParam, requestOption);
             return ConvertHttpResponseToObject<TResponse>(parameters, responseString);
         }
 
         public async ValueTask<HttpResponseMessage> PostReturnHttpResponseAsync(string url,
-            object parameters = null,
+            object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage> requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null)
         {
             var parametersStr = isQueryStringParam ? BuildQueryString(parameters) : BuildJsonBodyString(parameters);
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
@@ -53,8 +53,8 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         }
 
         public async ValueTask<string> GetAsync(string url,
-            object parameters = null,
-            Action<HttpRequestMessage> requestOption = null)
+            object? parameters = null,
+            Action<HttpRequestMessage>? requestOption = null)
         {
             var requestParamsStr = BuildQueryString(parameters);
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, new Uri($"{url}?{requestParamsStr}"));
@@ -67,8 +67,8 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         }
 
         public async ValueTask<TResponse> GetAsync<TResponse>(string url,
-            object parameters = null,
-            Action<HttpRequestMessage> requestOption = null)
+            object? parameters = null,
+            Action<HttpRequestMessage>? requestOption = null)
         {
             var responseString = await GetAsync(url, parameters, requestOption);
             return ConvertHttpResponseToObject<TResponse>(parameters, responseString);
@@ -79,7 +79,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
             return _httpClientFactory.CreateClient(HttpClientNameConstant);
         }
 
-        private string BuildQueryString(object parameters)
+        private string BuildQueryString(object? parameters)
         {
             if (parameters == null)
             {
@@ -89,7 +89,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
             var type = parameters.GetType();
             if (type == typeof(string))
             {
-                return parameters as string;
+                return parameters as string ?? string.Empty;
             }
 
             var properties = type.GetProperties();
@@ -106,7 +106,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
             return paramBuilder.ToString().TrimEnd('&');
         }
 
-        private string BuildJsonBodyString(object parameters)
+        private string BuildJsonBodyString(object? parameters)
         {
             if (parameters == null) return string.Empty;
             if (parameters is string result) return result;
@@ -122,7 +122,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         /// <param name="responseString">执行 Http 请求之后响应内容。</param>
         /// <returns>如果响应正常，则返回具体的响应内容。</returns>
         /// <exception cref="ErrorCodeException">如果 Http 响应不正常，则可能抛出本异常。</exception>
-        private string ValidateHttpResponse(HttpResponseMessage responseMessage, object requestParameters, string responseString)
+        private string ValidateHttpResponse(HttpResponseMessage responseMessage, object? requestParameters, string responseString)
         {
             return responseMessage.StatusCode switch
             {
@@ -139,7 +139,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
         /// <param name="responseString">执行 Http 请求之后响应内容。</param>
         /// <typeparam name="TResponse">需要将响应结果反序列化的目标类型。</typeparam>
         /// <exception cref="ErrorCodeException">如果反序列化失败，则可能抛出本异常。</exception>
-        private TResponse ConvertHttpResponseToObject<TResponse>(object requestParameters, string responseString)
+        private TResponse ConvertHttpResponseToObject<TResponse>(object? requestParameters, string responseString)
         {
             var throwException = new ErrorCodeException(ErrorCodes.HttpResponseConvertJsonFailed, attachObj: new { requestParameters, responseString });
 

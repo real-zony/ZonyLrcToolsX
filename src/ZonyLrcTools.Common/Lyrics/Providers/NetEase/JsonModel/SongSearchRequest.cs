@@ -45,17 +45,14 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase.JsonModel
 
         [JsonProperty("crypto")] public string Crypto { get; set; } = "weapi";
 
-        public SongSearchRequest()
+        public SongSearchRequest(string musicName, string artistName, int limit = 10)
         {
             CsrfToken = string.Empty;
             Type = 1;
             Offset = 0;
             IsTotal = true;
             Limit = 10;
-        }
 
-        public SongSearchRequest(string musicName, string artistName, int limit = 10) : this()
-        {
             // Remove all the brackets and the content inside them.
             var regex = new Regex(@"\([^)]*\)");
             musicName = regex.Replace(musicName, string.Empty);

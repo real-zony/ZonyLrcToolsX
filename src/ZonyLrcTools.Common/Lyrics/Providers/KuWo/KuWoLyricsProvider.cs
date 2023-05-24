@@ -60,7 +60,7 @@ public class KuWoLyricsProvider : LyricsProvider
         await ValueTask.CompletedTask;
 
         var lyricsResponse = (GetLyricsResponse)lyricsObject;
-        if (lyricsResponse.Data.Lyrics == null)
+        if (lyricsResponse.Data?.Lyrics == null)
         {
             return new LyricsItemCollection(null);
         }

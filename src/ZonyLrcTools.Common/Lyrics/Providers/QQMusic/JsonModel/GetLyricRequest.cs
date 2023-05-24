@@ -16,10 +16,6 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.QQMusic.JsonModel
 
         [JsonProperty("g_tk")] public int Gtk { get; set; }
 
-        protected GetLyricRequest()
-        {
-        }
-
         public GetLyricRequest(string? songId)
         {
             IsNoBase64Encoding = 1;

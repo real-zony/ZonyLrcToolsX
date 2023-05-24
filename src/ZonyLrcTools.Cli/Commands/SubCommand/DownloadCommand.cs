@@ -65,7 +65,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         [Option("-f|--file", Description = "指定 CSV 文件的路径。")]
         public string CsvFilePath { get; set; }
 
-        [Option("-s|--song-list-id", Description = "指定网易云音乐歌单的 ID。")]
+        [Option("-s|--song-list-id", Description = "指定网易云音乐歌单的 ID，如果有多个歌单，请使用 ';' 分割 ID。")]
         public string SongListId { get; set; }
 
         #endregion

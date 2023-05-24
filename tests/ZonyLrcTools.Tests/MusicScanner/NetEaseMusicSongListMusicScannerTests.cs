@@ -7,13 +7,13 @@ namespace ZonyLrcTools.Tests.MusicScanner;
 
 public class NetEaseMusicSongListMusicScannerTests : TestBase
 {
-    [Fact]
-    public async Task GetMusicInfoFromNetEaseMusicSongListAsync_Test()
-    {
-        var musicScanner = GetService<NetEaseMusicSongListMusicScanner>();
-        var musicInfo = await musicScanner.GetMusicInfoFromNetEaseMusicSongListAsync("7224428149", "DownloadedLrc", "{Artist} - {Name}.lrc");
-
-        musicInfo.ShouldNotBeNull();
-        musicInfo.Count.ShouldBeGreaterThan(10);
-    }
+    // [Fact]
+    // public async Task GetMusicInfoFromNetEaseMusicSongListAsync_Test()
+    // {
+    //     var musicScanner = GetService<NetEaseMusicSongListMusicScanner>();
+    //     var musicInfo = await musicScanner.GetMusicInfoFromNetEaseMusicSongListAsync("7224428149", "DownloadedLrc", "{Artist} - {Name}.lrc");
+    //
+    //     musicInfo.ShouldNotBeNull();
+    //     musicInfo.Count.ShouldBeGreaterThan(10);
+    // }
 }

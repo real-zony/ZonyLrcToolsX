@@ -15,7 +15,7 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <summary>
         /// 歌词文本数据。
         /// </summary>
-        public string LyricText { get; }
+        public string? LyricText { get; }
 
         /// <summary>
         /// 歌词所在的时间(分)。
@@ -55,21 +55,21 @@ namespace ZonyLrcTools.Common.Lyrics
         /// <param name="minute">歌词所在的时间(分)。</param>
         /// <param name="second">歌词所在的时间(秒)。</param>
         /// <param name="lyricText">歌词文本数据。</param>
-        public LyricsItem(int minute, double second, string lyricText)
+        public LyricsItem(int minute, double second, string? lyricText)
         {
             Minute = minute;
             Second = second;
             LyricText = lyricText;
         }
 
-        public int CompareTo(LyricsItem other)
+        public int CompareTo(LyricsItem? other)
         {
-            if (SortScore > other.SortScore)
+            if (SortScore > other?.SortScore)
             {
                 return 1;
             }
 
-            if (SortScore < other.SortScore)
+            if (SortScore < other?.SortScore)
             {
                 return -1;
             }
@@ -87,12 +87,12 @@ namespace ZonyLrcTools.Common.Lyrics
             return left.SortScore < right.SortScore;
         }
 
-        public static bool operator ==(LyricsItem left, LyricsItem right)
+        public static bool operator ==(LyricsItem? left, LyricsItem? right)
         {
             return (int?)left?.SortScore == (int?)right?.SortScore;
         }
 
-        public static bool operator !=(LyricsItem item1, LyricsItem item2)
+        public static bool operator !=(LyricsItem? item1, LyricsItem? item2)
         {
             return !(item1 == item2);
         }
@@ -107,7 +107,7 @@ namespace ZonyLrcTools.Common.Lyrics
             return LyricText == other.LyricText && Minute == other.Minute && Second.Equals(other.Second);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

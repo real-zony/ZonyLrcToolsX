@@ -6,7 +6,7 @@ public class SongSearchResponse
 {
     [JsonProperty("code")] public int Code { get; set; }
 
-    [JsonProperty("data")] public SongSearchResponseInnerData InnerData { get; set; }
+    [JsonProperty("data")] public SongSearchResponseInnerData InnerData { get; set; } = null!;
 
     [JsonProperty("msg")] public string? ErrorMessage { get; set; }
 
@@ -29,9 +29,9 @@ public class SongSearchResponse
 
 public class SongSearchResponseInnerData
 {
-    [JsonProperty("total")] public string Total { get; set; }
+    [JsonProperty("total")] public string? Total { get; set; }
 
-    [JsonProperty("list")] public ICollection<SongSearchResponseDetail> SongItems { get; set; }
+    [JsonProperty("list")] public ICollection<SongSearchResponseDetail> SongItems { get; set; } = null!;
 }
 
 public class SongSearchResponseDetail

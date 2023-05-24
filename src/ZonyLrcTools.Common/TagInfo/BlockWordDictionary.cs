@@ -22,11 +22,11 @@ namespace ZonyLrcTools.Cli.Infrastructure.Tag
             _wordsDictionary = new Lazy<Dictionary<string, string>>(() =>
             {
                 var jsonData = File.ReadAllText(_options.Provider.Tag.BlockWord.FilePath);
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonData);
+                return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonData) ?? throw new InvalidOperationException("屏蔽词字典文件格式错误。");
             });
         }
 
-        public string GetValue(string key)
+        public string? GetValue(string key)
         {
             if (_wordsDictionary.Value.TryGetValue(key, out var value))
             {

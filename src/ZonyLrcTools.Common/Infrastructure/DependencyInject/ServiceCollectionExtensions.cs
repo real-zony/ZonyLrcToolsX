@@ -15,7 +15,7 @@ namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
         /// <summary>
         /// 配置工具会用到的服务。
         /// </summary>
-        public static IServiceCollection ConfigureToolService(this IServiceCollection services)
+        public static IServiceCollection? ConfigureToolService(this IServiceCollection? services)
         {
             if (services == null)
             {

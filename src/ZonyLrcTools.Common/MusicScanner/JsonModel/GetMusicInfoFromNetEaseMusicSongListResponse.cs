@@ -62,15 +62,12 @@ public class PlayListSongArtistModelJsonConverter : JsonConverter
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         var token = JToken.Load(reader);
-        switch (token.Type)
+        return token.Type switch
         {
-            case JTokenType.Array:
-                return token.ToObject(objectType);
-            case JTokenType.Object:
-                return new List<PlayListSongArtistModel> { token.ToObject<PlayListSongArtistModel>() };
-            default:
-                return null;
-        }
+            JTokenType.Array => token.ToObject(objectType),
+            JTokenType.Object => new List<PlayListSongArtistModel> { token.ToObject<PlayListSongArtistModel>()! },
+            _ => null
+        };
     }
 
     public override bool CanConvert(Type objectType)
