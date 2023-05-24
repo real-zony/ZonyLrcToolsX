@@ -37,11 +37,11 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// <summary>
     /// 从网易云歌单获取需要下载的歌曲列表，调用这个 API 需要用户登录，否则获取的歌单数据不全。
     /// </summary>
-    /// <param name="songListId">网易云音乐歌单的 ID。</param>
+    /// <param name="songListIds">网易云音乐歌单的 ID。</param>
     /// <param name="outputDirectory">歌词文件的输出路径。</param>
     /// <param name="pattern">输出的歌词文件格式，默认是 "{Artist} - {Title}.lrc" 的形式。</param>
     /// <returns>返回获取到的歌曲列表。</returns>
-    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListId, string outputDirectory, string pattern)
+    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListIds, string outputDirectory, string pattern)
     {
         if (string.IsNullOrEmpty(Cookie))
         {
@@ -50,40 +50,52 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             CsrfToken = loginResponse.csrfToken ?? string.Empty;
         }
 
-        var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
-        var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
-        var response = await _warpHttpClient.PostAsync<GetMusicInfoFromNetEaseMusicSongListResponse>(
-            $"{Host}/weapi/v6/playlist/detail?csrf_token=e5044820d8b66e14b8c31d39f9651a98", requestOption:
-            request =>
-            {
-                request.Headers.Add("Cookie", Cookie);
-                request.Content = new FormUrlEncodedContent(HandleRequest(new
-                {
-                    csrf_token = CsrfToken,
-                    id = songListId,
-                    n = 1000,
-                    offset = 0,
-                    total = true,
-                    limit = 1000,
-                }, secretKey, encSecKey));
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            });
-
-        if (response.Code != 200 || response.PlayList?.SongList == null)
+        async Task<List<MusicInfo>> GetMusicInfoBySongIdAsync(string songId)
         {
-            throw new ErrorCodeException(ErrorCodes.NotSupportedFileEncoding);
+            var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
+            var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
+            var response = await _warpHttpClient.PostAsync<GetMusicInfoFromNetEaseMusicSongListResponse>(
+                $"{Host}/weapi/v6/playlist/detail?csrf_token={CsrfToken}", requestOption:
+                request =>
+                {
+                    request.Headers.Add("Cookie", Cookie);
+                    request.Content = new FormUrlEncodedContent(HandleRequest(new
+                    {
+                        csrf_token = CsrfToken,
+                        id = songId,
+                        n = 1000,
+                        offset = 0,
+                        total = true,
+                        limit = 1000,
+                    }, secretKey, encSecKey));
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                });
+
+            if (response.Code != 200 || response.PlayList?.SongList == null)
+            {
+                throw new ErrorCodeException(ErrorCodes.NotSupportedFileEncoding);
+            }
+
+            return response.PlayList.SongList
+                .Where(song => !string.IsNullOrEmpty(song.Name))
+                .Select(song =>
+                {
+                    var artistName = song.Artists?.FirstOrDefault()?.Name ?? string.Empty;
+                    var fakeFilePath = Path.Combine(outputDirectory, pattern.Replace("{Name}", song.Name).Replace("{Artist}", artistName));
+
+                    return new MusicInfo(fakeFilePath, song.Name!, artistName);
+                }).ToList();
         }
 
-        return response.PlayList.SongList
-            .Where(song => !string.IsNullOrEmpty(song.Name))
-            .Select(song =>
-            {
-                var artistName = song.Artists?.FirstOrDefault()?.Name ?? string.Empty;
-                var fakeFilePath = Path.Combine(outputDirectory, pattern.Replace("{Name}", song.Name).Replace("{Artist}", artistName));
+        var musicInfoList = new List<MusicInfo>();
+        foreach (var songListId in songListIds.Split(';'))
+        {
+            _logger.LogInformation("正在获取歌单 {SongListId} 的歌曲列表。", songListId);
+            var musicInfos = await GetMusicInfoBySongIdAsync(songListId);
+            musicInfoList.AddRange(musicInfos);
+        }
 
-                var info = new MusicInfo(fakeFilePath, song.Name!, artistName);
-                return info;
-            }).ToList();
+        return musicInfoList;
     }
 
     /// <summary>
