@@ -38,7 +38,7 @@ public sealed class PlayListSongModel
     /// <summary>
     /// 歌曲的艺术家信息，可能会有多位艺术家/歌手。
     /// </summary>
-    [JsonProperty("al")]
+    [JsonProperty("ar")]
     [JsonConverter(typeof(PlayListSongArtistModelJsonConverter))]
     public ICollection<PlayListSongArtistModel>? Artists { get; set; }
 }
