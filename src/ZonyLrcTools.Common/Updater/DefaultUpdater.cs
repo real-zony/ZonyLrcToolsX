@@ -23,6 +23,11 @@ public class DefaultUpdater : IUpdater, ISingletonDependency
 
     public async Task CheckUpdateAsync()
     {
+        if (!IsCheckUpdate())
+        {
+            return;
+        }
+
         var response = await _warpHttpClient.GetAsync<NewVersionResponse?>(UpdateUrl);
         if (response == null)
         {
@@ -55,5 +60,28 @@ public class DefaultUpdater : IUpdater, ISingletonDependency
                 Process.Start("xdg-open", importantItem.Url);
             }
         }
+    }
+
+    private bool IsCheckUpdate()
+    {
+        var lockFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "update.lock");
+
+        if (!File.Exists(lockFile))
+        {
+            File.WriteAllText(lockFile, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+            return true;
+        }
+
+        if (long.TryParse(File.ReadAllText(lockFile), out var time))
+        {
+            var now = DateTimeOffset.Now.ToUnixTimeSeconds();
+            if (now - time <= 86400 /* 1 Day */)
+            {
+                return false;
+            }
+        }
+
+        File.WriteAllText(lockFile, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+        return true;
     }
 }
