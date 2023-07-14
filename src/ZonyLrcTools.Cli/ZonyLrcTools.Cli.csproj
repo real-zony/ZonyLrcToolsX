@@ -10,37 +10,34 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
-        <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="4.0.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="QRCoder" Version="1.4.3" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils"/>
+        <PackageReference Include="McMaster.Extensions.Hosting.CommandLine"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Serilog.Extensions.Hosting"/>
+        <PackageReference Include="Serilog.Sinks.Async"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
+        <PackageReference Include="Serilog.Sinks.File"/>
+        <PackageReference Include="System.Text.Encoding.CodePages"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="appsettings.json" />
-        <None Remove="Resources\error_msg.json" />
+        <None Remove="appsettings.json"/>
+        <None Remove="Resources\error_msg.json"/>
         <Content Include="Resources\error_msg.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="BlockWords.json" />
+        <None Remove="BlockWords.json"/>
         <Content Include="BlockWords.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="config.yaml" />
+        <None Remove="config.yaml"/>
         <Content Include="config.yaml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj" />
+        <ProjectReference Include="..\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj"/>
     </ItemGroup>
 
 </Project>
