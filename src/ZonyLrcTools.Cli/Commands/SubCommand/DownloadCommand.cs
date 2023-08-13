@@ -46,7 +46,7 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
         [Option("-a|--album", CommandOptionType.NoValue, Description = "指定程序需要下载专辑图像。")]
         public bool DownloadAlbum { get; set; }
 
-        [Option("-n|--number", CommandOptionType.SingleValue, Description = "指定下载时候的线程数量。(默认值 2)")]
+        [Option("-n|--number", CommandOptionType.SingleValue, Description = "指定下载时候的线程数量。(默认值 1)")]
         public int ParallelNumber { get; set; } = 1;
 
         #endregion
