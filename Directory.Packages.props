@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <ManagePackageVersionCentrally>true</ManagePackageVersionCentrally>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
     <ItemGroup>
@@ -8,18 +8,17 @@
         <PackageVersion Include="McMaster.Extensions.Hosting.CommandLine" Version="4.0.2"/>
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0"/>
         <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.1"/>
-        <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0"/>
         <PackageVersion Include="QRCoder" Version="1.4.3"/>
         <PackageVersion Include="Serilog.Extensions.Hosting" Version="7.0.0"/>
         <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0"/>
         <PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0"/>
         <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0"/>
         <PackageVersion Include="System.Text.Encoding.CodePages" Version="7.0.0"/>
-        <PackageVersion Include="Polly" Version="7.2.3"/>
+        <PackageVersion Include="Polly" Version="7.2.4"/>
         <PackageVersion Include="TagLibSharp" Version="2.3.0"/>
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3"/>
         <PackageVersion Include="NetEscapades.Configuration.Yaml" Version="3.1.0"/>
-        <PackageVersion Include="MusicDecrypto.Library" Version="2.2.0"/>
+        <PackageVersion Include="MusicDecrypto.Library" Version="2.2.3"/>
         <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0"/>
         <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0"/>
         <PackageVersion Include="AutoMapper" Version="12.0.1"/>
