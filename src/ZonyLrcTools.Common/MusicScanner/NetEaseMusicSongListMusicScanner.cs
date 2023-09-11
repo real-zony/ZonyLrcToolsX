@@ -139,7 +139,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         var asciiQrCodeString = qrCode.GetGraphic(1, drawQuietZones: false);
 
         _logger.LogInformation("请使用网易云 APP 扫码登录:");
-        _logger.LogInformation(asciiQrCodeString);
+        _logger.LogInformation("\n{AsciiQrCodeString}", asciiQrCodeString);
 
         // Wait for login success.
         var isLogin = false;
