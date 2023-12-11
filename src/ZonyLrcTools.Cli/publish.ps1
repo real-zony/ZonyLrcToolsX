@@ -1,4 +1,4 @@
-﻿$Platforms = @('win-x64', 'linux-x64', 'osx-x64')
+﻿$Platforms = @('win-x64', 'linux-x64', 'osx-x64', 'win-arm64', 'linux-arm64', 'osx-arm64')
 
 if (-not (Test-Path ./TempFiles)) {
     New-Item -ItemType Directory -Path ./TempFiles | Out-Null
