@@ -4,6 +4,9 @@ globalOption:
     - '*.mp3'
     - '*.flac'
     - '*.wav'
+    - '*.m4a'
+    - '*.ogg'
+    - '*.opus'
   # 网络代理服务设置，仅支持 HTTP 代理。
   networkOptions:
     isEnable: false # 是否启用代理。
