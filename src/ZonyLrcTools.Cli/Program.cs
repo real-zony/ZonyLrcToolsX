@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
@@ -79,7 +78,6 @@ namespace ZonyLrcTools.Cli
         private static Task<int> BuildHostedService(string[] args)
         {
             return new HostBuilder()
-                .ConfigureLogging(builder => builder.AddSerilog())
                 .ConfigureHostConfiguration(builder =>
                 {
                     builder

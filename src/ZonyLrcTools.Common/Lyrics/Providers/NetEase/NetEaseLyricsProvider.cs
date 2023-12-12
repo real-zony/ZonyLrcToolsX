@@ -17,7 +17,7 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.NetEase
         private readonly ILyricsItemCollectionFactory _lyricsItemCollectionFactory;
         private readonly GlobalOptions _options;
 
-        private const string NetEaseSearchMusicUrl = @"https://music.163.com/weapi/cloudsearch/get/web";
+        private const string NetEaseSearchMusicUrl = @"https://music.163.com/weapi/search/get";
         private const string NetEaseGetLyricUrl = @"https://music.163.com/weapi/song/lyric?csrf_token=";
 
         private const string NetEaseRequestReferer = @"https://music.163.com";
