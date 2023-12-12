@@ -12,9 +12,9 @@ for platform in "${Platforms[@]}"
 do
     dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:DebugType=none --self-contained true || exit 1
 
-    cd ./bin/Release/net7.0/"$platform"/publish/ || exit 1
+    cd ./bin/Release/net8.0/"$platform"/publish/ || exit 1
     zip -r ./ZonyLrcTools_"$platform"_"${PUBLISH_VERSION}".zip ./ || exit 1
     cd ../../../../../ || exit 1
 
-    mv ./bin/Release/net7.0/"$platform"/publish/ZonyLrcTools_"$platform"_"$PUBLISH_VERSION".zip ./TempFiles
+    mv ./bin/Release/net8.0/"$platform"/publish/ZonyLrcTools_"$platform"_"$PUBLISH_VERSION".zip ./TempFiles
 done
