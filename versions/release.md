@@ -1,6 +1,6 @@
-New Features: None
+New Features: None  
 Breaking Changes: None  
-Enhancement: None
+Enhancement: None  
 
 Fixed Bugs:  
 
