@@ -78,6 +78,7 @@ namespace ZonyLrcTools.Cli
         private static Task<int> BuildHostedService(string[] args)
         {
             return new HostBuilder()
+                .ConfigureLogging(l => l.AddSerilog())
                 .ConfigureHostConfiguration(builder =>
                 {
                     builder
