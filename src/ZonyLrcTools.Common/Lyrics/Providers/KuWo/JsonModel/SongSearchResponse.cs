@@ -4,15 +4,14 @@ namespace ZonyLrcTools.Common.Lyrics.Providers.KuWo.JsonModel;
 
 public class SongSearchResponse
 {
-    [JsonProperty("code")] public int Code { get; set; }
+    [JsonProperty("TOTAL")] public int TotalCount { get; set; }
 
-    [JsonProperty("data")] public SongSearchResponseInnerData InnerData { get; set; } = null!;
-
-    [JsonProperty("msg")] public string? ErrorMessage { get; set; }
+    [JsonProperty("abslist")]
+    public IList<SongSearchResponseSongDetail> SongList { get; set; }
 
     public long GetMatchedMusicId(string musicName, string artistName, long? duration)
     {
-        var prefectMatch = InnerData.SongItems.FirstOrDefault(x => x.Name == musicName && x.Artist == artistName);
+        var prefectMatch = SongList.FirstOrDefault(x => x.Name == musicName && x.Artist == artistName);
         if (prefectMatch != null)
         {
             return prefectMatch.MusicId;
@@ -20,27 +19,42 @@ public class SongSearchResponse
 
         if (duration is null or 0)
         {
-            return InnerData.SongItems.First().MusicId;
+            return SongList.First().MusicId;
         }
 
-        return InnerData.SongItems.OrderBy(t => Math.Abs(t.Duration - duration.Value)).First().MusicId;
+        return SongList.OrderBy(t => Math.Abs(t.Duration - duration.Value)).First().MusicId;
     }
 }
 
-public class SongSearchResponseInnerData
+public class SongSearchResponseSongDetail
 {
-    [JsonProperty("total")] public string? Total { get; set; }
+    /// <summary>
+    /// 专辑名称。
+    /// </summary>
+    [JsonProperty("ALBUM")]
+    public string Album { get; set; }
 
-    [JsonProperty("list")] public ICollection<SongSearchResponseDetail> SongItems { get; set; } = null!;
-}
+    /// <summary>
+    /// 歌手名称。
+    /// </summary>
+    [JsonProperty("ARTIST")]
+    public string Artist { get; set; }
 
-public class SongSearchResponseDetail
-{
-    [JsonProperty("artist")] public string? Artist { get; set; }
+    /// <summary>
+    /// 歌曲名称。
+    /// </summary>
+    [JsonProperty("SONGNAME")]
+    public string Name { get; set; }
 
-    [JsonProperty("name")] public string? Name { get; set; }
+    /// <summary>
+    /// 歌曲的 ID。
+    /// </summary>
+    [JsonProperty("DC_TARGETID")]
+    public long MusicId { get; set; }
 
-    [JsonProperty("rid")] public long MusicId { get; set; }
-
-    [JsonProperty("duration")] public long Duration { get; set; }
+    /// <summary>
+    /// 歌曲的时间长度。
+    /// </summary>
+    [JsonProperty("DURATION")]
+    public long Duration { get; set; }
 }

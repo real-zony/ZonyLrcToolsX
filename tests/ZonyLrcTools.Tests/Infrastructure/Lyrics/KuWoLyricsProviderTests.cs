@@ -17,7 +17,7 @@ public class KuWoLyricsProviderTests : TestBase
             .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.KuWo);
     }
 
-    [Fact(Skip = "Not Working")]
+    [Fact]
     [Trait("LyricsProvider ", "KuGou")]
     public async Task DownloadAsync_Test()
     {
@@ -26,7 +26,7 @@ public class KuWoLyricsProviderTests : TestBase
         lyric.IsPruneMusic.ShouldBeFalse();
     }
 
-    [Fact(Skip = "Not Working")]
+    [Fact]
     public async Task DownloadAsync_Source_Null_Test()
     {
         var lyric = await _kuwoLyricsProvider.DownloadAsync("Concerto for Piano and Orchestra No. 12 in A major, K414 - 1. Allegro",
