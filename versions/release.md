@@ -4,5 +4,4 @@ Enhancement: None
 
 Fixed Bugs:  
 
-- 修复了网易云音歌词下载功能无效的问题。- [243a0e2](https://github.com/real-zony/ZonyLrcToolsX/commit/243a0e2559d3d9925dfcb96d11e2c1b1372363e6)
-- 修复了日志不正常显示的问题。
+- 修复了酷我音乐下载歌词失败的问题。- [fea5e11](https://github.com/real-zony/ZonyLrcToolsX/commit/fea5e1124ffde5f6cfe0b993e96fdfe04e1b7892)
