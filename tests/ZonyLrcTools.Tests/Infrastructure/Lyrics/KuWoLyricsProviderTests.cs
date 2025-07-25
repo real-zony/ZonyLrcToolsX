@@ -17,7 +17,7 @@ public class KuWoLyricsProviderTests : TestBase
             .FirstOrDefault(t => t.DownloaderName == InternalLyricsProviderNames.KuWo);
     }
 
-    [Fact]
+    [Fact(Skip = "酷我音乐的 API 不稳定，可能导致测试失败，暂跳过")]
     [Trait("LyricsProvider ", "KuGou")]
     public async Task DownloadAsync_Test()
     {
