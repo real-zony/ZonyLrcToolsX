@@ -9,55 +9,101 @@ on:
     branches: [ dev ]
 
 jobs:
-  build:
+  # Windows 和 Linux 构建（保持在 Ubuntu 上）
+  build-linux-windows:
     runs-on: ubuntu-latest
     steps:
       - name: Get build version
         id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d')${{github.run_number}}"
+        run: echo "date=$(date +'%Y%m%d')${{github.run_number}}" >> $GITHUB_OUTPUT
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Publish
+      - name: Publish Windows and Linux
         working-directory: ./src/ZonyLrcTools.Cli
         run: |
-          ls -a
-          chmod +x ./publish.sh
-          ./publish.sh
-          mv ./TempFiles ../../
+          for platform in win-x64 linux-x64 win-arm64 linux-arm64; do
+            dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:DebugType=none --self-contained true
+            cd ./bin/Release/net8.0/"$platform"/publish/
+            zip -r ./ZonyLrcTools_"$platform"_"${{ steps.date.outputs.date }}".zip ./
+            cd ../../../../../
+            mkdir -p ./TempFiles
+            mv ./bin/Release/net8.0/"$platform"/publish/*.zip ./TempFiles/
+          done
         shell: bash
-        env:
-          PUBLISH_VERSION: ${{ steps.date.outputs.date }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           retention-days: 90
-          name: release-files
-          path: |
-            ./TempFiles
-            ./versions/release.md
+          name: release-files-linux-windows
+          path: ./src/ZonyLrcTools.Cli/TempFiles
     outputs:
       version: ${{ steps.date.outputs.date }}
+
+  # macOS 构建（在 macOS runner 上，支持 ad-hoc 签名）
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Get build version
+        id: date
+        run: echo "date=$(date +'%Y%m%d')${{github.run_number}}" >> $GITHUB_OUTPUT
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Publish macOS
+        working-directory: ./src/ZonyLrcTools.Cli
+        run: |
+          for platform in osx-x64 osx-arm64; do
+            dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:DebugType=none --self-contained true
+
+            # Ad-hoc 签名，解决 macOS Gatekeeper/XProtect 问题
+            codesign -s - --force --deep ./bin/Release/net8.0/"$platform"/publish/ZonyLrcTools.Cli
+
+            cd ./bin/Release/net8.0/"$platform"/publish/
+            zip -r ./ZonyLrcTools_"$platform"_"${{ steps.date.outputs.date }}".zip ./
+            cd ../../../../../
+            mkdir -p ./TempFiles
+            mv ./bin/Release/net8.0/"$platform"/publish/*.zip ./TempFiles/
+          done
+        shell: bash
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 90
+          name: release-files-macos
+          path: ./src/ZonyLrcTools.Cli/TempFiles
+    outputs:
+      version: ${{ steps.date.outputs.date }}
+
+  # Release Job - 合并所有平台的构建产物
   release:
     if: github.event_name == 'push'
-    needs: build
+    needs: [build-linux-windows, build-macos]
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
+      - name: Checkout for release notes
+        uses: actions/checkout@v4
+      - name: Download Linux/Windows artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: release-files
-          path: .
+          name: release-files-linux-windows
+          path: ./TempFiles
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-files-macos
+          path: ./TempFiles
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "./TempFiles/*.zip"
           token: ${{ secrets.GITHUBACTIONS }}
-          tag: ZonyLrcToolsX_Alpha.${{ needs.build.outputs.version }}
+          tag: ZonyLrcToolsX_Alpha.${{ needs.build-linux-windows.outputs.version }}
           commit: dev
           bodyFile: ./versions/release.md
