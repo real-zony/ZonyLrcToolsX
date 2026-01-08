@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>4.0.2</Version>
+    <Version>4.0.3</Version>
     <Authors>Zony(real-zony)</Authors>
     <RepositoryUrl>https://github.com/real-zony/ZonyLrcToolsX</RepositoryUrl>
   </PropertyGroup>

@@ -4,4 +4,4 @@ Enhancement: None
 
 Fixed Bugs:  
 
-- 修复了 #156 的问题。
+- [#167] Handle macOS code signing issues. (处理 macOS 代码签名问题。)
