@@ -21,17 +21,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
       - name: Publish Windows and Linux
         working-directory: ./src/ZonyLrcTools.Cli
         run: |
           for platform in win-x64 linux-x64 win-arm64 linux-arm64; do
-            dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:DebugType=none --self-contained true
-            cd ./bin/Release/net8.0/"$platform"/publish/
+            dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:UseAppHost=true -p:DebugType=none --self-contained true
+            cd ./bin/Release/net10.0/"$platform"/publish/
             zip -r ./ZonyLrcTools_"$platform"_"${{ steps.date.outputs.date }}".zip ./
             cd ../../../../../
             mkdir -p ./TempFiles
-            mv ./bin/Release/net8.0/"$platform"/publish/*.zip ./TempFiles/
+            mv ./bin/Release/net10.0/"$platform"/publish/*.zip ./TempFiles/
           done
         shell: bash
       - name: Upload artifact
@@ -55,7 +55,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
       - name: Publish macOS
         working-directory: ./src/ZonyLrcTools.Cli
         run: |
@@ -63,13 +63,13 @@ jobs:
             dotnet publish -r "$platform" -c Release -p:PublishSingleFile=true -p:DebugType=none --self-contained true
 
             # Ad-hoc 签名，解决 macOS Gatekeeper/XProtect 问题
-            codesign -s - --force --deep ./bin/Release/net8.0/"$platform"/publish/ZonyLrcTools.Cli
+            codesign -s - --force --deep ./bin/Release/net10.0/"$platform"/publish/ZonyLrcTools.Cli
 
-            cd ./bin/Release/net8.0/"$platform"/publish/
+            cd ./bin/Release/net10.0/"$platform"/publish/
             zip -r ./ZonyLrcTools_"$platform"_"${{ steps.date.outputs.date }}".zip ./
             cd ../../../../../
             mkdir -p ./TempFiles
-            mv ./bin/Release/net8.0/"$platform"/publish/*.zip ./TempFiles/
+            mv ./bin/Release/net10.0/"$platform"/publish/*.zip ./TempFiles/
           done
         shell: bash
       - name: Upload artifact
