@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Lyrics Download -->
+  <data name="Lyrics_DownloadStart" xml:space="preserve">
+    <value>开始下载歌词文件数据...</value>
+  </data>
+  <data name="Lyrics_DownloadComplete" xml:space="preserve">
+    <value>歌词数据下载完成，成功: {0} 跳过(纯音乐): {1} 失败: {2}。</value>
+  </data>
+  <data name="Lyrics_SongDownloadSuccess" xml:space="preserve">
+    <value>歌曲名: {0}, 艺术家: {1}, 下载成功。</value>
+  </data>
+  <data name="Lyrics_SongDownloadFailed" xml:space="preserve">
+    <value>歌曲名: {0}, 艺术家: {1}, 下载失败。</value>
+  </data>
+  <!-- Album Download -->
+  <data name="Album_DownloadStart" xml:space="preserve">
+    <value>开始下载专辑封面...</value>
+  </data>
+  <data name="Album_DownloadComplete" xml:space="preserve">
+    <value>专辑封面下载完成，成功: {0} 失败: {1}。</value>
+  </data>
+  <!-- File Scanner -->
+  <data name="Scanner_Start" xml:space="preserve">
+    <value>开始扫描文件夹，请稍等...</value>
+  </data>
+  <data name="Scanner_Complete" xml:space="preserve">
+    <value>扫描完成，共 {0} 个文件。</value>
+  </data>
+  <!-- General -->
+  <data name="General_Starting" xml:space="preserve">
+    <value>正在启动...</value>
+  </data>
+  <data name="General_UnhandledException" xml:space="preserve">
+    <value>出现了未处理的异常。</value>
+  </data>
+  <data name="General_ErrorCode" xml:space="preserve">
+    <value>错误代码: {0}</value>
+  </data>
+  <data name="General_ErrorMessage" xml:space="preserve">
+    <value>错误信息: {0}</value>
+  </data>
+</root>

@@ -1,0 +1,33 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ZonyLrcTools.Desktop.App"
+             RequestedThemeVariant="Default">
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AppBackgroundBrush">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="AppAccentBrush">#0078D4</SolidColorBrush>
+                    <SolidColorBrush x:Key="NavigationBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessColorBrush">#107C10</SolidColorBrush>
+                    <SolidColorBrush x:Key="ErrorColorBrush">#D13438</SolidColorBrush>
+                    <SolidColorBrush x:Key="WarningColorBrush">#FFB900</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AppBackgroundBrush">#1F1F1F</SolidColorBrush>
+                    <SolidColorBrush x:Key="AppAccentBrush">#60CDFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="NavigationBackgroundBrush">#2D2D2D</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessColorBrush">#6CCB5F</SolidColorBrush>
+                    <SolidColorBrush x:Key="ErrorColorBrush">#FF99A4</SolidColorBrush>
+                    <SolidColorBrush x:Key="WarningColorBrush">#FCE100</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

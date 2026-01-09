@@ -1,0 +1,141 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             x:Class="ZonyLrcTools.Desktop.Views.Pages.SettingsPage"
+             x:DataType="vm:SettingsViewModel">
+
+    <ScrollViewer>
+        <StackPanel Spacing="24">
+            <!-- Title -->
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="{Binding SettingsTitle}"
+                           FontSize="28"
+                           FontWeight="SemiBold" />
+            </StackPanel>
+
+            <!-- Language Settings -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="{Binding SettingsLanguage}"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <CheckBox Content="{Binding SettingsFollowSystem}"
+                              IsChecked="{Binding FollowSystemLanguage}" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="16" IsEnabled="{Binding !FollowSystemLanguage}">
+                        <RadioButton GroupName="Language"
+                                     Content="{Binding SettingsChinese}"
+                                     IsChecked="{Binding IsChineseSelected}" />
+                        <RadioButton GroupName="Language"
+                                     Content="{Binding SettingsEnglish}"
+                                     IsChecked="{Binding IsEnglishSelected}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Network Settings -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="{Binding SettingsProxy}"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <CheckBox Content="{Binding SettingsProxyEnable}"
+                              IsChecked="{Binding IsProxyEnabled}" />
+
+                    <Grid ColumnDefinitions="*,Auto,120" IsEnabled="{Binding IsProxyEnabled}">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding ProxyIp}"
+                                 Watermark="{Binding SettingsProxyAddress}"
+                                 Margin="0,0,8,0" />
+                        <TextBlock Grid.Column="1"
+                                   Text=":"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0" />
+                        <NumericUpDown Grid.Column="2"
+                                       Value="{Binding ProxyPort}"
+                                       Minimum="1"
+                                       Maximum="65535" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Lyrics Settings -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Lyrics"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <CheckBox Content="Enable translation lyrics"
+                              IsChecked="{Binding IsTranslationEnabled}" />
+
+                    <CheckBox Content="One-line mode (original + translation on same line)"
+                              IsChecked="{Binding IsOneLineMode}" />
+
+                    <CheckBox Content="Skip existing lyrics files"
+                              IsChecked="{Binding SkipExistingLyrics}" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <TextBlock Text="File Encoding:"
+                                   VerticalAlignment="Center" />
+                        <ComboBox ItemsSource="{Binding AvailableEncodings}"
+                                  SelectedItem="{Binding SelectedEncoding}"
+                                  Width="150" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Lyrics Providers -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="{Binding SettingsLyricsProvider}"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <ItemsControl ItemsSource="{Binding LyricsProviders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:LyricsProviderSettingViewModel">
+                                <Border Background="{DynamicResource AppBackgroundBrush}"
+                                        CornerRadius="4"
+                                        Padding="12,8"
+                                        Margin="0,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding IsEnabled}"
+                                                  Margin="0,0,12,0" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Name}"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2"
+                                                   VerticalAlignment="Center"
+                                                   Opacity="0.5">
+                                            <Run Text="Priority: " />
+                                            <Run Text="{Binding Priority}" />
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Actions -->
+            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Right">
+                <Button Content="{Binding SettingsReset}"
+                        Command="{Binding ResetToDefaultsCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

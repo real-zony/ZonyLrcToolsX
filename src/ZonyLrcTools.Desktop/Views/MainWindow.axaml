@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+        xmlns:pages="using:ZonyLrcTools.Desktop.Views.Pages"
+        xmlns:loc="using:ZonyLrcTools.Desktop.Infrastructure.Localization"
+        x:Class="ZonyLrcTools.Desktop.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding Title}"
+        Width="1200" Height="800"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid ColumnDefinitions="220,*">
+        <!-- Left Navigation Panel -->
+        <Border Grid.Column="0"
+                Background="{DynamicResource NavigationBackgroundBrush}"
+                Padding="8">
+            <DockPanel>
+                <!-- App Title -->
+                <StackPanel DockPanel.Dock="Top" Margin="8,16,8,24">
+                    <TextBlock Text="ZonyLrcTools"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding HomeDescription}"
+                               FontSize="12"
+                               Opacity="0.7"
+                               HorizontalAlignment="Center"
+                               Margin="0,4,0,0" />
+                </StackPanel>
+
+                <!-- Theme Toggle -->
+                <Button DockPanel.Dock="Bottom"
+                        Content="{Binding ThemeButtonText}"
+                        Command="{Binding ToggleThemeCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Margin="8" />
+
+                <!-- Navigation Menu -->
+                <ListBox SelectedIndex="{Binding SelectedNavigationIndex}"
+                         Margin="0,8"
+                         SelectionChanged="OnNavigationSelectionChanged">
+                    <ListBoxItem>
+                        <TextBlock Text="{Binding NavHome}" VerticalAlignment="Center" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <TextBlock Text="{Binding NavLyricsDownload}" VerticalAlignment="Center" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <TextBlock Text="{Binding NavAlbumDownload}" VerticalAlignment="Center" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <TextBlock Text="{Binding NavSettings}" VerticalAlignment="Center" />
+                    </ListBoxItem>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- Right Content Area -->
+        <Border Grid.Column="1" Padding="24">
+            <ContentControl Content="{Binding CurrentPage}">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="vm:HomeViewModel">
+                        <pages:HomePage />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:LyricsDownloadViewModel">
+                        <pages:LyricsDownloadPage />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:AlbumDownloadViewModel">
+                        <pages:AlbumDownloadPage />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:SettingsViewModel">
+                        <pages:SettingsPage />
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Border>
+    </Grid>
+
+</Window>

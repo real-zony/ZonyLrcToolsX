@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Error Messages -->
+  <data name="Error_10001" xml:space="preserve">
+    <value>The file extension to search cannot be empty.</value>
+  </data>
+  <data name="Error_10002" xml:space="preserve">
+    <value>The directory to scan does not exist, please verify the path.</value>
+  </data>
+  <data name="Error_10003" xml:space="preserve">
+    <value>Unable to get the file extension information.</value>
+  </data>
+  <data name="Error_10004" xml:space="preserve">
+    <value>No music files were found.</value>
+  </data>
+  <data name="Error_10005" xml:space="preserve">
+    <value>The specified encoding is not supported, please check the configuration.</value>
+  </data>
+  <data name="Error_10006" xml:space="preserve">
+    <value>Unable to get the song list from NetEase Music.</value>
+  </data>
+  <!-- Warning Messages -->
+  <data name="Warning_50001" xml:space="preserve">
+    <value>An error occurred while scanning files.</value>
+  </data>
+  <data name="Warning_50002" xml:space="preserve">
+    <value>Both song name and artist name are empty, unable to search.</value>
+  </data>
+  <data name="Warning_50003" xml:space="preserve">
+    <value>Song name cannot be empty, unable to search.</value>
+  </data>
+  <data name="Warning_50004" xml:space="preserve">
+    <value>The downloader did not find the corresponding song information.</value>
+  </data>
+  <data name="Warning_50005" xml:space="preserve">
+    <value>The download request returned an invalid response, possibly a server error.</value>
+  </data>
+  <data name="Warning_50006" xml:space="preserve">
+    <value>Tag info reader is empty, unable to parse music tag information.</value>
+  </data>
+  <data name="Warning_50007" xml:space="preserve">
+    <value>TagLib tag reader encountered an unexpected exception.</value>
+  </data>
+  <data name="Warning_50008" xml:space="preserve">
+    <value>Service interface restricted, unable to make request, please try using a proxy server.</value>
+  </data>
+  <data name="Warning_50009" xml:space="preserve">
+    <value>HTTP request to target server failed.</value>
+  </data>
+  <data name="Warning_50010" xml:space="preserve">
+    <value>Failed to deserialize HTTP response to JSON.</value>
+  </data>
+  <data name="Warning_50011" xml:space="preserve">
+    <value>Currently only NCM format song conversion is supported.</value>
+  </data>
+</root>

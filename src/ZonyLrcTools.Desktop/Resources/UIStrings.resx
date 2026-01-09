@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Navigation -->
+  <data name="Nav_Home" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Nav_LyricsDownload" xml:space="preserve">
+    <value>歌词下载</value>
+  </data>
+  <data name="Nav_AlbumDownload" xml:space="preserve">
+    <value>专辑封面</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <!-- Home Page -->
+  <data name="Home_Welcome" xml:space="preserve">
+    <value>欢迎使用 ZonyLrcTools</value>
+  </data>
+  <data name="Home_Description" xml:space="preserve">
+    <value>一款开源的歌词下载工具</value>
+  </data>
+  <data name="Home_QuickStart" xml:space="preserve">
+    <value>快速开始</value>
+  </data>
+  <data name="Home_DownloadLyrics" xml:space="preserve">
+    <value>下载歌词</value>
+  </data>
+  <data name="Home_DownloadAlbumCover" xml:space="preserve">
+    <value>下载专辑封面</value>
+  </data>
+  <!-- Lyrics Download Page -->
+  <data name="Lyrics_Title" xml:space="preserve">
+    <value>歌词下载</value>
+  </data>
+  <data name="Lyrics_Description" xml:space="preserve">
+    <value>批量下载音乐文件的歌词</value>
+  </data>
+  <data name="Lyrics_SelectFolder" xml:space="preserve">
+    <value>选择音乐文件夹...</value>
+  </data>
+  <data name="Lyrics_Browse" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="Lyrics_Parallel" xml:space="preserve">
+    <value>并行:</value>
+  </data>
+  <data name="Lyrics_StartDownload" xml:space="preserve">
+    <value>开始下载</value>
+  </data>
+  <data name="Lyrics_StopDownload" xml:space="preserve">
+    <value>停止下载</value>
+  </data>
+  <data name="Lyrics_Progress" xml:space="preserve">
+    <value>下载进度</value>
+  </data>
+  <data name="Lyrics_Status_Idle" xml:space="preserve">
+    <value>等待中</value>
+  </data>
+  <data name="Lyrics_Status_Scanning" xml:space="preserve">
+    <value>正在扫描文件...</value>
+  </data>
+  <data name="Lyrics_Status_Downloading" xml:space="preserve">
+    <value>正在下载歌词...</value>
+  </data>
+  <data name="Lyrics_Status_Complete" xml:space="preserve">
+    <value>下载完成</value>
+  </data>
+  <data name="Common_Total" xml:space="preserve">
+    <value>总计:</value>
+  </data>
+  <data name="Common_Files" xml:space="preserve">
+    <value>个文件</value>
+  </data>
+  <data name="Common_Success" xml:space="preserve">
+    <value>成功:</value>
+  </data>
+  <data name="Common_Failed" xml:space="preserve">
+    <value>失败:</value>
+  </data>
+  <!-- Album Download Page -->
+  <data name="Album_Title" xml:space="preserve">
+    <value>专辑封面下载</value>
+  </data>
+  <data name="Album_Description" xml:space="preserve">
+    <value>批量下载音乐文件的专辑封面</value>
+  </data>
+  <data name="Album_SelectFolder" xml:space="preserve">
+    <value>选择音乐文件夹...</value>
+  </data>
+  <data name="Album_Browse" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="Album_Parallel" xml:space="preserve">
+    <value>并行:</value>
+  </data>
+  <data name="Album_StartDownload" xml:space="preserve">
+    <value>开始下载</value>
+  </data>
+  <data name="Album_StopDownload" xml:space="preserve">
+    <value>停止下载</value>
+  </data>
+  <!-- Settings Page -->
+  <data name="Settings_Title" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_FollowSystem" xml:space="preserve">
+    <value>跟随系统</value>
+  </data>
+  <data name="Settings_Chinese" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Settings_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="Settings_ThemeLight" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="Settings_ThemeDark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="Settings_ThemeSystem" xml:space="preserve">
+    <value>跟随系统</value>
+  </data>
+  <data name="Settings_LyricsProvider" xml:space="preserve">
+    <value>歌词源</value>
+  </data>
+  <data name="Settings_Proxy" xml:space="preserve">
+    <value>代理设置</value>
+  </data>
+  <data name="Settings_ProxyEnable" xml:space="preserve">
+    <value>启用代理</value>
+  </data>
+  <data name="Settings_ProxyAddress" xml:space="preserve">
+    <value>代理地址</value>
+  </data>
+  <data name="Settings_ProxyPort" xml:space="preserve">
+    <value>代理端口</value>
+  </data>
+  <data name="Settings_Save" xml:space="preserve">
+    <value>保存设置</value>
+  </data>
+  <data name="Settings_Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <!-- DataGrid Columns -->
+  <data name="Column_SongName" xml:space="preserve">
+    <value>歌曲名</value>
+  </data>
+  <data name="Column_Artist" xml:space="preserve">
+    <value>艺术家</value>
+  </data>
+  <data name="Column_Album" xml:space="preserve">
+    <value>专辑</value>
+  </data>
+  <data name="Column_Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Column_FilePath" xml:space="preserve">
+    <value>文件路径</value>
+  </data>
+  <!-- Status Messages -->
+  <data name="Status_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="Status_Failed" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="Status_Skipped" xml:space="preserve">
+    <value>已跳过</value>
+  </data>
+  <data name="Status_Pending" xml:space="preserve">
+    <value>等待中</value>
+  </data>
+  <data name="Status_Processing" xml:space="preserve">
+    <value>处理中</value>
+  </data>
+  <!-- Common -->
+  <data name="Common_OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Common_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Common_Info" xml:space="preserve">
+    <value>提示</value>
+  </data>
+</root>

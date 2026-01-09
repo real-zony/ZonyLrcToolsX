@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             x:Class="ZonyLrcTools.Desktop.Views.Pages.HomePage"
+             x:DataType="vm:HomeViewModel">
+
+    <ScrollViewer>
+        <StackPanel Spacing="24">
+            <!-- Header -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding WelcomeMessage}"
+                           FontSize="32"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding Description}"
+                           FontSize="14"
+                           Opacity="0.7"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+            <!-- Quick Actions -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Quick Actions"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Margin="0,0,16,16"
+                                Padding="24,16"
+                                CornerRadius="8">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Download Lyrics"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Batch download lyrics for your music"
+                                           FontSize="12"
+                                           Opacity="0.7" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="0,0,16,16"
+                                Padding="24,16"
+                                CornerRadius="8">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Download Album Covers"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Get album artwork for your collection"
+                                           FontSize="12"
+                                           Opacity="0.7" />
+                            </StackPanel>
+                        </Button>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Features -->
+            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Features"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+
+                    <ItemsControl>
+                        <ItemsControl.Items>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                                <TextBlock Text="Multiple lyrics sources: NetEase, QQ Music, KuGou, KuWo" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                                <TextBlock Text="Batch processing with parallel downloads" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                                <TextBlock Text="Support for translation lyrics" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                                <TextBlock Text="Cross-platform: Windows, macOS, Linux" />
+                            </StackPanel>
+                        </ItemsControl.Items>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Version Info -->
+            <TextBlock Opacity="0.5" FontSize="12">
+                <Run Text="Version " />
+                <Run Text="{Binding Version}" />
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

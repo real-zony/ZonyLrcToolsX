@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Navigation -->
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Nav_LyricsDownload" xml:space="preserve">
+    <value>Lyrics Download</value>
+  </data>
+  <data name="Nav_AlbumDownload" xml:space="preserve">
+    <value>Album Cover</value>
+  </data>
+  <data name="Nav_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <!-- Home Page -->
+  <data name="Home_Welcome" xml:space="preserve">
+    <value>Welcome to ZonyLrcTools</value>
+  </data>
+  <data name="Home_Description" xml:space="preserve">
+    <value>An open-source lyrics download tool</value>
+  </data>
+  <data name="Home_QuickStart" xml:space="preserve">
+    <value>Quick Start</value>
+  </data>
+  <data name="Home_DownloadLyrics" xml:space="preserve">
+    <value>Download Lyrics</value>
+  </data>
+  <data name="Home_DownloadAlbumCover" xml:space="preserve">
+    <value>Download Album Covers</value>
+  </data>
+  <!-- Lyrics Download Page -->
+  <data name="Lyrics_Title" xml:space="preserve">
+    <value>Lyrics Download</value>
+  </data>
+  <data name="Lyrics_Description" xml:space="preserve">
+    <value>Batch download lyrics for your music files</value>
+  </data>
+  <data name="Lyrics_SelectFolder" xml:space="preserve">
+    <value>Select music folder...</value>
+  </data>
+  <data name="Lyrics_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="Lyrics_Parallel" xml:space="preserve">
+    <value>Parallel:</value>
+  </data>
+  <data name="Lyrics_StartDownload" xml:space="preserve">
+    <value>Start Download</value>
+  </data>
+  <data name="Lyrics_StopDownload" xml:space="preserve">
+    <value>Stop Download</value>
+  </data>
+  <data name="Lyrics_Progress" xml:space="preserve">
+    <value>Download Progress</value>
+  </data>
+  <data name="Lyrics_Status_Idle" xml:space="preserve">
+    <value>Idle</value>
+  </data>
+  <data name="Lyrics_Status_Scanning" xml:space="preserve">
+    <value>Scanning files...</value>
+  </data>
+  <data name="Lyrics_Status_Downloading" xml:space="preserve">
+    <value>Downloading lyrics...</value>
+  </data>
+  <data name="Lyrics_Status_Complete" xml:space="preserve">
+    <value>Download Complete</value>
+  </data>
+  <data name="Common_Total" xml:space="preserve">
+    <value>Total:</value>
+  </data>
+  <data name="Common_Files" xml:space="preserve">
+    <value>files</value>
+  </data>
+  <data name="Common_Success" xml:space="preserve">
+    <value>Success:</value>
+  </data>
+  <data name="Common_Failed" xml:space="preserve">
+    <value>Failed:</value>
+  </data>
+  <!-- Album Download Page -->
+  <data name="Album_Title" xml:space="preserve">
+    <value>Album Cover Download</value>
+  </data>
+  <data name="Album_Description" xml:space="preserve">
+    <value>Download album artwork for your music collection</value>
+  </data>
+  <data name="Album_SelectFolder" xml:space="preserve">
+    <value>Select music folder...</value>
+  </data>
+  <data name="Album_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="Album_Parallel" xml:space="preserve">
+    <value>Parallel:</value>
+  </data>
+  <data name="Album_StartDownload" xml:space="preserve">
+    <value>Start Download</value>
+  </data>
+  <data name="Album_StopDownload" xml:space="preserve">
+    <value>Stop Download</value>
+  </data>
+  <!-- Settings Page -->
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_FollowSystem" xml:space="preserve">
+    <value>Follow System</value>
+  </data>
+  <data name="Settings_Chinese" xml:space="preserve">
+    <value>Simplified Chinese</value>
+  </data>
+  <data name="Settings_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Settings_ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings_ThemeSystem" xml:space="preserve">
+    <value>Follow System</value>
+  </data>
+  <data name="Settings_LyricsProvider" xml:space="preserve">
+    <value>Lyrics Provider</value>
+  </data>
+  <data name="Settings_Proxy" xml:space="preserve">
+    <value>Proxy Settings</value>
+  </data>
+  <data name="Settings_ProxyEnable" xml:space="preserve">
+    <value>Enable Proxy</value>
+  </data>
+  <data name="Settings_ProxyAddress" xml:space="preserve">
+    <value>Proxy Address</value>
+  </data>
+  <data name="Settings_ProxyPort" xml:space="preserve">
+    <value>Proxy Port</value>
+  </data>
+  <data name="Settings_Save" xml:space="preserve">
+    <value>Save Settings</value>
+  </data>
+  <data name="Settings_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <!-- DataGrid Columns -->
+  <data name="Column_SongName" xml:space="preserve">
+    <value>Song Name</value>
+  </data>
+  <data name="Column_Artist" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="Column_Album" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="Column_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Column_FilePath" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <!-- Status Messages -->
+  <data name="Status_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Status_Failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="Status_Skipped" xml:space="preserve">
+    <value>Skipped</value>
+  </data>
+  <data name="Status_Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Status_Processing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <!-- Common -->
+  <data name="Common_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Common_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Common_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+</root>

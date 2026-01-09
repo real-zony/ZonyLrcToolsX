@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Main Program -->
+  <data name="Program_Description" xml:space="preserve">
+    <value>ZonyLrcTools - Lyrics download command-line tool</value>
+  </data>
+  <!-- Download Command -->
+  <data name="Download_Description" xml:space="preserve">
+    <value>Download lyrics or album covers</value>
+  </data>
+  <data name="Download_Dir_Description" xml:space="preserve">
+    <value>Specify the folder path containing music files</value>
+  </data>
+  <data name="Download_Lyrics_Description" xml:space="preserve">
+    <value>Download lyrics files</value>
+  </data>
+  <data name="Download_Album_Description" xml:space="preserve">
+    <value>Download album covers</value>
+  </data>
+  <data name="Download_CSV_Description" xml:space="preserve">
+    <value>Import song list from CSV file for download</value>
+  </data>
+  <data name="Download_SongList_Description" xml:space="preserve">
+    <value>Import song list from NetEase playlist ID for download</value>
+  </data>
+  <!-- Utility Command -->
+  <data name="Utility_Description" xml:space="preserve">
+    <value>Utility commands</value>
+  </data>
+  <data name="Utility_Convert_Description" xml:space="preserve">
+    <value>Convert encrypted music files to normal format</value>
+  </data>
+  <data name="Utility_Source_Description" xml:space="preserve">
+    <value>Specify the folder path to convert</value>
+  </data>
+  <!-- Search Command -->
+  <data name="Search_Description" xml:space="preserve">
+    <value>Search for lyrics</value>
+  </data>
+  <data name="Search_Name_Description" xml:space="preserve">
+    <value>Song name</value>
+  </data>
+  <data name="Search_Artist_Description" xml:space="preserve">
+    <value>Artist name</value>
+  </data>
+  <!-- Common Options -->
+  <data name="Option_Help" xml:space="preserve">
+    <value>Show help information</value>
+  </data>
+  <data name="Option_Version" xml:space="preserve">
+    <value>Show version information</value>
+  </data>
+</root>

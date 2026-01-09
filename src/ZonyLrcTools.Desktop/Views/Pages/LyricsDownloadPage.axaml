@@ -1,0 +1,145 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             x:Class="ZonyLrcTools.Desktop.Views.Pages.LyricsDownloadPage"
+             x:DataType="vm:LyricsDownloadViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Title -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="{Binding LyricsTitle}"
+                       FontSize="28"
+                       FontWeight="SemiBold" />
+            <TextBlock Text="{Binding LyricsDescription}"
+                       Opacity="0.7"
+                       Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Controls -->
+        <Border Grid.Row="1"
+                Background="{DynamicResource NavigationBackgroundBrush}"
+                CornerRadius="8"
+                Padding="16"
+                Margin="0,0,0,16">
+            <StackPanel Spacing="16">
+                <!-- Row 1: Folder Selection -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Grid.Column="0"
+                             Text="{Binding SelectedFolderPath}"
+                             Watermark="{Binding LyricsSelectFolder}"
+                             IsReadOnly="True"
+                             Margin="0,0,12,0" />
+                    <Button Grid.Column="1"
+                            Content="{Binding LyricsBrowse}"
+                            Command="{Binding SelectFolderCommand}"
+                            MinWidth="80" />
+                </Grid>
+
+                <!-- Row 2: Options and Actions -->
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                    <!-- Parallel Count -->
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding LyricsParallel}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,8,0" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding ParallelCount}"
+                             Width="60"
+                             TextAlignment="Center"
+                             VerticalContentAlignment="Center" />
+
+                    <!-- Spacer -->
+                    <Panel Grid.Column="2" />
+
+                    <!-- Download Buttons -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8">
+                        <Button Command="{Binding StartDownloadCommand}"
+                                Content="{Binding LyricsStartDownload}"
+                                IsVisible="{Binding !IsDownloading}"
+                                Classes="accent"
+                                MinWidth="100" />
+                        <Button Command="{Binding CancelDownloadCommand}"
+                                Content="{Binding LyricsStopDownload}"
+                                IsVisible="{Binding IsDownloading}"
+                                MinWidth="100" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Progress Bar (visible during download) -->
+                <StackPanel IsVisible="{Binding IsDownloading}" Spacing="8">
+                    <ProgressBar Value="{Binding ProgressPercentage}"
+                                 Maximum="100"
+                                 Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.8">
+                        <Run Text="{Binding CompletedCount}" />
+                        <Run Text=" / " />
+                        <Run Text="{Binding TotalCount}" />
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- File List -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource NavigationBackgroundBrush}"
+                CornerRadius="8"
+                Padding="1">
+            <DataGrid ItemsSource="{Binding MusicFiles}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{Binding ColumnSongName}"
+                                        Binding="{Binding Name}"
+                                        Width="*" />
+                    <DataGridTextColumn Header="{Binding ColumnArtist}"
+                                        Binding="{Binding Artist}"
+                                        Width="150" />
+                    <DataGridTextColumn Header="{Binding ColumnFilePath}"
+                                        Binding="{Binding FilePath}"
+                                        Width="250" />
+                    <DataGridTextColumn Header="{Binding ColumnStatus}"
+                                        Binding="{Binding StatusMessage}"
+                                        Width="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="3"
+                Background="{DynamicResource NavigationBackgroundBrush}"
+                Padding="16,12"
+                Margin="0,16,0,0"
+                CornerRadius="8">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                <!-- Total -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="{Binding CommonTotal}" Opacity="0.8" />
+                    <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding CommonFiles}" Opacity="0.8" />
+                </StackPanel>
+
+                <!-- Spacer -->
+                <Panel Grid.Column="1" />
+
+                <!-- Success -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" Margin="0,0,24,0">
+                    <TextBlock Text="{Binding CommonSuccess}" Opacity="0.8" />
+                    <TextBlock Text="{Binding CompletedCount}"
+                               FontWeight="SemiBold"
+                               Foreground="#4CAF50" />
+                </StackPanel>
+
+                <!-- Failed -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="{Binding CommonFailed}" Opacity="0.8" />
+                    <TextBlock Text="{Binding FailedCount}"
+                               FontWeight="SemiBold"
+                               Foreground="#F44336" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>

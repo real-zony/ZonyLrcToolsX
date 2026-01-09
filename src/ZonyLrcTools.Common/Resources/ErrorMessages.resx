@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Error Messages -->
+  <data name="Error_10001" xml:space="preserve">
+    <value>待搜索的后缀不能为空。</value>
+  </data>
+  <data name="Error_10002" xml:space="preserve">
+    <value>需要扫描的目录不存在，请确认路径是否正确。</value>
+  </data>
+  <data name="Error_10003" xml:space="preserve">
+    <value>不能获取文件的后缀信息。</value>
+  </data>
+  <data name="Error_10004" xml:space="preserve">
+    <value>没有扫描到任何音乐文件。</value>
+  </data>
+  <data name="Error_10005" xml:space="preserve">
+    <value>指定的编码不受支持，请检查配置。</value>
+  </data>
+  <data name="Error_10006" xml:space="preserve">
+    <value>无法从网易云音乐获取歌曲列表。</value>
+  </data>
+  <!-- Warning Messages -->
+  <data name="Warning_50001" xml:space="preserve">
+    <value>扫描文件时出现了错误。</value>
+  </data>
+  <data name="Warning_50002" xml:space="preserve">
+    <value>歌曲名称或歌手名称均为空，无法进行搜索。</value>
+  </data>
+  <data name="Warning_50003" xml:space="preserve">
+    <value>歌曲名称不能为空，无法进行搜索。</value>
+  </data>
+  <data name="Warning_50004" xml:space="preserve">
+    <value>下载器没有搜索到对应的歌曲信息。</value>
+  </data>
+  <data name="Warning_50005" xml:space="preserve">
+    <value>下载请求的返回值不合法，可能是服务端故障。</value>
+  </data>
+  <data name="Warning_50006" xml:space="preserve">
+    <value>标签信息读取器为空，无法解析音乐 Tag 信息。</value>
+  </data>
+  <data name="Warning_50007" xml:space="preserve">
+    <value>TagLib 标签读取器出现了预期之外的异常。</value>
+  </data>
+  <data name="Warning_50008" xml:space="preserve">
+    <value>服务接口限制，无法进行请求，请尝试使用代理服务器。</value>
+  </data>
+  <data name="Warning_50009" xml:space="preserve">
+    <value>对目标服务器执行 HTTP 请求失败。</value>
+  </data>
+  <data name="Warning_50010" xml:space="preserve">
+    <value>HTTP 请求的结果反序列化为 JSON 失败。</value>
+  </data>
+  <data name="Warning_50011" xml:space="preserve">
+    <value>目前仅支持 NCM 格式的歌曲转换操作。</value>
+  </data>
+</root>
