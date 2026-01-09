@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +49,24 @@ namespace ZonyLrcTools.Common.Infrastructure.DependencyInject
                 .Build();
 
             services.Configure<GlobalOptions>(configuration);
+
+            return services;
+        }
+
+        /// <summary>
+        /// 配置本地化服务。
+        /// </summary>
+        /// <param name="services">服务集合。</param>
+        /// <param name="defaultCulture">默认语言，默认为 zh-CN。</param>
+        public static IServiceCollection ConfigureLocalization(this IServiceCollection services, string defaultCulture = "zh-CN")
+        {
+            // Note: Don't set ResourcesPath because the embedded resource names are based on
+            // the marker class namespace (e.g., ZonyLrcTools.Common.Messages), not folder path
+            services.AddLocalization();
+
+            var culture = new CultureInfo(defaultCulture);
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
 
             return services;
         }

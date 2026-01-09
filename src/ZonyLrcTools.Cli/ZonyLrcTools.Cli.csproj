@@ -9,6 +9,7 @@
         <PackageReference Include="McMaster.Extensions.CommandLineUtils"/>
         <PackageReference Include="McMaster.Extensions.Hosting.CommandLine"/>
         <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Microsoft.Extensions.Localization"/>
         <PackageReference Include="Serilog.Extensions.Hosting"/>
         <PackageReference Include="Serilog.Sinks.Async"/>
         <PackageReference Include="Serilog.Sinks.Console"/>

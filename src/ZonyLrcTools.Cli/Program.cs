@@ -48,7 +48,7 @@ namespace ZonyLrcTools.Cli
 
         #region > 程序初始化配置 <
 
-        private static void ConfigureErrorMessage() => ErrorCodeHelper.LoadErrorMessage();
+        private static void ConfigureErrorMessage() => ErrorCodeHelperStatic.LoadErrorMessage();
 
         private static void ConfigureLogger()
         {
@@ -90,6 +90,7 @@ namespace ZonyLrcTools.Cli
                     services.BeginAutoDependencyInject<Program>();
                     services.BeginAutoDependencyInject<IWarpHttpClient>();
                     services.ConfigureConfiguration();
+                    services.ConfigureLocalization();
                     services.ConfigureToolService();
                     services.AddHostedService<UpdaterHostedService>();
                 })
@@ -102,7 +103,7 @@ namespace ZonyLrcTools.Cli
             {
                 case ErrorCodeException exception:
                     Log.Logger.Error(
-                        $"出现了未处理的异常。\n错误代码: {exception.ErrorCode}\n错误信息: {ErrorCodeHelper.GetMessage(exception.ErrorCode)}\n原始信息:{exception.Message}\n调用栈:{exception.StackTrace}");
+                        $"出现了未处理的异常。\n错误代码: {exception.ErrorCode}\n错误信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}\n原始信息:{exception.Message}\n调用栈:{exception.StackTrace}");
                     Environment.Exit(exception.ErrorCode);
                     return exception.ErrorCode;
                 case { } unknownException:

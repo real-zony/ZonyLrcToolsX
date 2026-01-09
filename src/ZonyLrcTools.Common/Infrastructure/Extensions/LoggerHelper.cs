@@ -35,7 +35,7 @@ namespace ZonyLrcTools.Common.Infrastructure.Extensions
             }
 
             var sb = new StringBuilder();
-            sb.Append($"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelper.GetMessage(exception.ErrorCode)}");
+            sb.Append($"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}");
             sb.Append($"\n附加信息:\n {JsonConvert.SerializeObject(exception.AttachObject)}");
             logger.WarnAsync(sb.ToString()).GetAwaiter().GetResult();
         }
