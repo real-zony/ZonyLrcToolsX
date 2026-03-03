@@ -10,55 +10,146 @@
         MinWidth="900" MinHeight="600"
         WindowStartupLocation="CenterScreen">
 
-    <Grid ColumnDefinitions="220,*">
+    <Window.Styles>
+        <!-- Nav ListBoxItem: remove default selection background, use rounded style -->
+        <Style Selector="ListBox.nav-list ListBoxItem">
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="8,2" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBox.nav-list ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NavActiveBackgroundBrush}" />
+        </Style>
+        <Style Selector="ListBox.nav-list ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource NavActiveBackgroundBrush}" />
+            <Setter Property="Opacity" Value="0.6" />
+        </Style>
+        <Style Selector="ListBox.nav-list ListBoxItem:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="ListBox.nav-list">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </Window.Styles>
+
+    <Grid ColumnDefinitions="240,*">
         <!-- Left Navigation Panel -->
         <Border Grid.Column="0"
                 Background="{DynamicResource NavigationBackgroundBrush}"
-                Padding="8">
-            <DockPanel>
-                <!-- App Title -->
-                <StackPanel DockPanel.Dock="Top" Margin="8,16,8,24">
-                    <TextBlock Text="ZonyLrcTools"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center" />
+                BorderBrush="{DynamicResource SeparatorBrush}"
+                BorderThickness="0,0,1,0">
+            <DockPanel Margin="0,8,0,0">
+                <!-- Logo Area -->
+                <StackPanel DockPanel.Dock="Top" Margin="24,16,24,24">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="ZonyLrcTools"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center" />
+                        <Border Background="#000000"
+                                CornerRadius="4"
+                                Padding="5,1"
+                                Margin="3,0,0,0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="X"
+                                       FontSize="12"
+                                       FontWeight="Bold"
+                                       Foreground="White" />
+                        </Border>
+                    </StackPanel>
                     <TextBlock Text="{Binding HomeDescription}"
                                FontSize="12"
-                               Opacity="0.7"
-                               HorizontalAlignment="Center"
+                               Opacity="0.5"
                                Margin="0,4,0,0" />
                 </StackPanel>
 
-                <!-- Theme Toggle -->
-                <Button DockPanel.Dock="Bottom"
-                        Content="{Binding ThemeButtonText}"
-                        Command="{Binding ToggleThemeCommand}"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        Margin="8" />
+                <!-- Theme Toggle (bottom) -->
+                <Border DockPanel.Dock="Bottom"
+                        Background="{DynamicResource ContentAreaBrush}"
+                        CornerRadius="6"
+                        Margin="16,0,16,16"
+                        Padding="12,8">
+                    <Button Command="{Binding ToggleThemeCommand}"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="{StaticResource MoonIcon}"
+                                      Width="14" Height="14"
+                                      IsVisible="{Binding !IsDarkTheme}" />
+                            <PathIcon Data="{StaticResource SunIcon}"
+                                      Width="14" Height="14"
+                                      IsVisible="{Binding IsDarkTheme}" />
+                            <TextBlock Text="{Binding ThemeButtonText}"
+                                       VerticalAlignment="Center"
+                                       FontSize="13" />
+                        </StackPanel>
+                    </Button>
+                </Border>
 
                 <!-- Navigation Menu -->
-                <ListBox SelectedIndex="{Binding SelectedNavigationIndex}"
-                         Margin="0,8"
+                <ListBox Classes="nav-list"
+                         SelectedIndex="{Binding SelectedNavigationIndex}"
+                         Margin="0,8,0,0"
                          SelectionChanged="OnNavigationSelectionChanged">
                     <ListBoxItem>
-                        <TextBlock Text="{Binding NavHome}" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="3" CornerRadius="1.5"
+                                    Background="{DynamicResource AppAccentBrush}"
+                                    Margin="0,2"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                            <PathIcon Data="{StaticResource HomeIcon}"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding NavHome}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
-                        <TextBlock Text="{Binding NavLyricsDownload}" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="3" CornerRadius="1.5"
+                                    Background="{DynamicResource AppAccentBrush}"
+                                    Margin="0,2"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                            <PathIcon Data="{StaticResource MusicNoteIcon}"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding NavLyricsDownload}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
-                        <TextBlock Text="{Binding NavAlbumDownload}" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="3" CornerRadius="1.5"
+                                    Background="{DynamicResource AppAccentBrush}"
+                                    Margin="0,2"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                            <PathIcon Data="{StaticResource ImageIcon}"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding NavAlbumDownload}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
-                        <TextBlock Text="{Binding NavSettings}" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="3" CornerRadius="1.5"
+                                    Background="{DynamicResource AppAccentBrush}"
+                                    Margin="0,2"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                            <PathIcon Data="{StaticResource SettingsIcon}"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding NavSettings}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </ListBoxItem>
                 </ListBox>
             </DockPanel>
         </Border>
 
         <!-- Right Content Area -->
-        <Border Grid.Column="1" Padding="24">
+        <Border Grid.Column="1"
+                Background="{DynamicResource ContentAreaBrush}"
+                Padding="24">
             <ContentControl Content="{Binding CurrentPage}">
                 <ContentControl.DataTemplates>
                     <DataTemplate DataType="vm:HomeViewModel">

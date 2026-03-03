@@ -9,13 +9,14 @@
             <!-- Title -->
             <StackPanel Margin="0,0,0,8">
                 <TextBlock Text="{Binding SettingsTitle}"
-                           FontSize="28"
-                           FontWeight="SemiBold" />
+                           FontSize="24"
+                           FontWeight="Bold" />
             </StackPanel>
 
             <!-- Language Settings -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="{Binding SettingsLanguage}"
@@ -37,8 +38,9 @@
             </Border>
 
             <!-- Network Settings -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="{Binding SettingsProxy}"
@@ -66,8 +68,9 @@
             </Border>
 
             <!-- Lyrics Settings -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="Lyrics"
@@ -94,8 +97,9 @@
             </Border>
 
             <!-- Lyrics Providers -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="{Binding SettingsLyricsProvider}"

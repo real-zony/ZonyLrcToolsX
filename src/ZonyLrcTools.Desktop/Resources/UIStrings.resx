@@ -73,16 +73,19 @@
     <value>歌词下载</value>
   </data>
   <data name="Lyrics_Description" xml:space="preserve">
-    <value>批量下载音乐文件的歌词</value>
+    <value>批量下载音乐文件的歌词，支持并行处理与自动规避覆盖</value>
+  </data>
+  <data name="Lyrics_FolderLabel" xml:space="preserve">
+    <value>音乐文件夹</value>
   </data>
   <data name="Lyrics_SelectFolder" xml:space="preserve">
-    <value>选择音乐文件夹...</value>
+    <value>请选择包含音乐文件的目录...</value>
   </data>
   <data name="Lyrics_Browse" xml:space="preserve">
     <value>浏览...</value>
   </data>
   <data name="Lyrics_Parallel" xml:space="preserve">
-    <value>并行:</value>
+    <value>并行任务数</value>
   </data>
   <data name="Lyrics_StartDownload" xml:space="preserve">
     <value>开始下载</value>
@@ -105,6 +108,9 @@
   <data name="Lyrics_Status_Complete" xml:space="preserve">
     <value>下载完成</value>
   </data>
+  <data name="Lyrics_EmptyState" xml:space="preserve">
+    <value>暂无任务，请选择目录开始解析</value>
+  </data>
   <data name="Common_Total" xml:space="preserve">
     <value>总计:</value>
   </data>
@@ -124,20 +130,26 @@
   <data name="Album_Description" xml:space="preserve">
     <value>批量下载音乐文件的专辑封面</value>
   </data>
+  <data name="Album_FolderLabel" xml:space="preserve">
+    <value>音乐文件夹</value>
+  </data>
   <data name="Album_SelectFolder" xml:space="preserve">
-    <value>选择音乐文件夹...</value>
+    <value>请选择包含音乐文件的目录...</value>
   </data>
   <data name="Album_Browse" xml:space="preserve">
     <value>浏览...</value>
   </data>
   <data name="Album_Parallel" xml:space="preserve">
-    <value>并行:</value>
+    <value>并行任务数</value>
   </data>
   <data name="Album_StartDownload" xml:space="preserve">
     <value>开始下载</value>
   </data>
   <data name="Album_StopDownload" xml:space="preserve">
     <value>停止下载</value>
+  </data>
+  <data name="Album_EmptyState" xml:space="preserve">
+    <value>暂无任务，请选择目录开始解析</value>
   </data>
   <!-- Settings Page -->
   <data name="Settings_Title" xml:space="preserve">

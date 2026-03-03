@@ -71,7 +71,8 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     // Localized strings
     public string LyricsTitle => _localization?["Lyrics_Title"] ?? "Lyrics Download";
     public string LyricsDescription => _localization?["Lyrics_Description"] ?? "Batch download lyrics for your music files";
-    public string LyricsSelectFolder => _localization?["Lyrics_SelectFolder"] ?? "Select music folder...";
+    public string LyricsFolderLabel => _localization?["Lyrics_FolderLabel"] ?? "Music Folder";
+    public string LyricsSelectFolder => _localization?["Lyrics_SelectFolder"] ?? "Select a folder containing music files...";
     public string LyricsBrowse => _localization?["Lyrics_Browse"] ?? "Browse...";
     public string LyricsParallel => _localization?["Lyrics_Parallel"] ?? "Parallel:";
     public string LyricsStartDownload => _localization?["Lyrics_StartDownload"] ?? "Start Download";
@@ -87,6 +88,10 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     public string ColumnStatus => _localization?["Column_Status"] ?? "Status";
 
     public bool CanStartDownload => !IsDownloading && !IsScanning && MusicFiles.Count > 0;
+
+    public bool HasNoFiles => MusicFiles.Count == 0;
+
+    public string EmptyStateText => _localization?["Lyrics_EmptyState"] ?? "No tasks yet, please select a folder to start scanning";
 
     public ObservableCollection<MusicFileViewModel> MusicFiles { get; } = new();
 
@@ -109,12 +114,19 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         {
             _localization.LanguageChanged += OnLanguageChanged;
         }
+
+        MusicFiles.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(HasNoFiles));
+            OnPropertyChanged(nameof(CanStartDownload));
+        };
     }
 
     private void OnLanguageChanged(object? sender, EventArgs e)
     {
         OnPropertyChanged(nameof(LyricsTitle));
         OnPropertyChanged(nameof(LyricsDescription));
+        OnPropertyChanged(nameof(LyricsFolderLabel));
         OnPropertyChanged(nameof(LyricsSelectFolder));
         OnPropertyChanged(nameof(LyricsBrowse));
         OnPropertyChanged(nameof(LyricsParallel));
@@ -129,6 +141,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         OnPropertyChanged(nameof(ColumnArtist));
         OnPropertyChanged(nameof(ColumnFilePath));
         OnPropertyChanged(nameof(ColumnStatus));
+        OnPropertyChanged(nameof(EmptyStateText));
     }
 
     [RelayCommand(CanExecute = nameof(CanSelectFolder))]

@@ -18,8 +18,9 @@
             </StackPanel>
 
             <!-- Quick Actions -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="Quick Actions"
@@ -55,8 +56,9 @@
             </Border>
 
             <!-- Features -->
-            <Border Background="{DynamicResource NavigationBackgroundBrush}"
+            <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
                     <TextBlock Text="Features"

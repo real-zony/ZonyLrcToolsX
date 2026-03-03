@@ -39,12 +39,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IThemeService, ThemeService>();
 
-        // Register ViewModels
-        services.AddTransient<MainWindowViewModel>();
-        services.AddTransient<HomeViewModel>();
-        services.AddTransient<LyricsDownloadViewModel>();
-        services.AddTransient<AlbumDownloadViewModel>();
-        services.AddTransient<SettingsViewModel>();
+        // Register ViewModels (Singleton to preserve state across navigation)
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<HomeViewModel>();
+        services.AddSingleton<LyricsDownloadViewModel>();
+        services.AddSingleton<AlbumDownloadViewModel>();
+        services.AddSingleton<SettingsViewModel>();
 
         return services;
     }

@@ -7,72 +7,92 @@
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         <!-- Title -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
             <TextBlock Text="{Binding LyricsTitle}"
-                       FontSize="28"
-                       FontWeight="SemiBold" />
+                       FontSize="24"
+                       FontWeight="Bold" />
             <TextBlock Text="{Binding LyricsDescription}"
-                       Opacity="0.7"
+                       FontSize="13"
+                       Opacity="0.6"
                        Margin="0,4,0,0" />
         </StackPanel>
 
-        <!-- Controls -->
+        <!-- Card 1: Form Controls -->
         <Border Grid.Row="1"
-                Background="{DynamicResource NavigationBackgroundBrush}"
+                Background="{DynamicResource CardBackgroundBrush}"
                 CornerRadius="8"
-                Padding="16"
+                BoxShadow="0 2 8 0 #0D000000"
+                Padding="24,20"
                 Margin="0,0,0,16">
-            <StackPanel Spacing="16">
-                <!-- Row 1: Folder Selection -->
-                <Grid ColumnDefinitions="*,Auto">
-                    <TextBox Grid.Column="0"
-                             Text="{Binding SelectedFolderPath}"
-                             Watermark="{Binding LyricsSelectFolder}"
-                             IsReadOnly="True"
-                             Margin="0,0,12,0" />
-                    <Button Grid.Column="1"
-                            Content="{Binding LyricsBrowse}"
-                            Command="{Binding SelectFolderCommand}"
-                            MinWidth="80" />
-                </Grid>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto"
+                  >
+                <!-- Row 0: Folder Selection -->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="{Binding LyricsFolderLabel}"
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="Medium" />
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         Text="{Binding SelectedFolderPath}"
+                         Watermark="{Binding LyricsSelectFolder}"
+                         IsReadOnly="True"
+                         Margin="16,0" />
+                <Button Grid.Row="0" Grid.Column="2"
+                        Content="{Binding LyricsBrowse}"
+                        Command="{Binding SelectFolderCommand}"
+                        MinWidth="80"
+                        HorizontalAlignment="Stretch" />
 
-                <!-- Row 2: Options and Actions -->
-                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
-                    <!-- Parallel Count -->
-                    <TextBlock Grid.Column="0"
-                               Text="{Binding LyricsParallel}"
+                <!-- Separator -->
+                <Border Grid.Row="1" Grid.ColumnSpan="3"
+                        Height="1"
+                        Background="{DynamicResource SeparatorBrush}"
+                        Opacity="0.5"
+                        Margin="0,16" />
+
+                <!-- Row 2: Parallel Count + Download Button -->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="{Binding LyricsParallel}"
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="Medium" />
+                <NumericUpDown Grid.Row="2" Grid.Column="1"
+                               Value="{Binding ParallelCount}"
+                               Minimum="1"
+                               Maximum="32"
+                               Increment="1"
+                               Width="100"
+                               FormatString="0"
+                               HorizontalAlignment="Left"
                                VerticalAlignment="Center"
-                               Margin="0,0,8,0" />
-                    <TextBox Grid.Column="1"
-                             Text="{Binding ParallelCount}"
-                             Width="60"
-                             TextAlignment="Center"
-                             VerticalContentAlignment="Center" />
+                               Margin="16,0" />
+                <StackPanel Grid.Row="2" Grid.Column="2"
+                            Orientation="Horizontal" Spacing="8">
+                    <Button Command="{Binding StartDownloadCommand}"
+                            IsVisible="{Binding !IsDownloading}"
+                            IsEnabled="{Binding CanStartDownload}"
+                            Classes="accent"
+                            MinWidth="120">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource DownloadIcon}"
+                                      Width="14" Height="14" />
+                            <TextBlock Text="{Binding LyricsStartDownload}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding CancelDownloadCommand}"
+                            Content="{Binding LyricsStopDownload}"
+                            IsVisible="{Binding IsDownloading}"
+                            MinWidth="100" />
+                </StackPanel>
 
-                    <!-- Spacer -->
-                    <Panel Grid.Column="2" />
-
-                    <!-- Download Buttons -->
-                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8">
-                        <Button Command="{Binding StartDownloadCommand}"
-                                Content="{Binding LyricsStartDownload}"
-                                IsVisible="{Binding !IsDownloading}"
-                                IsEnabled="{Binding CanStartDownload}"
-                                Classes="accent"
-                                MinWidth="100" />
-                        <Button Command="{Binding CancelDownloadCommand}"
-                                Content="{Binding LyricsStopDownload}"
-                                IsVisible="{Binding IsDownloading}"
-                                MinWidth="100" />
-                    </StackPanel>
-                </Grid>
-
-                <!-- Progress Bar: Scanning phase -->
-                <StackPanel IsVisible="{Binding IsScanning}" Spacing="8">
+                <!-- Row 3: Progress (spans all columns) -->
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="3"
+                            IsVisible="{Binding IsScanning}"
+                            Spacing="8" Margin="0,16,0,0">
                     <ProgressBar Value="{Binding ScanProgressPercentage}"
-                                 Maximum="100"
-                                 Height="6" />
-                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.8">
+                                 Maximum="100" Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.7">
                         <Run Text="{Binding LyricsScanning}" />
                         <Run Text=" " />
                         <Run Text="{Binding ScanProgressCount}" />
@@ -80,84 +100,115 @@
                         <Run Text="{Binding ScanTotalCount}" />
                     </TextBlock>
                 </StackPanel>
-
-                <!-- Progress Bar: Download phase -->
-                <StackPanel IsVisible="{Binding IsDownloading}" Spacing="8">
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="3"
+                            IsVisible="{Binding IsDownloading}"
+                            Spacing="8" Margin="0,16,0,0">
                     <ProgressBar Value="{Binding ProgressPercentage}"
-                                 Maximum="100"
-                                 Height="6" />
-                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.8">
+                                 Maximum="100" Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.7">
                         <Run Text="{Binding CompletedCount}" />
                         <Run Text=" / " />
                         <Run Text="{Binding TotalCount}" />
                     </TextBlock>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </Border>
 
-        <!-- File List -->
-        <Border Grid.Row="2"
-                Background="{DynamicResource NavigationBackgroundBrush}"
-                CornerRadius="8"
-                Padding="1">
-            <DataGrid ItemsSource="{Binding MusicFiles}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      GridLinesVisibility="Horizontal"
-                      BorderThickness="0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
-                                        Header="{loc:Localize Column_SongName}"
-                                        Binding="{Binding Name}"
-                                        Width="*" />
-                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
-                                        Header="{loc:Localize Column_Artist}"
-                                        Binding="{Binding Artist}"
-                                        Width="150" />
-                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
-                                        Header="{loc:Localize Column_FilePath}"
-                                        Binding="{Binding FilePath}"
-                                        Width="250" />
-                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
-                                        Header="{loc:Localize Column_Status}"
-                                        Binding="{Binding StatusMessage}"
-                                        Width="100" />
-                </DataGrid.Columns>
-            </DataGrid>
+        <!-- Card 2: File List with Empty State -->
+        <Panel Grid.Row="2">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
+                    ClipToBounds="True">
+                <DataGrid ItemsSource="{Binding MusicFiles}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="Horizontal"
+                          BorderThickness="0"
+                          Background="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                            Header="{loc:Localize Column_SongName}"
+                                            Binding="{Binding Name}"
+                                            Width="*" />
+                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                            Header="{loc:Localize Column_Artist}"
+                                            Binding="{Binding Artist}"
+                                            Width="150" />
+                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                            Header="{loc:Localize Column_FilePath}"
+                                            Binding="{Binding FilePath}"
+                                            Width="250" />
+                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                            Header="{loc:Localize Column_Status}"
+                                            Binding="{Binding StatusMessage}"
+                                            Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
 
-        </Border>
+            <!-- Empty State Overlay (Margin top to preserve DataGrid header) -->
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="0,0,8,8"
+                    Margin="0,36,0,0"
+                    IsVisible="{Binding HasNoFiles}"
+                    IsHitTestVisible="False">
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Spacing="16">
+                    <Border Background="{DynamicResource ContentAreaBrush}"
+                            CornerRadius="4"
+                            Width="50" Height="40"
+                            HorizontalAlignment="Center">
+                        <PathIcon Data="{StaticResource ImageIcon}"
+                                  Width="24" Height="24"
+                                  Opacity="0.3" />
+                    </Border>
+                    <TextBlock Text="{Binding EmptyStateText}"
+                               Opacity="0.4"
+                               FontSize="13"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </Panel>
 
-        <!-- Status Bar -->
+        <!-- Card 3: Status Bar -->
         <Border Grid.Row="3"
-                Background="{DynamicResource NavigationBackgroundBrush}"
-                Padding="16,12"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BoxShadow="0 2 8 0 #0D000000"
+                Padding="24,12"
                 Margin="0,16,0,0"
                 CornerRadius="8">
             <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                 <!-- Total -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="{Binding CommonTotal}" Opacity="0.8" />
-                    <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" />
-                    <TextBlock Text="{Binding CommonFiles}" Opacity="0.8" />
+                    <TextBlock Text="{Binding CommonTotal}" FontSize="13" FontWeight="Medium" />
+                    <TextBlock Text="{Binding TotalCount}" FontWeight="Bold" FontSize="13" />
+                    <TextBlock Text="{Binding CommonFiles}" FontSize="13" Opacity="0.7" />
                 </StackPanel>
 
-                <!-- Spacer -->
                 <Panel Grid.Column="1" />
 
                 <!-- Success -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" Margin="0,0,24,0">
-                    <TextBlock Text="{Binding CommonSuccess}" Opacity="0.8" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="0,0,24,0">
+                    <Border Width="4" Height="16" CornerRadius="2"
+                            Background="{DynamicResource SuccessColorBrush}"
+                            VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding CommonSuccess}" FontSize="13" />
                     <TextBlock Text="{Binding CompletedCount}"
-                               FontWeight="SemiBold"
-                               Foreground="#4CAF50" />
+                               FontWeight="Bold" FontSize="13"
+                               Foreground="{DynamicResource SuccessColorBrush}" />
                 </StackPanel>
 
                 <!-- Failed -->
-                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="{Binding CommonFailed}" Opacity="0.8" />
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6">
+                    <Border Width="4" Height="16" CornerRadius="2"
+                            Background="{DynamicResource ErrorColorBrush}"
+                            VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding CommonFailed}" FontSize="13" />
                     <TextBlock Text="{Binding FailedCount}"
-                               FontWeight="SemiBold"
-                               Foreground="#F44336" />
+                               FontWeight="Bold" FontSize="13"
+                               Foreground="{DynamicResource ErrorColorBrush}" />
                 </StackPanel>
             </Grid>
         </Border>

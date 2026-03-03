@@ -73,16 +73,19 @@
     <value>Lyrics Download</value>
   </data>
   <data name="Lyrics_Description" xml:space="preserve">
-    <value>Batch download lyrics for your music files</value>
+    <value>Batch download lyrics for your music files, with parallel processing and auto-skip</value>
+  </data>
+  <data name="Lyrics_FolderLabel" xml:space="preserve">
+    <value>Music Folder</value>
   </data>
   <data name="Lyrics_SelectFolder" xml:space="preserve">
-    <value>Select music folder...</value>
+    <value>Select a folder containing music files...</value>
   </data>
   <data name="Lyrics_Browse" xml:space="preserve">
     <value>Browse...</value>
   </data>
   <data name="Lyrics_Parallel" xml:space="preserve">
-    <value>Parallel:</value>
+    <value>Parallel Tasks</value>
   </data>
   <data name="Lyrics_StartDownload" xml:space="preserve">
     <value>Start Download</value>
@@ -105,6 +108,9 @@
   <data name="Lyrics_Status_Complete" xml:space="preserve">
     <value>Download Complete</value>
   </data>
+  <data name="Lyrics_EmptyState" xml:space="preserve">
+    <value>No tasks yet, please select a folder to start scanning</value>
+  </data>
   <data name="Common_Total" xml:space="preserve">
     <value>Total:</value>
   </data>
@@ -124,20 +130,26 @@
   <data name="Album_Description" xml:space="preserve">
     <value>Download album artwork for your music collection</value>
   </data>
+  <data name="Album_FolderLabel" xml:space="preserve">
+    <value>Music Folder</value>
+  </data>
   <data name="Album_SelectFolder" xml:space="preserve">
-    <value>Select music folder...</value>
+    <value>Select a folder containing music files...</value>
   </data>
   <data name="Album_Browse" xml:space="preserve">
     <value>Browse...</value>
   </data>
   <data name="Album_Parallel" xml:space="preserve">
-    <value>Parallel:</value>
+    <value>Parallel Tasks</value>
   </data>
   <data name="Album_StartDownload" xml:space="preserve">
     <value>Start Download</value>
   </data>
   <data name="Album_StopDownload" xml:space="preserve">
     <value>Stop Download</value>
+  </data>
+  <data name="Album_EmptyState" xml:space="preserve">
+    <value>No tasks yet, please select a folder to start scanning</value>
   </data>
   <!-- Settings Page -->
   <data name="Settings_Title" xml:space="preserve">
