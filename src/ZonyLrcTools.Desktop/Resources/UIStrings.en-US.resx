@@ -242,4 +242,8 @@
   <data name="Common_Info" xml:space="preserve">
     <value>Info</value>
   </data>
+  <!-- Error Messages -->
+  <data name="Error_NoMusicFiles" xml:space="preserve">
+    <value>No music files found in the selected folder.</value>
+  </data>
 </root>

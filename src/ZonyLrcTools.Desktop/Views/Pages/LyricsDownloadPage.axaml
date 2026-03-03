@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             xmlns:loc="using:ZonyLrcTools.Desktop.Infrastructure.Localization"
              x:Class="ZonyLrcTools.Desktop.Views.Pages.LyricsDownloadPage"
              x:DataType="vm:LyricsDownloadViewModel">
 
@@ -56,6 +57,7 @@
                         <Button Command="{Binding StartDownloadCommand}"
                                 Content="{Binding LyricsStartDownload}"
                                 IsVisible="{Binding !IsDownloading}"
+                                IsEnabled="{Binding CanStartDownload}"
                                 Classes="accent"
                                 MinWidth="100" />
                         <Button Command="{Binding CancelDownloadCommand}"
@@ -65,7 +67,21 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Progress Bar (visible during download) -->
+                <!-- Progress Bar: Scanning phase -->
+                <StackPanel IsVisible="{Binding IsScanning}" Spacing="8">
+                    <ProgressBar Value="{Binding ScanProgressPercentage}"
+                                 Maximum="100"
+                                 Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.8">
+                        <Run Text="{Binding LyricsScanning}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding ScanProgressCount}" />
+                        <Run Text=" / " />
+                        <Run Text="{Binding ScanTotalCount}" />
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Progress Bar: Download phase -->
                 <StackPanel IsVisible="{Binding IsDownloading}" Spacing="8">
                     <ProgressBar Value="{Binding ProgressPercentage}"
                                  Maximum="100"
@@ -90,20 +106,25 @@
                       GridLinesVisibility="Horizontal"
                       BorderThickness="0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="{Binding ColumnSongName}"
+                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                        Header="{loc:Localize Column_SongName}"
                                         Binding="{Binding Name}"
                                         Width="*" />
-                    <DataGridTextColumn Header="{Binding ColumnArtist}"
+                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                        Header="{loc:Localize Column_Artist}"
                                         Binding="{Binding Artist}"
                                         Width="150" />
-                    <DataGridTextColumn Header="{Binding ColumnFilePath}"
+                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                        Header="{loc:Localize Column_FilePath}"
                                         Binding="{Binding FilePath}"
                                         Width="250" />
-                    <DataGridTextColumn Header="{Binding ColumnStatus}"
+                    <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                                        Header="{loc:Localize Column_Status}"
                                         Binding="{Binding StatusMessage}"
                                         Width="100" />
                 </DataGrid.Columns>
             </DataGrid>
+
         </Border>
 
         <!-- Status Bar -->

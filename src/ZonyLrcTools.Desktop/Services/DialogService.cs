@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using ZonyLrcTools.Desktop.Views.Dialogs;
 
 namespace ZonyLrcTools.Desktop.Services;
 
@@ -47,14 +48,18 @@ public class DialogService : IDialogService
 
     public async Task<bool> ShowConfirmDialogAsync(string title, string message)
     {
-        // TODO: Implement custom confirm dialog
-        await Task.CompletedTask;
-        return true;
+        if (MainWindow == null) return false;
+
+        var dialog = new ConfirmDialog(title, message);
+        var result = await dialog.ShowDialog<bool>(MainWindow);
+        return result;
     }
 
     public async Task ShowMessageAsync(string title, string message)
     {
-        // TODO: Implement custom message dialog
-        await Task.CompletedTask;
+        if (MainWindow == null) return;
+
+        var dialog = new MessageDialog(title, message);
+        await dialog.ShowDialog(MainWindow);
     }
 }

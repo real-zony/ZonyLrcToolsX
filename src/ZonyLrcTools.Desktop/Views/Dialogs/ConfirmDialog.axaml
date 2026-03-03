@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ZonyLrcTools.Desktop.Views.Dialogs.ConfirmDialog"
+        Title=""
+        Width="400"
+        Height="200"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height">
+
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto">
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   x:Name="TitleText"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,12" />
+
+        <!-- Message -->
+        <TextBlock Grid.Row="1"
+                   x:Name="MessageText"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,20" />
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8">
+            <Button x:Name="CancelButton"
+                    MinWidth="80"
+                    Click="OnCancelClick" />
+            <Button x:Name="ConfirmButton"
+                    MinWidth="80"
+                    Classes="accent"
+                    Click="OnConfirmClick" />
+        </StackPanel>
+    </Grid>
+</Window>
