@@ -1,4 +1,4 @@
-English | [简体中文](./zh_CN.md)
+English | [简体中文](./docs/zh_CN.md)
 
 # Disclaimer
 
