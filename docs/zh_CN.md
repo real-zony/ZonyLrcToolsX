@@ -37,4 +37,4 @@ ZonyLrcTools.Cli --help
 
 # Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=real-zony/ZonyLrcToolsX&type=Timeline)](https://star-history.com/#real-zony/ZonyLrcToolsX&Timeline)
+[![Star History Chart](https://star-history.dera.page/svg?repos=real-zony/ZonyLrcToolsX&type=Timeline)](https://star-history.dera.page/#real-zony/ZonyLrcToolsX&Timeline)
