@@ -47,7 +47,9 @@ namespace ZonyLrcTools.Cli.Commands.SubCommand
 
                 _logger.LogInformation($"扫描完成，共 {files.Count} 个文件，准备转换。");
 
-                var wrapTask = new WarpTask(4);
+                // WarpTask.Dispose 会取消令牌并同步等待所有槽位释放，漏掉 using 就会
+                // 泄漏 CTS/Semaphore，并让终结器线程去做阻塞等待。
+                using var wrapTask = new WarpTask(4);
                 var tasks = files.Select(path => wrapTask.RunAsync(async () =>
                 {
                     _logger.LogInformation($"开始转换文件：{path}");
