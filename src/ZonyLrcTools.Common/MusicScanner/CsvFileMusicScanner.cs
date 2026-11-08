@@ -21,16 +21,22 @@ public class CsvFileMusicScanner : ITransientDependency
         var encoding = DetectFileEncoding(csvFilePath);
 
         var csvFileContent = await File.ReadAllTextAsync(csvFilePath, encoding);
-        var csvFileLines = csvFileContent.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries);
-        return csvFileLines.Skip(1).Select(line => GetMusicInfoFromCsvFileLine(line, outputDirectory, pattern))
+
+        // 不能只按 Environment.NewLine 切分：在 Windows 上读到的是 "\r\n"，而用户从网盘、
+        // 版本的表格导出、Git 里签出的 CSV 往往是 "\n"，那样整个文件会被当成一行，
+        // 跳过表头之后就是空的，界面上表现为"解析了但一首歌都没有"。
+        var csvFileLines = csvFileContent.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        return csvFileLines.Skip(1)
+            .Where(line => line.Contains(',')) // 跳过空行与 VCS 合并产生的杂行。
+            .Select(line => GetMusicInfoFromCsvFileLine(line, outputDirectory, pattern))
             .ToList();
     }
 
     private MusicInfo GetMusicInfoFromCsvFileLine(string csvFileLine, string outputDirectory, string pattern)
     {
         var csvFileLineItems = csvFileLine.Split(',');
-        var name = csvFileLineItems[0];
-        var artist = csvFileLineItems[1];
+        var name = csvFileLineItems[0].Trim();
+        var artist = csvFileLineItems.Length > 1 ? csvFileLineItems[1].Trim() : string.Empty;
         var fakeFilePath = Path.Combine(outputDirectory, pattern.Replace("{Name}", name).Replace("{Artist}", artist));
         var musicInfo = new MusicInfo(fakeFilePath, name, artist);
         return musicInfo;

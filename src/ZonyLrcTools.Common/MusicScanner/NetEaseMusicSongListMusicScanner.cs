@@ -21,8 +21,20 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     private readonly ILogger<NetEaseMusicSongListMusicScanner> _logger;
     private const string Host = "https://music.163.com";
 
-    private string Cookie { get; set; } = string.Empty;
-    private string CsrfToken { get; set; } = string.Empty;
+    /// <summary>
+    /// 登录后的 Cookie。GUI 可以在登录成功之后把它持久化下来，下次直接赋值恢复登录态。
+    /// </summary>
+    public string Cookie { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 登录后的 CSRF Token，通常与 <see cref="Cookie"/> 一起持久化。
+    /// </summary>
+    public string CsrfToken { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前是否已经持有登录态。
+    /// </summary>
+    public bool IsLoggedIn => !string.IsNullOrEmpty(Cookie);
 
     /// <summary>
     /// 构建一个新的 <see cref="NetEaseMusicSongListMusicScanner"/> 对象。
@@ -35,23 +47,87 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     }
 
     /// <summary>
+    /// 清除当前登录态，下次调用歌单接口时会重新要求扫码。
+    /// </summary>
+    public void ClearLoginState()
+    {
+        Cookie = string.Empty;
+        CsrfToken = string.Empty;
+    }
+
+    /// <summary>
+    /// 恢复一个已有的登录态，供 GUI 从本地缓存中读回 Cookie 之后调用。
+    /// </summary>
+    /// <param name="cookie">之前登录成功时保存的 Cookie。</param>
+    /// <param name="csrfToken">与 <paramref name="cookie"/> 一起保存的 CSRF Token。</param>
+    public void RestoreLoginState(string cookie, string csrfToken)
+    {
+        Cookie = cookie ?? string.Empty;
+        CsrfToken = csrfToken ?? string.Empty;
+    }
+
+    /// <summary>
+    /// 主动触发一次扫码登录（如果已经登录则直接返回 true）。
+    /// </summary>
+    /// <param name="onQrCodeReady">二维码就绪回调。</param>
+    /// <param name="onStateChanged">登录状态变化回调，GUI 用它显示「已扫码，请在手机上确认」之类的中间态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>登录成功时为 true。</returns>
+    public async Task<bool> LoginAsync(
+        Action<NetEaseQrCodePayload>? onQrCodeReady = null,
+        Action<NetEaseLoginState>? onStateChanged = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (IsLoggedIn)
+        {
+            onStateChanged?.Invoke(NetEaseLoginState.Succeeded);
+            return true;
+        }
+
+        var loginResponse = await LoginViqQrCodeAsync(onQrCodeReady, onStateChanged, cancellationToken);
+        Cookie = loginResponse.cookieContainer?.GetCookieHeader(new Uri(Host)) ?? string.Empty;
+        CsrfToken = loginResponse.csrfToken ?? string.Empty;
+
+        return IsLoggedIn;
+    }
+
+    /// <summary>
     /// 从网易云歌单获取需要下载的歌曲列表，调用这个 API 需要用户登录，否则获取的歌单数据不全。
     /// </summary>
-    /// <param name="songListIds">网易云音乐歌单的 ID。</param>
+    /// <param name="songListIds">网易云音乐歌单的 ID，多个歌单以分号分隔。</param>
     /// <param name="outputDirectory">歌词文件的输出路径。</param>
     /// <param name="pattern">输出的歌词文件格式，默认是 "{Artist} - {Title}.lrc" 的形式。</param>
+    /// <param name="onQrCodeReady">
+    /// 二维码就绪时的回调。CLI 不传，走原有的终端 ASCII 输出；GUI 传入后会收到可渲染的二维码数据。
+    /// </param>
+    /// <param name="onStateChanged">登录状态变化回调。</param>
+    /// <param name="cancellationToken">取消令牌，用于中断扫码等待与歌单请求。</param>
     /// <returns>返回获取到的歌曲列表。</returns>
-    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(string songListIds, string outputDirectory, string pattern)
+    public async Task<List<MusicInfo>> GetMusicInfoFromNetEaseMusicSongListAsync(
+        string songListIds,
+        string outputDirectory,
+        string pattern,
+        Action<NetEaseQrCodePayload>? onQrCodeReady = null,
+        Action<NetEaseLoginState>? onStateChanged = null,
+        CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(Cookie))
         {
-            var loginResponse = await LoginViqQrCodeAsync();
+            var loginResponse = await LoginViqQrCodeAsync(onQrCodeReady, onStateChanged, cancellationToken);
             Cookie = loginResponse.cookieContainer?.GetCookieHeader(new Uri(Host)) ?? string.Empty;
             CsrfToken = loginResponse.csrfToken ?? string.Empty;
+
+            if (string.IsNullOrEmpty(Cookie))
+            {
+                // 登录没成（用户取消、二维码过期），直接失败，不要再拿空 Cookie 去请求歌单。
+                throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
+            }
         }
 
         async Task<List<MusicInfo>> GetMusicInfoBySongIdAsync(string songId)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
             var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
             var response = await _warpHttpClient.PostAsync<GetMusicInfoFromNetEaseMusicSongListResponse>(
@@ -73,7 +149,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
 
             if (response.Code != 200 || response.PlayList?.SongList == null)
             {
-                throw new ErrorCodeException(ErrorCodes.NotSupportedFileEncoding);
+                throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
             }
 
             return response.PlayList.SongList
@@ -88,8 +164,10 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         }
 
         var musicInfoList = new List<MusicInfo>();
-        foreach (var songListId in songListIds.Split(';'))
+        foreach (var songListId in songListIds.Split(';', StringSplitOptions.RemoveEmptyEntries))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             _logger.LogInformation("正在获取歌单 {SongListId} 的歌曲列表。", songListId);
             var musicInfos = await GetMusicInfoBySongIdAsync(songListId);
             musicInfoList.AddRange(musicInfos);
@@ -121,55 +199,72 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// <summary>
     /// 通过二维码登录网易云音乐，登录成功后返回 Cookie 和 CSRF Token。
     /// </summary>
-    private async Task<(string? csrfToken, CookieContainer? cookieContainer)> LoginViqQrCodeAsync()
+    /// <param name="onQrCodeReady">
+    /// 二维码就绪回调。为空时保持原有行为 —— 把 ASCII 二维码打到日志里，供 CLI 在终端展示。
+    /// </param>
+    /// <param name="onStateChanged">登录状态变化回调。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    private async Task<(string? csrfToken, CookieContainer? cookieContainer)> LoginViqQrCodeAsync(
+        Action<NetEaseQrCodePayload>? onQrCodeReady,
+        Action<NetEaseLoginState>? onStateChanged,
+        CancellationToken cancellationToken)
     {
         // Get unikey.
         var qrCodeKeyJson = await (await PostAsync($"{Host}/weapi/login/qrcode/unikey", new
         {
             type = 1
-        })).Content.ReadAsStringAsync();
+        })).Content.ReadAsStringAsync(cancellationToken);
         var uniKey = JObject.Parse(qrCodeKeyJson).SelectToken("$.unikey")!.Value<string>();
         if (string.IsNullOrEmpty(uniKey)) return (null, null);
 
         // Generate QR code.
         var qrGenerator = new QRCodeGenerator();
-        var qrCodeData = qrGenerator.CreateQrCode($"{Host}/login?codekey={uniKey}",
-            QRCodeGenerator.ECCLevel.L);
-        var qrCode = new AsciiQRCode(qrCodeData);
-        var asciiQrCodeString = qrCode.GetGraphic(1, drawQuietZones: false);
+        var qrContent = $"{Host}/login?codekey={uniKey}";
+        var qrCodeData = qrGenerator.CreateQrCode(qrContent, QRCodeGenerator.ECCLevel.L);
+        var asciiQrCodeString = new AsciiQRCode(qrCodeData).GetGraphic(1, drawQuietZones: false);
 
-        _logger.LogInformation("请使用网易云 APP 扫码登录:");
-        _logger.LogInformation("\n{AsciiQrCodeString}", asciiQrCodeString);
+        if (onQrCodeReady != null)
+        {
+            onQrCodeReady(new NetEaseQrCodePayload(qrContent, uniKey, asciiQrCodeString));
+        }
+        else
+        {
+            _logger.LogInformation("请使用网易云 APP 扫码登录:");
+            _logger.LogInformation("\n{AsciiQrCodeString}", asciiQrCodeString);
+        }
 
         // Wait for login success.
-        var isLogin = false;
-        while (!isLogin)
+        var lastState = NetEaseLoginState.Waiting;
+        while (true)
         {
-            var (isSuccess, cookieContainer) = await CheckIsLoginAsync(uniKey);
-            isLogin = isSuccess;
+            cancellationToken.ThrowIfCancellationRequested();
 
-            if (!isLogin)
+            var (state, cookieContainer) = await CheckIsLoginAsync(uniKey, cancellationToken);
+
+            if (state != lastState)
             {
-                await Task.Delay(2000);
+                lastState = state;
+                onStateChanged?.Invoke(state);
             }
-            else
+
+            if (state == NetEaseLoginState.Succeeded)
             {
                 return (cookieContainer?.GetCookies(new Uri(Host))["__csrf"]?.Value, cookieContainer);
             }
-        }
 
-        return (null, null);
+            if (state == NetEaseLoginState.Expired)
+            {
+                // 二维码已失效，继续轮询没有意义。
+                return (null, null);
+            }
+
+            await Task.Delay(2000, cancellationToken);
+        }
     }
 
-    /// <summary>
-    /// 使用 <paramref name="uniKey"/> 检测是否登录成功。
-    /// </summary>
-    /// <param name="uniKey">由网易云 API 生成的唯一 Key，用于登录。</param>
-    /// <returns>
-    /// 当登录成功的时候，元组 <c>isSuccess</c> 会为 true，<c>cookieContainer</c> 会包含登录成功后的 Cookie。<br/>
-    /// 如果登录失败，<c>isSuccess</c> 会为 false，<c>cookieContainer</c> 会为 null。 
-    /// </returns>
-    private async Task<(bool isSuccess, CookieContainer? cookieContainer)> CheckIsLoginAsync(string uniKey)
+    private async Task<(NetEaseLoginState state, CookieContainer? cookieContainer)> CheckIsLoginAsync(
+        string uniKey,
+        CancellationToken cancellationToken)
     {
         var responseMessage = await PostAsync($"{Host}/weapi/login/qrcode/client/login", new
         {
@@ -177,17 +272,25 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             type = 1
         });
 
-        var responseString = await responseMessage.Content.ReadAsStringAsync();
+        var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
         var responseCode = JObject.Parse(responseString)["code"]?.Value<int>();
 
-        if (responseCode != 803)
+        switch (responseCode)
         {
-            return (false, null);
+            // 800 二维码过期、801 等待扫码、802 已扫码待确认、803 登录成功。
+            case 800:
+                return (NetEaseLoginState.Expired, null);
+            case 802:
+                return (NetEaseLoginState.ScanConfirmed, null);
+            case 803:
+                break;
+            default:
+                return (NetEaseLoginState.Waiting, null);
         }
 
         if (!responseMessage.Headers.TryGetValues("Set-Cookie", out var cookies))
         {
-            return (false, null);
+            return (NetEaseLoginState.Waiting, null);
         }
 
         var cookieContainer = new CookieContainer();
@@ -196,7 +299,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             cookieContainer.SetCookies(new Uri(Host), cookie);
         }
 
-        return (true, cookieContainer);
+        return (NetEaseLoginState.Succeeded, cookieContainer);
     }
 
     /// <summary>
