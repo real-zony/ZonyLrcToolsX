@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Text;
 using Microsoft.Extensions.Options;
 using ZonyLrcTools.Common.Configuration;
@@ -49,22 +49,53 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
             parallelCount = 1;
         }
 
-        var warpTask = new WarpTask(parallelCount);
+        using var warpTask = new WarpTask(parallelCount);
         var downloadTasks = needDownloadMusicInfos.Select(info =>
             warpTask.RunAsync(() =>
                 Task.Run(async () =>
                 {
-                    // Try to download lyrics from all available providers.
+                    // 依次尝试所有可用的歌词来源，直到某一家真正返回了歌词。
+                    // 某个来源返回空结果是「这家没搜到」，不是「这首歌没有歌词」，必须继续问下一家。
+                    var isFinished = false;
+                    var hasProviderError = false;
+
                     foreach (var lyricsProvider in AvailableProviders)
                     {
-                        await DownloadAndWriteLyricsAsync(lyricsProvider, info);
+                        var result = await DownloadAndWriteLyricsAsync(lyricsProvider, info);
 
-                        if (!info.IsSuccessful) continue;
-                        _logger.LogSuccessful(info);
-                        break;
+                        if (result == LyricsDownloadResult.Success)
+                        {
+                            _logger.LogSuccessful(info);
+                            isFinished = true;
+                            break;
+                        }
+
+                        if (result == LyricsDownloadResult.Failed)
+                        {
+                            hasProviderError = true;
+                        }
                     }
 
-                    if (callback != null) await callback(info);
+                    if (!isFinished)
+                    {
+                        // 所有来源都没有返回歌词。若期间有来源报错，就判为失败；
+                        // 否则说明各家都查无此曲，按纯音乐/未收录处理（与旧版的统计口径保持一致）。
+                        info.IsSuccessful = !hasProviderError;
+                        info.IsPruneMusic = !hasProviderError;
+                    }
+
+                    // 回调是调用方（GUI）提供的 UI 代码，它抛异常不应该拖垮整批下载。
+                    if (callback != null)
+                    {
+                        try
+                        {
+                            await callback(info);
+                        }
+                        catch (Exception ex)
+                        {
+                            await _logger.WarnAsync($"处理歌曲下载回调时发生错误：{ex.Message}，歌曲名: {info.Name}。");
+                        }
+                    }
                 }, cancellationToken), cancellationToken));
 
         await Task.WhenAll(downloadTasks);
@@ -76,18 +107,21 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
         await LogFailedSongFilesInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"歌词下载失败列表_{DateTime.Now:yyyyMMddHHmmss}.txt"), needDownloadMusicInfos);
     }
 
-    private async Task DownloadAndWriteLyricsAsync(ILyricsProvider provider, MusicInfo info)
+    private async Task<LyricsDownloadResult> DownloadAndWriteLyricsAsync(ILyricsProvider provider, MusicInfo info)
     {
         try
         {
             var lyrics = await provider.DownloadAsync(info.Name, info.Artist);
 
+            // 该来源没有搜到歌词，交给调用方去问下一家，不能在这里判定整首歌完成。
             if (lyrics.IsPruneMusic)
             {
-                info.IsSuccessful = true;
-                info.IsPruneMusic = true;
-                return;
+                return LyricsDownloadResult.Empty;
             }
+
+            // 先把歌词编码成字节，再动磁盘。编码配置有误时（例如 fileEncoding 写成了不存在的名字）
+            // 这一步就会抛错，此时文件还没被创建，不会留下 0 字节的空壳。
+            var content = Utf8ToSelectedEncoding(lyrics);
 
             var newLyricsFilePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
                 $"{Path.GetFileNameWithoutExtension(info.FilePath)}.lrc");
@@ -100,25 +134,45 @@ public class LyricsDownloader : ILyricsDownloader, ISingletonDependency
             // Write lyrics to file.
             await using (var fileStream = new FileStream(newLyricsFilePath, FileMode.CreateNew, FileAccess.Write))
             {
-                await using (var binaryWriter = new BinaryWriter(fileStream, Encoding.UTF8))
-                {
-                    binaryWriter.Write(Utf8ToSelectedEncoding(lyrics));
-                    binaryWriter.Flush();
-                }
+                await fileStream.WriteAsync(content);
+                await fileStream.FlushAsync();
             }
 
             info.IsSuccessful = true;
+            info.IsPruneMusic = false;
+            return LyricsDownloadResult.Success;
         }
         catch (ErrorCodeException ex)
         {
-            _logger.LogWarningInfo(ex);
+            // 失败标记必须放在记录日志之前：LoggerHelper 即便将来再改动行为，
+            // 也不能让「失败」的歌曲以默认的 IsSuccessful = true 冒出去。
             info.IsSuccessful = false;
+            info.IsPruneMusic = false;
+            _logger.LogWarningInfo(ex);
+            return LyricsDownloadResult.Failed;
         }
         catch (Exception ex)
         {
-            await _logger.ErrorAsync($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
             info.IsSuccessful = false;
+            info.IsPruneMusic = false;
+            await _logger.ErrorAsync($"下载歌词文件时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
+            return LyricsDownloadResult.Failed;
         }
+    }
+
+    /// <summary>
+    /// 单个歌词来源的处理结果。
+    /// </summary>
+    private enum LyricsDownloadResult
+    {
+        /// <summary>歌词已写入文件。</summary>
+        Success,
+
+        /// <summary>该来源没有返回歌词（既可能是没有收录，也可能是纯音乐）。</summary>
+        Empty,
+
+        /// <summary>该来源处理过程中出错。</summary>
+        Failed
     }
 
     // Convert UTF-8 to selected encoding.
