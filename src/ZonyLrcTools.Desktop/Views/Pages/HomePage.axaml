@@ -17,38 +17,77 @@
                            TextWrapping="Wrap" />
             </StackPanel>
 
-            <!-- Quick Actions -->
+            <!-- Quick Actions: every card navigates for real -->
             <Border Background="{DynamicResource CardBackgroundBrush}"
                     CornerRadius="8"
                     BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
-                    <TextBlock Text="Quick Actions"
+                    <TextBlock Text="{Binding QuickActionsTitle}"
                                FontSize="18"
                                FontWeight="SemiBold" />
 
                     <WrapPanel Orientation="Horizontal">
                         <Button Margin="0,0,16,16"
                                 Padding="24,16"
-                                CornerRadius="8">
+                                CornerRadius="8"
+                                MinWidth="240"
+                                Command="{Binding OpenLyricsCommand}">
                             <StackPanel Spacing="8">
-                                <TextBlock Text="Download Lyrics"
-                                           FontWeight="SemiBold" />
-                                <TextBlock Text="Batch download lyrics for your music"
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <PathIcon Data="{StaticResource MusicNoteIcon}"
+                                              Width="16" Height="16"
+                                              Foreground="{DynamicResource AppAccentBrush}" />
+                                    <TextBlock Text="{Binding LyricsCardTitle}"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding LyricsCardDescription}"
                                            FontSize="12"
-                                           Opacity="0.7" />
+                                           Opacity="0.7"
+                                           TextWrapping="Wrap" />
                             </StackPanel>
                         </Button>
 
                         <Button Margin="0,0,16,16"
                                 Padding="24,16"
-                                CornerRadius="8">
+                                CornerRadius="8"
+                                MinWidth="240"
+                                Command="{Binding OpenAlbumCommand}">
                             <StackPanel Spacing="8">
-                                <TextBlock Text="Download Album Covers"
-                                           FontWeight="SemiBold" />
-                                <TextBlock Text="Get album artwork for your collection"
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <PathIcon Data="{StaticResource ImageIcon}"
+                                              Width="16" Height="16"
+                                              Foreground="{DynamicResource AppAccentBrush}" />
+                                    <TextBlock Text="{Binding AlbumCardTitle}"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding AlbumCardDescription}"
                                            FontSize="12"
-                                           Opacity="0.7" />
+                                           Opacity="0.7"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="0,0,16,16"
+                                Padding="24,16"
+                                CornerRadius="8"
+                                MinWidth="240"
+                                Command="{Binding OpenDecryptCommand}">
+                            <StackPanel Spacing="8">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <PathIcon Data="{StaticResource LockIcon}"
+                                              Width="16" Height="16"
+                                              Foreground="{DynamicResource AppAccentBrush}" />
+                                    <TextBlock Text="{Binding DecryptCardTitle}"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding DecryptCardDescription}"
+                                           FontSize="12"
+                                           Opacity="0.7"
+                                           TextWrapping="Wrap" />
                             </StackPanel>
                         </Button>
                     </WrapPanel>
@@ -61,36 +100,35 @@
                     BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
-                    <TextBlock Text="Features"
+                    <TextBlock Text="{Binding FeaturesTitle}"
                                FontSize="18"
                                FontWeight="SemiBold" />
 
-                    <ItemsControl>
-                        <ItemsControl.Items>
-                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
-                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
-                                <TextBlock Text="Multiple lyrics sources: NetEase, QQ Music, KuGou, KuWo" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
-                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
-                                <TextBlock Text="Batch processing with parallel downloads" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
-                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
-                                <TextBlock Text="Support for translation lyrics" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
-                                <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
-                                <TextBlock Text="Cross-platform: Windows, macOS, Linux" />
-                            </StackPanel>
-                        </ItemsControl.Items>
-                    </ItemsControl>
+                    <StackPanel Spacing="8">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                            <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                            <TextBlock Text="{Binding FeatureFormats}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                            <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                            <TextBlock Text="{Binding FeatureParallel}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                            <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                            <TextBlock Text="{Binding FeatureEncodings}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                            <TextBlock Text="*" FontWeight="Bold" Foreground="{DynamicResource AppAccentBrush}" />
+                            <TextBlock Text="{Binding FeatureCrossPlatform}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 
             <!-- Version Info -->
             <TextBlock Opacity="0.5" FontSize="12">
-                <Run Text="Version " />
+                <Run Text="{Binding VersionLabel}" />
+                <Run Text=" " />
                 <Run Text="{Binding Version}" />
             </TextBlock>
         </StackPanel>
