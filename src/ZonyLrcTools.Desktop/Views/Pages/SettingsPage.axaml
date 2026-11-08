@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             xmlns:loc="using:ZonyLrcTools.Desktop.Infrastructure.Localization"
              x:Class="ZonyLrcTools.Desktop.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsViewModel">
 
@@ -64,6 +65,12 @@
                                        Minimum="1"
                                        Maximum="65535" />
                     </Grid>
+
+                    <TextBlock Text="{Binding SettingsProxyRestartHint}"
+                               FontSize="12"
+                               Opacity="0.55"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding IsProxyEnabled}" />
                 </StackPanel>
             </Border>
 
@@ -73,26 +80,43 @@
                     BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
-                    <TextBlock Text="Lyrics"
+                    <TextBlock Text="{Binding SettingsLyricsSection}"
                                FontSize="18"
                                FontWeight="SemiBold" />
 
-                    <CheckBox Content="Enable translation lyrics"
+                    <CheckBox Content="{Binding SettingsEnableTranslation}"
                               IsChecked="{Binding IsTranslationEnabled}" />
 
-                    <CheckBox Content="One-line mode (original + translation on same line)"
-                              IsChecked="{Binding IsOneLineMode}" />
+                    <CheckBox Content="{Binding SettingsOneLineMode}"
+                              IsChecked="{Binding IsOneLineMode}"
+                              IsEnabled="{Binding IsTranslationEnabled}" />
 
-                    <CheckBox Content="Skip existing lyrics files"
+                    <CheckBox Content="{Binding SettingsOnlyTranslation}"
+                              IsChecked="{Binding IsOnlyOutputTranslation}"
+                              IsEnabled="{Binding IsTranslationEnabled}" />
+
+                    <CheckBox Content="{Binding SettingsSkipExisting}"
                               IsChecked="{Binding SkipExistingLyrics}" />
 
-                    <StackPanel Orientation="Horizontal" Spacing="16">
-                        <TextBlock Text="File Encoding:"
-                                   VerticalAlignment="Center" />
-                        <ComboBox ItemsSource="{Binding AvailableEncodings}"
+                    <Grid ColumnDefinitions="Auto,180,Auto,180" RowDefinitions="Auto,Auto">
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding SettingsFileEncoding}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,12,0" />
+                        <ComboBox Grid.Row="0" Grid.Column="1"
+                                  ItemsSource="{Binding AvailableEncodings}"
                                   SelectedItem="{Binding SelectedEncoding}"
-                                  Width="150" />
-                    </StackPanel>
+                                  HorizontalAlignment="Stretch" />
+
+                        <TextBlock Grid.Row="0" Grid.Column="2"
+                                   Text="{Binding SettingsLineBreak}"
+                                   VerticalAlignment="Center"
+                                   Margin="24,0,12,0" />
+                        <ComboBox Grid.Row="0" Grid.Column="3"
+                                  ItemsSource="{Binding LineBreakDisplayNames}"
+                                  SelectedIndex="{Binding SelectedLineBreakIndex}"
+                                  HorizontalAlignment="Stretch" />
+                    </Grid>
                 </StackPanel>
             </Border>
 
@@ -102,9 +126,15 @@
                     BoxShadow="0 2 8 0 #0D000000"
                     Padding="24">
                 <StackPanel Spacing="16">
-                    <TextBlock Text="{Binding SettingsLyricsProvider}"
-                               FontSize="18"
-                               FontWeight="SemiBold" />
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{Binding SettingsLyricsProvider}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SettingsProviderOrderHint}"
+                                   FontSize="12"
+                                   Opacity="0.55"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
 
                     <ItemsControl ItemsSource="{Binding LyricsProviders}">
                         <ItemsControl.ItemTemplate>
@@ -112,20 +142,35 @@
                                 <Border Background="{DynamicResource AppBackgroundBrush}"
                                         CornerRadius="4"
                                         Padding="12,8"
-                                        Margin="0,4">
-                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        Margin="0,4"
+                                        Opacity="{Binding RowOpacity}">
+                                    <Grid ColumnDefinitions="Auto,28,*,Auto,Auto">
                                         <CheckBox Grid.Column="0"
                                                   IsChecked="{Binding IsEnabled}"
                                                   Margin="0,0,12,0" />
                                         <TextBlock Grid.Column="1"
+                                                   Text="{Binding PriorityLabel}"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{DynamicResource NumericFontFamily}"
+                                                   Opacity="0.55" />
+                                        <TextBlock Grid.Column="2"
                                                    Text="{Binding Name}"
                                                    VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="2"
-                                                   VerticalAlignment="Center"
-                                                   Opacity="0.5">
-                                            <Run Text="Priority: " />
-                                            <Run Text="{Binding Priority}" />
-                                        </TextBlock>
+                                        <Button Grid.Column="3"
+                                                Command="{Binding MoveUpCommand}"
+                                                IsEnabled="{Binding CanMoveUp}"
+                                                Classes="icon"
+                                                Margin="0,0,4,0"
+                                                ToolTip.Tip="{loc:Localize Settings_MoveUp}">
+                                            <PathIcon Data="{StaticResource ChevronUpIcon}" Width="12" Height="12" />
+                                        </Button>
+                                        <Button Grid.Column="4"
+                                                Command="{Binding MoveDownCommand}"
+                                                IsEnabled="{Binding CanMoveDown}"
+                                                Classes="icon"
+                                                ToolTip.Tip="{loc:Localize Settings_MoveDown}">
+                                            <PathIcon Data="{StaticResource ChevronDownIcon}" Width="12" Height="12" />
+                                        </Button>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -134,11 +179,124 @@
                 </StackPanel>
             </Border>
 
-            <!-- Actions -->
-            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Right">
-                <Button Content="{Binding SettingsReset}"
-                        Command="{Binding ResetToDefaultsCommand}" />
-            </StackPanel>
+            <!-- Advanced Settings (collapsed by default) -->
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
+                    Padding="24">
+                <StackPanel Spacing="16">
+                    <ToggleSwitch IsChecked="{Binding IsAdvancedVisible}"
+                                  Content="{Binding SettingsShowAdvanced}"
+                                  OnContent="{Binding SettingsAdvancedSection}"
+                                  OffContent="{Binding SettingsShowAdvanced}" />
+
+                    <StackPanel Spacing="16" IsVisible="{Binding IsAdvancedVisible}">
+                        <Border Height="1" Background="{DynamicResource SeparatorBrush}" Opacity="0.5" />
+
+                        <!-- Romanized output -->
+                        <CheckBox Content="{Binding SettingsRomanOutput}"
+                                  IsChecked="{Binding IsRomanOutputEnabled}" />
+
+                        <!-- Block word dictionary -->
+                        <TextBlock Text="{Binding SettingsBlockWordSection}"
+                                   FontSize="15"
+                                   FontWeight="Medium" />
+
+                        <CheckBox Content="{Binding SettingsBlockWordEnable}"
+                                  IsChecked="{Binding IsBlockWordEnabled}" />
+
+                        <Grid ColumnDefinitions="Auto,*">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding SettingsBlockWordPath}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding BlockWordFilePath}"
+                                     IsEnabled="{Binding IsBlockWordEnabled}" />
+                        </Grid>
+
+                        <!-- Tag providers -->
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="{Binding SettingsTagProvider}"
+                                       FontSize="15"
+                                       FontWeight="Medium" />
+                            <TextBlock Text="{Binding SettingsProviderOrderHint}"
+                                       FontSize="12"
+                                       Opacity="0.55"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding TagProviders}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:TagInfoProviderSettingViewModel">
+                                    <Border Background="{DynamicResource AppBackgroundBrush}"
+                                            CornerRadius="4"
+                                            Padding="12,8"
+                                            Margin="0,4"
+                                            Opacity="{Binding RowOpacity}">
+                                        <Grid ColumnDefinitions="Auto,28,*,Auto,Auto">
+                                            <CheckBox Grid.Column="0"
+                                                      IsChecked="{Binding IsEnabled}"
+                                                      Margin="0,0,12,0" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding PriorityLabel}"
+                                                       VerticalAlignment="Center"
+                                                       Opacity="0.55" />
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding Name}"
+                                                       VerticalAlignment="Center" />
+                                            <Button Grid.Column="3"
+                                                    Command="{Binding MoveUpCommand}"
+                                                    IsEnabled="{Binding CanMoveUp}"
+                                                    Classes="icon"
+                                                    Margin="0,0,4,0"
+                                                    ToolTip.Tip="{loc:Localize Settings_MoveUp}">
+                                                <PathIcon Data="{StaticResource ChevronUpIcon}" Width="12" Height="12" />
+                                            </Button>
+                                            <Button Grid.Column="4"
+                                                    Command="{Binding MoveDownCommand}"
+                                                    IsEnabled="{Binding CanMoveDown}"
+                                                    Classes="icon"
+                                                    ToolTip.Tip="{loc:Localize Settings_MoveDown}">
+                                                <PathIcon Data="{StaticResource ChevronDownIcon}" Width="12" Height="12" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Actions + status -->
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
+                    Padding="24,14">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="4" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StorageHint}"
+                                   FontSize="12"
+                                   Opacity="0.55"
+                                   TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{Binding SaveStatusText}"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource SuccessColorBrush}"
+                                   IsVisible="{Binding ShowSaveSuccess}" />
+                        <TextBlock Text="{Binding SaveStatusText}"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource ErrorColorBrush}"
+                                   IsVisible="{Binding ShowSaveFailure}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="{Binding SettingsReset}"
+                            Command="{Binding ResetToDefaultsCommand}"
+                            VerticalAlignment="Center" />
+                </Grid>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 

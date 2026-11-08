@@ -20,6 +20,18 @@ public partial class MessageDialog : Window
 
         var localization = App.Services?.GetService<IUILocalizationService>();
         OkButton.Content = localization?["Common_OK"] ?? "OK";
+        CopyButton.Content = localization?["Common_Copy"] ?? "Copy";
+    }
+
+    private async void OnCopyClick(object? sender, RoutedEventArgs e)
+    {
+        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+        if (clipboard == null)
+        {
+            return;
+        }
+
+        await clipboard.SetTextAsync(MessageText.Text ?? string.Empty);
     }
 
     private void OnOkClick(object? sender, RoutedEventArgs e)
