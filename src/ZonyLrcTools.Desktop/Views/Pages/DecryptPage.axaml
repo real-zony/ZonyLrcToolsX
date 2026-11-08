@@ -1,0 +1,274 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+             xmlns:loc="using:ZonyLrcTools.Desktop.Infrastructure.Localization"
+             x:Class="ZonyLrcTools.Desktop.Views.Pages.DecryptPage"
+             x:DataType="vm:DecryptViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <!-- Title -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="{Binding DecryptTitle}"
+                       FontSize="24"
+                       FontWeight="Bold" />
+            <TextBlock Text="{Binding DecryptDescription}"
+                       FontSize="13"
+                       Opacity="0.6"
+                       Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Requirement strip: kgg needs the KuGou key database, say so before anything is pressed -->
+        <Border Grid.Row="1"
+                IsVisible="{Binding ShowDatabaseWarning}"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BorderBrush="{DynamicResource WarningColorBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="16,12"
+                Margin="0,0,0,16">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <PathIcon Grid.Column="0"
+                          Data="{StaticResource AlertIcon}"
+                          Width="16" Height="16"
+                          Foreground="{DynamicResource WarningColorBrush}"
+                          VerticalAlignment="Top"
+                          Margin="0,2,12,0" />
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="{Binding DecryptKugouRequirement}"
+                               FontSize="13"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding KugouDatabaseStatus}"
+                               FontSize="11"
+                               Opacity="0.6"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+                <Button Grid.Column="2"
+                        Content="{Binding DecryptSpecifyDatabase}"
+                        Command="{Binding SpecifyDatabaseCommand}"
+                        MinWidth="150"
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0" />
+            </Grid>
+        </Border>
+
+        <!-- Card 1: Form Controls -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource CardBackgroundBrush}"
+                CornerRadius="8"
+                BoxShadow="0 2 8 0 #0D000000"
+                Padding="24,20"
+                Margin="0,0,0,16">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto">
+                <!-- Row 0: File selection summary -->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="{Binding DecryptFilesLabel}"
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="Medium" />
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         Text="{Binding SelectionSummary}"
+                         Watermark="{Binding DecryptSelectFiles}"
+                         IsReadOnly="True"
+                         Margin="16,0" />
+                <StackPanel Grid.Row="0" Grid.Column="2"
+                            Orientation="Horizontal" Spacing="8">
+                    <Button Content="{Binding DecryptBrowse}"
+                            Command="{Binding SelectFilesCommand}"
+                            MinWidth="108" />
+                    <Button Content="{Binding DecryptClear}"
+                            Command="{Binding ClearFilesCommand}"
+                            IsEnabled="{Binding CanClear}"
+                            MinWidth="88" />
+                </StackPanel>
+
+                <!-- Separator -->
+                <Border Grid.Row="1" Grid.ColumnSpan="3"
+                        Height="1"
+                        Background="{DynamicResource SeparatorBrush}"
+                        Opacity="0.5"
+                        Margin="0,16" />
+
+                <!-- Row 2: Parallel Count + Start Button -->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="{Binding DecryptParallel}"
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="Medium" />
+                <NumericUpDown Grid.Row="2" Grid.Column="1"
+                               Value="{Binding ParallelCount}"
+                               Minimum="1"
+                               Maximum="32"
+                               Increment="1"
+                               Width="100"
+                               FormatString="0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="16,0" />
+                <StackPanel Grid.Row="2" Grid.Column="2"
+                            Orientation="Horizontal" Spacing="8">
+                    <Button Command="{Binding StartDecryptCommand}"
+                            IsVisible="{Binding !IsDecrypting}"
+                            IsEnabled="{Binding CanStartDecrypt}"
+                            Classes="accent"
+                            MinWidth="132">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource DownloadIcon}"
+                                      Width="14" Height="14" />
+                            <TextBlock Text="{Binding DecryptStart}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding CancelDecryptCommand}"
+                            Content="{Binding DecryptStop}"
+                            IsVisible="{Binding IsDecrypting}"
+                            MinWidth="108" />
+                </StackPanel>
+
+                <!-- Row 3: Progress -->
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="3"
+                            IsVisible="{Binding IsDecrypting}"
+                            Spacing="8" Margin="0,16,0,0">
+                    <ProgressBar Value="{Binding ProgressPercentage}"
+                                 Maximum="100" Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.7">
+                        <Run Text="{Binding CompletedCount}" />
+                        <Run Text=" / " />
+                        <Run Text="{Binding TotalCount}" />
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Card 2: File List with Empty State -->
+        <Panel Grid.Row="3">
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="8"
+                    BoxShadow="0 2 8 0 #0D000000"
+                    ClipToBounds="True">
+                <DataGrid ItemsSource="{Binding Files}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserResizeColumns="True"
+                          GridLinesVisibility="Horizontal"
+                          BorderThickness="0"
+                          Background="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn x:DataType="vm:DecryptFileViewModel"
+                                                Header="{loc:Localize Column_FileName}"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="vm:DecryptFileViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="6"
+                                                VerticalAlignment="Center">
+                                        <PathIcon Data="{StaticResource AlertIcon}"
+                                                  Width="12" Height="12"
+                                                  Foreground="{DynamicResource ErrorColorBrush}"
+                                                  IsVisible="{Binding IsBlocked}"
+                                                  ToolTip.Tip="{Binding StatusMessage}" />
+                                        <TextBlock Text="{Binding FileName}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn x:DataType="vm:DecryptFileViewModel"
+                                            Header="{loc:Localize Column_OutputPath}"
+                                            Binding="{Binding OutputPath}"
+                                            Width="280" />
+
+                        <DataGridTemplateColumn x:DataType="vm:DecryptFileViewModel"
+                                                Header="{loc:Localize Column_Status}"
+                                                Width="220">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="vm:DecryptFileViewModel">
+                                    <!-- Status stays a short label; the full reason goes to the
+                                         tooltip and to the detail dialog, because the missing
+                                         database message is several hundred characters long. -->
+                                    <StackPanel Orientation="Horizontal" Spacing="6"
+                                                VerticalAlignment="Center"
+                                                ToolTip.Tip="{Binding ErrorDetail}">
+                                        <TextBlock Text="{Binding StatusMessage}"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <Button Content="{Binding ViewDetailLabel}"
+                                                Command="{Binding ShowDetailCommand}"
+                                                IsVisible="{Binding HasErrorDetail}"
+                                                Classes="icon"
+                                                Padding="4,0"
+                                                FontSize="11"
+                                                VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- Empty State Overlay -->
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    CornerRadius="0,0,8,8"
+                    Margin="0,36,0,0"
+                    IsVisible="{Binding HasNoFiles}"
+                    IsHitTestVisible="False">
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Spacing="16">
+                    <Border Background="{DynamicResource ContentAreaBrush}"
+                            CornerRadius="4"
+                            Width="50" Height="40"
+                            HorizontalAlignment="Center">
+                        <PathIcon Data="{StaticResource MusicNoteIcon}"
+                                  Width="24" Height="24"
+                                  Opacity="0.3" />
+                    </Border>
+                    <TextBlock Text="{Binding DecryptEmptyState}"
+                               Opacity="0.4"
+                               FontSize="13"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </Panel>
+
+        <!-- Card 3: Status Bar -->
+        <Border Grid.Row="4"
+                Background="{DynamicResource CardBackgroundBrush}"
+                BoxShadow="0 2 8 0 #0D000000"
+                Padding="24,12"
+                Margin="0,16,0,0"
+                CornerRadius="8">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="{Binding CommonTotal}" FontSize="13" FontWeight="Medium" />
+                    <TextBlock Text="{Binding TotalCount}" FontWeight="Bold" FontSize="13" />
+                    <TextBlock Text="{Binding CommonFiles}" FontSize="13" Opacity="0.7" />
+                </StackPanel>
+
+                <Panel Grid.Column="1" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="0,0,24,0">
+                    <Border Width="4" Height="16" CornerRadius="2"
+                            Background="{DynamicResource SuccessColorBrush}"
+                            VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding CommonSuccess}" FontSize="13" />
+                    <TextBlock Text="{Binding CompletedCount}"
+                               FontWeight="Bold" FontSize="13"
+                               Foreground="{DynamicResource SuccessColorBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6">
+                    <Border Width="4" Height="16" CornerRadius="2"
+                            Background="{DynamicResource ErrorColorBrush}"
+                            VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding CommonFailed}" FontSize="13" />
+                    <TextBlock Text="{Binding FailedCount}"
+                               FontWeight="Bold" FontSize="13"
+                               Foreground="{DynamicResource ErrorColorBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>
