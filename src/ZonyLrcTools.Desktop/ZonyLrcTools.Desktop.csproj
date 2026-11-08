@@ -34,6 +34,39 @@
         <PackageReference Include="QRCoder" />
     </ItemGroup>
 
+    <!--
+        Trimming is ON by default for RID-specific publishes, taking the self-contained win-x64
+        output from ~108 MB to ~51 MB. Pass -p:PublishTrimmed=false to get the untrimmed build.
+
+        Trimming is not free here, which is why ILLink.Descriptors.xml exists. Two things in this
+        app are resolved by reflection and would silently vanish from a naive trim:
+          - the DI container, populated by GetTypes() over ZonyLrcTools.Common, and
+          - Avalonia's automation peers, which is what Windows UI Automation asks for by name.
+        Lose the first and the app starts then throws "No service for type ... has been registered"
+        the moment a page is opened; lose the second and the window renders fine while its UIA tree
+        is empty, taking Narrator and every automation script with it. Both are rooted in that file.
+
+        TrimMode=partial keeps method bodies intact and only drops whole unreferenced assemblies,
+        which is the conservative choice: the size win comes from the framework, not from risking
+        half an assembly that something reflects over.
+
+        The condition also keeps plain `dotnet build` (no RID) unaffected: trimming needs a runtime
+        identifier, so there is nothing to opt into there.
+    -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' != '' AND '$(PublishTrimmed)' == ''">
+        <PublishTrimmed>true</PublishTrimmed>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(PublishTrimmed)' == 'true'">
+        <TrimMode>partial</TrimMode>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PublishTrimmed)' == 'true'">
+        <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\ZonyLrcTools.Common\ZonyLrcTools.Common.csproj" />
     </ItemGroup>
