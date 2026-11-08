@@ -30,6 +30,8 @@
         <PackageReference Include="System.Text.Encoding.CodePages" />
         <!-- Localization -->
         <PackageReference Include="Microsoft.Extensions.Localization" />
+        <!-- QR code rendering for the NetEase QR login dialog -->
+        <PackageReference Include="QRCoder" />
     </ItemGroup>
 
     <ItemGroup>

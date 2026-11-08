@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ZonyLrcTools.Desktop.ViewModels"
+        x:Class="ZonyLrcTools.Desktop.Views.Dialogs.QrCodeLoginDialog"
+        x:DataType="vm:QrCodeLoginViewModel"
+        Width="380"
+        SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+    <StackPanel Margin="24" Spacing="16">
+        <TextBlock Text="{Binding LoginTitle}"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   TextWrapping="Wrap" />
+
+        <TextBlock Text="{Binding LoginTip}"
+                   FontSize="12"
+                   Opacity="0.65"
+                   TextWrapping="Wrap" />
+
+        <!-- QR surface: fixed size so the dialog does not jump when the image arrives. -->
+        <Border Width="240" Height="240"
+                HorizontalAlignment="Center"
+                Background="White"
+                CornerRadius="8"
+                Padding="8">
+            <Panel>
+                <Image Source="{Binding QrCodeImage}"
+                       Stretch="Uniform"
+                       IsVisible="{Binding HasImage}" />
+
+                <TextBlock Text="..."
+                           FontSize="24"
+                           Opacity="0.3"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding !HasImage}" />
+            </Panel>
+        </Border>
+
+        <TextBlock Text="{Binding StatusText}"
+                   FontSize="13"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center" />
+
+        <Button Content="{Binding CancelText}"
+                HorizontalAlignment="Right"
+                MinWidth="88"
+                Click="OnCancelClick" />
+    </StackPanel>
+
+</Window>
