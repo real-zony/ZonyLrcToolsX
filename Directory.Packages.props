@@ -41,6 +41,9 @@
     <!-- Misc -->
     <PackageVersion Include="Ude.NetStandard" Version="1.2.0" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.1" />
+    <!-- 显式提升 SQLitePCLRaw 的原生包：Microsoft.Data.Sqlite 10.0.1 默认带下来的 2.1.11 有已知高危漏洞（GHSA-2m69-gcr7-jv3q）。 -->
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
     <!-- Avalonia -->
     <PackageVersion Include="Avalonia" Version="11.2.3" />
     <PackageVersion Include="Avalonia.Desktop" Version="11.2.3" />
