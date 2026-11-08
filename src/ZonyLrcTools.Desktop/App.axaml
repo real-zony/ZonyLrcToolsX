@@ -6,6 +6,50 @@
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+
+        <!--
+            按钮排版统一：Fluent 默认的 14px/偏大内边距在中文界面里显得松散，而且
+            带图标的按钮和纯文字按钮高度对不齐。这里把字号、内边距、圆角、最小高度
+            统一成一套，让所有页面的按钮共用同一套度量。
+        -->
+        <Style Selector="Button">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="16,6" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <!-- 主操作按钮（开始下载 / 开始解密）：文字稍微加粗，和次要按钮拉开层次 -->
+        <Style Selector="Button.accent">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="18,6" />
+        </Style>
+        <!-- 图标与文字之间统一留白，图标本身垂直居中，避免和文字基线错位 -->
+        <Style Selector="Button.accent PathIcon">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+        </Style>
+
+        <!-- Compact icon-only button used by the reorder arrows in the settings list -->
+        <Style Selector="Button.icon">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SeparatorBrush}" />
+        </Style>
+        <Style Selector="Button.icon:disabled">
+            <Setter Property="Opacity" Value="0.25" />
+        </Style>
     </Application.Styles>
 
     <Application.Resources>
@@ -19,6 +63,13 @@
             <StreamGeometry x:Key="SunIcon">M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12S8.69 18 12 18 18 15.31 18 12 15.31 6 12 6M20 13H23V11H20M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5.41L19.04 4L17.24 5.79L18.66 7.21M13 1H11V4H13M6.76 5.79L4.96 4L3.55 5.41L5.34 7.21L6.76 5.79M1 13H4V11H1M13 20H11V23H13Z</StreamGeometry>
             <StreamGeometry x:Key="DownloadIcon">M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z</StreamGeometry>
             <StreamGeometry x:Key="FolderIcon">M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z</StreamGeometry>
+            <StreamGeometry x:Key="LockIcon">M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z</StreamGeometry>
+            <StreamGeometry x:Key="CheckCircleIcon">M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z</StreamGeometry>
+            <StreamGeometry x:Key="ChevronUpIcon">M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z</StreamGeometry>
+            <StreamGeometry x:Key="ChevronDownIcon">M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z</StreamGeometry>
+            <StreamGeometry x:Key="ChevronRightIcon">M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z</StreamGeometry>
+            <StreamGeometry x:Key="AlertIcon">M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</StreamGeometry>
+            <StreamGeometry x:Key="AccountIcon">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z</StreamGeometry>
 
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
