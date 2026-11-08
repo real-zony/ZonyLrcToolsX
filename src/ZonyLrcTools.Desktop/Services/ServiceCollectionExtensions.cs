@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 using ZonyLrcTools.Common.Infrastructure.Network;
+using ZonyLrcTools.Desktop.Infrastructure.Configuration;
 using ZonyLrcTools.Desktop.Infrastructure.Localization;
 using ZonyLrcTools.Desktop.ViewModels;
 
@@ -20,7 +21,10 @@ public static class ServiceCollectionExtensions
         services.BeginAutoDependencyInject<IWarpHttpClient>();
 
         // Configure Common services
-        services.ConfigureConfiguration();
+        // ConfigureConfiguration() from Common always reads config.yaml from the executable
+        // folder, which breaks portable installs and read-only install locations. The desktop
+        // app resolves a writable location first and binds from there instead.
+        services.ConfigureDesktopConfiguration();
         services.ConfigureLocalization();
         services.ConfigureToolService();
 
@@ -39,11 +43,18 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IThemeService, ThemeService>();
 
+        // Stores the NetEase login cookie between launches so the QR dialog is a first-run event.
+        services.AddSingleton<NetEaseSessionStore>();
+
+        // Remembers a manually chosen KuGou database path (machine state, not a user preference).
+        services.AddSingleton<KugouDatabaseStore>();
+
         // Register ViewModels (Singleton to preserve state across navigation)
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<LyricsDownloadViewModel>();
         services.AddSingleton<AlbumDownloadViewModel>();
+        services.AddSingleton<DecryptViewModel>();
         services.AddSingleton<SettingsViewModel>();
 
         return services;

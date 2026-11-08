@@ -92,8 +92,7 @@
                 <!-- Navigation Menu -->
                 <ListBox Classes="nav-list"
                          SelectedIndex="{Binding SelectedNavigationIndex}"
-                         Margin="0,8,0,0"
-                         SelectionChanged="OnNavigationSelectionChanged">
+                         Margin="0,8,0,0">
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <Border Width="3" CornerRadius="1.5"
@@ -136,6 +135,18 @@
                                     Background="{DynamicResource AppAccentBrush}"
                                     Margin="0,2"
                                     IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                            <PathIcon Data="{StaticResource LockIcon}"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding NavDecrypt}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="3" CornerRadius="1.5"
+                                    Background="{DynamicResource AppAccentBrush}"
+                                    Margin="0,2"
+                                    IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
                             <PathIcon Data="{StaticResource SettingsIcon}"
                                       Width="16" Height="16" />
                             <TextBlock Text="{Binding NavSettings}"
@@ -160,6 +171,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="vm:AlbumDownloadViewModel">
                         <pages:AlbumDownloadPage />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:DecryptViewModel">
+                        <pages:DecryptPage />
                     </DataTemplate>
                     <DataTemplate DataType="vm:SettingsViewModel">
                         <pages:SettingsPage />
