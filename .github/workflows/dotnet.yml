@@ -43,6 +43,49 @@ jobs:
     outputs:
       version: ${{ steps.date.outputs.date }}
 
+  # 桌面端构建（目前只发布 Windows，见 README 的说明）
+  build-desktop:
+    runs-on: windows-latest
+    steps:
+      - name: Get build version
+        id: date
+        run: echo "date=$(Get-Date -Format 'yyyyMMdd')${{github.run_number}}" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish Desktop (win-x64)
+        working-directory: ./src/ZonyLrcTools.Desktop
+        run: |
+          dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:UseAppHost=true -p:DebugType=none --self-contained true
+          New-Item -ItemType Directory -Force -Path ./TempFiles | Out-Null
+          Compress-Archive -Path ./bin/Release/net10.0/win-x64/publish/* -DestinationPath ./TempFiles/ZonyLrcTools.Desktop_win-x64_${{ steps.date.outputs.date }}.zip -Force
+        shell: pwsh
+      # Microsoft.Data.Sqlite 的原生库不会被打进单文件 exe，漏了它 .kgg 解密会在运行时直接失败。
+      # 这里在打包后做一次校验，让 CI 在发布环节而不是在用户机器上暴露问题。
+      - name: Verify Desktop publish output
+        working-directory: ./src/ZonyLrcTools.Desktop
+        run: |
+          $publish = './bin/Release/net10.0/win-x64/publish'
+          $exe = Join-Path $publish 'ZonyLrcTools.Desktop.exe'
+          $sqlite = Join-Path $publish 'e_sqlite3.dll'
+          if (-not (Test-Path $exe)) { throw "缺少主程序: $exe" }
+          if (-not (Test-Path $sqlite)) { throw "缺少 SQLite 原生库: $sqlite（.kgg 解密依赖它）" }
+          if (-not (Test-Path (Join-Path $publish 'config.yaml'))) { throw '缺少 config.yaml 模板' }
+          Write-Host "publish 目录校验通过：$((Get-ChildItem $publish -File).Count) 个文件"
+        shell: pwsh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 90
+          name: release-files-desktop
+          path: ./src/ZonyLrcTools.Desktop/TempFiles
+    outputs:
+      version: ${{ steps.date.outputs.date }}
+
   # macOS 构建（在 macOS runner 上，支持 ad-hoc 签名）
   build-macos:
     runs-on: macos-latest
@@ -84,7 +127,7 @@ jobs:
   # Release Job - 合并所有平台的构建产物
   release:
     if: github.event_name == 'push'
-    needs: [build-linux-windows, build-macos]
+    needs: [build-linux-windows, build-macos, build-desktop]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout for release notes
@@ -98,6 +141,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: release-files-macos
+          path: ./TempFiles
+      - name: Download Desktop artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-files-desktop
           path: ./TempFiles
       - name: Upload Release
         uses: ncipollo/release-action@v1
