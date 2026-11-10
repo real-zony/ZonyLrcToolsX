@@ -1,16 +1,17 @@
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Extensions;
-using ZonyLrcTools.Common.Infrastructure.IO;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 using ZonyLrcTools.Common.Infrastructure.Threading;
 
 namespace ZonyLrcTools.Common.Album;
 
+/// <inheritdoc />
 public class AlbumDownloader : IAlbumDownloader, ISingletonDependency
 {
     private readonly IEnumerable<IAlbumProvider> _albumProviders;
 
+    /// <inheritdoc />
     public IEnumerable<IAlbumProvider> AvailableProviders => new Lazy<IEnumerable<IAlbumProvider>>(() =>
     {
         return _albumProviders.Where(d => d.DownloaderName == InternalAlbumProviderNames.NetEase);
@@ -18,6 +19,9 @@ public class AlbumDownloader : IAlbumDownloader, ISingletonDependency
 
     private readonly IWarpLogger _logger;
 
+    /// <summary>
+    /// 创建专辑封面下载器。
+    /// </summary>
     public AlbumDownloader(IEnumerable<IAlbumProvider> albumProviders,
         IWarpLogger logger)
     {
@@ -25,38 +29,19 @@ public class AlbumDownloader : IAlbumDownloader, ISingletonDependency
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task DownloadAsync(List<MusicInfo> needDownloadMusicInfos,
         int parallelCount = 2,
         Func<MusicInfo, Task>? callback = null,
         CancellationToken cancellationToken = default)
     {
-        await _logger.InfoAsync("开始下载专辑图像数据...");
-
-        var provider = AvailableProviders.FirstOrDefault(d => d.DownloaderName == InternalAlbumProviderNames.NetEase);
-        if (provider == null)
+        foreach (var info in needDownloadMusicInfos)
         {
-            // 没有任何可用的专辑图像源，全部标记为失败并回调，避免调用方一直等待。
-            foreach (var info in needDownloadMusicInfos)
-            {
-                info.IsSuccessful = false;
-
-                if (callback == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    await callback(info);
-                }
-                catch (Exception ex)
-                {
-                    await _logger.WarnAsync($"处理专辑下载回调时发生错误：{ex.Message}，歌曲名: {info.Name}。");
-                }
-            }
-
-            return;
+            info.IsSuccessful = false;
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        var provider = AvailableProviders.FirstOrDefault(d => d.DownloaderName == InternalAlbumProviderNames.NetEase);
 
         if (parallelCount <= 0)
         {
@@ -72,59 +57,81 @@ public class AlbumDownloader : IAlbumDownloader, ISingletonDependency
                     {
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        var album = await provider.DownloadAsync(info.Name, info.Artist);
-                        var filePath = Path.Combine(Path.GetDirectoryName(info.FilePath)!,
-                            $"{Path.GetFileNameWithoutExtension(info.FilePath)}.png");
-
-                        if (album.Length <= 0)
-                        {
-                            info.IsSuccessful = false;
-                            return;
-                        }
-
-                        // 已存在同名图像视为成功，不重复覆盖用户已有的封面。
+                        var filePath = Path.ChangeExtension(info.FilePath, ".png");
                         if (File.Exists(filePath))
                         {
                             info.IsSuccessful = true;
                             return;
                         }
 
-                        await new FileStream(filePath, FileMode.Create).WriteBytesToFileAsync(album);
+                        if (provider == null)
+                        {
+                            return;
+                        }
+
+                        var album = await provider.DownloadAsync(info.Name, info.Artist);
+                        cancellationToken.ThrowIfCancellationRequested();
+                        if (album.Length == 0)
+                        {
+                            return;
+                        }
+
+                        var temporaryPath = $"{filePath}.{Guid.NewGuid():N}.tmp";
+                        try
+                        {
+                            await File.WriteAllBytesAsync(temporaryPath, album, cancellationToken);
+                            cancellationToken.ThrowIfCancellationRequested();
+                            // 完整写入后再发布，且不覆盖其他任务或用户刚创建的封面。
+                            try
+                            {
+                                File.Move(temporaryPath, filePath);
+                            }
+                            catch (IOException) when (File.Exists(filePath))
+                            {
+                                // 目标已由其他任务生成，保留已有封面。
+                            }
+                        }
+                        finally
+                        {
+                            File.Delete(temporaryPath);
+                        }
+
                         info.IsSuccessful = true;
-                        _logger.LogSuccessful(info);
+                    }
+                    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                    {
+                        throw;
                     }
                     catch (ErrorCodeException ex)
                     {
-                        info.IsSuccessful = false;
                         _logger.LogWarningInfo(ex);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        info.IsSuccessful = false;
                     }
                     catch (Exception ex)
                     {
-                        info.IsSuccessful = false;
-                        await _logger.ErrorAsync($"下载专辑图像时发生错误：{ex.Message}，歌曲名: {info.Name}，歌手: {info.Artist}。");
+                        await _logger.ErrorAsync("下载专辑图像失败。", ex);
                     }
                     finally
                     {
-                        // 回调是调用方（GUI）提供的 UI 代码，它抛异常不应该拖垮整批下载。
                         if (callback != null)
                         {
                             try
                             {
                                 await callback(info);
                             }
+                            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                            {
+                                throw;
+                            }
                             catch (Exception ex)
                             {
-                                await _logger.WarnAsync($"处理专辑下载回调时发生错误：{ex.Message}，歌曲名: {info.Name}。");
+                                await _logger.WarnAsync("处理专辑下载回调失败。", ex);
                             }
                         }
                     }
                 }, cancellationToken), cancellationToken));
 
         await Task.WhenAll(warpTaskList);
+        cancellationToken.ThrowIfCancellationRequested();
 
         await _logger.InfoAsync($"专辑数据下载完成，成功: {needDownloadMusicInfos.Count(m => m.IsSuccessful)} 失败{needDownloadMusicInfos.Count(m => m.IsSuccessful == false)}。");
     }

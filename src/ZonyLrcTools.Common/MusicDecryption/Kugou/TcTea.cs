@@ -68,8 +68,8 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                 return [];
             }
 
-            ulong iv1 = 0;
-            ulong iv2 = 0;
+            var iv1 = 0UL;
+            var iv2 = 0UL;
             var inOffset = 0;
             var header = new byte[HeaderSize];
 

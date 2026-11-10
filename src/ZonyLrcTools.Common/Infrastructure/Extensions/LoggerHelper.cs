@@ -1,6 +1,4 @@
-using System.Text;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 
@@ -19,26 +17,19 @@ namespace ZonyLrcTools.Common.Infrastructure.Extensions
         /// <param name="e">异常实例，可为空。</param>
         public static void LogWarningWithErrorCode(this IWarpLogger logger, int errorCode, Exception? e = null)
         {
-            logger.WarnAsync($"错误代码: {errorCode}\n堆栈异常: {e?.StackTrace}").GetAwaiter().GetResult();
+            logger.WarnAsync($"错误代码: {errorCode}", e).GetAwaiter().GetResult();
         }
 
         /// <summary>
-        /// 使用 <see cref="LogLevel.Warning"/> 级别打印错误日志，并记录异常堆栈。
-        /// <remarks>
-        /// 这个方法只负责记录，<b>不会抛出异常</b>。调用点全部位于 catch 块内，
-        /// 若在此处重新抛出，异常会穿透调用方的 catch 并终止整批任务
-        /// （例如一首歌的编码配置有误会导致整批歌词下载中断）。
-        /// 需要向上传播错误时，请由调用方显式决定，而不是让日志方法代劳。
-        /// </remarks>
+        /// 记录错误码与异常，不重新抛出业务异常。
         /// </summary>
         /// <param name="logger">日志记录器的实例。</param>
         /// <param name="exception">错误码异常实例。</param>
         public static void LogWarningInfo(this IWarpLogger logger, ErrorCodeException exception)
         {
-            var sb = new StringBuilder();
-            sb.Append($"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}");
-            sb.Append($"\n附加信息:\n {JsonConvert.SerializeObject(exception.AttachObject)}");
-            logger.WarnAsync(sb.ToString()).GetAwaiter().GetResult();
+            logger.WarnAsync(
+                $"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}",
+                exception).GetAwaiter().GetResult();
         }
 
         /// <summary>

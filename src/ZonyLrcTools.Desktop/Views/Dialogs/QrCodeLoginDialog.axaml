@@ -20,7 +20,7 @@
                    Opacity="0.65"
                    TextWrapping="Wrap" />
 
-        <!-- QR surface: fixed size so the dialog does not jump when the image arrives. -->
+        <!-- 固定二维码区域尺寸，避免加载时窗口跳动。 -->
         <Border Width="240" Height="240"
                 HorizontalAlignment="Center"
                 Background="White"

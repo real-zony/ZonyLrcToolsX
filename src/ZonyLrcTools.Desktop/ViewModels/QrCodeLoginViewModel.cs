@@ -7,16 +7,12 @@ using ZonyLrcTools.Desktop.Infrastructure.Localization;
 namespace ZonyLrcTools.Desktop.ViewModels;
 
 /// <summary>
-/// Drives the NetEase QR-code login dialog.
+/// 网易云扫码登录对话框。
 /// </summary>
-/// <remarks>
-/// Two events cross the dialog boundary in opposite directions: <see cref="CloseRequested"/>
-/// lets the login flow close the window once it is done, and <see cref="Cancelled"/> fires when
-/// the user closed the window first, so the caller can stop polling instead of waiting forever.
-/// </remarks>
 public partial class QrCodeLoginViewModel : ObservableObject
 {
     private readonly IUILocalizationService? _localization;
+    private bool _isClosed;
 
     [ObservableProperty]
     private Bitmap? _qrCodeImage;
@@ -28,24 +24,30 @@ public partial class QrCodeLoginViewModel : ObservableObject
     private bool _hasImage;
 
     /// <summary>
-    /// Raised when the login flow wants the dialog closed.
+    /// 请求关闭登录对话框。
     /// </summary>
     public event EventHandler? CloseRequested;
 
     /// <summary>
-    /// Raised when the user closed the dialog before logging in.
+    /// 登录完成前关闭对话框时触发。
     /// </summary>
     public event EventHandler? Cancelled;
 
     /// <summary>
-    /// True once the login succeeded; the dialog stays closable but no longer counts as a cancel.
+    /// 是否已登录成功。
     /// </summary>
     public bool IsCompleted { get; private set; }
 
+    /// <summary>登录窗口标题。</summary>
     public string LoginTitle => _localization?["NetEase_LoginTitle"] ?? "Sign in to NetEase Cloud Music";
+    /// <summary>扫码登录提示。</summary>
     public string LoginTip => _localization?["NetEase_LoginTip"] ?? "Scan the QR code with the NetEase Cloud Music app on your phone.";
+    /// <summary>取消按钮文案。</summary>
     public string CancelText => _localization?["Common_Cancel"] ?? "Cancel";
 
+    /// <summary>
+    /// 创建扫码登录对话框状态。
+    /// </summary>
     public QrCodeLoginViewModel(IUILocalizationService? localization = null)
     {
         _localization = localization;
@@ -57,47 +59,60 @@ public partial class QrCodeLoginViewModel : ObservableObject
     private string SuccessText => _localization?["NetEase_LoginSucceeded"] ?? "Signed in.";
 
     /// <summary>
-    /// Render the QR payload the scanner produced.
+    /// 显示扫描器提供的二维码。
     /// </summary>
     public void SetPayload(NetEaseQrCodePayload payload)
     {
+        if (_isClosed) return;
+
+        var previousImage = QrCodeImage;
         QrCodeImage = RenderQrCode(payload.Content);
         HasImage = QrCodeImage != null;
-        StatusText = WaitText;
+        previousImage?.Dispose();
+        StatusText = HasImage
+            ? WaitText
+            : _localization?["NetEase_LoginFailed"] ?? "Login did not complete. Close this dialog and try again.";
     }
 
     /// <summary>
-    /// Reflect a login-state change reported by the scanner.
+    /// 更新扫码登录状态。
     /// </summary>
     public void SetState(NetEaseLoginState state)
     {
+        if (_isClosed) return;
+
         StatusText = state switch
         {
             NetEaseLoginState.ScanConfirmed => ScannedText,
             NetEaseLoginState.Succeeded => SuccessText,
+            NetEaseLoginState.Expired => _localization?["NetEase_LoginExpired"] ?? "The QR code expired. Close this dialog and try again.",
             _ => WaitText
         };
     }
 
     /// <summary>
-    /// Push an error message into the dialog.
+    /// 显示登录错误。
     /// </summary>
     public void SetError(string message)
     {
+        if (_isClosed) return;
+
         StatusText = message;
     }
 
     /// <summary>
-    /// Mark the flow as finished and close the dialog.
+    /// 标记登录完成并关闭对话框。
     /// </summary>
     public void Complete()
     {
+        if (_isClosed) return;
+
         IsCompleted = true;
         RequestClose();
     }
 
     /// <summary>
-    /// Ask the dialog to close.
+    /// 请求关闭对话框。
     /// </summary>
     public void RequestClose()
     {
@@ -105,10 +120,18 @@ public partial class QrCodeLoginViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Called by the dialog when its window closed, for whatever reason.
+    /// 窗口关闭后停止登录并释放二维码。
     /// </summary>
     public void NotifyClosed()
     {
+        if (_isClosed) return;
+
+        _isClosed = true;
+        var image = QrCodeImage;
+        QrCodeImage = null;
+        HasImage = false;
+        image?.Dispose();
+
         if (!IsCompleted)
         {
             Cancelled?.Invoke(this, EventArgs.Empty);
@@ -121,13 +144,13 @@ public partial class QrCodeLoginViewModel : ObservableObject
         {
             using var generator = new QRCodeGenerator();
             using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.M);
-            var pngBytes = new PngByteQRCode(data).GetGraphic(12);
-
-            return new Bitmap(new MemoryStream(pngBytes));
+            using var qrCode = new PngByteQRCode(data);
+            using var stream = new MemoryStream(qrCode.GetGraphic(12));
+            return new Bitmap(stream);
         }
         catch (Exception)
         {
-            // A render failure shows up as the placeholder, not as a crash.
+            // 二维码无法生成时，由界面显示登录失败提示。
             return null;
         }
     }

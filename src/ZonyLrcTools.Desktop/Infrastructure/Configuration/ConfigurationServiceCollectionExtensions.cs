@@ -5,13 +5,10 @@ using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
+/// <summary>桌面配置服务注册。</summary>
 public static class ConfigurationServiceCollectionExtensions
 {
-    /// <summary>
-    /// Bind <see cref="GlobalOptions"/> from the writable settings file resolved by
-    /// <see cref="AppPaths"/>, instead of the read-only folder next to the executable that
-    /// <see cref="ServiceCollectionExtensions.ConfigureConfiguration"/> uses.
-    /// </summary>
+    /// <summary>从可写配置目录加载配置并注册设置存储。</summary>
     public static IServiceCollection ConfigureDesktopConfiguration(this IServiceCollection services)
     {
         AppPaths.EnsureConfigFile();

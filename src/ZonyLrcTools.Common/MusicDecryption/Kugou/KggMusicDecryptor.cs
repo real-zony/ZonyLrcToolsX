@@ -29,16 +29,17 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         private static byte[] Magic => KugouEkeyDatabase.KggMagic;
 
         /// <summary>
-        /// 判断文件是否真的是 .kgg 格式（按魔数而非扩展名）。
+        /// 按魔数和加密版本判断是否为 KGG，避免误判共用魔数的旧版 KGM。
         /// </summary>
         public static bool IsKggFile(string filePath)
         {
             try
             {
                 using var stream = File.OpenRead(filePath);
-                Span<byte> buffer = stackalloc byte[16];
-                return stream.ReadAtLeast(buffer, 16, throwOnEndOfStream: false) == 16
-                       && buffer.SequenceEqual(Magic);
+                Span<byte> buffer = stackalloc byte[0x18];
+                return stream.ReadAtLeast(buffer, buffer.Length, throwOnEndOfStream: false) == buffer.Length
+                       && buffer[..Magic.Length].SequenceEqual(Magic)
+                       && BinaryPrimitives.ReadUInt32LittleEndian(buffer[0x14..]) == ExpectedEncodingVersion;
             }
             catch
             {
@@ -55,8 +56,9 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         /// <returns>解密结果；失败时带有可读的错误说明。</returns>
         public static async Task<DecryptionResult> ConvertAsync(string filePath,
             IKugouKeyProvider? keyProvider,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (!File.Exists(filePath))
             {
                 return DecryptionResult.Failed($"文件不存在: {filePath}");
@@ -77,6 +79,11 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             }
 
             var offsetToAudio = BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(0x10));
+            if (offsetToAudio < HeaderSize || offsetToAudio > input.Length - 4)
+            {
+                return DecryptionResult.Failed("kgg 音频偏移超出有效范围。");
+            }
+
             var encodingVersion = BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(0x14));
             if (encodingVersion != ExpectedEncodingVersion)
             {
@@ -93,10 +100,11 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 
             if (!HasDatabase(keyProvider))
             {
-                return DecryptionResult.Failed(KugouEkeyDatabase.BuildMissingDatabaseMessage());
+                return DecryptionResult.Failed(keyProvider?.Probe().Message ?? KugouEkeyDatabase.BuildMissingDatabaseMessage());
             }
 
             var ekey = ResolveEkey(keyProvider, audioHash);
+            cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrEmpty(ekey))
             {
                 return DecryptionResult.Failed(
@@ -129,6 +137,11 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 
             cipher.Decrypt(magic, 0);
             var extension = DetectExtension(magic);
+            if (extension == null)
+            {
+                return DecryptionResult.Failed("解密后的音频格式无法识别，文件或密钥可能已损坏。");
+            }
+
             input.Seek(offsetToAudio, SeekOrigin.Begin);
 
             var outputPath = Path.Combine(
@@ -138,25 +151,30 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             // 期望的输出字节数，用于校验写盘是否完整。
             var expectedLength = input.Length - offsetToAudio;
 
-            // 目标已存在且大小正确就不再覆盖，避免重复解密白费时间。
-            // 只要大小对不上（例如上次被中途取消留下的半截文件），就重新解密覆盖。
-            if (File.Exists(outputPath) && new FileInfo(outputPath).Length == expectedLength)
+            if (File.Exists(outputPath))
             {
-                return DecryptionResult.Success(outputPath);
+                return DecryptionResult.Failed($"输出文件已存在，未覆盖：{outputPath}");
             }
 
-            // 先写临时文件，成功后再改名。中途取消或被强杀都不会污染正式输出文件名。
-            var tempPath = outputPath + ".part";
+            // 每次转换独占临时文件，仅在完整写入后发布，且不覆盖已有输出。
+            var tempPath = outputPath + $".{Guid.NewGuid():N}.part";
+            var ownsTempFile = false;
             try
             {
-                await using (var output = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None,
+                await using (var output = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None,
                                  BufferSize, true))
                 {
+                    ownsTempFile = true;
                     var buffer = new byte[BufferSize];
-                    long offset = 0;
-                    int read;
-                    while ((read = await input.ReadAsync(buffer, cancellationToken)) > 0)
+                    var offset = 0L;
+                    while (true)
                     {
+                        var read = await input.ReadAsync(buffer, cancellationToken);
+                        if (read == 0)
+                        {
+                            break;
+                        }
+
                         cipher.Decrypt(buffer.AsSpan(0, read), offset);
                         await output.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
                         offset += read;
@@ -170,12 +188,15 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                     }
                 }
 
-                File.Move(tempPath, outputPath, overwrite: true);
+                cancellationToken.ThrowIfCancellationRequested();
+                File.Move(tempPath, outputPath);
             }
-            catch
+            finally
             {
-                TryDelete(tempPath);
-                throw;
+                if (ownsTempFile)
+                {
+                    TryDelete(tempPath);
+                }
             }
 
             return DecryptionResult.Success(outputPath);
@@ -192,13 +213,13 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             }
             catch
             {
-                // 清理失败不影响主流程，下次解密会覆盖这个临时文件。
+                // 保留原始转换结果或异常。
             }
         }
 
         private static bool HasDatabase(IKugouKeyProvider? keyProvider)
         {
-            return keyProvider?.DatabasePath != null || KugouEkeyDatabase.FindDatabasePath() != null;
+            return keyProvider != null ? keyProvider.DatabasePath != null : KugouEkeyDatabase.FindDatabasePath() != null;
         }
 
         /// <summary>
@@ -221,7 +242,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             return keys.TryGetValue(audioHash, out var ekey) ? ekey : null;
         }
 
-        private static string DetectExtension(ReadOnlySpan<byte> magic)
+        private static string? DetectExtension(ReadOnlySpan<byte> magic)
         {
             if (magic.SequenceEqual("fLaC"u8))
             {
@@ -233,7 +254,10 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                 return "ogg";
             }
 
-            return "mp3";
+            return magic[..3].SequenceEqual("ID3"u8)
+                   || (magic[0] == 0xFF && (magic[1] & 0xE0) == 0xE0 && (magic[1] & 0x06) != 0)
+                ? "mp3"
+                : null;
         }
     }
 }

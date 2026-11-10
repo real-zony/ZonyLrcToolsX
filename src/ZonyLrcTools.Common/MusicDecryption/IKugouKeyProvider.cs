@@ -46,7 +46,7 @@ namespace ZonyLrcTools.Common.MusicDecryption
         void Invalidate();
 
         /// <summary>
-        /// 判断文件是否是 .kgg（按魔数，不看扩展名）。
+        /// 按魔数和加密版本判断文件是否为 KGG，不看扩展名。
         /// </summary>
         bool IsKggFile(string filePath);
 

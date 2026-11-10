@@ -51,6 +51,8 @@
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.2.3" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.2.3" />
     <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.2.3" />
+    <!-- Avalonia 的 Linux D-Bus 依赖：使用包含安全修复的兼容分支。 -->
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.3" />
     <!-- MVVM -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <!-- Localization -->

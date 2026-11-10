@@ -4,15 +4,24 @@ using ZonyLrcTools.Desktop.ViewModels;
 
 namespace ZonyLrcTools.Desktop.Views.Dialogs;
 
+/// <summary>
+/// 网易云扫码登录窗口。
+/// </summary>
 public partial class QrCodeLoginDialog : Window
 {
     private QrCodeLoginViewModel? _viewModel;
 
+    /// <summary>
+    /// 初始化登录窗口。
+    /// </summary>
     public QrCodeLoginDialog()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 使用指定登录状态创建窗口。
+    /// </summary>
     public QrCodeLoginDialog(QrCodeLoginViewModel viewModel) : this()
     {
         _viewModel = viewModel;

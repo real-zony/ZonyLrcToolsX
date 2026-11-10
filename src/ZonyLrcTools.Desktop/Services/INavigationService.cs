@@ -8,13 +8,12 @@ public interface INavigationService
     event EventHandler<ViewModelBase>? NavigationChanged;
 
     /// <summary>
-    /// Push a page onto the navigation stack. Use for drill-down (detail pages, wizards).
+    /// 打开页面并保留返回记录。
     /// </summary>
     TViewModel NavigateTo<TViewModel>() where TViewModel : ViewModelBase;
 
     /// <summary>
-    /// Replace the whole stack with a single page. This is what the sidebar uses: switching
-    /// sections is not a back-navigable action, so the stack must not grow on every click.
+    /// 切换顶层页面并清空返回记录。
     /// </summary>
     TViewModel NavigateRoot<TViewModel>() where TViewModel : ViewModelBase;
 

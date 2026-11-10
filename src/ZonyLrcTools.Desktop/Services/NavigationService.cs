@@ -24,7 +24,7 @@ public class NavigationService : INavigationService
 
         if (_navigationStack.TryPeek(out var current) && ReferenceEquals(current, viewModel))
         {
-            // Already showing this page; do not restart it.
+            // 当前页面无需重复激活。
             return viewModel;
         }
 
@@ -40,6 +40,7 @@ public class NavigationService : INavigationService
         return viewModel;
     }
 
+    /// <inheritdoc />
     public TViewModel NavigateRoot<TViewModel>() where TViewModel : ViewModelBase
     {
         var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
@@ -79,8 +80,7 @@ public class NavigationService : INavigationService
     }
 
     /// <summary>
-    /// Page lifecycle hooks are fire-and-forget from the caller's perspective; an exception thrown
-    /// inside one must not tear down the navigation call that triggered it.
+    /// 页面激活失败时不打断导航。
     /// </summary>
     private static async Task SafeActivateAsync(ViewModelBase viewModel)
     {
@@ -90,7 +90,7 @@ public class NavigationService : INavigationService
         }
         catch (Exception)
         {
-            // A failing OnActivated must not crash navigation.
+            // 页面自行处理错误，避免中断导航。
         }
     }
 
@@ -102,7 +102,7 @@ public class NavigationService : INavigationService
         }
         catch (Exception)
         {
-            // A failing OnDeactivated must not crash navigation.
+            // 页面自行处理错误，避免中断导航。
         }
     }
 }

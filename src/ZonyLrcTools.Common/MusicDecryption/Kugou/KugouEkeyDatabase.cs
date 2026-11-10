@@ -4,6 +4,7 @@
 // The original licence text is reproduced in THIRD-PARTY-NOTICES.md at the repository root.
 
 using System.Buffers.Binary;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Data.Sqlite;
@@ -13,7 +14,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
     /// <summary>
     /// 酷狗客户端本地数据库（KGMusicV3.db）的读取器。
     /// <remarks>
-    /// 数据库按 4KB 分页做了 AES-128-CBC 加密，每页的密钥与 IV 由主密钥 + 页号派生。
+    /// 数据库按 1KB 分页做了 AES-128-CBC 加密，每页的密钥与 IV 由主密钥和页号派生。
     /// 解密后可以读到 <c>ShareFileItems</c> 表里的 ekey，那是 .kgg 文件真正用的解密密钥。
     /// </remarks>
     /// </summary>
@@ -106,20 +107,18 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                 return result;
             }
 
-            // 解密后的内容写到临时文件，交给 SQLite 自己解析，避免手写记录格式。
-            // 这里放的是明文密钥库，所以用一个专用目录并在每次进入时清理上次留下的残留：
-            // 进程被强杀时 finally 不会执行，但下一次读取会把上一轮的明文文件删掉。
-            var tempDirectory = Path.Combine(Path.GetTempPath(), TemporaryDirectoryName);
-            var tempPath = Path.Combine(tempDirectory, $"{Guid.NewGuid():N}.db");
+            // 直接从内存解析，避免明文密钥落盘和并发清理临时文件的竞争。
+            var pinned = GCHandle.Alloc(plain, GCHandleType.Pinned);
             try
             {
-                Directory.CreateDirectory(tempDirectory);
-                SweepStaleTempFiles(tempDirectory);
-
-                WriteFileWithFlush(tempPath, plain);
-
-                using var connection = new SqliteConnection($"Data Source={tempPath};Mode=ReadOnly");
+                using var connection = new SqliteConnection("Data Source=:memory:;Pooling=False");
                 connection.Open();
+                var error = SQLitePCL.raw.sqlite3_deserialize(connection.Handle, "main",
+                    pinned.AddrOfPinnedObject(), plain.Length, plain.Length, SQLitePCL.raw.SQLITE_DESERIALIZE_READONLY);
+                if (error != SQLitePCL.raw.SQLITE_OK)
+                {
+                    throw new SqliteException("无法读取解密后的酷狗数据库。", error);
+                }
 
                 using var command = connection.CreateCommand();
                 command.CommandText = "select EncryptionKeyId, EncryptionKey from ShareFileItems where EncryptionKey != ''";
@@ -146,52 +145,10 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             }
             finally
             {
-                TryDeleteFile(tempPath);
+                pinned.Free();
             }
 
             return result;
-        }
-
-        private const string TemporaryDirectoryName = "zony-kgm-temp";
-
-        private static void WriteFileWithFlush(string path, byte[] content)
-        {
-            using var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read);
-            stream.Write(content, 0, content.Length);
-            stream.Flush(true);
-        }
-
-        /// <summary>
-        /// 清掉上一次运行留下的明文临时库（正常退出时 finally 已经删过，这里只兜异常退出的底）。
-        /// </summary>
-        private static void SweepStaleTempFiles(string directory)
-        {
-            try
-            {
-                foreach (var file in Directory.EnumerateFiles(directory, "*.db"))
-                {
-                    TryDeleteFile(file);
-                }
-            }
-            catch
-            {
-                // 目录枚举失败不影响本次读取。
-            }
-        }
-
-        private static void TryDeleteFile(string path)
-        {
-            try
-            {
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
-            }
-            catch
-            {
-                // 删不掉不影响结果，下次进入时还会再清一次。
-            }
         }
 
         /// <summary>
@@ -201,12 +158,13 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         {
             using var source = new FileStream(databasePath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-            var length = (int)source.Length;
-            if (length == 0 || length % PageSize != 0)
+            var sourceLength = source.Length;
+            if (sourceLength == 0 || sourceLength > Array.MaxLength || sourceLength % PageSize != 0)
             {
                 return [];
             }
 
+            var length = (int)sourceLength;
             var pageCount = length / PageSize;
             var plain = new byte[length];
             var headerBuffer = new byte[8];

@@ -61,15 +61,9 @@ jobs:
         working-directory: ./src/ZonyLrcTools.Desktop
         run: |
           dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true -p:UseAppHost=true -p:DebugType=none --self-contained true
-          New-Item -ItemType Directory -Force -Path ./TempFiles | Out-Null
-          Compress-Archive -Path ./bin/Release/net10.0/win-x64/publish/* -DestinationPath ./TempFiles/ZonyLrcTools.Desktop_win-x64_${{ steps.date.outputs.date }}.zip -Force
+          if ($LASTEXITCODE -ne 0) { throw '桌面端发布失败' }
         shell: pwsh
-      # Microsoft.Data.Sqlite 的原生库不会被打进单文件 exe，漏了它 .kgg 解密会在运行时直接失败。
-      # 这里在打包后做一次校验，让 CI 在发布环节而不是在用户机器上暴露问题。
-      #
-      # 顺带盯着裁剪有没有真的生效：项目默认开了 PublishTrimmed，但裁剪可以被环境变量、
-      # 命令行参数或者一次 csproj 手滑静默关掉，而关掉之后唯一的症状就是包变大 55 MB。
-      # 用一个宽阈值（90 MB）而不是精确值，是因为框架版本升级会让体积小幅波动。
+      # 单文件发布仍需附带 SQLite 原生库、配置模板及第三方许可声明。
       - name: Verify Desktop publish output
         working-directory: ./src/ZonyLrcTools.Desktop
         run: |
@@ -79,12 +73,19 @@ jobs:
           if (-not (Test-Path $exe)) { throw "缺少主程序: $exe" }
           if (-not (Test-Path $sqlite)) { throw "缺少 SQLite 原生库: $sqlite（.kgg 解密依赖它）" }
           if (-not (Test-Path (Join-Path $publish 'config.yaml'))) { throw '缺少 config.yaml 模板' }
+          if (-not (Test-Path (Join-Path $publish 'THIRD-PARTY-NOTICES.md'))) { throw '缺少第三方许可声明' }
 
           $totalMb = [math]::Round(((Get-ChildItem $publish -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB), 1)
           Write-Host "publish 目录校验通过：$((Get-ChildItem $publish -File).Count) 个文件，共 $totalMb MB"
           if ($totalMb -gt 90) {
             throw "publish 目录有 $totalMb MB，超过 90 MB 上限；这通常意味着 PublishTrimmed 被关掉了"
           }
+        shell: pwsh
+      - name: Package Desktop
+        working-directory: ./src/ZonyLrcTools.Desktop
+        run: |
+          New-Item -ItemType Directory -Force -Path ./TempFiles | Out-Null
+          Compress-Archive -Path ./bin/Release/net10.0/win-x64/publish/* -DestinationPath ./TempFiles/ZonyLrcTools.Desktop_win-x64_${{ steps.date.outputs.date }}.zip -Force
         shell: pwsh
       - name: Upload artifact
         uses: actions/upload-artifact@v4

@@ -7,11 +7,7 @@
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 
-        <!--
-            按钮排版统一：Fluent 默认的 14px/偏大内边距在中文界面里显得松散，而且
-            带图标的按钮和纯文字按钮高度对不齐。这里把字号、内边距、圆角、最小高度
-            统一成一套，让所有页面的按钮共用同一套度量。
-        -->
+        <!-- 统一按钮尺寸与文字对齐方式。 -->
         <Style Selector="Button">
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Padding" Value="16,6" />
@@ -33,7 +29,7 @@
             <Setter Property="Height" Value="14" />
         </Style>
 
-        <!-- Compact icon-only button used by the reorder arrows in the settings list -->
+        <!-- 设置列表中的紧凑图标按钮。 -->
         <Style Selector="Button.icon">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />

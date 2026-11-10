@@ -2,38 +2,28 @@ using ZonyLrcTools.Common.Configuration;
 
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
-/// <summary>
-/// Result of a settings persist operation.
-/// </summary>
-/// <param name="IsSuccess">Whether the settings were written to disk.</param>
-/// <param name="FilePath">The file that was written, when the write succeeded.</param>
-/// <param name="ErrorMessage">Human readable reason when the write failed.</param>
+/// <summary>设置保存结果。</summary>
+/// <param name="IsSuccess">是否保存成功。</param>
+/// <param name="FilePath">保存成功的文件路径。</param>
+/// <param name="ErrorMessage">保存失败的原因。</param>
 public readonly record struct SettingsSaveResult(bool IsSuccess, string? FilePath, string? ErrorMessage)
 {
+    /// <summary>创建保存成功的结果。</summary>
     public static SettingsSaveResult Success(string filePath) => new(true, filePath, null);
 
+    /// <summary>创建保存失败的结果。</summary>
     public static SettingsSaveResult Failure(string errorMessage) => new(false, null, errorMessage);
 }
 
-/// <summary>
-/// Single owner of the settings file: reads the bound <see cref="GlobalOptions"/> and writes it back
-/// to <see cref="AppPaths.ConfigFilePath"/>.
-/// </summary>
+/// <summary>统一管理共享配置及其持久化。</summary>
 public interface ISettingsStore
 {
-    /// <summary>
-    /// The live options instance shared by the whole application. Mutating it takes effect
-    /// immediately for components that read it per operation.
-    /// </summary>
+    /// <summary>应用共享配置，修改后对按操作读取配置的组件立即生效。</summary>
     GlobalOptions Options { get; }
 
-    /// <summary>
-    /// Absolute path of the settings file currently in use.
-    /// </summary>
+    /// <summary>当前配置文件的完整路径。</summary>
     string ConfigFilePath { get; }
 
-    /// <summary>
-    /// Serialize <see cref="Options"/> to YAML and replace the settings file atomically.
-    /// </summary>
+    /// <summary>保存界面管理的配置值，不覆盖无法安全修改的文件。</summary>
     Task<SettingsSaveResult> SaveAsync(CancellationToken cancellationToken = default);
 }

@@ -1,58 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Root descriptor for the trimmer, used only when PublishTrimmed is on.
-  Everything listed here is code the trimmer cannot see being used, because it is
-  reached through reflection at runtime rather than through a static call.
-
-  See the comments in ZonyLrcTools.Desktop.csproj for why each assembly is here.
--->
+<!-- 裁剪时保留通过反射、序列化及系统无障碍接口访问的程序集。 -->
 <linker>
-  <!--
-    AutoDependencyInjectExtensions scans this assembly with Assembly.GetTypes() and registers
-    whatever implements ITransientDependency / ISingletonDependency. The trimmer cannot prove
-    those 20+ types are ever instantiated, so without this root a trimmed build starts fine and
-    then throws "No service for type ... has been registered" the moment a page asks for one.
-  -->
+  <!-- 自动注入依赖扫描程序集中的服务类型。 -->
   <assembly fullname="ZonyLrcTools.Common" preserve="all" />
 
-  <!--
-    Same reason, plus System.Text.Json deserialisation of NetEaseSession / KugouDatabaseSetting
-    in NetEaseSessionStore and KugouDatabaseStore: the trimmer would drop the setters it cannot
-    see being called.
-  -->
+  <!-- 保留桌面服务及界面绑定使用的类型。 -->
   <assembly fullname="ZonyLrcTools.Desktop" preserve="all" />
 
-  <!--
-    Avalonia resolves automation peers by name when Windows UI Automation asks for a node.
-    Trimming removes those peer types because nothing statically references them, and the visible
-    symptom is a running window whose UIA tree is empty — screen readers, Narrator and every
-    UI-automation script see a blank shell. Preserving the peer namespace keeps accessibility and
-    testability intact.
-  -->
+  <!-- Avalonia 的无障碍节点通过运行时查找创建。 -->
   <assembly fullname="Avalonia.Controls" preserve="all" />
   <assembly fullname="Avalonia.Controls.DataGrid" preserve="all" />
-  <!--
-    The UIA provider that Windows talks to lives in the Win32 backend, and it is reached through
-    COM activation rather than through a static reference, so it needs the same treatment as the
-    peers above. Without this the window still renders but Windows UI Automation enumerates zero
-    children, which silently breaks Narrator and every automation script.
-  -->
+  <!-- Windows 无障碍提供程序还会通过 COM 激活。 -->
   <assembly fullname="Avalonia.Win32" preserve="all" />
   <assembly fullname="Avalonia.Base" preserve="all" />
 
-  <!--
-    The remaining libraries all build their behaviour on reflection over types the trimmer cannot
-    follow: YamlDotNet walks GlobalOptions by property name, Newtonsoft.Json (used by Common's
-    text providers) maps JSON onto model classes, TagLibSharp reads audio tags, MusicDecrypto
-    creates decryptors from a factory, and SQLitePCLRaw loads its provider by reflection.
-    These are small (a few hundred KB each) next to the framework assemblies that trimming really
-    does remove, so rooting them costs little and removes a whole class of "works until you use it"
-    failures.
-  -->
+  <!-- 保留配置映射、音频元数据、解密及 SQLite 运行时加载所需类型。 -->
   <assembly fullname="YamlDotNet" preserve="all" />
   <assembly fullname="Newtonsoft.Json" preserve="all" />
   <assembly fullname="TagLibSharp" preserve="all" />
-  <!-- The NuGet package is MusicDecrypto.Library, but the assembly it ships is libmusicdecrypto. -->
+  <!-- MusicDecrypto.Library 包中的程序集名为 libmusicdecrypto。 -->
   <assembly fullname="libmusicdecrypto" preserve="all" />
   <assembly fullname="QRCoder" preserve="all" />
   <assembly fullname="SQLitePCLRaw.core" preserve="all" />

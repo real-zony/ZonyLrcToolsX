@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using ZonyLrcTools.Desktop.ViewModels;
 using ZonyLrcTools.Desktop.Views.Dialogs;
 
@@ -24,17 +25,29 @@ public class DialogService : IDialogService
                 AllowMultiple = false
             });
 
-        return folders.FirstOrDefault()?.Path.LocalPath;
+        return folders.FirstOrDefault()?.TryGetLocalPath();
     }
 
     public async Task<string?> ShowFilePickerAsync(string title, string[]? filters = null)
     {
-        var files = await ShowFilesPickerAsync(title, filters);
-        return files.FirstOrDefault();
+        if (MainWindow == null) return null;
+
+        var files = await MainWindow.StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions
+            {
+                Title = title,
+                AllowMultiple = false,
+                FileTypeFilter = BuildFileTypes(filters)
+            });
+
+        return files.FirstOrDefault()?.TryGetLocalPath();
     }
 
-    public async Task<IReadOnlyList<string>> ShowFilesPickerAsync(string title, string[]? filters = null)
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<string>> ShowFilesPickerAsync(string title, string[]? filters = null,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (MainWindow == null) return Array.Empty<string>();
 
         var fileTypes = BuildFileTypes(filters);
@@ -46,15 +59,17 @@ public class DialogService : IDialogService
                 AllowMultiple = true,
                 FileTypeFilter = fileTypes
             });
+        cancellationToken.ThrowIfCancellationRequested();
 
         return files
-            .Select(f => f.Path.LocalPath)
+            .Select(f => f.TryGetLocalPath())
+            .OfType<string>()
             .Where(p => !string.IsNullOrEmpty(p))
             .ToList();
     }
 
     /// <summary>
-    /// Turn a list of bare extensions (".mp3", "mp3", "*.mp3") into Avalonia file type filters.
+    /// 将文件扩展名转换为文件选择器筛选条件。
     /// </summary>
     private static List<FilePickerFileType>? BuildFileTypes(string[]? filters)
     {
@@ -100,15 +115,19 @@ public class DialogService : IDialogService
         await dialog.ShowDialog(MainWindow);
     }
 
-    public async Task ShowQrCodeLoginDialogAsync(QrCodeLoginViewModel viewModel)
+    /// <inheritdoc />
+    public async Task ShowQrCodeLoginDialogAsync(QrCodeLoginViewModel viewModel, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (MainWindow == null)
         {
-            viewModel.RequestClose();
+            viewModel.NotifyClosed();
             return;
         }
 
         var dialog = new QrCodeLoginDialog(viewModel);
+        using var registration = cancellationToken.Register(
+            () => Dispatcher.UIThread.Post(viewModel.RequestClose));
         await dialog.ShowDialog(MainWindow);
     }
 }

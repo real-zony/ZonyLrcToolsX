@@ -10,6 +10,9 @@ using ZonyLrcTools.Desktop.Services;
 
 namespace ZonyLrcTools.Desktop.ViewModels;
 
+/// <summary>
+/// 音乐文件解密页面。
+/// </summary>
 public partial class DecryptViewModel : ViewModelBase
 {
     private const string KggExtension = ".kgg";
@@ -22,6 +25,13 @@ public partial class DecryptViewModel : ViewModelBase
 
     private CancellationTokenSource? _decryptCts;
     private bool _isInitialized;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(StartDecryptCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SpecifyDatabaseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanStartDecrypt))]
+    private bool _isInitializing;
 
     [ObservableProperty]
     private int _parallelCount = 2;
@@ -42,13 +52,13 @@ public partial class DecryptViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(StartDecryptCommand))]
     [NotifyCanExecuteChangedFor(nameof(SelectFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(ClearFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SpecifyDatabaseCommand))]
     [NotifyPropertyChangedFor(nameof(CanStartDecrypt))]
     [NotifyPropertyChangedFor(nameof(CanClear))]
     private bool _isDecrypting;
 
     /// <summary>
-    /// True when the KuGou key database could not be read. kgg files cannot be decrypted without
-    /// it, so the page says so up front instead of letting every row fail with a wall of text.
+    /// 是否可以读取酷狗解密密钥数据库。
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowDatabaseWarning))]
@@ -57,54 +67,78 @@ public partial class DecryptViewModel : ViewModelBase
     [ObservableProperty]
     private string _kugouDatabaseStatus = string.Empty;
 
-    // Localized strings
+    // 界面文案。
+    /// <summary>页面标题。</summary>
     public string DecryptTitle => _localization?["Decrypt_Title"] ?? "Music Decryption";
+    /// <summary>页面说明。</summary>
     public string DecryptDescription => _localization?["Decrypt_Description"] ?? "Convert encrypted music files (ncm / qmc / kgm / kgg / kwm) into playable formats";
+    /// <summary>文件选择提示。</summary>
     public string DecryptSelectFiles => _localization?["Decrypt_SelectFiles"] ?? "Select encrypted music files...";
+    /// <summary>添加文件按钮文案。</summary>
     public string DecryptBrowse => _localization?["Decrypt_Browse"] ?? "Add Files...";
+    /// <summary>并行任务数标签。</summary>
     public string DecryptParallel => _localization?["Decrypt_Parallel"] ?? "Parallel:";
+    /// <summary>开始解密按钮文案。</summary>
     public string DecryptStart => _localization?["Decrypt_Start"] ?? "Start Decrypt";
+    /// <summary>停止按钮文案。</summary>
     public string DecryptStop => _localization?["Decrypt_Stop"] ?? "Stop";
+    /// <summary>文件列表为空时的提示。</summary>
     public string DecryptEmptyState => _localization?["Decrypt_EmptyState"] ?? "No files yet, add files to start decrypting";
+    /// <summary>清空按钮文案。</summary>
     public string DecryptClear => _localization?["Decrypt_Clear"] ?? "Clear";
+    /// <summary>文件列表标签。</summary>
     public string DecryptFilesLabel => _localization?["Decrypt_FilesLabel"] ?? "Files";
+    /// <summary>选择数据库按钮文案。</summary>
     public string DecryptSpecifyDatabase => _localization?["Decrypt_SpecifyDatabase"] ?? "Locate KGMusicV3.db...";
+    /// <summary>数据库缺失状态文案。</summary>
     public string DecryptStatusMissingDb => _localization?["Decrypt_StatusMissingDb"] ?? "KuGou database missing";
+    /// <summary>查看详情按钮文案。</summary>
     public string DecryptViewDetail => _localization?["Decrypt_ViewDetail"] ?? "Details";
+    /// <summary>失败详情窗口标题。</summary>
     public string DecryptFailureTitle => _localization?["Decrypt_FailureTitle"] ?? "Decryption failure";
 
     /// <summary>
-    /// Explanation shown in the warning strip. Kept as one sentence because the real condition is
-    /// simple: kgg needs the KuGou database, and that database only holds keys for songs KuGou
-    /// itself downloaded on this machine.
+    /// 酷狗数据库缺失时的提示。
     /// </summary>
     public string DecryptKugouRequirement => _localization?["Decrypt_KugouMissing"]
         ?? "kgg decryption needs the KuGou database KGMusicV3.db (the key is only written when KuGou downloaded that song)";
 
+    /// <summary>是否显示数据库缺失提示。</summary>
     public bool ShowDatabaseWarning => !IsKugouDatabaseAvailable;
 
     /// <summary>
-    /// Read-only summary shown in the picker text box: "3 files selected" rather than a path,
-    /// because this page takes a list, not a single location.
+    /// 已选文件数量。
     /// </summary>
     public string SelectionSummary => Files.Count == 0
         ? string.Empty
         : $"{Files.Count} {CommonFiles}";
 
+    /// <summary>总数标签。</summary>
     public string CommonTotal => _localization?["Common_Total"] ?? "Total:";
+    /// <summary>文件数量单位。</summary>
     public string CommonFiles => _localization?["Common_Files"] ?? "files";
+    /// <summary>成功数量标签。</summary>
     public string CommonSuccess => _localization?["Common_Success"] ?? "Success:";
+    /// <summary>失败数量标签。</summary>
     public string CommonFailed => _localization?["Common_Failed"] ?? "Failed:";
+    /// <summary>文件名列标题。</summary>
     public string ColumnFileName => _localization?["Column_FileName"] ?? "File Name";
+    /// <summary>输出路径列标题。</summary>
     public string ColumnOutputPath => _localization?["Column_OutputPath"] ?? "Output";
+    /// <summary>状态列标题。</summary>
     public string ColumnStatus => _localization?["Column_Status"] ?? "Status";
 
-    // 全部行都被 blocked 时按钮不该亮着，否则点下去只会空转一次。
-    public bool CanStartDecrypt => !IsDecrypting && Files.Any(f => !f.IsBlocked);
+    /// <summary>是否存在可以开始解密的文件。</summary>
+    public bool CanStartDecrypt => !IsDecrypting && !IsInitializing && Files.Any(f => !f.IsBlocked);
+    /// <summary>文件列表是否为空。</summary>
     public bool HasNoFiles => Files.Count == 0;
 
+    /// <summary>待解密文件列表。</summary>
     public ObservableCollection<DecryptFileViewModel> Files { get; } = new();
 
+    /// <summary>
+    /// 创建音乐解密页面。
+    /// </summary>
     public DecryptViewModel(
         IMusicDecryptor musicDecryptor,
         IDialogService dialogService,
@@ -135,11 +169,12 @@ public partial class DecryptViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Restores the manually chosen database path (if any) and probes it once so the page can show
-    /// the warning strip and mark kgg rows before the user presses start.
+    /// 恢复已保存的数据库路径并刷新文件状态。
     /// </summary>
     public override async Task OnActivatedAsync()
     {
+        if (IsDecrypting || IsInitializing) return;
+
         if (!_isInitialized)
         {
             await InitializeAsync();
@@ -149,26 +184,47 @@ public partial class DecryptViewModel : ViewModelBase
         RefreshDatabaseStatus();
     }
 
-    public async Task InitializeAsync()
+    /// <summary>
+    /// 初始化酷狗数据库路径。
+    /// </summary>
+    public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        _isInitialized = true;
-        if (_kugouDatabaseStore != null && _kugouKeyProvider != null)
-        {
-            var stored = await _kugouDatabaseStore.LoadAsync().ConfigureAwait(true);
-            if (!string.IsNullOrWhiteSpace(stored))
-            {
-                _kugouKeyProvider.SetDatabasePath(stored);
-            }
-        }
+        if (IsInitializing) return;
 
-        RefreshDatabaseStatus();
+        IsInitializing = true;
+        try
+        {
+            if (_kugouDatabaseStore != null && _kugouKeyProvider != null)
+            {
+                var stored = await _kugouDatabaseStore.LoadAsync(cancellationToken);
+                if (!string.IsNullOrWhiteSpace(stored))
+                {
+                    _kugouKeyProvider.SetDatabasePath(stored);
+                }
+            }
+
+            RefreshDatabaseStatus();
+            _isInitialized = true;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消初始化，下次进入页面时重试。
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageAsync(_localization?["Common_Error"] ?? "Error", ex.Message);
+        }
+        finally
+        {
+            IsInitializing = false;
+        }
     }
 
     private void RefreshDatabaseStatus()
     {
         if (_kugouKeyProvider == null)
         {
-            // No provider at all: keep the page usable, kgg will report the failure itself.
+            // 未注册密钥提供者时，由解密器报告具体错误。
             IsKugouDatabaseAvailable = true;
             KugouDatabaseStatus = string.Empty;
             return;
@@ -178,7 +234,7 @@ public partial class DecryptViewModel : ViewModelBase
         IsKugouDatabaseAvailable = info.IsAvailable;
         KugouDatabaseStatus = info.Message;
 
-        // Rows added while the database was missing are stale the moment it becomes readable.
+        // 数据库可用后解除未处理文件的阻止状态。
         foreach (var file in Files)
         {
             if (!IsKggFile(file.FilePath)) continue;
@@ -241,24 +297,35 @@ public partial class DecryptViewModel : ViewModelBase
         OnPropertyChanged(nameof(ColumnFileName));
         OnPropertyChanged(nameof(ColumnOutputPath));
         OnPropertyChanged(nameof(ColumnStatus));
+
+        foreach (var file in Files)
+        {
+            file.ViewDetailLabel = DecryptViewDetail;
+            file.StatusMessage = file.IsBlocked
+                ? DecryptStatusMissingDb
+                : file.IsProcessed
+                    ? file.IsSuccessful
+                        ? _localization?["Status_Success"] ?? "Success"
+                        : _localization?["Status_Failed"] ?? "Failed"
+                    : _localization?["Status_Pending"] ?? "Pending";
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanSelectFiles))]
-    private async Task SelectFilesAsync()
+    private async Task SelectFilesAsync(CancellationToken cancellationToken = default)
     {
         var picked = await _dialogService.ShowFilesPickerAsync(
             DecryptSelectFiles,
-            new[] { ".ncm", ".qmc0", ".qmc2", ".qmc3", ".qmcflac", ".qmcogg", ".mflac", ".mgg", ".kgm", ".kgma", ".kgg", ".kwm" });
-
+            [".ncm", ".qmc0", ".qmc2", ".qmc3", ".qmcflac", ".qmcogg", ".mflac", ".mgg", ".kgm", ".kgma", ".kgg", ".kwm"],
+            cancellationToken);
         if (picked.Count == 0) return;
 
-        // Probe once for the whole batch instead of per file: the database is either readable or
-        // it is not, and re-reading it for every dropped file would be pointless I/O.
+        // 同一批文件只检查一次数据库。
         RefreshDatabaseStatus();
 
         foreach (var path in picked)
         {
-            // The picker can hand back the same file twice; keys must stay unique.
+            // 避免重复添加同一文件。
             if (Files.Any(f => string.Equals(f.FilePath, path, StringComparison.OrdinalIgnoreCase)))
             {
                 continue;
@@ -277,9 +344,7 @@ public partial class DecryptViewModel : ViewModelBase
                 ViewDetailLabel = DecryptViewDetail
             };
 
-            // 详情命令挂在行自己身上，比在模板里通过 $parent 硬转成父 VM 再取命令更稳，
-            // 也不会因为 DataTemplate 的上下文变化而悄悄失效。
-            row.ShowDetailCommand = new AsyncRelayCommand(() => ShowDetailAsync(row));
+            row.ShowDetailCommand = new AsyncRelayCommand(token => ShowDetailAsync(row, token));
             Files.Add(row);
         }
 
@@ -287,14 +352,15 @@ public partial class DecryptViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanStartDecrypt));
     }
 
-    private bool CanSelectFiles => !IsDecrypting;
+    private bool CanSelectFiles => !IsDecrypting && !IsInitializing;
 
     [RelayCommand(CanExecute = nameof(CanSelectFiles))]
-    private async Task SpecifyDatabaseAsync()
+    private async Task SpecifyDatabaseAsync(CancellationToken cancellationToken = default)
     {
         var picked = await _dialogService.ShowFilePickerAsync(
             DecryptSpecifyDatabase,
             new[] { ".db" });
+        cancellationToken.ThrowIfCancellationRequested();
 
         if (string.IsNullOrWhiteSpace(picked))
         {
@@ -306,16 +372,15 @@ public partial class DecryptViewModel : ViewModelBase
 
         if (_kugouDatabaseStore != null)
         {
-            await _kugouDatabaseStore.SaveAsync(picked).ConfigureAwait(true);
+            await _kugouDatabaseStore.SaveAsync(picked, cancellationToken);
         }
     }
 
     [RelayCommand(CanExecute = nameof(CanStartDecrypt))]
-    private async Task StartDecryptAsync()
+    private async Task StartDecryptAsync(CancellationToken cancellationToken = default)
     {
         if (Files.Count == 0) return;
-        // A kgg row without a readable database cannot decrypt, so it is left out of the run
-        // entirely instead of failing one file at a time with the same message.
+        // 缺少密钥数据库的文件不加入本次任务。
         var runnable = Files.Where(f => !f.IsBlocked).ToList();
 
         IsDecrypting = true;
@@ -329,6 +394,7 @@ public partial class DecryptViewModel : ViewModelBase
             file.IsProcessed = false;
             file.IsSuccessful = false;
             file.OutputPath = null;
+            file.ErrorDetail = null;
 
             if (!file.IsBlocked)
             {
@@ -342,7 +408,7 @@ public partial class DecryptViewModel : ViewModelBase
             return;
         }
 
-        _decryptCts = new CancellationTokenSource();
+        _decryptCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         var token = _decryptCts.Token;
 
         try
@@ -358,7 +424,11 @@ public partial class DecryptViewModel : ViewModelBase
                 DecryptionResult result;
                 try
                 {
-                    result = await _musicDecryptor.ConvertMusicAsync(file.FilePath, token);
+                    result = await Task.Run(() => _musicDecryptor.ConvertMusicAsync(file.FilePath, token), token);
+                }
+                catch (OperationCanceledException) when (token.IsCancellationRequested)
+                {
+                    throw;
                 }
                 catch (Exception ex)
                 {
@@ -379,8 +449,7 @@ public partial class DecryptViewModel : ViewModelBase
                     }
                     else
                     {
-                        // The status column shows a short label; the full reason (a missing
-                        // database dumps several hundred characters) lives in the row detail.
+                        // 状态列只显示摘要，完整错误在详情对话框展示。
                         file.ErrorDetail = result.ErrorMessage;
                         file.StatusMessage = _localization?["Status_Failed"] ?? "Failed";
                         FailedCount++;
@@ -389,13 +458,13 @@ public partial class DecryptViewModel : ViewModelBase
                     var done = CompletedCount + FailedCount;
                     ProgressPercentage = done * 100.0 / TotalCount;
                 });
-            }));
+            }, token));
 
             await Task.WhenAll(tasks);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
         {
-            // User cancelled; rows that never ran stay "Pending".
+            // 用户取消时，未完成的文件保持待处理状态。
         }
         finally
         {
@@ -406,11 +475,11 @@ public partial class DecryptViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Shows the untruncated reason a row failed. Without this the only place the explanatory text
-    /// exists is a tooltip, which is unreadable for the long "database not found" message.
+    /// 显示文件解密失败的完整原因。
     /// </summary>
-    private async Task ShowDetailAsync(DecryptFileViewModel? file)
+    private async Task ShowDetailAsync(DecryptFileViewModel? file, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (file == null || string.IsNullOrWhiteSpace(file.ErrorDetail))
         {
             return;
@@ -436,47 +505,57 @@ public partial class DecryptViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanStartDecrypt));
     }
 
+    /// <summary>
+    /// 是否可以清空文件列表。
+    /// </summary>
     private bool CanClear => !IsDecrypting && Files.Count > 0;
 }
 
+/// <summary>
+/// 单个文件的解密状态。
+/// </summary>
 public partial class DecryptFileViewModel : ObservableObject
 {
+    /// <summary>输入文件路径。</summary>
     [ObservableProperty]
     private string _filePath = string.Empty;
 
+    /// <summary>输入文件名。</summary>
     [ObservableProperty]
     private string _fileName = string.Empty;
 
+    /// <summary>解密后的输出路径。</summary>
     [ObservableProperty]
     private string? _outputPath;
 
+    /// <summary>是否已完成处理。</summary>
     [ObservableProperty]
     private bool _isProcessed;
 
+    /// <summary>是否解密成功。</summary>
     [ObservableProperty]
     private bool _isSuccessful;
 
     /// <summary>
-    /// Short label for the status column. Long explanations belong in <see cref="ErrorDetail"/>,
-    /// which the detail dialog shows in full.
+    /// 状态列摘要，完整原因保存在 <see cref="ErrorDetail"/>。
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasErrorDetail))]
     private string? _statusMessage;
 
+    /// <summary>解密失败的完整原因。</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasErrorDetail))]
     private string? _errorDetail;
 
     /// <summary>
-    /// Set when the row cannot run at all (kgg without a readable KuGou database). Blocked rows are
-    /// tinted so the reason is visible before pressing start.
+    /// 是否因缺少酷狗数据库而无法开始解密。
     /// </summary>
     [ObservableProperty]
     private bool _isBlocked;
 
     /// <summary>
-    /// 详情按钮上的文案。挂在行上，模板就不必再通过 $parent 反向取父 ViewModel。
+    /// 详情按钮文案。
     /// </summary>
     [ObservableProperty]
     private string? _viewDetailLabel;
@@ -486,5 +565,8 @@ public partial class DecryptFileViewModel : ObservableObject
     /// </summary>
     public IAsyncRelayCommand? ShowDetailCommand { get; set; }
 
+    /// <summary>
+    /// 是否存在可查看的错误详情。
+    /// </summary>
     public bool HasErrorDetail => !string.IsNullOrWhiteSpace(ErrorDetail);
 }

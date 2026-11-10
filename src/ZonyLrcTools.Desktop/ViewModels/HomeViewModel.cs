@@ -7,14 +7,16 @@ using ZonyLrcTools.Desktop.Services;
 namespace ZonyLrcTools.Desktop.ViewModels;
 
 /// <summary>
-/// The landing page. Its only job is to point people at the three things this app actually does,
-/// so every quick-action button navigates for real instead of sitting there looking clickable.
+/// 首页与功能入口。
 /// </summary>
 public partial class HomeViewModel : ViewModelBase
 {
     private readonly INavigationService _navigation;
     private readonly IUILocalizationService _localization;
 
+    /// <summary>
+    /// 创建首页。
+    /// </summary>
     public HomeViewModel(INavigationService navigation, IUILocalizationService localization)
     {
         _navigation = navigation;
@@ -26,22 +28,37 @@ public partial class HomeViewModel : ViewModelBase
     [ObservableProperty]
     private string _version;
 
+    /// <summary>欢迎语。</summary>
     public string WelcomeMessage => _localization["Home_Welcome"];
+    /// <summary>应用说明。</summary>
     public string Description => _localization["Home_Description"];
+    /// <summary>快捷操作标题。</summary>
     public string QuickActionsTitle => _localization["Home_QuickActions"];
+    /// <summary>功能特性标题。</summary>
     public string FeaturesTitle => _localization["Home_Features"];
+    /// <summary>支持格式说明。</summary>
     public string FeatureFormats => _localization["Home_FeatureFormats"];
+    /// <summary>并行下载说明。</summary>
     public string FeatureParallel => _localization["Home_FeatureParallel"];
+    /// <summary>编码支持说明。</summary>
     public string FeatureEncodings => _localization["Home_FeatureEncodings"];
+    /// <summary>跨平台支持说明。</summary>
     public string FeatureCrossPlatform => _localization["Home_FeatureCrossPlatform"];
+    /// <summary>版本标签。</summary>
     public string VersionLabel => _localization["Home_Version"];
 
-    // Card copy: title + one-line explanation, both localized.
+    // 功能入口文案。
+    /// <summary>歌词下载入口标题。</summary>
     public string LyricsCardTitle => _localization["Home_DownloadLyrics"];
+    /// <summary>歌词下载入口说明。</summary>
     public string LyricsCardDescription => _localization["Home_DownloadLyricsHint"];
+    /// <summary>封面下载入口标题。</summary>
     public string AlbumCardTitle => _localization["Home_DownloadAlbumCover"];
+    /// <summary>封面下载入口说明。</summary>
     public string AlbumCardDescription => _localization["Home_DownloadAlbumCoverHint"];
+    /// <summary>音乐解密入口标题。</summary>
     public string DecryptCardTitle => _localization["Home_Decrypt"];
+    /// <summary>音乐解密入口说明。</summary>
     public string DecryptCardDescription => _localization["Home_DecryptHint"];
 
     [RelayCommand]
@@ -79,7 +96,7 @@ public partial class HomeViewModel : ViewModelBase
 
         if (!string.IsNullOrWhiteSpace(informational))
         {
-            // Strip the "+<commit sha>" suffix that SourceLink appends.
+            // 隐藏 SourceLink 添加的提交标识。
             var plusIndex = informational.IndexOf('+');
             return plusIndex > 0 ? informational[..plusIndex] : informational;
         }

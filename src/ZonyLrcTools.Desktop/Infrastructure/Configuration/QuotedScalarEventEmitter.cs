@@ -4,22 +4,10 @@ using YamlDotNet.Serialization.EventEmitters;
 
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
-/// <summary>
-/// Forces every control-character scalar onto a single double-quoted line.
-/// </summary>
-/// <remarks>
-/// <para>
-/// YamlDotNet renders a value such as <c>"\n"</c> as the folded block scalar <c>&gt;2</c>, which is
-/// technically legal YAML but reads as garbage to anyone opening <c>config.yaml</c> by hand and
-/// contradicts the documentation that describes <c>lineBreak</c> as an escape sequence.
-/// </para>
-/// <para>
-/// This emitter only changes presentation: the value that survives a round trip is identical,
-/// it just comes back as <c>lineBreak: "\n"</c> instead of a folded block.
-/// </para>
-/// </remarks>
+/// <summary>将含控制字符的文本输出为单行双引号标量。</summary>
 public sealed class QuotedScalarEventEmitter : ChainedEventEmitter
 {
+    /// <summary>创建标量输出器。</summary>
     public QuotedScalarEventEmitter(IEventEmitter nextEmitter) : base(nextEmitter)
     {
     }
@@ -45,7 +33,7 @@ public sealed class QuotedScalarEventEmitter : ChainedEventEmitter
             }
         }
 
-        // Leading or trailing whitespace is silently trimmed by the plain-scalar reader.
+        // 保留首尾空格，避免普通标量读取时丢失。
         return text.Length > 0 && (text[0] == ' ' || text[^1] == ' ');
     }
 }

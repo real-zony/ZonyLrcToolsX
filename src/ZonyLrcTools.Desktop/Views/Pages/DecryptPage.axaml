@@ -77,7 +77,6 @@
                             MinWidth="108" />
                     <Button Content="{Binding DecryptClear}"
                             Command="{Binding ClearFilesCommand}"
-                            IsEnabled="{Binding CanClear}"
                             MinWidth="88" />
                 </StackPanel>
 

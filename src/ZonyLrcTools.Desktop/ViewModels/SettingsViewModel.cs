@@ -9,12 +9,13 @@ using ZonyLrcTools.Desktop.Infrastructure.Localization;
 
 namespace ZonyLrcTools.Desktop.ViewModels;
 
+/// <summary>设置页面及自动保存状态。</summary>
 public partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsStore _settingsStore;
     private readonly IUILocalizationService? _localizationService;
     private readonly GlobalOptions _globalOptions;
-    private bool _isLoading = true; // Prevent saving during initial load
+    private bool _isLoading = true;
 
     [ObservableProperty]
     private bool _followSystemLanguage = true;
@@ -32,7 +33,7 @@ public partial class SettingsViewModel : ViewModelBase
     private string _proxyIp = "127.0.0.1";
 
     [ObservableProperty]
-    private int _proxyPort = 7890;
+    private int _proxyPort = 4780;
 
     [ObservableProperty]
     private bool _isTranslationEnabled;
@@ -61,15 +62,11 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isRomanOutputEnabled;
 
-    /// <summary>
-    /// Advanced options are collapsed by default: the common path is language + proxy + the four
-    /// lyric flags, everything else is a power-user setting.
-    /// </summary>
+    /// <summary>是否显示高级设置。</summary>
     [ObservableProperty]
     private bool _isAdvancedVisible;
 
-    // Status line for the settings page: shows where settings are stored and whether the
-    // last save succeeded.
+    // 显示配置位置及上次保存结果。
     [ObservableProperty]
     private string _storageHint = string.Empty;
 
@@ -83,10 +80,7 @@ public partial class SettingsViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(ShowSaveFailure))]
     private bool _hasSaveError;
 
-    /// <summary>
-    /// Encoding choices offered in the settings page. These map to the values accepted by
-    /// <see cref="GlobalLyricsConfigOptions.FileEncoding"/>.
-    /// </summary>
+    /// <summary>可选择的歌词编码。</summary>
     public ObservableCollection<string> AvailableEncodings { get; } = new()
     {
         "utf-8",
@@ -95,10 +89,7 @@ public partial class SettingsViewModel : ViewModelBase
         "gbk"
     };
 
-    /// <summary>
-    /// Line-break choices, parallel to <see cref="LineBreakDisplayNames"/>. The stored value is the
-    /// actual escape sequence so the YAML file stays compatible with the CLI.
-    /// </summary>
+    /// <summary>预设换行符，与显示列表顺序一致。</summary>
     private static readonly string[] LineBreaks =
     {
         LineBreakType.Unix,
@@ -106,9 +97,7 @@ public partial class SettingsViewModel : ViewModelBase
         LineBreakType.MacOs
     };
 
-    /// <summary>
-    /// Display names for the line-break selector, parallel to the internal sequence table.
-    /// </summary>
+    /// <summary>换行符的显示名称。</summary>
     public ObservableCollection<string> LineBreakDisplayNames { get; } = new()
     {
         "LF (Unix)",
@@ -116,68 +105,103 @@ public partial class SettingsViewModel : ViewModelBase
         "CR (macOS)"
     };
 
-    /// <summary>
-    /// Value the current settings file uses, for the selected line-break entry.
-    /// </summary>
-    private string CurrentLineBreak => LineBreaks[Math.Clamp(SelectedLineBreakIndex, 0, LineBreaks.Length - 1)];
+    private string CurrentLineBreak => SelectedLineBreakIndex >= 0 && SelectedLineBreakIndex < LineBreaks.Length
+        ? LineBreaks[SelectedLineBreakIndex]
+        : _globalOptions.Provider?.Lyric?.Config?.LineBreak ?? LineBreakType.Unix;
 
+    /// <summary>歌词提供者及搜索顺序。</summary>
     public ObservableCollection<LyricsProviderSettingViewModel> LyricsProviders { get; } = new();
 
+    /// <summary>标签提供者及加载顺序。</summary>
     public ObservableCollection<TagInfoProviderSettingViewModel> TagProviders { get; } = new();
 
-    // Localized strings
+    // 本地化文本。
+    /// <summary>设置标题的本地化文本。</summary>
     public string SettingsTitle => _localizationService?["Settings_Title"] ?? "Settings";
+    /// <summary>语言设置标题的本地化文本。</summary>
     public string SettingsLanguage => _localizationService?["Settings_Language"] ?? "Language";
+    /// <summary>跟随系统语言的本地化文本。</summary>
     public string SettingsFollowSystem => _localizationService?["Settings_FollowSystem"] ?? "Follow System";
+    /// <summary>中文选项的本地化文本。</summary>
     public string SettingsChinese => _localizationService?["Settings_Chinese"] ?? "Chinese";
+    /// <summary>英文选项的本地化文本。</summary>
     public string SettingsEnglish => _localizationService?["Settings_English"] ?? "English";
+    /// <summary>代理设置标题的本地化文本。</summary>
     public string SettingsProxy => _localizationService?["Settings_Proxy"] ?? "Proxy";
+    /// <summary>启用代理的本地化文本。</summary>
     public string SettingsProxyEnable => _localizationService?["Settings_ProxyEnable"] ?? "Enable Proxy";
+    /// <summary>代理地址的本地化文本。</summary>
     public string SettingsProxyAddress => _localizationService?["Settings_ProxyAddress"] ?? "Proxy Address";
+    /// <summary>代理端口的本地化文本。</summary>
     public string SettingsProxyPort => _localizationService?["Settings_ProxyPort"] ?? "Port";
+    /// <summary>歌词提供者标题的本地化文本。</summary>
     public string SettingsLyricsProvider => _localizationService?["Settings_LyricsProvider"] ?? "Lyrics Provider";
+    /// <summary>恢复默认值的本地化文本。</summary>
     public string SettingsReset => _localizationService?["Settings_Reset"] ?? "Reset";
 
+    /// <summary>基本设置标题的本地化文本。</summary>
     public string SettingsBasicSection => _localizationService?["Settings_BasicSection"] ?? "Basics";
+    /// <summary>高级设置标题的本地化文本。</summary>
     public string SettingsAdvancedSection => _localizationService?["Settings_AdvancedSection"] ?? "Advanced";
+    /// <summary>高级选项开关的本地化文本。</summary>
     public string SettingsShowAdvanced => _localizationService?["Settings_ShowAdvanced"] ?? "Show advanced options";
+    /// <summary>歌词设置标题的本地化文本。</summary>
     public string SettingsLyricsSection => _localizationService?["Settings_LyricsSection"] ?? "Lyrics";
+    /// <summary>翻译开关的本地化文本。</summary>
     public string SettingsEnableTranslation => _localizationService?["Settings_EnableTranslation"] ?? "Enable translation lyrics";
+    /// <summary>合并双语歌词开关的本地化文本。</summary>
     public string SettingsOneLineMode => _localizationService?["Settings_OneLineMode"] ?? "One-line mode (original + translation on same line)";
+    /// <summary>仅输出翻译开关的本地化文本。</summary>
     public string SettingsOnlyTranslation => _localizationService?["Settings_OnlyTranslation"] ?? "Output translation only";
+    /// <summary>跳过已有文件开关的本地化文本。</summary>
     public string SettingsSkipExisting => _localizationService?["Settings_SkipExisting"] ?? "Skip existing lyrics files";
+    /// <summary>编码选项的本地化文本。</summary>
     public string SettingsFileEncoding => _localizationService?["Settings_FileEncoding"] ?? "File Encoding:";
+    /// <summary>换行符选项的本地化文本。</summary>
     public string SettingsLineBreak => _localizationService?["Settings_LineBreak"] ?? "Line break:";
+    /// <summary>罗马音开关的本地化文本。</summary>
     public string SettingsRomanOutput => _localizationService?["Settings_RomanOutput"] ?? "Enable romanized output (NetEase)";
+    /// <summary>屏蔽词设置标题的本地化文本。</summary>
     public string SettingsBlockWordSection => _localizationService?["Settings_BlockWordSection"] ?? "Tag block word dictionary";
+    /// <summary>屏蔽词开关的本地化文本。</summary>
     public string SettingsBlockWordEnable => _localizationService?["Settings_BlockWordEnable"] ?? "Enable block word dictionary";
-    public string SettingsBlockWordPath => _localizationService?["Settings_BlockWordPath"] ?? "Dictionary file (relative to the app folder)";
+    /// <summary>屏蔽词路径的本地化文本。</summary>
+    public string SettingsBlockWordPath => _localizationService?["Settings_BlockWordPath"] ?? "Dictionary file (relative to the working directory)";
+    /// <summary>标签提供者标题的本地化文本。</summary>
     public string SettingsTagProvider => _localizationService?["Settings_TagProvider"] ?? "Tag Provider";
+    /// <summary>优先级标题的本地化文本。</summary>
     public string SettingsPriority => _localizationService?["Settings_Priority"] ?? "Priority: ";
+    /// <summary>上移按钮的本地化文本。</summary>
     public string SettingsMoveUp => _localizationService?["Settings_MoveUp"] ?? "Move up";
+    /// <summary>下移按钮的本地化文本。</summary>
     public string SettingsMoveDown => _localizationService?["Settings_MoveDown"] ?? "Move down";
+    /// <summary>提供者顺序说明的本地化文本。</summary>
     public string SettingsProviderOrderHint => _localizationService?["Settings_ProviderOrderHint"]
         ?? "The list order is the search order. Use the arrows to change which source is tried first.";
+    /// <summary>设置保存位置的本地化文本。</summary>
     public string SettingsStorage => _localizationService?["Settings_Storage"] ?? "Settings file";
+    /// <summary>保存成功的本地化文本。</summary>
     public string SettingsSaved => _localizationService?["Settings_Saved"] ?? "Saved";
+    /// <summary>保存失败的本地化文本。</summary>
     public string SettingsSaveFailed => _localizationService?["Settings_SaveFailed"] ?? "Could not save settings";
+    /// <summary>代理重启提示的本地化文本。</summary>
     public string SettingsProxyRestartHint => _localizationService?["Settings_ProxyRestartHint"]
         ?? "Proxy changes take effect the next time the app starts.";
 
-    /// <summary>
-    /// Save feedback: only one of these is ever true, and both stay false before the first save.
-    /// </summary>
+    /// <summary>是否显示保存成功提示。</summary>
     public bool ShowSaveSuccess => !HasSaveError && !string.IsNullOrEmpty(SaveStatusText);
 
+    /// <summary>是否显示保存失败提示。</summary>
     public bool ShowSaveFailure => HasSaveError && !string.IsNullOrEmpty(SaveStatusText);
 
+    /// <summary>创建设置页面。</summary>
     public SettingsViewModel(ISettingsStore settingsStore, IUILocalizationService? localizationService = null)
     {
         _settingsStore = settingsStore;
         _localizationService = localizationService;
         _globalOptions = settingsStore.Options;
 
-        // Subscribe to language changes
+        // 跟随应用语言切换更新界面。
         if (_localizationService != null)
         {
             _localizationService.LanguageChanged += OnLanguageChanged;
@@ -186,7 +210,7 @@ public partial class SettingsViewModel : ViewModelBase
         LoadSettings();
         LoadLanguageSettings();
         StorageHint = $"{SettingsStorage}: {_settingsStore.ConfigFilePath}";
-        _isLoading = false; // Allow saving after initial load
+        _isLoading = false;
     }
 
     private void OnLanguageChanged(object? sender, EventArgs e)
@@ -225,6 +249,7 @@ public partial class SettingsViewModel : ViewModelBase
         OnPropertyChanged(nameof(SettingsSaved));
         OnPropertyChanged(nameof(SettingsSaveFailed));
         OnPropertyChanged(nameof(SettingsProxyRestartHint));
+        StorageHint = $"{SettingsStorage}: {_settingsStore.ConfigFilePath}";
     }
 
     private void LoadLanguageSettings()
@@ -238,7 +263,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         if (value)
         {
-            // Auto-detect system language
+            // 使用操作系统语言。
             var systemCulture = CultureInfo.InstalledUICulture.Name;
             ApplyLanguage(systemCulture.StartsWith("zh") ? "zh-CN" : "en-US");
         }
@@ -294,12 +319,12 @@ public partial class SettingsViewModel : ViewModelBase
 
     private void LoadSettings()
     {
-        // Load network settings
+        // 加载代理设置。
         IsProxyEnabled = _globalOptions.NetworkOptions?.IsEnable ?? false;
         ProxyIp = _globalOptions.NetworkOptions?.Ip ?? "127.0.0.1";
-        ProxyPort = _globalOptions.NetworkOptions?.Port ?? 7890;
+        ProxyPort = _globalOptions.NetworkOptions?.Port ?? 4780;
 
-        // Load lyrics settings
+        // 加载歌词设置，保留未列入预设的有效编码。
         var lyricsConfig = _globalOptions.Provider?.Lyric?.Config;
         if (lyricsConfig != null)
         {
@@ -307,11 +332,15 @@ public partial class SettingsViewModel : ViewModelBase
             IsOneLineMode = lyricsConfig.IsOneLine;
             SkipExistingLyrics = lyricsConfig.IsSkipExistLyricFiles;
             SelectedEncoding = lyricsConfig.FileEncoding ?? "utf-8";
+            if (!AvailableEncodings.Contains(SelectedEncoding))
+            {
+                AvailableEncodings.Add(SelectedEncoding);
+            }
             IsOnlyOutputTranslation = lyricsConfig.IsOnlyOutputTranslation;
             SelectedLineBreakIndex = ResolveLineBreakIndex(lyricsConfig.LineBreak);
         }
 
-        // Load block word settings
+        // 加载屏蔽词设置。
         var blockWord = _globalOptions.Provider?.Tag?.BlockWord;
         if (blockWord != null)
         {
@@ -321,7 +350,7 @@ public partial class SettingsViewModel : ViewModelBase
                 : blockWord.FilePath;
         }
 
-        // Load romanized output flag from the NetEase provider's extended options
+        // 罗马音开关保存在网易云提供者的扩展设置中。
         var netEase = _globalOptions.Provider?.Lyric?.Plugin?
             .FirstOrDefault(p => string.Equals(p.Name, "NetEase", StringComparison.OrdinalIgnoreCase));
         if (netEase?.Additional != null &&
@@ -330,9 +359,7 @@ public partial class SettingsViewModel : ViewModelBase
             IsRomanOutputEnabled = string.Equals(romanValue, "true", StringComparison.OrdinalIgnoreCase);
         }
 
-        // Tag providers are listed in ascending priority, which is also the order the loader tries
-        // them in. The list itself is the order now: the number is derived from the position, so a
-        // row that is moved up shows a smaller number without any extra bookkeeping.
+        // 启用的提供者按优先级排列，禁用项放到末尾。
         var tagProviders = _globalOptions.Provider?.Tag?.Plugin;
         if (tagProviders != null)
         {
@@ -341,8 +368,7 @@ public partial class SettingsViewModel : ViewModelBase
                 AddTagProviderRow(provider.Name, true);
             }
 
-            // Disabled sources (priority -1) have no slot of their own; they sit at the bottom of
-            // the list, greyed out, so re-enabling one just drops it back into the queue.
+            // 禁用项不参与搜索。
             foreach (var provider in tagProviders.Where(p => p.Priority == -1))
             {
                 AddTagProviderRow(provider.Name, false);
@@ -351,7 +377,7 @@ public partial class SettingsViewModel : ViewModelBase
             NormalizeProviderOrder(TagProviders);
         }
 
-        // Lyrics providers follow the same rule as the tag providers above.
+        // 歌词提供者与标签提供者采用相同排序规则。
         var providers = _globalOptions.Provider?.Lyric?.Plugin;
         if (providers != null)
         {
@@ -377,13 +403,11 @@ public partial class SettingsViewModel : ViewModelBase
             IsEnabled = isEnabled
         };
 
-        // The arrows move the row inside its own list; the callback has to be installed after the
-        // row exists, otherwise the lambda would capture an unassigned local.
+        // 创建行后绑定移动命令。
         row.MoveUpCommand = new RelayCommand(() => MoveProviderBy(TagProviders, row, -1));
         row.MoveDownCommand = new RelayCommand(() => MoveProviderBy(TagProviders, row, 1));
 
-        // Rows are separate objects, so their own change notifications have to be wired back into
-        // the save pipeline or the checkbox moves and the file never changes.
+        // 将行内编辑接入自动保存。
         row.PropertyChanged += OnProviderRowChanged;
         TagProviders.Add(row);
     }
@@ -403,11 +427,7 @@ public partial class SettingsViewModel : ViewModelBase
         LyricsProviders.Add(row);
     }
 
-    /// <summary>
-    /// Any edit inside a provider row funnels into the same debounced save that the top-level
-    /// settings use. Toggling a checkbox also re-sorts the list, because enabled sources always
-    /// sit above disabled ones and the visible numbering has to follow.
-    /// </summary>
+    /// <summary>提供者启用状态改变后重新排序并保存。</summary>
     private void OnProviderRowChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (_isLoading || _isNormalizing)
@@ -442,11 +462,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     private bool _isNormalizing;
 
-    /// <summary>
-    /// The list order <em>is</em> the search order. This enforces the two invariants that make that
-    /// readable: enabled rows above disabled ones, and a visible 1..n numbering that matches the
-    /// position. Priorities are derived here, never typed by hand.
-    /// </summary>
+    /// <summary>启用项在前，优先级按可见顺序从一开始。</summary>
     private void NormalizeProviderOrder<T>(ObservableCollection<T> rows) where T : class, IProviderRowViewModel
     {
         var ordered = rows.Where(r => r.IsEnabled).Concat(rows.Where(r => !r.IsEnabled)).ToList();
@@ -465,8 +481,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             var row = ordered[i];
 
-            // 禁用行在内存里就写 -1，和配置文件里的语义保持一致；否则一旦某条路径漏掉
-            // ApplyProviderSelection，就会把一个不存在的「第 5 名」写回 config.yaml。
+            // 禁用项统一使用 -1。
             row.Priority = i < enabledCount ? i + 1 : -1;
             row.PriorityLabel = i < enabledCount ? (i + 1).ToString(CultureInfo.InvariantCulture) : "—";
             row.CanMoveUp = i > 0 && i < enabledCount;
@@ -474,11 +489,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// Moves a row one slot up or down. Disabled rows are pinned to the bottom, so a move that
-    /// would cross the enabled/disabled boundary is ignored rather than silently doing nothing
-    /// visible.
-    /// </summary>
+    /// <summary>在启用项范围内移动提供者。</summary>
     private void MoveProviderBy<T>(ObservableCollection<T> rows, T row, int offset)
         where T : class, IProviderRowViewModel
     {
@@ -513,7 +524,7 @@ public partial class SettingsViewModel : ViewModelBase
             }
         }
 
-        return 0;
+        return -1;
     }
 
     private void WriteSettingsToOptions()
@@ -551,18 +562,12 @@ public partial class SettingsViewModel : ViewModelBase
             netEase.Additional["isEnableRomanOutput"] = IsRomanOutputEnabled ? "true" : "false";
         }
 
-        // Provider toggles are not decoration: unchecking writes priority -1, which is how the
-        // downloader skips a source. Without this the checkboxes move and the file never changes.
+        // 同步启用状态及搜索顺序。
         ApplyProviderSelection(_globalOptions.Provider?.Lyric?.Plugin, LyricsProviders);
         ApplyProviderSelection(_globalOptions.Provider?.Tag?.Plugin, TagProviders);
     }
 
-    /// <summary>
-    /// Push the row state onto the options: the checkbox decides whether a source runs at all
-    /// (disabled sources store -1, which is how the downloader skips them) and the list position
-    /// decides the search order. The number in the UI is derived from that position, so there is
-    /// nothing to reconcile here — no duplicate slots, no silent renumbering.
-    /// </summary>
+    /// <summary>将歌词提供者的界面顺序写入共享配置。</summary>
     private static void ApplyProviderSelection(
         IEnumerable<LyricsProviderOptions>? options,
         IEnumerable<LyricsProviderSettingViewModel> viewModels)
@@ -611,18 +616,22 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
-    private async Task SaveSettingsAsync()
+    private async Task SaveSettingsAsync(CancellationToken cancellationToken = default)
     {
-        // Debounce rapid changes (dragging a port spinner, typing an IP) into one write.
+        // 合并连续输入，但配置在内存中立即生效。
         var pending = Interlocked.Increment(ref _saveRequestId);
-        await Task.Delay(SaveDebounceMilliseconds).ConfigureAwait(true);
+        await Task.Delay(SaveDebounceMilliseconds, cancellationToken).ConfigureAwait(true);
 
         if (pending != Volatile.Read(ref _saveRequestId))
         {
             return;
         }
 
-        var result = await _settingsStore.SaveAsync().ConfigureAwait(true);
+        var result = await _settingsStore.SaveAsync(cancellationToken).ConfigureAwait(true);
+        if (pending != Volatile.Read(ref _saveRequestId))
+        {
+            return;
+        }
 
         HasSaveError = !result.IsSuccess;
         SaveStatusText = result.IsSuccess
@@ -635,12 +644,13 @@ public partial class SettingsViewModel : ViewModelBase
     private const int SaveDebounceMilliseconds = 400;
 
     [RelayCommand]
-    private async Task ResetToDefaults()
+    private async Task ResetToDefaultsAsync(CancellationToken cancellationToken = default)
     {
-        _isLoading = true; // Prevent multiple saves during reset
+        Interlocked.Increment(ref _saveRequestId);
+        _isLoading = true;
         IsProxyEnabled = false;
         ProxyIp = "127.0.0.1";
-        ProxyPort = 7890;
+        ProxyPort = 4780;
         IsTranslationEnabled = true;
         IsOneLineMode = true;
         SkipExistingLyrics = false;
@@ -651,9 +661,9 @@ public partial class SettingsViewModel : ViewModelBase
         BlockWordFilePath = "BlockWords.json";
         IsRomanOutputEnabled = false;
 
-        // Provider rows are settings too; leaving a disabled source behind after "reset" would
-        // look like the button half worked. Everything comes back enabled, in the order the rows
-        // are listed, which the numbering then reflects as 1..n again.
+        // 恢复随程序附带的默认顺序，额外提供者保留在末尾。
+        RestoreProviderOrder(LyricsProviders, ["NetEase", "QQ", "KuGou", "KuWo"], row => row.Name);
+        RestoreProviderOrder(TagProviders, ["Taglib", "FileName"], row => row.Name);
         foreach (var row in LyricsProviders)
         {
             row.IsEnabled = true;
@@ -669,44 +679,59 @@ public partial class SettingsViewModel : ViewModelBase
 
         _isLoading = false;
 
-        // Save once after all resets
+        // 所有默认值恢复后只保存一次。
         WriteSettingsToOptions();
-        var result = await _settingsStore.SaveAsync().ConfigureAwait(true);
+        var result = await _settingsStore.SaveAsync(cancellationToken).ConfigureAwait(true);
         HasSaveError = !result.IsSuccess;
         SaveStatusText = result.IsSuccess
             ? $"{SettingsSaved}: {result.FilePath}"
             : $"{SettingsSaveFailed}: {result.ErrorMessage}";
     }
+
+    private static void RestoreProviderOrder<T>(ObservableCollection<T> rows, string[] names, Func<T, string> getName)
+        where T : class
+    {
+        var target = 0;
+        foreach (var name in names)
+        {
+            var row = rows.FirstOrDefault(row => string.Equals(getName(row), name, StringComparison.OrdinalIgnoreCase));
+            if (row is not null)
+            {
+                rows.Move(rows.IndexOf(row), target++);
+            }
+        }
+    }
 }
 
-/// <summary>
-/// Shared shape of a source row so the reordering logic can work on both lists without
-/// duplicating it. The visible order is the search order; <see cref="Priority"/> and
-/// <see cref="PriorityLabel"/> are written by the view model, never typed by the user.
-/// </summary>
+/// <summary>可排序的提供者设置行。</summary>
 public interface IProviderRowViewModel
 {
+    /// <summary>是否启用。</summary>
     bool IsEnabled { get; set; }
 
+    /// <summary>搜索优先级，禁用时为 -1。</summary>
     int Priority { get; set; }
 
+    /// <summary>界面显示的顺序。</summary>
     string PriorityLabel { get; set; }
 
+    /// <summary>是否可以向上移动。</summary>
     bool CanMoveUp { get; set; }
 
+    /// <summary>是否可以向下移动。</summary>
     bool CanMoveDown { get; set; }
 
-    /// <summary>
-    /// Dimming for disabled rows: they are out of the running and pinned to the bottom, so they
-    /// should read as inactive rather than as just another entry.
-    /// </summary>
+    /// <summary>禁用时降低行透明度。</summary>
     double RowOpacity { get; }
 
+    /// <summary>向上移动命令。</summary>
     IRelayCommand MoveUpCommand { get; }
 
+    /// <summary>向下移动命令。</summary>
     IRelayCommand MoveDownCommand { get; }
 }
 
+/// <summary>歌词提供者设置行。</summary>
 public partial class LyricsProviderSettingViewModel : ObservableObject, IProviderRowViewModel
 {
     [ObservableProperty]
@@ -716,17 +741,11 @@ public partial class LyricsProviderSettingViewModel : ObservableObject, IProvide
     [NotifyPropertyChangedFor(nameof(RowOpacity))]
     private bool _isEnabled;
 
-    /// <summary>
-    /// Search order derived from the row position, smaller runs first. Disabled rows keep the
-    /// number they would occupy but are written as -1, which is how the downloader skips them.
-    /// </summary>
+    /// <summary>搜索优先级，禁用时为 -1。</summary>
     [ObservableProperty]
     private int _priority;
 
-    /// <summary>
-    /// What the list shows in the number column: the position, or a dash once the row is disabled
-    /// and pushed to the bottom.
-    /// </summary>
+    /// <summary>显示的顺序，禁用时显示横线。</summary>
     [ObservableProperty]
     private string _priorityLabel = string.Empty;
 
@@ -736,13 +755,17 @@ public partial class LyricsProviderSettingViewModel : ObservableObject, IProvide
     [ObservableProperty]
     private bool _canMoveDown;
 
+    /// <inheritdoc />
     public double RowOpacity => IsEnabled ? 1.0 : 0.45;
 
+    /// <inheritdoc />
     public IRelayCommand MoveUpCommand { get; set; } = new RelayCommand(() => { });
 
+    /// <inheritdoc />
     public IRelayCommand MoveDownCommand { get; set; } = new RelayCommand(() => { });
 }
 
+/// <summary>标签提供者设置行。</summary>
 public partial class TagInfoProviderSettingViewModel : ObservableObject, IProviderRowViewModel
 {
     [ObservableProperty]
@@ -766,9 +789,12 @@ public partial class TagInfoProviderSettingViewModel : ObservableObject, IProvid
     [ObservableProperty]
     private bool _canMoveDown;
 
+    /// <inheritdoc />
     public double RowOpacity => IsEnabled ? 1.0 : 0.45;
 
+    /// <inheritdoc />
     public IRelayCommand MoveUpCommand { get; set; } = new RelayCommand(() => { });
 
+    /// <inheritdoc />
     public IRelayCommand MoveDownCommand { get; set; } = new RelayCommand(() => { });
 }

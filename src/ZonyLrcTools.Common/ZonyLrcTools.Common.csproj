@@ -27,4 +27,16 @@
         <Compile Remove="Lyrics\Providers\Kugeci\KugeciDownloader.cs"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="ZonyLrcTools.Tests"/>
+    </ItemGroup>
+
 </Project>

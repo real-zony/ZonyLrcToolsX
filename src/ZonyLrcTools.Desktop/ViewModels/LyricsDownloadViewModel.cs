@@ -17,17 +17,17 @@ using ZonyLrcTools.Desktop.Services;
 namespace ZonyLrcTools.Desktop.ViewModels;
 
 /// <summary>
-/// Which source the lyrics page reads its song list from.
+/// 歌词列表的数据来源。
 /// </summary>
 public enum LyricsScannerKind
 {
-    /// <summary>Scan a local folder for audio files.</summary>
+    /// <summary>扫描本地音乐文件夹。</summary>
     Local = 0,
 
-    /// <summary>Read a CSV file containing "song,artist" rows.</summary>
+    /// <summary>读取歌曲与歌手信息的 CSV 文件。</summary>
     Csv = 1,
 
-    /// <summary>Pull a NetEase Cloud Music playlist by id.</summary>
+    /// <summary>读取网易云歌单。</summary>
     NetEase = 2
 }
 
@@ -47,9 +47,8 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     private readonly IUILocalizationService? _localization;
 
     private CancellationTokenSource? _downloadCts;
-    private CancellationTokenSource? _scanCts;
     private readonly Dictionary<string, MusicFileViewModel> _musicFileMap = new();
-    private List<MusicInfo> _scannedMusicInfos = new();
+    private readonly List<MusicInfo> _scannedMusicInfos = new();
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartScanCommand))]
@@ -73,6 +72,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsLocalScanner))]
     [NotifyPropertyChangedFor(nameof(IsCsvScanner))]
     [NotifyPropertyChangedFor(nameof(IsNetEaseScanner))]
+    [NotifyCanExecuteChangedFor(nameof(StartScanCommand))]
     [NotifyPropertyChangedFor(nameof(CanScan))]
     private int _selectedScannerIndex;
 
@@ -93,6 +93,14 @@ public partial class LyricsDownloadViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartDownloadCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectCsvFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectOutputFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(StartScanCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignInNetEaseCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignOutNetEaseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanScan))]
+    [NotifyPropertyChangedFor(nameof(CanEditInputs))]
     [NotifyPropertyChangedFor(nameof(CanStartDownload))]
     private bool _isDownloading;
 
@@ -102,6 +110,9 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(SelectCsvFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(SelectOutputFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(StartScanCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignInNetEaseCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignOutNetEaseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanEditInputs))]
     [NotifyPropertyChangedFor(nameof(CanStartDownload))]
     [NotifyPropertyChangedFor(nameof(CanScan))]
     private bool _isScanning;
@@ -122,9 +133,22 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     private bool _isNetEaseLoggedIn;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(StartDownloadCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectCsvFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectOutputFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(StartScanCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignInNetEaseCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SignOutNetEaseCommand))]
+    [NotifyPropertyChangedFor(nameof(CanStartDownload))]
+    [NotifyPropertyChangedFor(nameof(CanScan))]
+    [NotifyPropertyChangedFor(nameof(CanEditInputs))]
+    private bool _isAccountBusy;
+
+    [ObservableProperty]
     private string? _currentProcessingFile;
 
-    // Localized strings
+    // 界面文案。
     public string LyricsTitle => _localization?["Lyrics_Title"] ?? "Lyrics Download";
     public string LyricsDescription => _localization?["Lyrics_Description"] ?? "Batch download lyrics for your music files";
     public string LyricsFolderLabel => _localization?["Lyrics_FolderLabel"] ?? "Music Folder";
@@ -134,32 +158,45 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     public string LyricsStartDownload => _localization?["Lyrics_StartDownload"] ?? "Start Download";
     public string LyricsStopDownload => _localization?["Lyrics_StopDownload"] ?? "Stop Download";
     public string LyricsScanning => _localization?["Lyrics_Status_Scanning"] ?? "Scanning files...";
+    /// <summary>数据来源标签。</summary>
     public string LyricsScannerLabel => _localization?["Lyrics_Scanner"] ?? "Source";
+    /// <summary>扫描按钮文案。</summary>
     public string LyricsScan => _localization?["Lyrics_Scan"] ?? "Scan";
+    /// <summary>CSV 文件标签。</summary>
     public string LyricsCsvLabel => _localization?["Lyrics_CsvLabel"] ?? "CSV File";
+    /// <summary>CSV 文件选择提示。</summary>
     public string LyricsCsvSelect => _localization?["Lyrics_CsvSelect"] ?? "Select a CSV file...";
+    /// <summary>CSV 文件选择按钮文案。</summary>
     public string LyricsCsvBrowse => _localization?["Lyrics_CsvBrowse"] ?? "Choose...";
+    /// <summary>网易云歌单编号标签。</summary>
     public string LyricsSongListLabel => _localization?["Lyrics_SongListLabel"] ?? "Playlist ID";
+    /// <summary>网易云歌单编号输入提示。</summary>
     public string LyricsSongListWatermark => _localization?["Lyrics_SongListWatermark"] ?? "e.g. 7224428149 (separate multiple ids with ;)";
+    /// <summary>输出目录标签。</summary>
     public string LyricsOutputLabel => _localization?["Lyrics_OutputLabel"] ?? "Save To";
+    /// <summary>输出目录选择提示。</summary>
     public string LyricsOutputSelect => _localization?["Lyrics_OutputSelect"] ?? "Where the .lrc files should be written";
+    /// <summary>输出目录选择按钮文案。</summary>
     public string LyricsOutputBrowse => _localization?["Lyrics_OutputBrowse"] ?? "Choose...";
+    /// <summary>退出登录按钮文案。</summary>
     public string NetEaseSignOut => _localization?["NetEase_SignOut"] ?? "Sign out";
+    /// <summary>退出登录提示。</summary>
     public string NetEaseSignOutHint => _localization?["NetEase_SignOutHint"] ??
                                         "Forget the saved session and scan the QR code again next time.";
+    /// <summary>登录按钮文案。</summary>
     public string NetEaseSignIn => _localization?["NetEase_SignIn"] ?? "Sign in…";
+    /// <summary>登录按钮提示。</summary>
     public string NetEaseSignInHint => _localization?["NetEase_SignInHint"] ??
                                        "Scan a QR code now instead of waiting until the next scan.";
 
     /// <summary>
-    /// Human readable login state. The sign in / sign out buttons alone were not enough: a user
-    /// who had never signed in could not tell whether a session was stored, and a user who had
-    /// signed in had no way to notice the cookie was restored from disk.
+    /// 当前网易云登录状态。
     /// </summary>
     public string NetEaseAccountStatus => IsNetEaseLoggedIn
         ? _localization?["NetEase_LoggedIn"] ?? "Signed in. Scanning a playlist reuses this session."
         : _localization?["NetEase_NotLoggedIn"] ?? "Not signed in. Scanning a playlist will show a QR code.";
 
+    /// <summary>账号状态标签。</summary>
     public string NetEaseAccountLabel => _localization?["NetEase_AccountLabel"] ?? "Account";
     public string CommonTotal => _localization?["Common_Total"] ?? "Total:";
     public string CommonFiles => _localization?["Common_Files"] ?? "files";
@@ -171,7 +208,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     public string ColumnStatus => _localization?["Column_Status"] ?? "Status";
 
     /// <summary>
-    /// Scanner display names, indexed the same way as <see cref="SelectedScannerIndex"/>.
+    /// 按 <see cref="SelectedScannerIndex"/> 排列的数据来源名称。
     /// </summary>
     public string[] ScannerNames =>
     [
@@ -184,7 +221,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     public bool IsCsvScanner => SelectedScannerIndex == (int)LyricsScannerKind.Csv;
     public bool IsNetEaseScanner => SelectedScannerIndex == (int)LyricsScannerKind.NetEase;
 
-    public bool CanStartDownload => !IsDownloading && !IsScanning && MusicFiles.Count > 0;
+    public bool CanStartDownload => CanEditInputs && MusicFiles.Count > 0;
 
     public bool HasNoFiles => MusicFiles.Count == 0;
 
@@ -222,8 +259,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
             _localization.LanguageChanged += OnLanguageChanged;
         }
 
-        // The scanner is a singleton, so a session restored by an earlier page visit is already
-        // in memory; reflect it right away instead of waiting for the first activation.
+        // 扫描器为单例，页面直接复用已恢复的登录状态。
         IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
 
         MusicFiles.CollectionChanged += (_, _) =>
@@ -273,75 +309,93 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         OnPropertyChanged(nameof(ScannerNames));
     }
 
-    // ---------------------------------------------------------------- selection commands
+    partial void OnSelectedScannerIndexChanged(int value) => InvalidateScan();
+    partial void OnSelectedCsvFilePathChanged(string? value) => InvalidateScan();
+    partial void OnSongListIdsChanged(string? value) => InvalidateScan();
+    partial void OnOutputDirectoryChanged(string? value) => InvalidateScan();
+
+    private void InvalidateScan()
+    {
+        if (CanEditInputs)
+        {
+            ResetCollections();
+        }
+    }
 
     [RelayCommand(CanExecute = nameof(CanSelectFolder))]
-    private async Task SelectFolderAsync()
+    private async Task SelectFolderAsync(CancellationToken cancellationToken = default)
     {
         var folder = await _dialogService.ShowFolderPickerAsync(
             _localization?["Lyrics_SelectFolder"] ?? "Select Music Folder");
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(folder)) return;
 
         SelectedFolderPath = folder;
-        await ScanFilesAsync();
+        await ScanFilesAsync(cancellationToken);
     }
 
-    private bool CanSelectFolder => !IsScanning && !IsDownloading;
+    /// <summary>
+    /// 是否可以修改任务来源与输出目录。
+    /// </summary>
+    public bool CanEditInputs => !IsScanning && !IsDownloading && !IsAccountBusy;
+
+    private bool CanSelectFolder => CanEditInputs;
 
     [RelayCommand(CanExecute = nameof(CanSelectFolder))]
-    private async Task SelectCsvFileAsync()
+    private async Task SelectCsvFileAsync(CancellationToken cancellationToken = default)
     {
         var file = await _dialogService.ShowFilePickerAsync(
             _localization?["Lyrics_CsvSelect"] ?? "Select a CSV file", [".csv"]);
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(file)) return;
 
         SelectedCsvFilePath = file;
     }
 
     [RelayCommand(CanExecute = nameof(CanSelectFolder))]
-    private async Task SelectOutputFolderAsync()
+    private async Task SelectOutputFolderAsync(CancellationToken cancellationToken = default)
     {
         var folder = await _dialogService.ShowFolderPickerAsync(
             _localization?["Lyrics_OutputSelect"] ?? "Select Output Folder");
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(folder)) return;
 
         OutputDirectory = folder;
     }
 
-    // ---------------------------------------------------------------- scanning
 
     /// <summary>
-    /// Whether the current source has enough input to start reading a song list.
+    /// 当前来源是否具备扫描所需的输入。
     /// </summary>
-    public bool CanScan => !IsScanning && !IsDownloading && SelectedScannerIndex switch
+    public bool CanScan => CanEditInputs && (SelectedScannerIndex switch
     {
         (int)LyricsScannerKind.Local => !string.IsNullOrEmpty(SelectedFolderPath),
         (int)LyricsScannerKind.Csv => !string.IsNullOrEmpty(SelectedCsvFilePath),
         (int)LyricsScannerKind.NetEase => !string.IsNullOrWhiteSpace(SongListIds),
         _ => false
-    };
+    });
 
     /// <summary>
-    /// Re-read the song list using the currently selected source.
+    /// 使用当前来源重新读取歌曲列表。
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanScan))]
-    private async Task StartScanAsync()
+    private async Task StartScanAsync(CancellationToken cancellationToken = default)
     {
         switch ((LyricsScannerKind)SelectedScannerIndex)
         {
             case LyricsScannerKind.Csv:
-                await ScanCsvFileAsync();
+                await ScanCsvFileAsync(cancellationToken);
                 break;
             case LyricsScannerKind.NetEase:
-                await ScanNetEasePlaylistAsync();
+                await ScanNetEasePlaylistAsync(cancellationToken);
                 break;
             default:
-                await ScanFilesAsync();
+                await ScanFilesAsync(cancellationToken);
                 break;
         }
     }
 
-    private async Task ScanFilesAsync()
+    private async Task ScanFilesAsync(CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
@@ -350,12 +404,13 @@ public partial class LyricsDownloadViewModel : ViewModelBase
 
         try
         {
-            var files = (await _fileScanner.ScanMusicFilesAsync(SelectedFolderPath, _options.SupportFileExtensions))
-                .ToList();
+            var files = (await Task.Run(
+                () => _fileScanner.ScanMusicFilesAsync(SelectedFolderPath, _options.SupportFileExtensions),
+                cancellationToken)).ToList();
 
             if (files.Count == 0)
             {
-                await ShowNoMusicFilesAsync();
+                await ShowNoMusicFilesAsync(cancellationToken);
                 return;
             }
 
@@ -365,7 +420,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
             var scanTasks = files.Select(file =>
                 warpTask.RunAsync(async () =>
                 {
-                    var musicInfo = await _tagLoader.LoadTagAsync(file);
+                    var musicInfo = await Task.Run(() => _tagLoader.LoadTagAsync(file).AsTask(), cancellationToken);
 
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
@@ -378,15 +433,19 @@ public partial class LyricsDownloadViewModel : ViewModelBase
                         ScanProgressCount++;
                         ScanProgressPercentage = ScanProgressCount * 100.0 / ScanTotalCount;
                     });
-                }));
+                }, cancellationToken));
 
             await Task.WhenAll(scanTasks);
 
             TotalCount = MusicFiles.Count;
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消扫描。
+        }
         catch (Exception ex)
         {
-            await ShowErrorAsync(ex.Message);
+            await ShowErrorAsync(ex.Message, cancellationToken);
         }
         finally
         {
@@ -394,7 +453,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         }
     }
 
-    private async Task ScanCsvFileAsync()
+    private async Task ScanCsvFileAsync(CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(SelectedCsvFilePath)) return;
 
@@ -403,16 +462,19 @@ public partial class LyricsDownloadViewModel : ViewModelBase
 
         try
         {
-            var musicInfos = await _csvFileMusicScanner.GetMusicInfoFromCsvFileAsync(
-                SelectedCsvFilePath,
-                RequireOutputDirectory(),
-                DefaultFileNamePattern);
+            var outputDirectory = RequireOutputDirectory();
+            var musicInfos = await Task.Run(() => _csvFileMusicScanner.GetMusicInfoFromCsvFileAsync(
+                SelectedCsvFilePath, outputDirectory, DefaultFileNamePattern, cancellationToken), cancellationToken);
 
             AppendScannedMusicInfos(musicInfos);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消扫描。
+        }
         catch (Exception ex)
         {
-            await ShowErrorAsync(ex.Message);
+            await ShowErrorAsync(ex.Message, cancellationToken);
         }
         finally
         {
@@ -420,21 +482,18 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         }
     }
 
-    private async Task ScanNetEasePlaylistAsync()
+    private async Task ScanNetEasePlaylistAsync(CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(SongListIds)) return;
 
         ResetCollections();
         IsScanning = true;
 
-        using var scanCts = new CancellationTokenSource();
-        _scanCts = scanCts;
-
         try
         {
-            await RestoreNetEaseSessionAsync();
+            await RestoreNetEaseSessionAsync(cancellationToken);
 
-            if (!_neteaseMusicScanner.IsLoggedIn && !await LoginToNetEaseAsync())
+            if (!_neteaseMusicScanner.IsLoggedIn && !await LoginToNetEaseAsync(cancellationToken))
             {
                 return;
             }
@@ -448,46 +507,43 @@ public partial class LyricsDownloadViewModel : ViewModelBase
                 DefaultFileNamePattern,
                 onQrCodeReady: null,
                 onStateChanged: null,
-                cancellationToken: scanCts.Token);
+                cancellationToken: cancellationToken);
 
-            await PersistNetEaseSessionAsync();
+            await PersistNetEaseSessionAsync(cancellationToken);
 
             AppendScannedMusicInfos(musicInfos);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            // User closed the login dialog.
+            // 用户取消扫描。
         }
         catch (Exception ex)
         {
-            await ShowErrorAsync(ex.Message);
+            await ShowErrorAsync(ex.Message, cancellationToken);
         }
         finally
         {
-            _scanCts = null;
             IsScanning = false;
 
-            // Whatever happened above - scan ok, user cancelled the QR dialog, request failed -
-            // the account row must reflect the scanner's real state. Without this the sign-in
-            // button kept saying "Sign out" after a successful login from the scan flow.
+            // 无论登录成功还是取消，都以扫描器中的状态为准。
             IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
         }
     }
 
     /// <summary>
-    /// Load a previously saved NetEase session so the QR dialog only appears on first use.
+    /// 恢复已保存的网易云登录状态。
     /// </summary>
-    private async Task RestoreNetEaseSessionAsync()
+    private async Task RestoreNetEaseSessionAsync(CancellationToken cancellationToken = default)
     {
         if (_neteaseMusicScanner.IsLoggedIn) return;
 
-        var session = await _sessionStore.LoadAsync();
+        var session = await _sessionStore.LoadAsync(cancellationToken);
         if (session == null) return;
 
         _neteaseMusicScanner.RestoreLoginState(session.Cookie, session.CsrfToken);
     }
 
-    private async Task PersistNetEaseSessionAsync()
+    private async Task PersistNetEaseSessionAsync(CancellationToken cancellationToken = default)
     {
         if (!_neteaseMusicScanner.IsLoggedIn) return;
 
@@ -495,61 +551,81 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         {
             Cookie = _neteaseMusicScanner.Cookie,
             CsrfToken = _neteaseMusicScanner.CsrfToken,
-            SavedAt = DateTimeOffset.Now
-        });
+            SavedAtUtc = DateTimeOffset.UtcNow
+        }, cancellationToken);
     }
 
     /// <summary>
-    /// Show the QR dialog and wait for the scan-and-confirm flow to finish.
+    /// 显示二维码并等待登录或窗口关闭。
     /// </summary>
-    private async Task<bool> LoginToNetEaseAsync()
+    private async Task<bool> LoginToNetEaseAsync(CancellationToken cancellationToken = default)
     {
         var loginViewModel = new QrCodeLoginViewModel(_localization);
-        using var loginCts = new CancellationTokenSource();
-
-        loginViewModel.Cancelled += (_, _) => loginCts.Cancel();
+        using var loginCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        void OnCancelled(object? sender, EventArgs args) => loginCts.Cancel();
+        loginViewModel.Cancelled += OnCancelled;
 
         var loginTask = Task.Run(async () =>
         {
             try
             {
+                var expired = false;
                 var isSuccess = await _neteaseMusicScanner.LoginAsync(
                     payload => Dispatcher.UIThread.Post(() => loginViewModel.SetPayload(payload)),
-                    state => Dispatcher.UIThread.Post(() => loginViewModel.SetState(state)),
+                    state =>
+                    {
+                        expired = state == NetEaseLoginState.Expired;
+                        Dispatcher.UIThread.Post(() => loginViewModel.SetState(state));
+                    },
                     loginCts.Token);
 
-                if (isSuccess)
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    Dispatcher.UIThread.Post(() => loginViewModel.Complete());
-                }
+                    if (isSuccess)
+                    {
+                        loginViewModel.Complete();
+                    }
+                    else if (!expired)
+                    {
+                        loginViewModel.SetError(_localization?["NetEase_LoginFailed"] ??
+                            "Login did not complete. Close this dialog and try again.");
+                    }
+                });
 
                 return isSuccess;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (loginCts.IsCancellationRequested)
             {
                 return false;
             }
             catch (Exception ex)
             {
-                Dispatcher.UIThread.Post(() => loginViewModel.SetError(ex.Message));
+                await Dispatcher.UIThread.InvokeAsync(() => loginViewModel.SetError(ex.Message));
                 return false;
             }
         });
 
-        // The dialog closes itself once the flow calls Complete(), so this await returns as soon
-        // as the user either confirms on the phone or gives up.
-        await _dialogService.ShowQrCodeLoginDialogAsync(loginViewModel);
+        try
+        {
+            await _dialogService.ShowQrCodeLoginDialogAsync(loginViewModel, cancellationToken);
+        }
+        finally
+        {
+            loginViewModel.NotifyClosed();
+            loginCts.Cancel();
+            await loginTask;
+            loginViewModel.Cancelled -= OnCancelled;
+        }
 
         var isSuccess = await loginTask;
         if (isSuccess)
         {
-            await PersistNetEaseSessionAsync();
+            await PersistNetEaseSessionAsync(cancellationToken);
         }
 
         return isSuccess;
     }
 
-    // ---------------------------------------------------------------- shared helpers
 
     private void ResetCollections()
     {
@@ -567,6 +643,8 @@ public partial class LyricsDownloadViewModel : ViewModelBase
 
     private void AddRow(MusicInfo musicInfo)
     {
+        if (_musicFileMap.ContainsKey(musicInfo.FilePath)) return;
+
         var vm = new MusicFileViewModel
         {
             FilePath = musicInfo.FilePath,
@@ -581,7 +659,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Fill the grid from a scanner that returns its list in one shot (CSV, NetEase).
+    /// 将 CSV 或网易云扫描结果加入列表。
     /// </summary>
     private void AppendScannedMusicInfos(List<MusicInfo> musicInfos)
     {
@@ -611,22 +689,23 @@ public partial class LyricsDownloadViewModel : ViewModelBase
         return fallback;
     }
 
-    private Task ShowNoMusicFilesAsync()
+    private Task ShowNoMusicFilesAsync(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         return _dialogService.ShowMessageAsync(
             _localization?["Common_Info"] ?? "Info",
             _localization?["Error_NoMusicFiles"] ?? "No music files found in the selected folder.");
     }
 
-    private Task ShowErrorAsync(string message)
+    private Task ShowErrorAsync(string message, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         return _dialogService.ShowMessageAsync(_localization?["Common_Error"] ?? "Error", message);
     }
 
-    // ---------------------------------------------------------------- download
 
     [RelayCommand(CanExecute = nameof(CanStartDownload))]
-    private async Task StartDownloadAsync()
+    private async Task StartDownloadAsync(CancellationToken cancellationToken = default)
     {
         if (_scannedMusicInfos.Count == 0) return;
 
@@ -643,7 +722,7 @@ public partial class LyricsDownloadViewModel : ViewModelBase
             vm.StatusMessage = _localization?["Status_Pending"] ?? "Pending";
         }
 
-        _downloadCts = new CancellationTokenSource();
+        _downloadCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         try
         {
@@ -683,9 +762,13 @@ public partial class LyricsDownloadViewModel : ViewModelBase
                 },
                 _downloadCts.Token);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (_downloadCts.IsCancellationRequested)
         {
-            // User cancelled
+            // 用户取消下载。
+        }
+        catch (Exception ex)
+        {
+            await ShowErrorAsync(ex.Message, cancellationToken);
         }
         finally
         {
@@ -702,54 +785,85 @@ public partial class LyricsDownloadViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Clears the saved NetEase session so the next playlist scan asks for a fresh QR login.
-    /// <remarks>
-    /// Without this the only way to recover from an expired Cookie was to delete
-    /// <c>netease.session.json</c> by hand.
-    /// </remarks>
+    /// 清除已保存的网易云登录状态。
     /// </summary>
-    [RelayCommand(CanExecute = nameof(IsNetEaseLoggedIn))]
-    private async Task SignOutNetEaseAsync()
+    [RelayCommand(CanExecute = nameof(CanSignOutNetEase))]
+    private async Task SignOutNetEaseAsync(CancellationToken cancellationToken = default)
     {
-        _neteaseMusicScanner.ClearLoginState();
-        await _sessionStore.ClearAsync();
-        IsNetEaseLoggedIn = false;
-        await _dialogService.ShowMessageAsync(
-            _localization?["Common_Info"] ?? "Info",
-            _localization?["NetEase_SignedOut"] ?? "Signed out. The next playlist scan will ask for a QR login.");
+        IsAccountBusy = true;
+        try
+        {
+            await _sessionStore.ClearAsync(cancellationToken);
+            _neteaseMusicScanner.ClearLoginState();
+            await _dialogService.ShowMessageAsync(
+                _localization?["Common_Info"] ?? "Info",
+                _localization?["NetEase_SignedOut"] ?? "Signed out. The next playlist scan will ask for a QR login.");
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消操作。
+        }
+        catch (Exception ex)
+        {
+            await ShowErrorAsync(ex.Message, cancellationToken);
+        }
+        finally
+        {
+            IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
+            IsAccountBusy = false;
+        }
     }
 
-    private bool CanSignInNetEase => !IsNetEaseLoggedIn && !IsScanning && !IsDownloading;
+    private bool CanSignInNetEase => !IsNetEaseLoggedIn && CanEditInputs;
+    private bool CanSignOutNetEase => IsNetEaseLoggedIn && CanEditInputs;
 
     /// <summary>
-    /// Let the user sign in from the page itself instead of discovering the QR dialog only after
-    /// pressing "Scan" - the button used to be hidden behind one specific scanner choice.
+    /// 主动发起网易云扫码登录。
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanSignInNetEase))]
-    private async Task SignInNetEaseAsync()
+    private async Task SignInNetEaseAsync(CancellationToken cancellationToken = default)
     {
-        if (await LoginToNetEaseAsync())
+        IsAccountBusy = true;
+        try
         {
-            IsNetEaseLoggedIn = true;
+            await LoginToNetEaseAsync(cancellationToken);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消登录。
+        }
+        catch (Exception ex)
+        {
+            await ShowErrorAsync(ex.Message, cancellationToken);
+        }
+        finally
+        {
+            IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
+            IsAccountBusy = false;
         }
     }
 
     /// <summary>
-    /// Refresh the visible login state. Called on construction and every time the page is shown,
-    /// because the session may have been written by an earlier run of the app.
+    /// 页面打开时恢复登录状态。
     /// </summary>
-    private async Task RefreshNetEaseLoginStateAsync()
-    {
-        await RestoreNetEaseSessionAsync();
-        IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
-        SignOutNetEaseCommand.NotifyCanExecuteChanged();
-        SignInNetEaseCommand.NotifyCanExecuteChanged();
-    }
-
     public override async Task OnActivatedAsync()
     {
-        await base.OnActivatedAsync();
-        await RefreshNetEaseLoginStateAsync();
+        if (!CanEditInputs) return;
+
+        IsAccountBusy = true;
+        try
+        {
+            await RestoreNetEaseSessionAsync();
+        }
+        catch (Exception ex)
+        {
+            await ShowErrorAsync(ex.Message);
+        }
+        finally
+        {
+            IsNetEaseLoggedIn = _neteaseMusicScanner.IsLoggedIn;
+            IsAccountBusy = false;
+        }
     }
 }
 

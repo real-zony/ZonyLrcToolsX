@@ -338,7 +338,7 @@
     <value>Enable block word filtering</value>
   </data>
   <data name="Settings_BlockWordPath" xml:space="preserve">
-    <value>Block word file path:</value>
+    <value>Block Words File (relative to current working directory):</value>
   </data>
   <data name="Settings_TagProvider" xml:space="preserve">
     <value>Tag Providers</value>
@@ -435,6 +435,12 @@
   </data>
   <data name="NetEase_LoginSucceeded" xml:space="preserve">
     <value>Signed in.</value>
+  </data>
+  <data name="NetEase_LoginExpired" xml:space="preserve">
+    <value>The QR code expired. Close this dialog and try again.</value>
+  </data>
+  <data name="NetEase_LoginFailed" xml:space="preserve">
+    <value>Login did not complete. Close this dialog and try again.</value>
   </data>
   <data name="Home_Features" xml:space="preserve">
     <value>Features</value>

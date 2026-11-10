@@ -28,6 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public string NavHome => _localization["Nav_Home"];
     public string NavLyricsDownload => _localization["Nav_LyricsDownload"];
     public string NavAlbumDownload => _localization["Nav_AlbumDownload"];
+    /// <summary>音乐解密导航文案。</summary>
     public string NavDecrypt => _localization["Nav_Decrypt"];
     public string NavSettings => _localization["Nav_Settings"];
     public string HomeDescription => _localization["Home_Description"];
@@ -44,17 +45,20 @@ public partial class MainWindowViewModel : ViewModelBase
         _themeService = themeService;
         _localization = localization;
         _navigation = navigation;
+        IsDarkTheme = _themeService.CurrentTheme == Avalonia.Styling.ThemeVariant.Dark;
+        _themeService.ThemeChanged += (_, _) =>
+            IsDarkTheme = _themeService.CurrentTheme == Avalonia.Styling.ThemeVariant.Dark;
 
         // Subscribe to language changes
         _localization.LanguageChanged += OnLanguageChanged;
 
-        // The navigation service is the single owner of "which page is showing".
+        // 页面切换统一由导航服务管理。
         _navigation.NavigationChanged += OnNavigationChanged;
 
         NavigateToIndex(0);
     }
 
-    // Guards against the re-entrant loop "index changed -> navigate -> navigation changed -> index changed".
+    // 避免导航通知与侧栏选中状态互相触发。
     private bool _isSyncingNavigation;
 
     partial void OnSelectedNavigationIndexChanged(int value)
@@ -69,8 +73,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void NavigateToIndex(int index)
     {
-        // NavigateRoot keeps the stack depth at one: sidebar switching is not a back-navigable
-        // action, so clicking around must not grow history.
+        // 侧栏切换不累积返回记录。
         CurrentPage = index switch
         {
             1 => _navigation.NavigateRoot<LyricsDownloadViewModel>(),
@@ -85,7 +88,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = viewModel;
 
-        // The home page quick actions navigate directly, so the sidebar has to follow them.
+        // 首页快捷入口跳转时同步侧栏选中项。
         var index = IndexOf(viewModel);
         if (index < 0 || index == SelectedNavigationIndex)
         {
@@ -128,9 +131,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleTheme()
     {
-        IsDarkTheme = !IsDarkTheme;
-        _themeService.SetTheme(IsDarkTheme
-            ? Avalonia.Styling.ThemeVariant.Dark
-            : Avalonia.Styling.ThemeVariant.Light);
+        _themeService.ToggleTheme();
     }
 }

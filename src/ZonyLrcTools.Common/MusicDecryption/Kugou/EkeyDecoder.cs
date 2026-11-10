@@ -15,7 +15,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         /// <summary>
         /// V2 前缀，解码后即 "QQMusic EncV2,Key:"。
         /// </summary>
-        private static readonly byte[] V2Prefix = "UVFNdXNpYyBFbmNWMixLZXk6"u8.ToArray();
+        private const string V2Prefix = "UVFNdXNpYyBFbmNWMixLZXk6";
 
         private static readonly byte[] V2Key1 =
         [
@@ -35,11 +35,9 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 
         /// <summary>
         /// 将数据库中的 ekey 字符串还原为 QMC2 使用的原始密钥。
-        /// <param name="invalidCharCount">
-        /// Base64 段里被忽略的非法字符数量。Base64 解码本身是宽容的（会静默映射成 0），
-        /// 这里把它统计出来，让上层能把「密钥损坏」和「没有密钥」区分开。
-        /// </param>
         /// </summary>
+        /// <param name="ekey">数据库中的密钥。</param>
+        /// <param name="invalidCharCount">Base64 中的非法字符数量，空白不计入。</param>
         /// <returns>原始密钥；解码失败时为空数组。</returns>
         public static byte[] Decode(string ekey, out int invalidCharCount)
         {
@@ -49,10 +47,10 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                 return [];
             }
 
-            var raw = Encoding.Latin1.GetBytes(ekey);
-            if (raw.Length >= V2Prefix.Length && raw.AsSpan(0, V2Prefix.Length).SequenceEqual(V2Prefix))
+            if (ekey.StartsWith(V2Prefix, StringComparison.Ordinal))
             {
-                var inner = TcTea.CbcDecrypt(raw[V2Prefix.Length..], TcTea.ToRoundKeys(V2Key1));
+                var raw = Encoding.Latin1.GetBytes(ekey[V2Prefix.Length..]);
+                var inner = TcTea.CbcDecrypt(raw, TcTea.ToRoundKeys(V2Key1));
                 if (inner.Length == 0)
                 {
                     return [];
@@ -72,7 +70,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 
         private static byte[] DecodeV1(string ekey, out int invalidCharCount)
         {
-            var result = Base64Decode(Encoding.Latin1.GetBytes(ekey), out invalidCharCount);
+            var result = Base64Decode(ekey, out invalidCharCount);
             if (result.Length < 8)
             {
                 return [];
@@ -98,107 +96,52 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             return output;
         }
 
-        private static readonly byte[] Base64Table =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"u8.ToArray();
-
-        /// <summary>
-        /// 宽容的 Base64 解码，兼容 URL-safe 变体与不规范的长度。
-        /// <param name="invalidCount">输入中不属于 Base64 的字符数量（空白字符会被跳过，不计入）。</param>
-        /// </summary>
-        private static byte[] Base64Decode(byte[] input, out int invalidCount)
+        private static byte[] Base64Decode(string input, out int invalidCount)
         {
-            var reverse = new byte[256];
-            var isKnown = new bool[256];
-            for (var i = 0; i < Base64Table.Length; i++)
-            {
-                reverse[Base64Table[i]] = (byte)i;
-                isKnown[Base64Table[i]] = true;
-            }
-
-            // URL-safe 变体。
-            reverse[(byte)'-'] = 62;
-            reverse[(byte)'_'] = 63;
-            isKnown[(byte)'-'] = true;
-            isKnown[(byte)'_'] = true;
-            isKnown[(byte)'='] = true;
-
-            // 空白字符按「忽略」处理，其余未知字符计入 invalidCount，交给调用方判定为损坏。
-            isKnown[(byte)' '] = true;
-            isKnown[(byte)'\r'] = true;
-            isKnown[(byte)'\n'] = true;
-            isKnown[(byte)'\t'] = true;
-
+            var normalized = new char[input.Length + 3];
+            var length = 0;
             invalidCount = 0;
-            var cleaned = new byte[input.Length];
-            var cleanedLength = 0;
             foreach (var value in input)
             {
-                if (value is (byte)' ' or (byte)'\r' or (byte)'\n' or (byte)'\t')
+                if (value is ' ' or '\r' or '\n' or '\t')
                 {
                     continue;
                 }
 
-                if (!isKnown[value])
+                if (value is not (>= 'A' and <= 'Z' or >= 'a' and <= 'z' or >= '0' and <= '9'
+                    or '+' or '/' or '-' or '_' or '='))
                 {
                     invalidCount++;
                     continue;
                 }
 
-                cleaned[cleanedLength++] = value;
-            }
-
-            input = cleaned.AsSpan(0, cleanedLength).ToArray();
-
-            var output = new byte[(input.Length + 3) / 4 * 3];
-            var outOffset = 0;
-
-            // 解一组 4 个字符；返回 true 表示遇到了填充，可以结束。
-            bool DecodeBlock(ReadOnlySpan<byte> block)
-            {
-                var a = reverse[block[0]];
-                var b = reverse[block[1]];
-                var c = reverse[block[2]];
-                var d = reverse[block[3]];
-
-                output[outOffset++] = (byte)((a << 2) | (b >> 4));
-
-                if (block[2] == '=')
+                normalized[length++] = value switch
                 {
-                    return true;
-                }
-
-                output[outOffset++] = (byte)((b << 4) | (c >> 2));
-
-                if (block[3] == '=')
-                {
-                    return true;
-                }
-
-                output[outOffset++] = (byte)((c << 6) | d);
-                return false;
+                    '-' => '+',
+                    '_' => '/',
+                    _ => value
+                };
             }
 
-            var fullLength = input.Length - input.Length % 4;
-            for (var i = 0; i < fullLength; i += 4)
+            if (invalidCount != 0 || length == 0 || length % 4 == 1)
             {
-                if (DecodeBlock(input.AsSpan(i, 4)))
-                {
-                    return output.AsSpan(0, outOffset).ToArray();
-                }
+                return [];
             }
 
-            var remainder = input.Length % 4;
-            if (remainder != 0)
+            // 兼容省略末尾填充的密钥，由标准解码器校验填充位置。
+            while (length % 4 != 0)
             {
-                var tail = new byte[4];
-                tail[0] = input[fullLength];
-                tail[1] = remainder > 1 ? input[fullLength + 1] : (byte)'=';
-                tail[2] = (byte)'=';
-                tail[3] = (byte)'=';
-                DecodeBlock(tail);
+                normalized[length++] = '=';
             }
 
-            return output.AsSpan(0, outOffset).ToArray();
+            var padding = normalized[length - 1] == '=' ? 1 : 0;
+            if (normalized[length - 2] == '=')
+            {
+                padding++;
+            }
+
+            var output = new byte[length / 4 * 3 - padding];
+            return Convert.TryFromBase64Chars(normalized.AsSpan(0, length), output, out _) ? output : [];
         }
     }
 }

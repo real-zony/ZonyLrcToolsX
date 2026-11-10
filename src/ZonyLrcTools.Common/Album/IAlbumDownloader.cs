@@ -1,5 +1,8 @@
 namespace ZonyLrcTools.Common.Album;
 
+/// <summary>
+/// 下载歌曲对应的专辑封面。
+/// </summary>
 public interface IAlbumDownloader
 {
     /// <summary>
@@ -14,5 +17,8 @@ public interface IAlbumDownloader
         Func<MusicInfo, Task>? callback = null,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 可用的专辑封面来源。
+    /// </summary>
     IEnumerable<IAlbumProvider> AvailableProviders { get; }
 }

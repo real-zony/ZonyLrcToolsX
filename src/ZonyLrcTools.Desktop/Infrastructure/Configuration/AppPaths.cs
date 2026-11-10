@@ -1,14 +1,7 @@
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
-/// <summary>
-/// Resolves the directories the desktop application reads and writes at runtime.
-/// </summary>
-/// <remarks>
-/// The application prefers a portable layout: settings live next to the executable so the
-/// whole folder can be copied to a USB stick and moved between machines. If that directory
-/// is read-only (installed under Program Files, or launched from a read-only mount), it falls
-/// back to %AppData%\ZonyLrcTools instead of silently losing every setting the user changes.
-/// </remarks>
+/// <summary>解析桌面应用的配置目录。</summary>
+/// <remarks>优先使用便携目录；不可写时回退到当前用户的应用数据目录。</remarks>
 public static class AppPaths
 {
     private const string ApplicationFolderName = "ZonyLrcTools";
@@ -16,20 +9,13 @@ public static class AppPaths
 
     private static readonly Lazy<string> LazyConfigDirectory = new(ResolveConfigDirectory);
 
-    /// <summary>
-    /// Directory that holds <c>config.yaml</c>.
-    /// </summary>
+    /// <summary>配置文件所在目录。</summary>
     public static string ConfigDirectory => LazyConfigDirectory.Value;
 
-    /// <summary>
-    /// Full path of the writable <c>config.yaml</c>.
-    /// </summary>
+    /// <summary>配置文件的完整路径。</summary>
     public static string ConfigFilePath => Path.Combine(ConfigDirectory, ConfigFileName);
 
-    /// <summary>
-    /// Copy the template shipped next to the executable into the config directory when the
-    /// user does not have a settings file yet. Safe to call on every startup.
-    /// </summary>
+    /// <summary>首次启动时将随程序附带的配置复制到用户目录。</summary>
     public static void EnsureConfigFile()
     {
         if (File.Exists(ConfigFilePath))
@@ -46,7 +32,7 @@ public static class AppPaths
         if (string.Equals(
                 Path.GetFullPath(template),
                 Path.GetFullPath(ConfigFilePath),
-                StringComparison.OrdinalIgnoreCase))
+                OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
         {
             return;
         }
@@ -57,7 +43,7 @@ public static class AppPaths
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // A missing config file is not fatal: the options binder falls back to defaults.
+            // 模板无法复制时由调用方处理缺失配置。
         }
     }
 
@@ -82,7 +68,7 @@ public static class AppPaths
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Fall through to the portable path; reading still works even when writing does not.
+            // 没有可写目录时仍允许读取便携目录的配置。
         }
 
         return baseDirectory;

@@ -2,33 +2,17 @@ using System.Text.Json;
 
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
-/// <summary>
-/// Remembers a manually chosen Kugou database (<c>KGMusicV3.db</c>) path.
-/// </summary>
-/// <remarks>
-/// This is machine state, not a user preference — it points at a file that happens to exist on
-/// this computer. Keeping it out of <c>config.yaml</c> means the shipped configuration template
-/// stays clean and CLI users never see a stray GUI-only key.
-/// </remarks>
+/// <summary>保存本机手动选择的酷狗数据库路径。</summary>
 public sealed class KugouDatabaseStore
 {
     private const string FileName = "kugou.database.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     private readonly SemaphoreSlim _lock = new(1, 1);
 
-    /// <summary>
-    /// Full path of the settings file.
-    /// </summary>
+    /// <summary>本机状态文件的完整路径。</summary>
     public string FilePath => Path.Combine(AppPaths.ConfigDirectory, FileName);
 
-    /// <summary>
-    /// Load the stored database path, or <c>null</c> when there is none / it cannot be read.
-    /// </summary>
+    /// <summary>读取数据库路径；文件缺失或损坏时返回空。</summary>
     public async Task<string?> LoadAsync(CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
@@ -40,13 +24,13 @@ public sealed class KugouDatabaseStore
             }
 
             var json = await File.ReadAllTextAsync(FilePath, cancellationToken);
-            var stored = JsonSerializer.Deserialize<KugouDatabaseSetting>(json);
+            var stored = JsonSerializer.Deserialize(json, DesktopStateJsonContext.Default.KugouDatabaseSetting);
 
             return string.IsNullOrWhiteSpace(stored?.DatabasePath) ? null : stored.DatabasePath;
         }
         catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
         {
-            // A corrupt cache must never block the application; fall back to auto detection.
+            // 缓存损坏时恢复自动查找。
             return null;
         }
         finally
@@ -55,24 +39,19 @@ public sealed class KugouDatabaseStore
         }
     }
 
-    /// <summary>
-    /// Persist the chosen database path.
-    /// </summary>
+    /// <summary>保存数据库路径。</summary>
     public async Task SaveAsync(string databasePath, CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
         try
         {
-            Directory.CreateDirectory(AppPaths.ConfigDirectory);
-
             var setting = new KugouDatabaseSetting { DatabasePath = databasePath };
-            var temporaryPath = FilePath + ".tmp";
-            await File.WriteAllTextAsync(temporaryPath, JsonSerializer.Serialize(setting, JsonOptions), cancellationToken);
-            File.Move(temporaryPath, FilePath, overwrite: true);
+            await DesktopStateFile.WriteAsync(FilePath, setting,
+                DesktopStateJsonContext.Default.KugouDatabaseSetting, ownerOnly: false, cancellationToken);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Losing this only costs the user one extra pick next launch.
+            // 缓存写入失败不影响本次使用。
         }
         finally
         {
@@ -80,9 +59,7 @@ public sealed class KugouDatabaseStore
         }
     }
 
-    /// <summary>
-    /// Forget the stored path so auto detection takes over again.
-    /// </summary>
+    /// <summary>忘记手动路径，恢复自动查找。</summary>
     public async Task ClearAsync(CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
@@ -95,7 +72,7 @@ public sealed class KugouDatabaseStore
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Nothing actionable.
+            // 调用方仍可使用本次自动查找结果。
         }
         finally
         {
@@ -104,10 +81,9 @@ public sealed class KugouDatabaseStore
     }
 }
 
-/// <summary>
-/// The persisted shape of <see cref="KugouDatabaseStore"/>.
-/// </summary>
+/// <summary>酷狗数据库路径的持久化格式。</summary>
 public sealed class KugouDatabaseSetting
 {
+    /// <summary>数据库的完整路径。</summary>
     public string DatabasePath { get; set; } = string.Empty;
 }

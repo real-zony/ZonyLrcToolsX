@@ -338,7 +338,7 @@
     <value>启用屏蔽词过滤</value>
   </data>
   <data name="Settings_BlockWordPath" xml:space="preserve">
-    <value>屏蔽词文件路径:</value>
+    <value>屏蔽词文件路径（相对当前工作目录）:</value>
   </data>
   <data name="Settings_TagProvider" xml:space="preserve">
     <value>标签源</value>
@@ -435,6 +435,12 @@
   </data>
   <data name="NetEase_LoginSucceeded" xml:space="preserve">
     <value>登录成功。</value>
+  </data>
+  <data name="NetEase_LoginExpired" xml:space="preserve">
+    <value>二维码已过期，请关闭窗口后重新登录。</value>
+  </data>
+  <data name="NetEase_LoginFailed" xml:space="preserve">
+    <value>登录未完成，请关闭窗口后重试。</value>
   </data>
   <data name="Home_Features" xml:space="preserve">
     <value>功能特性</value>

@@ -16,10 +16,10 @@ namespace ZonyLrcTools.Common.MusicDecryption
 
         private string? _manualPath;
         private string? _databasePath;
-        private string? _loadedPath;
         private string? _failureReason;
         private bool _isLoaded;
 
+        /// <inheritdoc />
         public string? DatabasePath
         {
             get
@@ -32,12 +32,14 @@ namespace ZonyLrcTools.Common.MusicDecryption
             }
         }
 
+        /// <inheritdoc />
         public void SetDatabasePath(string? path)
         {
             lock (_syncRoot)
             {
                 var normalized = string.IsNullOrWhiteSpace(path) ? null : path;
-                if (string.Equals(normalized, _manualPath, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(normalized, _manualPath,
+                        OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
                 {
                     // 路径没变就不作废缓存，避免无意义地重新解密 16 MB 数据库。
                     return;
@@ -65,7 +67,7 @@ namespace ZonyLrcTools.Common.MusicDecryption
                 {
                     var message = _manualPath != null
                         ? $"指定的酷狗数据库不可用：{_failureReason ?? _manualPath}"
-                        : Kugou.KugouEkeyDatabase.BuildMissingDatabaseMessage();
+                        : _failureReason ?? Kugou.KugouEkeyDatabase.BuildMissingDatabaseMessage();
 
                     return new KugouDatabaseInfo(false, null, 0, message);
                 }
@@ -88,13 +90,14 @@ namespace ZonyLrcTools.Common.MusicDecryption
                 _isLoaded = false;
                 _keys.Clear();
                 _databasePath = null;
-                _loadedPath = null;
                 _failureReason = null;
             }
         }
 
-        public bool IsKggFile(string filePath) => ReadAudioHash(filePath) != null;
+        /// <inheritdoc />
+        public bool IsKggFile(string filePath) => Kugou.KggMusicDecryptor.IsKggFile(filePath);
 
+        /// <inheritdoc />
         public string? ReadAudioHash(string filePath)
         {
             try
@@ -111,8 +114,15 @@ namespace ZonyLrcTools.Common.MusicDecryption
                     return null;
                 }
 
+                var audioOffset = BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(0x10));
+                if (BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(0x14)) != 5
+                    || audioOffset < HeaderSize || audioOffset > stream.Length - 4)
+                {
+                    return null;
+                }
+
                 var hashLength = BinaryPrimitives.ReadUInt32LittleEndian(header.AsSpan(0x44));
-                if (hashLength == 0 || hashLength > AudioHashLength)
+                if (hashLength != AudioHashLength)
                 {
                     return null;
                 }
@@ -125,6 +135,7 @@ namespace ZonyLrcTools.Common.MusicDecryption
             }
         }
 
+        /// <inheritdoc />
         public string? FindKey(string audioHash)
         {
             if (string.IsNullOrEmpty(audioHash))
@@ -149,7 +160,6 @@ namespace ZonyLrcTools.Common.MusicDecryption
             _isLoaded = true;
             _keys.Clear();
             _databasePath = null;
-            _loadedPath = null;
             _failureReason = null;
 
             var path = _manualPath;
@@ -172,15 +182,10 @@ namespace ZonyLrcTools.Common.MusicDecryption
             {
                 _failureReason = failureReason ?? "没有读到任何密钥";
 
-                // 手动指定的文件读不出密钥，就不要把它当成可用数据库。
-                if (_manualPath != null)
-                {
-                    return;
-                }
+                return;
             }
 
             _databasePath = path;
-            _loadedPath = path;
             foreach (var pair in keys)
             {
                 _keys[pair.Key] = pair.Value;

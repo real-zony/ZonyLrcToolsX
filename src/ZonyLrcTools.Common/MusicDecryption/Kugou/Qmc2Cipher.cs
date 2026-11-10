@@ -3,8 +3,6 @@
 //   Copyright (c) 2024 LSR
 // The original licence text is reproduced in THIRD-PARTY-NOTICES.md at the repository root.
 
-using System.Buffers.Binary;
-
 namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 {
     /// <summary>
@@ -70,6 +68,9 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
 
         private readonly byte[] _key;
 
+        /// <summary>
+        /// 根据短密钥生成查找表。
+        /// </summary>
         public Qmc2MapCipher(byte[] key)
         {
             _key = new byte[MapKeySize];
@@ -79,16 +80,18 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
                 var j = (int)(((long)i * i + MapIndexOffset) % length);
                 var shift = (j + 4) % 8;
                 var value = key[j];
-                _key[i] = (byte)((value << shift) | (value >> (8 - shift)));
+                _key[i] = (byte)((value << shift) | (value >> shift));
             }
         }
 
+        /// <inheritdoc />
         public override byte Decrypt(byte cipher, long offset)
         {
             var index = offset <= MapIndexBoundary ? offset : offset % MapIndexBoundary;
             return (byte)(cipher ^ _key[index % MapKeySize]);
         }
 
+        /// <inheritdoc />
         public override void Decrypt(Span<byte> data, long offset)
         {
             for (var i = 0; i < data.Length; i++)
@@ -119,6 +122,9 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         private readonly byte[] _keyStream = new byte[KeyStreamSize];
         private readonly uint _keyHash;
 
+        /// <summary>
+        /// 根据长密钥生成密钥流。
+        /// </summary>
         public Qmc2Rc4Cipher(byte[] key)
         {
             _key = key;
@@ -126,6 +132,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             DeriveKeyStream();
         }
 
+        /// <inheritdoc />
         public override byte Decrypt(byte cipher, long offset)
         {
             if (offset < FirstSegmentSize)
@@ -142,6 +149,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
             return (byte)(cipher ^ _keyStream[skipLength + segmentOffset]);
         }
 
+        /// <inheritdoc />
         public override void Decrypt(Span<byte> data, long offset)
         {
             // 首段与常规段的算法不同，先按边界切一刀。
@@ -182,7 +190,7 @@ namespace ZonyLrcTools.Common.MusicDecryption.Kugou
         /// </summary>
         private static uint ComputeKeyHash(ReadOnlySpan<byte> key)
         {
-            uint hash = 1;
+            var hash = 1u;
             foreach (var item in key)
             {
                 if (item == 0)

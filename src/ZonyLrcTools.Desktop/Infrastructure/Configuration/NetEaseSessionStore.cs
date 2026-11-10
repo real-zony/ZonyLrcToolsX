@@ -1,40 +1,24 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace ZonyLrcTools.Desktop.Infrastructure.Configuration;
 
-/// <summary>
-/// Persists the NetEase Cloud Music login state (cookie + csrf token) so the QR login dialog
-/// does not reappear on every launch.
-/// </summary>
-/// <remarks>
-/// The cookie is a bearer credential: whoever holds it is logged in as the user. It is written
-/// next to the settings file with owner-only permissions where the platform supports it, and
-/// the file is small and plain JSON so a user can delete it by hand to force a re-login.
-/// </remarks>
+/// <summary>持久化网易云登录会话。</summary>
+/// <remarks>会话属于登录凭据；Unix 文件仅限当前用户读写，Windows 继承目录权限。</remarks>
 public sealed class NetEaseSessionStore
 {
     private const string FileName = "netease.session.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     private readonly SemaphoreSlim _lock = new(1, 1);
 
-    /// <summary>
-    /// Full path of the session file.
-    /// </summary>
+    /// <summary>会话文件的完整路径。</summary>
     public string FilePath => Path.Combine(AppPaths.ConfigDirectory, FileName);
 
-    /// <summary>
-    /// Whether a stored session exists on disk.
-    /// </summary>
+    /// <summary>是否存在已保存的会话。</summary>
     public bool HasStoredSession => File.Exists(FilePath);
 
-    /// <summary>
-    /// Load the stored session, or <c>null</c> when there is none / it cannot be read.
-    /// </summary>
+    /// <summary>读取会话；文件缺失或损坏时返回空。</summary>
     public async Task<NetEaseSession?> LoadAsync(CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
@@ -44,15 +28,19 @@ public sealed class NetEaseSessionStore
             {
                 return null;
             }
+            if (!OperatingSystem.IsWindows())
+            {
+                File.SetUnixFileMode(FilePath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
 
             var json = await File.ReadAllTextAsync(FilePath, cancellationToken);
-            var session = JsonSerializer.Deserialize<NetEaseSession>(json);
+            var session = JsonSerializer.Deserialize(json, DesktopStateJsonContext.Default.NetEaseSession);
 
             return string.IsNullOrEmpty(session?.Cookie) ? null : session;
         }
         catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
         {
-            // A corrupt session cache must never block the application; treat it as "not logged in".
+            // 损坏的缓存按未登录处理。
             return null;
         }
         finally
@@ -61,23 +49,18 @@ public sealed class NetEaseSessionStore
         }
     }
 
-    /// <summary>
-    /// Write the session to disk.
-    /// </summary>
+    /// <summary>保存会话。</summary>
     public async Task SaveAsync(NetEaseSession session, CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
         try
         {
-            Directory.CreateDirectory(AppPaths.ConfigDirectory);
-
-            var temporaryPath = FilePath + ".tmp";
-            await File.WriteAllTextAsync(temporaryPath, JsonSerializer.Serialize(session, JsonOptions), cancellationToken);
-            File.Move(temporaryPath, FilePath, overwrite: true);
+            await DesktopStateFile.WriteAsync(FilePath, session,
+                DesktopStateJsonContext.Default.NetEaseSession, ownerOnly: true, cancellationToken);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Losing the cache only costs the user one extra scan next launch.
+            // 缓存写入失败不影响本次会话。
         }
         finally
         {
@@ -85,22 +68,14 @@ public sealed class NetEaseSessionStore
         }
     }
 
-    /// <summary>
-    /// Delete the stored session.
-    /// </summary>
+    /// <summary>删除已保存的会话。</summary>
     public async Task ClearAsync(CancellationToken cancellationToken = default)
     {
         await _lock.WaitAsync(cancellationToken);
         try
         {
-            if (File.Exists(FilePath))
-            {
-                File.Delete(FilePath);
-            }
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // Nothing actionable; the in-memory state is cleared regardless.
+            cancellationToken.ThrowIfCancellationRequested();
+            File.Delete(FilePath);
         }
         finally
         {
@@ -109,14 +84,58 @@ public sealed class NetEaseSessionStore
     }
 }
 
-/// <summary>
-/// The bits of a NetEase login that are worth keeping between runs.
-/// </summary>
+/// <summary>网易云登录凭据。</summary>
 public sealed class NetEaseSession
 {
+    /// <summary>登录 Cookie。</summary>
     public string Cookie { get; set; } = string.Empty;
 
+    /// <summary>请求校验令牌。</summary>
     public string CsrfToken { get; set; } = string.Empty;
 
-    public DateTimeOffset SavedAt { get; set; } = DateTimeOffset.Now;
+    /// <summary>会话保存时间，使用 UTC。</summary>
+    public DateTimeOffset SavedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+}
+
+[JsonSerializable(typeof(NetEaseSession))]
+[JsonSerializable(typeof(KugouDatabaseSetting))]
+internal partial class DesktopStateJsonContext : JsonSerializerContext
+{
+}
+
+internal static class DesktopStateFile
+{
+    internal static async Task WriteAsync<T>(string path, T value, JsonTypeInfo<T> typeInfo,
+        bool ownerOnly, CancellationToken cancellationToken = default)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        var temporaryPath = path + $".{Guid.NewGuid():N}.tmp";
+        var options = new FileStreamOptions
+        {
+            Mode = FileMode.CreateNew,
+            Access = FileAccess.Write,
+            Share = FileShare.None,
+            Options = FileOptions.Asynchronous
+        };
+        if (ownerOnly && !OperatingSystem.IsWindows())
+        {
+            // 在创建时限制权限，避免先写入凭据再修改权限的泄露窗口。
+            options.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+        }
+
+        try
+        {
+            await using (var stream = new FileStream(temporaryPath, options))
+            {
+                await JsonSerializer.SerializeAsync(stream, value, typeInfo, cancellationToken);
+                await stream.FlushAsync(cancellationToken);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            File.Move(temporaryPath, path, overwrite: true);
+        }
+        finally
+        {
+            File.Delete(temporaryPath);
+        }
+    }
 }

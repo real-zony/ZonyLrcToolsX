@@ -16,7 +16,7 @@
                    FontWeight="SemiBold"
                    Margin="0,0,0,12" />
 
-        <!-- Message. 用只读 TextBox 而不是 TextBlock，这样正文可以被选中复制。 -->
+        <!-- 正文可选中并复制。 -->
         <TextBox Grid.Row="1"
                  x:Name="MessageText"
                  IsReadOnly="True"

@@ -20,16 +20,55 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     private readonly IWarpHttpClient _warpHttpClient;
     private readonly ILogger<NetEaseMusicSongListMusicScanner> _logger;
     private const string Host = "https://music.163.com";
+    private readonly SemaphoreSlim _loginSemaphore = new(1, 1);
+    private readonly object _loginStateLock = new();
+    private string _cookie = string.Empty;
+    private string _csrfToken = string.Empty;
+    private long _loginStateVersion;
 
     /// <summary>
     /// 登录后的 Cookie。GUI 可以在登录成功之后把它持久化下来，下次直接赋值恢复登录态。
     /// </summary>
-    public string Cookie { get; set; } = string.Empty;
+    public string Cookie
+    {
+        get
+        {
+            lock (_loginStateLock)
+            {
+                return _cookie;
+            }
+        }
+        set
+        {
+            lock (_loginStateLock)
+            {
+                _cookie = value ?? string.Empty;
+                _loginStateVersion++;
+            }
+        }
+    }
 
     /// <summary>
     /// 登录后的 CSRF Token，通常与 <see cref="Cookie"/> 一起持久化。
     /// </summary>
-    public string CsrfToken { get; set; } = string.Empty;
+    public string CsrfToken
+    {
+        get
+        {
+            lock (_loginStateLock)
+            {
+                return _csrfToken;
+            }
+        }
+        set
+        {
+            lock (_loginStateLock)
+            {
+                _csrfToken = value ?? string.Empty;
+                _loginStateVersion++;
+            }
+        }
+    }
 
     /// <summary>
     /// 当前是否已经持有登录态。
@@ -51,8 +90,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// </summary>
     public void ClearLoginState()
     {
-        Cookie = string.Empty;
-        CsrfToken = string.Empty;
+        RestoreLoginState(string.Empty, string.Empty);
     }
 
     /// <summary>
@@ -62,8 +100,12 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// <param name="csrfToken">与 <paramref name="cookie"/> 一起保存的 CSRF Token。</param>
     public void RestoreLoginState(string cookie, string csrfToken)
     {
-        Cookie = cookie ?? string.Empty;
-        CsrfToken = csrfToken ?? string.Empty;
+        lock (_loginStateLock)
+        {
+            _cookie = cookie ?? string.Empty;
+            _csrfToken = csrfToken ?? string.Empty;
+            _loginStateVersion++;
+        }
     }
 
     /// <summary>
@@ -78,17 +120,44 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         Action<NetEaseLoginState>? onStateChanged = null,
         CancellationToken cancellationToken = default)
     {
-        if (IsLoggedIn)
+        await _loginSemaphore.WaitAsync(cancellationToken);
+        try
         {
+            var session = GetLoginState();
+            if (!string.IsNullOrEmpty(session.Cookie))
+            {
+                onStateChanged?.Invoke(NetEaseLoginState.Succeeded);
+                return true;
+            }
+
+            var loginResponse = await LoginViaQrCodeAsync(onQrCodeReady, onStateChanged, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            var cookie = loginResponse.cookieContainer?.GetCookieHeader(new Uri(Host)) ?? string.Empty;
+            lock (_loginStateLock)
+            {
+                // 退出或恢复会话后，不能再提交旧二维码的登录结果。
+                if (session.Version != _loginStateVersion)
+                {
+                    return false;
+                }
+
+                _cookie = cookie;
+                _csrfToken = loginResponse.csrfToken ?? string.Empty;
+                _loginStateVersion++;
+            }
+
+            if (string.IsNullOrEmpty(cookie))
+            {
+                return false;
+            }
+
             onStateChanged?.Invoke(NetEaseLoginState.Succeeded);
             return true;
         }
-
-        var loginResponse = await LoginViqQrCodeAsync(onQrCodeReady, onStateChanged, cancellationToken);
-        Cookie = loginResponse.cookieContainer?.GetCookieHeader(new Uri(Host)) ?? string.Empty;
-        CsrfToken = loginResponse.csrfToken ?? string.Empty;
-
-        return IsLoggedIn;
+        finally
+        {
+            _loginSemaphore.Release();
+        }
     }
 
     /// <summary>
@@ -111,33 +180,27 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         Action<NetEaseLoginState>? onStateChanged = null,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(Cookie))
+        if (!await LoginAsync(onQrCodeReady, onStateChanged, cancellationToken))
         {
-            var loginResponse = await LoginViqQrCodeAsync(onQrCodeReady, onStateChanged, cancellationToken);
-            Cookie = loginResponse.cookieContainer?.GetCookieHeader(new Uri(Host)) ?? string.Empty;
-            CsrfToken = loginResponse.csrfToken ?? string.Empty;
-
-            if (string.IsNullOrEmpty(Cookie))
-            {
-                // 登录没成（用户取消、二维码过期），直接失败，不要再拿空 Cookie 去请求歌单。
-                throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
-            }
+            throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
         }
 
-        async Task<List<MusicInfo>> GetMusicInfoBySongIdAsync(string songId)
+        var session = GetLoginState();
+
+        async Task<List<MusicInfo>> GetMusicInfoBySongIdAsync(string songId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
             var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
             var response = await _warpHttpClient.PostAsync<GetMusicInfoFromNetEaseMusicSongListResponse>(
-                $"{Host}/weapi/v6/playlist/detail?csrf_token={CsrfToken}", requestOption:
+                $"{Host}/weapi/v6/playlist/detail?csrf_token={session.CsrfToken}", requestOption:
                 request =>
                 {
-                    request.Headers.Add("Cookie", Cookie);
+                    request.Headers.Add("Cookie", session.Cookie);
                     request.Content = new FormUrlEncodedContent(HandleRequest(new
                     {
-                        csrf_token = CsrfToken,
+                        csrf_token = session.CsrfToken,
                         id = songId,
                         n = 1000,
                         offset = 0,
@@ -145,7 +208,8 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
                         limit = 1000,
                     }, secretKey, encSecKey));
                     request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                });
+                }, cancellationToken: cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (response.Code != 200 || response.PlayList?.SongList == null)
             {
@@ -164,16 +228,23 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
         }
 
         var musicInfoList = new List<MusicInfo>();
-        foreach (var songListId in songListIds.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var songListId in songListIds.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            _logger.LogInformation("正在获取歌单 {SongListId} 的歌曲列表。", songListId);
-            var musicInfos = await GetMusicInfoBySongIdAsync(songListId);
+            var musicInfos = await GetMusicInfoBySongIdAsync(songListId, cancellationToken);
             musicInfoList.AddRange(musicInfos);
         }
 
         return musicInfoList;
+    }
+
+    private (string Cookie, string CsrfToken, long Version) GetLoginState()
+    {
+        lock (_loginStateLock)
+        {
+            return (_cookie, _csrfToken, _loginStateVersion);
+        }
     }
 
     /// <summary>
@@ -204,24 +275,27 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// </param>
     /// <param name="onStateChanged">登录状态变化回调。</param>
     /// <param name="cancellationToken">取消令牌。</param>
-    private async Task<(string? csrfToken, CookieContainer? cookieContainer)> LoginViqQrCodeAsync(
+    private async Task<(string? csrfToken, CookieContainer? cookieContainer)> LoginViaQrCodeAsync(
         Action<NetEaseQrCodePayload>? onQrCodeReady,
         Action<NetEaseLoginState>? onStateChanged,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
-        // Get unikey.
-        var qrCodeKeyJson = await (await PostAsync($"{Host}/weapi/login/qrcode/unikey", new
+        using var keyResponse = await PostAsync($"{Host}/weapi/login/qrcode/unikey", new
         {
             type = 1
-        })).Content.ReadAsStringAsync(cancellationToken);
-        var uniKey = JObject.Parse(qrCodeKeyJson).SelectToken("$.unikey")!.Value<string>();
-        if (string.IsNullOrEmpty(uniKey)) return (null, null);
+        }, cancellationToken: cancellationToken);
+        var keyResponseJson = JObject.Parse(await keyResponse.Content.ReadAsStringAsync(cancellationToken));
+        var uniKey = keyResponseJson.Value<string>("unikey");
+        if (keyResponseJson.Value<int?>("code") != 200 || string.IsNullOrEmpty(uniKey))
+        {
+            throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
+        }
 
-        // Generate QR code.
-        var qrGenerator = new QRCodeGenerator();
+        using var qrGenerator = new QRCodeGenerator();
         var qrContent = $"{Host}/login?codekey={uniKey}";
-        var qrCodeData = qrGenerator.CreateQrCode(qrContent, QRCodeGenerator.ECCLevel.L);
-        var asciiQrCodeString = new AsciiQRCode(qrCodeData).GetGraphic(1, drawQuietZones: false);
+        using var qrCodeData = qrGenerator.CreateQrCode(qrContent, QRCodeGenerator.ECCLevel.L);
+        using var qrCode = new AsciiQRCode(qrCodeData);
+        var asciiQrCodeString = qrCode.GetGraphic(1, drawQuietZones: false);
 
         if (onQrCodeReady != null)
         {
@@ -233,7 +307,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             _logger.LogInformation("\n{AsciiQrCodeString}", asciiQrCodeString);
         }
 
-        // Wait for login success.
+        onStateChanged?.Invoke(NetEaseLoginState.Waiting);
         var lastState = NetEaseLoginState.Waiting;
         while (true)
         {
@@ -241,7 +315,7 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
 
             var (state, cookieContainer) = await CheckIsLoginAsync(uniKey, cancellationToken);
 
-            if (state != lastState)
+            if (state != lastState && state != NetEaseLoginState.Succeeded)
             {
                 lastState = state;
                 onStateChanged?.Invoke(state);
@@ -264,13 +338,13 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
 
     private async Task<(NetEaseLoginState state, CookieContainer? cookieContainer)> CheckIsLoginAsync(
         string uniKey,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
-        var responseMessage = await PostAsync($"{Host}/weapi/login/qrcode/client/login", new
+        using var responseMessage = await PostAsync($"{Host}/weapi/login/qrcode/client/login", new
         {
             key = uniKey,
             type = 1
-        });
+        }, cancellationToken: cancellationToken);
 
         var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
         var responseCode = JObject.Parse(responseString)["code"]?.Value<int>();
@@ -280,23 +354,30 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
             // 800 二维码过期、801 等待扫码、802 已扫码待确认、803 登录成功。
             case 800:
                 return (NetEaseLoginState.Expired, null);
+            case 801:
+                return (NetEaseLoginState.Waiting, null);
             case 802:
                 return (NetEaseLoginState.ScanConfirmed, null);
             case 803:
                 break;
             default:
-                return (NetEaseLoginState.Waiting, null);
+                throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
         }
 
         if (!responseMessage.Headers.TryGetValues("Set-Cookie", out var cookies))
         {
-            return (NetEaseLoginState.Waiting, null);
+            throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
         }
 
         var cookieContainer = new CookieContainer();
         foreach (var cookie in cookies)
         {
             cookieContainer.SetCookies(new Uri(Host), cookie);
+        }
+
+        if (cookieContainer.GetCookies(new Uri(Host)).Count == 0)
+        {
+            throw new ErrorCodeException(ErrorCodes.UnableGetSongListFromNetEaseCloudMusic);
         }
 
         return (NetEaseLoginState.Succeeded, cookieContainer);
@@ -307,19 +388,34 @@ public class NetEaseMusicSongListMusicScanner : ISingletonDependency
     /// </summary>
     /// <param name="url">需要请求的网易云音乐 API 地址。</param>
     /// <param name="params">API 请求参数。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
     /// <returns>
     /// 正常情况下会返回一个 <see cref="HttpResponseMessage"/> 对象。
     /// </returns>
-    private async Task<HttpResponseMessage> PostAsync(string url, object @params)
+    private async Task<HttpResponseMessage> PostAsync(string url, object @params,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var secretKey = NetEaseMusicEncryptionHelper.CreateSecretKey(16);
         var encSecKey = NetEaseMusicEncryptionHelper.RsaEncode(secretKey);
 
-        return await _warpHttpClient.PostReturnHttpResponseAsync(url, requestOption:
+        var response = await _warpHttpClient.PostReturnHttpResponseAsync(url, requestOption:
             request =>
             {
                 request.Content = new FormUrlEncodedContent(HandleRequest(@params, secretKey, encSecKey));
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            });
+            }, cancellationToken: cancellationToken);
+
+        try
+        {
+            response.EnsureSuccessStatusCode();
+            cancellationToken.ThrowIfCancellationRequested();
+            return response;
+        }
+        catch
+        {
+            response.Dispose();
+            throw;
+        }
     }
 }

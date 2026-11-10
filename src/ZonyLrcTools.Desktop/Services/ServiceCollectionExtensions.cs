@@ -21,9 +21,7 @@ public static class ServiceCollectionExtensions
         services.BeginAutoDependencyInject<IWarpHttpClient>();
 
         // Configure Common services
-        // ConfigureConfiguration() from Common always reads config.yaml from the executable
-        // folder, which breaks portable installs and read-only install locations. The desktop
-        // app resolves a writable location first and binds from there instead.
+        // 桌面端使用可写的配置目录，避免只读安装位置导致保存失败。
         services.ConfigureDesktopConfiguration();
         services.ConfigureLocalization();
         services.ConfigureToolService();
@@ -43,10 +41,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IThemeService, ThemeService>();
 
-        // Stores the NetEase login cookie between launches so the QR dialog is a first-run event.
+        // 保存网易云登录状态。
         services.AddSingleton<NetEaseSessionStore>();
 
-        // Remembers a manually chosen KuGou database path (machine state, not a user preference).
+        // 保存本机酷狗数据库路径。
         services.AddSingleton<KugouDatabaseStore>();
 
         // Register ViewModels (Singleton to preserve state across navigation)

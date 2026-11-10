@@ -15,19 +15,19 @@ public class CsvFileMusicScanner : ITransientDependency
     /// <param name="csvFilePath">CSV 文件的路径。</param>
     /// <param name="outputDirectory">歌词文件的输出目录。</param>
     /// <param name="pattern">输出的歌词文件格式，默认是 "{Artist} - {Title}.lrc" 的形式。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
     public async Task<List<MusicInfo>> GetMusicInfoFromCsvFileAsync(string csvFilePath, string outputDirectory,
-        string pattern)
+        string pattern, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var encoding = DetectFileEncoding(csvFilePath);
 
-        var csvFileContent = await File.ReadAllTextAsync(csvFilePath, encoding);
+        var csvFileContent = await File.ReadAllTextAsync(csvFilePath, encoding, cancellationToken);
 
-        // 不能只按 Environment.NewLine 切分：在 Windows 上读到的是 "\r\n"，而用户从网盘、
-        // 版本的表格导出、Git 里签出的 CSV 往往是 "\n"，那样整个文件会被当成一行，
-        // 跳过表头之后就是空的，界面上表现为"解析了但一首歌都没有"。
+        // 兼容不同操作系统导出的换行符。
         var csvFileLines = csvFileContent.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         return csvFileLines.Skip(1)
-            .Where(line => line.Contains(',')) // 跳过空行与 VCS 合并产生的杂行。
+            .Where(line => line.Contains(','))
             .Select(line => GetMusicInfoFromCsvFileLine(line, outputDirectory, pattern))
             .ToList();
     }

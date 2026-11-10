@@ -18,59 +18,73 @@ namespace ZonyLrcTools.Common.Infrastructure.Network
             _httpClientFactory = httpClientFactory;
         }
 
+        /// <inheritdoc />
         public async ValueTask<string> PostAsync(string url,
             object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage>? requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null,
+            CancellationToken cancellationToken = default)
         {
-            using var responseMessage = await PostReturnHttpResponseAsync(url, parameters, isQueryStringParam, requestOption);
-            var responseContentString = await responseMessage.Content.ReadAsStringAsync();
+            using var responseMessage = await PostReturnHttpResponseAsync(url, parameters, isQueryStringParam, requestOption,
+                cancellationToken: cancellationToken);
+            var responseContentString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
 
             return ValidateHttpResponse(responseMessage, parameters, responseContentString);
         }
 
+        /// <inheritdoc />
         public async ValueTask<TResponse> PostAsync<TResponse>(string url,
             object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage>? requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null,
+            CancellationToken cancellationToken = default)
         {
-            var responseString = await PostAsync(url, parameters, isQueryStringParam, requestOption);
+            var responseString = await PostAsync(url, parameters, isQueryStringParam, requestOption,
+                cancellationToken: cancellationToken);
             return ConvertHttpResponseToObject<TResponse>(parameters, responseString);
         }
 
+        /// <inheritdoc />
         public async ValueTask<HttpResponseMessage> PostReturnHttpResponseAsync(string url,
             object? parameters = null,
             bool isQueryStringParam = false,
-            Action<HttpRequestMessage>? requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null,
+            CancellationToken cancellationToken = default)
         {
             var parametersStr = isQueryStringParam ? BuildQueryString(parameters) : BuildJsonBodyString(parameters);
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
             requestMessage.Content = new StringContent(parametersStr);
 
             requestOption?.Invoke(requestMessage);
 
-            return await BuildHttpClient().SendAsync(requestMessage);
+            using var client = BuildHttpClient();
+            return await client.SendAsync(requestMessage, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async ValueTask<string> GetAsync(string url,
             object? parameters = null,
-            Action<HttpRequestMessage>? requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null,
+            CancellationToken cancellationToken = default)
         {
             var requestParamsStr = BuildQueryString(parameters);
-            var requestMsg = new HttpRequestMessage(HttpMethod.Get, new Uri($"{url}?{requestParamsStr}"));
+            using var requestMsg = new HttpRequestMessage(HttpMethod.Get, new Uri($"{url}?{requestParamsStr}"));
             requestOption?.Invoke(requestMsg);
 
-            using var responseMessage = await BuildHttpClient().SendAsync(requestMsg);
-            var responseContentString = await responseMessage.Content.ReadAsStringAsync();
+            using var client = BuildHttpClient();
+            using var responseMessage = await client.SendAsync(requestMsg, cancellationToken);
+            var responseContentString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
 
             return ValidateHttpResponse(responseMessage, parameters, responseContentString);
         }
 
+        /// <inheritdoc />
         public async ValueTask<TResponse> GetAsync<TResponse>(string url,
             object? parameters = null,
-            Action<HttpRequestMessage>? requestOption = null)
+            Action<HttpRequestMessage>? requestOption = null,
+            CancellationToken cancellationToken = default)
         {
-            var responseString = await GetAsync(url, parameters, requestOption);
+            var responseString = await GetAsync(url, parameters, requestOption, cancellationToken: cancellationToken);
             return ConvertHttpResponseToObject<TResponse>(parameters, responseString);
         }
 

@@ -36,6 +36,7 @@
                     <ComboBox Grid.Column="1"
                               ItemsSource="{Binding ScannerNames}"
                               SelectedIndex="{Binding SelectedScannerIndex}"
+                              IsEnabled="{Binding CanEditInputs}"
                               MinWidth="200"
                               HorizontalAlignment="Left"
                               Margin="16,0" />
@@ -97,6 +98,7 @@
                                    FontWeight="Medium" />
                         <TextBox Grid.Column="1"
                                  Text="{Binding SongListIds}"
+                                 IsEnabled="{Binding CanEditInputs}"
                                  Watermark="{Binding LyricsSongListWatermark}"
                                  Margin="16,0" />
                         <Button Grid.Column="2"
@@ -114,8 +116,7 @@
                                 MinWidth="88" />
                     </Grid>
 
-                    <!-- Account state stays visible even when this scanner is not selected, so the
-                         sign-out entry is no longer hidden behind one dropdown value. -->
+                    <!-- 显示当前网易云登录状态。 -->
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <PathIcon Grid.Column="0"
                                   Data="{StaticResource AccountIcon}"

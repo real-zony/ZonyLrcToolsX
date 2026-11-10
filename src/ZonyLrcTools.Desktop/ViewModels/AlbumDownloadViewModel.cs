@@ -25,7 +25,7 @@ public partial class AlbumDownloadViewModel : ViewModelBase
 
     private CancellationTokenSource? _downloadCts;
     private readonly Dictionary<string, AlbumFileViewModel> _musicFileMap = new();
-    private List<MusicInfo> _scannedMusicInfos = new();
+    private readonly List<MusicInfo> _scannedMusicInfos = new();
 
     [ObservableProperty]
     private string? _selectedFolderPath;
@@ -75,6 +75,7 @@ public partial class AlbumDownloadViewModel : ViewModelBase
     public string AlbumParallel => _localization?["Album_Parallel"] ?? "Parallel:";
     public string AlbumStartDownload => _localization?["Album_StartDownload"] ?? "Start Download";
     public string AlbumStopDownload => _localization?["Album_StopDownload"] ?? "Stop Download";
+    /// <summary>扫描进度提示。</summary>
     public string AlbumScanning => _localization?["Lyrics_Status_Scanning"] ?? "Scanning files...";
     public string CommonTotal => _localization?["Common_Total"] ?? "Total:";
     public string CommonFiles => _localization?["Common_Files"] ?? "files";
@@ -142,23 +143,23 @@ public partial class AlbumDownloadViewModel : ViewModelBase
     }
 
     [RelayCommand(CanExecute = nameof(CanSelectFolder))]
-    private async Task SelectFolderAsync()
+    private async Task SelectFolderAsync(CancellationToken cancellationToken = default)
     {
         var folder = await _dialogService.ShowFolderPickerAsync(
             _localization?["Album_SelectFolder"] ?? "Select Music Folder");
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(folder)) return;
 
         SelectedFolderPath = folder;
-        await ScanFilesAsync();
+        await ScanFilesAsync(cancellationToken);
     }
 
     private bool CanSelectFolder => !IsScanning && !IsDownloading;
 
     /// <summary>
-    /// Tag-read the folder the same way the lyrics page does: identical row set, so the user sees
-    /// the same songs whichever feature they open first.
+    /// 扫描文件并读取音乐标签。
     /// </summary>
-    private async Task ScanFilesAsync()
+    private async Task ScanFilesAsync(CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
@@ -176,8 +177,9 @@ public partial class AlbumDownloadViewModel : ViewModelBase
 
         try
         {
-            var files = (await _fileScanner.ScanMusicFilesAsync(SelectedFolderPath, _options.SupportFileExtensions))
-                .ToList();
+            var files = (await Task.Run(
+                () => _fileScanner.ScanMusicFilesAsync(SelectedFolderPath, _options.SupportFileExtensions),
+                cancellationToken)).ToList();
 
             if (files.Count == 0)
             {
@@ -193,7 +195,7 @@ public partial class AlbumDownloadViewModel : ViewModelBase
             var scanTasks = files.Select(file =>
                 warpTask.RunAsync(async () =>
                 {
-                    var musicInfo = await _tagLoader.LoadTagAsync(file);
+                    var musicInfo = await Task.Run(() => _tagLoader.LoadTagAsync(file).AsTask(), cancellationToken);
 
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
@@ -215,11 +217,15 @@ public partial class AlbumDownloadViewModel : ViewModelBase
                         ScanProgressCount++;
                         ScanProgressPercentage = ScanProgressCount * 100.0 / ScanTotalCount;
                     });
-                }));
+                }, cancellationToken));
 
             await Task.WhenAll(scanTasks);
 
             TotalCount = MusicFiles.Count;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // 用户取消扫描。
         }
         catch (Exception ex)
         {
@@ -235,7 +241,7 @@ public partial class AlbumDownloadViewModel : ViewModelBase
     }
 
     [RelayCommand(CanExecute = nameof(CanStartDownload))]
-    private async Task StartDownloadAsync()
+    private async Task StartDownloadAsync(CancellationToken cancellationToken = default)
     {
         if (_scannedMusicInfos.Count == 0) return;
 
@@ -252,7 +258,7 @@ public partial class AlbumDownloadViewModel : ViewModelBase
             vm.StatusMessage = _localization?["Status_Pending"] ?? "Pending";
         }
 
-        _downloadCts = new CancellationTokenSource();
+        _downloadCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         try
         {
@@ -283,9 +289,15 @@ public partial class AlbumDownloadViewModel : ViewModelBase
                 },
                 _downloadCts.Token);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (_downloadCts.IsCancellationRequested)
         {
-            // User cancelled.
+            // 用户取消下载。
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageAsync(
+                _localization?["Common_Error"] ?? "Error",
+                ex.Message);
         }
         finally
         {
@@ -302,6 +314,9 @@ public partial class AlbumDownloadViewModel : ViewModelBase
     }
 }
 
+/// <summary>
+/// 单个音乐文件的封面下载状态。
+/// </summary>
 public partial class AlbumFileViewModel : ObservableObject
 {
     [ObservableProperty]
