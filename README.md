@@ -8,7 +8,7 @@ English | [简体中文](./docs/zh_CN.md)
 
 # Introduction
 
-ZonyLrcToolX 4 is a cross-platform lyrics download tool based on CEF. **QQ Group: 337656932**. Detailed video tutorials are available in the group files.
+ZonyLrcToolX 4 is a cross-platform lyrics download tool with a .NET 10 CLI and an Avalonia desktop application. **QQ Group: 337656932**. Detailed video tutorials are available in the group files.
 
 🚧 The current version is under development.
 🚧 If you want to see working code, please switch to the dev branch.
@@ -30,6 +30,20 @@ ZonyLrcTools.Cli --help
 
 # Usage
 Detailed usage instructions have been moved to a new documentation site. Please visit [https://docs.myzony.com](https://docs.myzony.com) for complete documentation.
+
+## Run a contribution locally
+
+Fork pull requests can be checked out without merging or obtaining write access to the contributor's repository. From the repository root, use a new branch and directory (replace `172` with the PR number):
+
+```bash
+git fetch origin pull/172/head
+git worktree add ../ZonyLrcToolsX-pr-172 -b review/pr-172 FETCH_HEAD
+cd ../ZonyLrcToolsX-pr-172
+dotnet run --project src/ZonyLrcTools.Desktop -c Release
+```
+
+Requires .NET SDK 10. Local changes do not update the PR until explicitly committed and pushed. See [desktop notes](./docs/en_US.md#desktop-development) for publishing, configuration and manual verification.
+
 
 # Donation
 [爱发电](https://afdian.net/a/zony-lrc-tools)

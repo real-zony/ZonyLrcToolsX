@@ -7,6 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Data.Sqlite"/>
+        <!-- 直接引用 bundle 以覆盖 Microsoft.Data.Sqlite 传递进来的旧版原生包（消除 NU1903）。 -->
+        <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3"/>
         <PackageReference Include="Microsoft.Extensions.Http"/>
         <PackageReference Include="Microsoft.Extensions.Localization"/>
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"/>
@@ -22,6 +25,18 @@
 
     <ItemGroup>
         <Compile Remove="Lyrics\Providers\Kugeci\KugeciDownloader.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="ZonyLrcTools.Tests"/>
     </ItemGroup>
 
 </Project>

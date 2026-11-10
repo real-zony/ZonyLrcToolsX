@@ -1,4 +1,4 @@
-﻿using MusicDecrypto.Library;
+using MusicDecrypto.Library;
 
 namespace ZonyLrcTools.Common.MusicDecryption
 {
@@ -14,7 +14,8 @@ namespace ZonyLrcTools.Common.MusicDecryption
         /// 将加密数据歌曲文件转换为可识别的歌曲格式。
         /// </summary>
         /// <param name="filePath">加密歌曲文件的路径。</param>
+        /// <param name="cancellationToken">取消令牌，用于中断大文件的转换。</param>
         /// <returns>转换结果。</returns>
-        Task<DecryptionResult> ConvertMusicAsync(string filePath);
+        Task<DecryptionResult> ConvertMusicAsync(string filePath, CancellationToken cancellationToken = default);
     }
 }

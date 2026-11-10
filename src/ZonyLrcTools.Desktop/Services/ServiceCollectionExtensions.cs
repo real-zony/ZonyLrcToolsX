@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ZonyLrcTools.Common.Infrastructure.DependencyInject;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 using ZonyLrcTools.Common.Infrastructure.Network;
+using ZonyLrcTools.Desktop.Infrastructure.Configuration;
 using ZonyLrcTools.Desktop.Infrastructure.Localization;
 using ZonyLrcTools.Desktop.ViewModels;
 
@@ -20,7 +21,8 @@ public static class ServiceCollectionExtensions
         services.BeginAutoDependencyInject<IWarpHttpClient>();
 
         // Configure Common services
-        services.ConfigureConfiguration();
+        // 桌面端使用可写的配置目录，避免只读安装位置导致保存失败。
+        services.ConfigureDesktopConfiguration();
         services.ConfigureLocalization();
         services.ConfigureToolService();
 
@@ -39,11 +41,18 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IThemeService, ThemeService>();
 
+        // 保存网易云登录状态。
+        services.AddSingleton<NetEaseSessionStore>();
+
+        // 保存本机酷狗数据库路径。
+        services.AddSingleton<KugouDatabaseStore>();
+
         // Register ViewModels (Singleton to preserve state across navigation)
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<LyricsDownloadViewModel>();
         services.AddSingleton<AlbumDownloadViewModel>();
+        services.AddSingleton<DecryptViewModel>();
         services.AddSingleton<SettingsViewModel>();
 
         return services;

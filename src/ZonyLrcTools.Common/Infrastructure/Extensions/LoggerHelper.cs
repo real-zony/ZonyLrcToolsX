@@ -1,6 +1,4 @@
-using System.Text;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using ZonyLrcTools.Common.Infrastructure.Exceptions;
 using ZonyLrcTools.Common.Infrastructure.Logging;
 
@@ -19,25 +17,19 @@ namespace ZonyLrcTools.Common.Infrastructure.Extensions
         /// <param name="e">异常实例，可为空。</param>
         public static void LogWarningWithErrorCode(this IWarpLogger logger, int errorCode, Exception? e = null)
         {
-            logger.WarnAsync($"错误代码: {errorCode}\n堆栈异常: {e?.StackTrace}").GetAwaiter().GetResult();
+            logger.WarnAsync($"错误代码: {errorCode}", e).GetAwaiter().GetResult();
         }
 
         /// <summary>
-        /// 使用 <see cref="LogLevel.Warning"/> 级别打印错误日志，并记录异常堆栈。
+        /// 记录错误码与异常，不重新抛出业务异常。
         /// </summary>
         /// <param name="logger">日志记录器的实例。</param>
         /// <param name="exception">错误码异常实例。</param>
         public static void LogWarningInfo(this IWarpLogger logger, ErrorCodeException exception)
         {
-            if (exception.ErrorCode < 50000)
-            {
-                throw exception;
-            }
-
-            var sb = new StringBuilder();
-            sb.Append($"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}");
-            sb.Append($"\n附加信息:\n {JsonConvert.SerializeObject(exception.AttachObject)}");
-            logger.WarnAsync(sb.ToString()).GetAwaiter().GetResult();
+            logger.WarnAsync(
+                $"错误代码: {exception.ErrorCode}，信息: {ErrorCodeHelperStatic.GetMessage(exception.ErrorCode)}",
+                exception).GetAwaiter().GetResult();
         }
 
         /// <summary>

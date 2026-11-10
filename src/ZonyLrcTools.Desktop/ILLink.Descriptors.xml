@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 裁剪时保留通过反射、序列化及系统无障碍接口访问的程序集。 -->
+<linker>
+  <!-- 自动注入依赖扫描程序集中的服务类型。 -->
+  <assembly fullname="ZonyLrcTools.Common" preserve="all" />
+
+  <!-- 保留桌面服务及界面绑定使用的类型。 -->
+  <assembly fullname="ZonyLrcTools.Desktop" preserve="all" />
+
+  <!-- Avalonia 的无障碍节点通过运行时查找创建。 -->
+  <assembly fullname="Avalonia.Controls" preserve="all" />
+  <assembly fullname="Avalonia.Controls.DataGrid" preserve="all" />
+  <!-- Windows 无障碍提供程序还会通过 COM 激活。 -->
+  <assembly fullname="Avalonia.Win32" preserve="all" />
+  <assembly fullname="Avalonia.Base" preserve="all" />
+
+  <!-- 保留配置映射、音频元数据、解密及 SQLite 运行时加载所需类型。 -->
+  <assembly fullname="YamlDotNet" preserve="all" />
+  <assembly fullname="Newtonsoft.Json" preserve="all" />
+  <assembly fullname="TagLibSharp" preserve="all" />
+  <!-- MusicDecrypto.Library 包中的程序集名为 libmusicdecrypto。 -->
+  <assembly fullname="libmusicdecrypto" preserve="all" />
+  <assembly fullname="QRCoder" preserve="all" />
+  <assembly fullname="SQLitePCLRaw.core" preserve="all" />
+  <assembly fullname="SQLitePCLRaw.batteries_v2" preserve="all" />
+  <assembly fullname="SQLitePCLRaw.provider.e_sqlite3" preserve="all" />
+</linker>

@@ -79,10 +79,10 @@
     <value>音乐文件夹</value>
   </data>
   <data name="Lyrics_SelectFolder" xml:space="preserve">
-    <value>请选择包含音乐文件的目录...</value>
+    <value>请选择包含音乐文件的目录…</value>
   </data>
   <data name="Lyrics_Browse" xml:space="preserve">
-    <value>浏览...</value>
+    <value>浏览…</value>
   </data>
   <data name="Lyrics_Parallel" xml:space="preserve">
     <value>并行任务数</value>
@@ -100,10 +100,10 @@
     <value>等待中</value>
   </data>
   <data name="Lyrics_Status_Scanning" xml:space="preserve">
-    <value>正在扫描文件...</value>
+    <value>正在扫描文件…</value>
   </data>
   <data name="Lyrics_Status_Downloading" xml:space="preserve">
-    <value>正在下载歌词...</value>
+    <value>正在下载歌词…</value>
   </data>
   <data name="Lyrics_Status_Complete" xml:space="preserve">
     <value>下载完成</value>
@@ -134,10 +134,10 @@
     <value>音乐文件夹</value>
   </data>
   <data name="Album_SelectFolder" xml:space="preserve">
-    <value>请选择包含音乐文件的目录...</value>
+    <value>请选择包含音乐文件的目录…</value>
   </data>
   <data name="Album_Browse" xml:space="preserve">
-    <value>浏览...</value>
+    <value>浏览…</value>
   </data>
   <data name="Album_Parallel" xml:space="preserve">
     <value>并行任务数</value>
@@ -257,5 +257,264 @@
   <!-- Error Messages -->
   <data name="Error_NoMusicFiles" xml:space="preserve">
     <value>在所选文件夹中没有找到任何音乐文件。</value>
+  </data>
+<!-- Decryption / Settings / Home additions -->
+  <data name="Nav_Decrypt" xml:space="preserve">
+    <value>音乐解密</value>
+  </data>
+  <data name="Decrypt_Title" xml:space="preserve">
+    <value>音乐解密</value>
+  </data>
+  <data name="Decrypt_Description" xml:space="preserve">
+    <value>将加密的音乐文件（ncm / qmc / kgm / kgg / kwm）转换为可播放格式</value>
+  </data>
+  <data name="Decrypt_SelectFiles" xml:space="preserve">
+    <value>请选择要解密的加密音乐文件…</value>
+  </data>
+  <data name="Decrypt_Browse" xml:space="preserve">
+    <value>添加文件…</value>
+  </data>
+  <data name="Decrypt_Parallel" xml:space="preserve">
+    <value>并行数:</value>
+  </data>
+  <data name="Decrypt_Start" xml:space="preserve">
+    <value>开始解密</value>
+  </data>
+  <data name="Decrypt_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Decrypt_EmptyState" xml:space="preserve">
+    <value>暂无文件，请添加文件后开始解密</value>
+  </data>
+  <data name="Decrypt_Clear" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="Decrypt_FilesLabel" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Column_FileName" xml:space="preserve">
+    <value>文件名</value>
+  </data>
+  <data name="Column_OutputPath" xml:space="preserve">
+    <value>输出路径</value>
+  </data>
+  <data name="Settings_BasicSection" xml:space="preserve">
+    <value>基础设置</value>
+  </data>
+  <data name="Settings_AdvancedSection" xml:space="preserve">
+    <value>高级设置</value>
+  </data>
+  <data name="Settings_ShowAdvanced" xml:space="preserve">
+    <value>显示高级设置</value>
+  </data>
+  <data name="Settings_LyricsSection" xml:space="preserve">
+    <value>歌词设置</value>
+  </data>
+  <data name="Settings_EnableTranslation" xml:space="preserve">
+    <value>启用翻译歌词</value>
+  </data>
+  <data name="Settings_OneLineMode" xml:space="preserve">
+    <value>单行模式（原文与翻译在同一行）</value>
+  </data>
+  <data name="Settings_OnlyTranslation" xml:space="preserve">
+    <value>只输出翻译歌词</value>
+  </data>
+  <data name="Settings_SkipExisting" xml:space="preserve">
+    <value>跳过已存在的歌词文件</value>
+  </data>
+  <data name="Settings_FileEncoding" xml:space="preserve">
+    <value>文件编码:</value>
+  </data>
+  <data name="Settings_LineBreak" xml:space="preserve">
+    <value>换行符:</value>
+  </data>
+  <data name="Settings_RomanOutput" xml:space="preserve">
+    <value>输出罗马音歌词</value>
+  </data>
+  <data name="Settings_BlockWordSection" xml:space="preserve">
+    <value>屏蔽词</value>
+  </data>
+  <data name="Settings_BlockWordEnable" xml:space="preserve">
+    <value>启用屏蔽词过滤</value>
+  </data>
+  <data name="Settings_BlockWordPath" xml:space="preserve">
+    <value>屏蔽词文件路径（相对当前工作目录）:</value>
+  </data>
+  <data name="Settings_TagProvider" xml:space="preserve">
+    <value>标签源</value>
+  </data>
+  <data name="Settings_Priority" xml:space="preserve">
+    <value>优先级</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>配置文件位置</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>设置已保存</value>
+  </data>
+  <data name="Settings_SaveFailed" xml:space="preserve">
+    <value>设置保存失败</value>
+  </data>
+  <data name="Settings_ProxyRestartHint" xml:space="preserve">
+    <value>修改代理设置后需要重启程序才能生效。</value>
+  </data>
+  <data name="Settings_ResetConfirm" xml:space="preserve">
+    <value>确定要将所有设置恢复为默认值吗？</value>
+  </data>
+  <data name="Home_QuickActions" xml:space="preserve">
+    <value>快速操作</value>
+  </data>
+  <data name="Home_Decrypt" xml:space="preserve">
+    <value>解密音乐</value>
+  </data>
+  <data name="Home_FeatureFormats" xml:space="preserve">
+    <value>支持网易云、QQ音乐、酷狗、酷我四大歌词源</value>
+  </data>
+  <data name="Home_FeatureParallel" xml:space="preserve">
+    <value>多线程并行下载，自动规避覆盖</value>
+  </data>
+  <data name="Home_FeatureEncodings" xml:space="preserve">
+    <value>支持多种文件编码与翻译歌词输出</value>
+  </data>
+  <data name="Home_FeatureCrossPlatform" xml:space="preserve">
+    <value>跨平台运行，支持 Windows、Linux 与 macOS</value>
+  </data>
+  <data name="Home_GetStarted" xml:space="preserve">
+    <value>开始使用</value>
+  </data>
+  <data name="Lyrics_Scanner" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="Scanner_Local" xml:space="preserve">
+    <value>本地文件夹</value>
+  </data>
+  <data name="Scanner_Csv" xml:space="preserve">
+    <value>CSV 文件</value>
+  </data>
+  <data name="Scanner_NetEase" xml:space="preserve">
+    <value>网易云歌单</value>
+  </data>
+  <data name="Lyrics_Scan" xml:space="preserve">
+    <value>解析</value>
+  </data>
+  <data name="Lyrics_CsvLabel" xml:space="preserve">
+    <value>CSV 文件</value>
+  </data>
+  <data name="Lyrics_CsvSelect" xml:space="preserve">
+    <value>请选择 CSV 文件…</value>
+  </data>
+  <data name="Lyrics_CsvBrowse" xml:space="preserve">
+    <value>选择…</value>
+  </data>
+  <data name="Lyrics_SongListLabel" xml:space="preserve">
+    <value>歌单 ID</value>
+  </data>
+  <data name="Lyrics_SongListWatermark" xml:space="preserve">
+    <value>例如 7224428149（多个歌单用分号分隔）</value>
+  </data>
+  <data name="Lyrics_OutputLabel" xml:space="preserve">
+    <value>保存到</value>
+  </data>
+  <data name="Lyrics_OutputSelect" xml:space="preserve">
+    <value>歌词文件的输出目录</value>
+  </data>
+  <data name="Lyrics_OutputBrowse" xml:space="preserve">
+    <value>选择…</value>
+  </data>
+  <data name="NetEase_LoginTitle" xml:space="preserve">
+    <value>登录网易云音乐</value>
+  </data>
+  <data name="NetEase_LoginTip" xml:space="preserve">
+    <value>请使用手机上的网易云音乐 App 扫描二维码。</value>
+  </data>
+  <data name="NetEase_LoginWaiting" xml:space="preserve">
+    <value>等待扫码…</value>
+  </data>
+  <data name="NetEase_LoginScanned" xml:space="preserve">
+    <value>已扫码，请在手机上确认。</value>
+  </data>
+  <data name="NetEase_LoginSucceeded" xml:space="preserve">
+    <value>登录成功。</value>
+  </data>
+  <data name="NetEase_LoginExpired" xml:space="preserve">
+    <value>二维码已过期，请关闭窗口后重新登录。</value>
+  </data>
+  <data name="NetEase_LoginFailed" xml:space="preserve">
+    <value>登录未完成，请关闭窗口后重试。</value>
+  </data>
+  <data name="Home_Features" xml:space="preserve">
+    <value>功能特性</value>
+  </data>
+  <data name="Home_Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="Home_DownloadLyricsHint" xml:space="preserve">
+    <value>批量下载音乐文件的歌词</value>
+  </data>
+  <data name="Home_DownloadAlbumCoverHint" xml:space="preserve">
+    <value>为音乐库获取专辑封面</value>
+  </data>
+  <data name="Home_DecryptHint" xml:space="preserve">
+    <value>解密受保护的音乐文件</value>
+  </data>
+  <data name="Settings_MoveUp" xml:space="preserve">
+    <value>上移</value>
+  </data>
+  <data name="Settings_MoveDown" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="Decrypt_KugouMissing" xml:space="preserve">
+    <value>kgg 解密需要酷狗数据库 KGMusicV3.db（酷狗下载过该歌曲才会写入密钥）</value>
+  </data>
+  <data name="Decrypt_SelectDatabase" xml:space="preserve">
+    <value>选择数据库文件…</value>
+  </data>
+  <data name="Decrypt_DatabaseOk" xml:space="preserve">
+    <value>已读取 {0} 个解密密钥</value>
+  </data>
+  <data name="Decrypt_DatabaseMissing" xml:space="preserve">
+    <value>未找到酷狗数据库，kgg 文件将无法解密</value>
+  </data>
+  <data name="Decrypt_SpecifyDatabase" xml:space="preserve">
+    <value>指定数据库…</value>
+  </data>
+  <data name="Decrypt_StatusMissingDb" xml:space="preserve">
+    <value>缺少酷狗数据库</value>
+  </data>
+  <data name="Decrypt_ViewDetail" xml:space="preserve">
+    <value>查看详情</value>
+  </data>
+  <data name="Decrypt_FailureTitle" xml:space="preserve">
+    <value>解密失败原因</value>
+  </data>
+  <data name="Settings_ProviderOrderHint" xml:space="preserve">
+    <value>列表顺序即搜索顺序，用右侧箭头调整优先尝试哪一家。</value>
+  </data>
+  <data name="NetEase_SignOut" xml:space="preserve">
+    <value>退出登录</value>
+  </data>
+  <data name="NetEase_SignOutHint" xml:space="preserve">
+    <value>清除已保存的登录状态，下次解析歌单需要重新扫码。</value>
+  </data>
+  <data name="NetEase_SignedOut" xml:space="preserve">
+    <value>已退出登录，下次解析歌单需要重新扫码。</value>
+  </data>
+  <data name="NetEase_SignIn" xml:space="preserve">
+    <value>登录…</value>
+  </data>
+  <data name="NetEase_SignInHint" xml:space="preserve">
+    <value>立即扫码登录，不必等到下次解析歌单。</value>
+  </data>
+  <data name="NetEase_LoggedIn" xml:space="preserve">
+    <value>已登录，解析歌单会直接使用这个会话。</value>
+  </data>
+  <data name="NetEase_NotLoggedIn" xml:space="preserve">
+    <value>未登录，解析歌单时会弹出二维码。</value>
+  </data>
+  <data name="NetEase_AccountLabel" xml:space="preserve">
+    <value>账号状态</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>复制</value>
   </data>
 </root>

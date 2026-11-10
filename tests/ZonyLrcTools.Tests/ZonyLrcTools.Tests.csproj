@@ -22,6 +22,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\ZonyLrcTools.Cli\ZonyLrcTools.Cli.csproj" />
+      <ProjectReference Include="..\..\src\ZonyLrcTools.Desktop\ZonyLrcTools.Desktop.csproj" />
     </ItemGroup>
 
     <ItemGroup>

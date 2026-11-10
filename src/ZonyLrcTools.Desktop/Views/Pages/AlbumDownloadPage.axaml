@@ -40,7 +40,7 @@
                 <Button Grid.Row="0" Grid.Column="2"
                         Content="{Binding AlbumBrowse}"
                         Command="{Binding SelectFolderCommand}"
-                        MinWidth="80"
+                        MinWidth="88"
                         HorizontalAlignment="Stretch" />
 
                 <!-- Separator -->
@@ -70,8 +70,9 @@
                             Orientation="Horizontal" Spacing="8">
                     <Button Command="{Binding StartDownloadCommand}"
                             IsVisible="{Binding !IsDownloading}"
+                            IsEnabled="{Binding CanStartDownload}"
                             Classes="accent"
-                            MinWidth="120">
+                            MinWidth="132">
                         <StackPanel Orientation="Horizontal" Spacing="6">
                             <PathIcon Data="{StaticResource DownloadIcon}"
                                       Width="14" Height="14" />
@@ -82,10 +83,25 @@
                     <Button Command="{Binding CancelDownloadCommand}"
                             Content="{Binding AlbumStopDownload}"
                             IsVisible="{Binding IsDownloading}"
-                            MinWidth="100" />
+                            MinWidth="108" />
                 </StackPanel>
 
-                <!-- Row 3: Progress -->
+                <!-- Row 3a: Scan progress -->
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="3"
+                            IsVisible="{Binding IsScanning}"
+                            Spacing="8" Margin="0,16,0,0">
+                    <ProgressBar Value="{Binding ScanProgressPercentage}"
+                                 Maximum="100" Height="6" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Opacity="0.7">
+                        <Run Text="{Binding AlbumScanning}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding ScanProgressCount}" />
+                        <Run Text=" / " />
+                        <Run Text="{Binding ScanTotalCount}" />
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Row 3b: Download progress -->
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="3"
                             IsVisible="{Binding IsDownloading}"
                             Spacing="8" Margin="0,16,0,0">
@@ -113,15 +129,15 @@
                           BorderThickness="0"
                           Background="Transparent">
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                        <DataGridTextColumn x:DataType="vm:AlbumFileViewModel"
                                             Header="{loc:Localize Column_SongName}"
                                             Binding="{Binding Name}"
                                             Width="*" />
-                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                        <DataGridTextColumn x:DataType="vm:AlbumFileViewModel"
                                             Header="{loc:Localize Column_Artist}"
                                             Binding="{Binding Artist}"
                                             Width="200" />
-                        <DataGridTextColumn x:DataType="vm:MusicFileViewModel"
+                        <DataGridTextColumn x:DataType="vm:AlbumFileViewModel"
                                             Header="{loc:Localize Column_Status}"
                                             Binding="{Binding StatusMessage}"
                                             Width="120" />

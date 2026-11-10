@@ -79,10 +79,10 @@
     <value>Music Folder</value>
   </data>
   <data name="Lyrics_SelectFolder" xml:space="preserve">
-    <value>Select a folder containing music files...</value>
+    <value>Select a folder containing music files…</value>
   </data>
   <data name="Lyrics_Browse" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Browse…</value>
   </data>
   <data name="Lyrics_Parallel" xml:space="preserve">
     <value>Parallel Tasks</value>
@@ -100,10 +100,10 @@
     <value>Idle</value>
   </data>
   <data name="Lyrics_Status_Scanning" xml:space="preserve">
-    <value>Scanning files...</value>
+    <value>Scanning files…</value>
   </data>
   <data name="Lyrics_Status_Downloading" xml:space="preserve">
-    <value>Downloading lyrics...</value>
+    <value>Downloading lyrics…</value>
   </data>
   <data name="Lyrics_Status_Complete" xml:space="preserve">
     <value>Download Complete</value>
@@ -134,10 +134,10 @@
     <value>Music Folder</value>
   </data>
   <data name="Album_SelectFolder" xml:space="preserve">
-    <value>Select a folder containing music files...</value>
+    <value>Select a folder containing music files…</value>
   </data>
   <data name="Album_Browse" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Browse…</value>
   </data>
   <data name="Album_Parallel" xml:space="preserve">
     <value>Parallel Tasks</value>
@@ -257,5 +257,264 @@
   <!-- Error Messages -->
   <data name="Error_NoMusicFiles" xml:space="preserve">
     <value>No music files found in the selected folder.</value>
+  </data>
+<!-- Decryption / Settings / Home additions -->
+  <data name="Nav_Decrypt" xml:space="preserve">
+    <value>Music Decryption</value>
+  </data>
+  <data name="Decrypt_Title" xml:space="preserve">
+    <value>Music Decryption</value>
+  </data>
+  <data name="Decrypt_Description" xml:space="preserve">
+    <value>Convert encrypted music files (ncm / qmc / kgm / kgg / kwm) into playable formats</value>
+  </data>
+  <data name="Decrypt_SelectFiles" xml:space="preserve">
+    <value>Select encrypted music files…</value>
+  </data>
+  <data name="Decrypt_Browse" xml:space="preserve">
+    <value>Add Files…</value>
+  </data>
+  <data name="Decrypt_Parallel" xml:space="preserve">
+    <value>Parallel:</value>
+  </data>
+  <data name="Decrypt_Start" xml:space="preserve">
+    <value>Start Decrypt</value>
+  </data>
+  <data name="Decrypt_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Decrypt_EmptyState" xml:space="preserve">
+    <value>No files yet, add files to start decrypting</value>
+  </data>
+  <data name="Decrypt_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Decrypt_FilesLabel" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="Column_FileName" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="Column_OutputPath" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="Settings_BasicSection" xml:space="preserve">
+    <value>Basic Settings</value>
+  </data>
+  <data name="Settings_AdvancedSection" xml:space="preserve">
+    <value>Advanced Settings</value>
+  </data>
+  <data name="Settings_ShowAdvanced" xml:space="preserve">
+    <value>Show advanced settings</value>
+  </data>
+  <data name="Settings_LyricsSection" xml:space="preserve">
+    <value>Lyrics Settings</value>
+  </data>
+  <data name="Settings_EnableTranslation" xml:space="preserve">
+    <value>Enable translation lyrics</value>
+  </data>
+  <data name="Settings_OneLineMode" xml:space="preserve">
+    <value>One-line mode (original + translation on the same line)</value>
+  </data>
+  <data name="Settings_OnlyTranslation" xml:space="preserve">
+    <value>Only output translation lyrics</value>
+  </data>
+  <data name="Settings_SkipExisting" xml:space="preserve">
+    <value>Skip existing lyrics files</value>
+  </data>
+  <data name="Settings_FileEncoding" xml:space="preserve">
+    <value>File Encoding:</value>
+  </data>
+  <data name="Settings_LineBreak" xml:space="preserve">
+    <value>Line Break:</value>
+  </data>
+  <data name="Settings_RomanOutput" xml:space="preserve">
+    <value>Output romanized lyrics</value>
+  </data>
+  <data name="Settings_BlockWordSection" xml:space="preserve">
+    <value>Block Words</value>
+  </data>
+  <data name="Settings_BlockWordEnable" xml:space="preserve">
+    <value>Enable block word filtering</value>
+  </data>
+  <data name="Settings_BlockWordPath" xml:space="preserve">
+    <value>Block Words File (relative to current working directory):</value>
+  </data>
+  <data name="Settings_TagProvider" xml:space="preserve">
+    <value>Tag Providers</value>
+  </data>
+  <data name="Settings_Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Configuration File</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Settings saved</value>
+  </data>
+  <data name="Settings_SaveFailed" xml:space="preserve">
+    <value>Failed to save settings</value>
+  </data>
+  <data name="Settings_ProxyRestartHint" xml:space="preserve">
+    <value>Restart the application for proxy changes to take effect.</value>
+  </data>
+  <data name="Settings_ResetConfirm" xml:space="preserve">
+    <value>Reset all settings to their default values?</value>
+  </data>
+  <data name="Home_QuickActions" xml:space="preserve">
+    <value>Quick Actions</value>
+  </data>
+  <data name="Home_Decrypt" xml:space="preserve">
+    <value>Decrypt Music</value>
+  </data>
+  <data name="Home_FeatureFormats" xml:space="preserve">
+    <value>Supports NetEase, QQ Music, KuGou and KuWo lyric sources</value>
+  </data>
+  <data name="Home_FeatureParallel" xml:space="preserve">
+    <value>Parallel downloads with automatic overwrite protection</value>
+  </data>
+  <data name="Home_FeatureEncodings" xml:space="preserve">
+    <value>Multiple file encodings and translated lyrics output</value>
+  </data>
+  <data name="Home_FeatureCrossPlatform" xml:space="preserve">
+    <value>Runs on Windows, Linux and macOS</value>
+  </data>
+  <data name="Home_GetStarted" xml:space="preserve">
+    <value>Get Started</value>
+  </data>
+  <data name="Lyrics_Scanner" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Scanner_Local" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
+  <data name="Scanner_Csv" xml:space="preserve">
+    <value>CSV File</value>
+  </data>
+  <data name="Scanner_NetEase" xml:space="preserve">
+    <value>NetEase Playlist</value>
+  </data>
+  <data name="Lyrics_Scan" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="Lyrics_CsvLabel" xml:space="preserve">
+    <value>CSV File</value>
+  </data>
+  <data name="Lyrics_CsvSelect" xml:space="preserve">
+    <value>Select a CSV file…</value>
+  </data>
+  <data name="Lyrics_CsvBrowse" xml:space="preserve">
+    <value>Choose…</value>
+  </data>
+  <data name="Lyrics_SongListLabel" xml:space="preserve">
+    <value>Playlist ID</value>
+  </data>
+  <data name="Lyrics_SongListWatermark" xml:space="preserve">
+    <value>e.g. 7224428149 (separate multiple ids with ;)</value>
+  </data>
+  <data name="Lyrics_OutputLabel" xml:space="preserve">
+    <value>Save To</value>
+  </data>
+  <data name="Lyrics_OutputSelect" xml:space="preserve">
+    <value>Where the .lrc files should be written</value>
+  </data>
+  <data name="Lyrics_OutputBrowse" xml:space="preserve">
+    <value>Choose…</value>
+  </data>
+  <data name="NetEase_LoginTitle" xml:space="preserve">
+    <value>Sign in to NetEase Cloud Music</value>
+  </data>
+  <data name="NetEase_LoginTip" xml:space="preserve">
+    <value>Scan the QR code with the NetEase Cloud Music app on your phone.</value>
+  </data>
+  <data name="NetEase_LoginWaiting" xml:space="preserve">
+    <value>Waiting for you to scan…</value>
+  </data>
+  <data name="NetEase_LoginScanned" xml:space="preserve">
+    <value>Scanned, please confirm on your phone.</value>
+  </data>
+  <data name="NetEase_LoginSucceeded" xml:space="preserve">
+    <value>Signed in.</value>
+  </data>
+  <data name="NetEase_LoginExpired" xml:space="preserve">
+    <value>The QR code expired. Close this dialog and try again.</value>
+  </data>
+  <data name="NetEase_LoginFailed" xml:space="preserve">
+    <value>Login did not complete. Close this dialog and try again.</value>
+  </data>
+  <data name="Home_Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="Home_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Home_DownloadLyricsHint" xml:space="preserve">
+    <value>Batch download lyrics for your music files</value>
+  </data>
+  <data name="Home_DownloadAlbumCoverHint" xml:space="preserve">
+    <value>Fetch album artwork for your collection</value>
+  </data>
+  <data name="Home_DecryptHint" xml:space="preserve">
+    <value>Decrypt protected music files</value>
+  </data>
+  <data name="Settings_MoveUp" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="Settings_MoveDown" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="Decrypt_KugouMissing" xml:space="preserve">
+    <value>kgg decryption needs the KuGou database KGMusicV3.db (the key is only written when KuGou downloaded that song)</value>
+  </data>
+  <data name="Decrypt_SelectDatabase" xml:space="preserve">
+    <value>Choose Database…</value>
+  </data>
+  <data name="Decrypt_DatabaseOk" xml:space="preserve">
+    <value>{0} decryption keys loaded</value>
+  </data>
+  <data name="Decrypt_DatabaseMissing" xml:space="preserve">
+    <value>KuGou database not found, kgg files cannot be decrypted</value>
+  </data>
+  <data name="Decrypt_SpecifyDatabase" xml:space="preserve">
+    <value>Locate Database…</value>
+  </data>
+  <data name="Decrypt_StatusMissingDb" xml:space="preserve">
+    <value>KuGou database missing</value>
+  </data>
+  <data name="Decrypt_ViewDetail" xml:space="preserve">
+    <value>View details</value>
+  </data>
+  <data name="Decrypt_FailureTitle" xml:space="preserve">
+    <value>Decryption failure</value>
+  </data>
+  <data name="Settings_ProviderOrderHint" xml:space="preserve">
+    <value>The list order is the search order. Use the arrows on the right to change which source is tried first.</value>
+  </data>
+  <data name="NetEase_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="NetEase_SignOutHint" xml:space="preserve">
+    <value>Forget the saved session so the next playlist scan asks for a QR login again.</value>
+  </data>
+  <data name="NetEase_SignedOut" xml:space="preserve">
+    <value>Signed out. The next playlist scan will ask for a QR login.</value>
+  </data>
+  <data name="NetEase_SignIn" xml:space="preserve">
+    <value>Sign in…</value>
+  </data>
+  <data name="NetEase_SignInHint" xml:space="preserve">
+    <value>Scan a QR code now instead of waiting until the next scan.</value>
+  </data>
+  <data name="NetEase_LoggedIn" xml:space="preserve">
+    <value>Signed in. Scanning a playlist reuses this session.</value>
+  </data>
+  <data name="NetEase_NotLoggedIn" xml:space="preserve">
+    <value>Not signed in. Scanning a playlist will show a QR code.</value>
+  </data>
+  <data name="NetEase_AccountLabel" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>Copy</value>
   </data>
 </root>

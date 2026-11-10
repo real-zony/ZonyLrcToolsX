@@ -28,10 +28,10 @@
                     HorizontalAlignment="Right"
                     Spacing="8">
             <Button x:Name="CancelButton"
-                    MinWidth="80"
+                    MinWidth="88"
                     Click="OnCancelClick" />
             <Button x:Name="ConfirmButton"
-                    MinWidth="80"
+                    MinWidth="88"
                     Classes="accent"
                     Click="OnConfirmClick" />
         </StackPanel>

@@ -18,6 +18,7 @@
         <PackageReference Include="Avalonia.Fonts.Inter" />
         <PackageReference Include="Avalonia.Controls.DataGrid" />
         <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Tmds.DBus.Protocol" />
         <!-- MVVM -->
         <PackageReference Include="CommunityToolkit.Mvvm" />
         <!-- DI & Hosting -->
@@ -30,6 +31,24 @@
         <PackageReference Include="System.Text.Encoding.CodePages" />
         <!-- Localization -->
         <PackageReference Include="Microsoft.Extensions.Localization" />
+        <!-- 网易云扫码登录所需的二维码生成器 -->
+        <PackageReference Include="QRCoder" />
+    </ItemGroup>
+
+    <!-- 指定运行平台时默认裁剪，可通过 -p:PublishTrimmed=false 关闭。
+         反射注入、序列化和无障碍访问所需程序集由 ILLink.Descriptors.xml 保留。 -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' != '' AND '$(PublishTrimmed)' == ''">
+        <PublishTrimmed>true</PublishTrimmed>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(PublishTrimmed)' == 'true'">
+        <TrimMode>partial</TrimMode>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PublishTrimmed)' == 'true'">
+        <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
     </ItemGroup>
 
     <ItemGroup>
