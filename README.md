@@ -48,6 +48,12 @@ Requires .NET SDK 10. Local changes do not update the PR until explicitly commit
 # Donation
 [爱发电](https://afdian.net/a/zony-lrc-tools)
 
-# Star History
+## Star History
 
-[![Star History Chart](https://star-history.dera.page/svg?repos=real-zony/ZonyLrcToolsX&type=Timeline)](https://star-history.dera.page/#real-zony/ZonyLrcToolsX&Timeline)
+<a href="https://star-history.dera.page/real-zony/ZonyLrcToolsX?type=timeline">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=real-zony/ZonyLrcToolsX&type=timeline&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=real-zony/ZonyLrcToolsX&type=timeline" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=real-zony/ZonyLrcToolsX&type=timeline" />
+ </picture>
+</a>
