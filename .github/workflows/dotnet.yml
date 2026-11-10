@@ -137,6 +137,8 @@ jobs:
   # Release Job - 合并所有平台的构建产物
   release:
     if: github.event_name == 'push'
+    permissions:
+      contents: write
     needs: [build-linux-windows, build-macos, build-desktop]
     runs-on: ubuntu-latest
     steps:
@@ -161,7 +163,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "./TempFiles/*.zip"
-          token: ${{ secrets.GITHUBACTIONS }}
+          token: ${{ github.token }}
           tag: ZonyLrcToolsX_Alpha.${{ needs.build-linux-windows.outputs.version }}
           commit: dev
           bodyFile: ./versions/release.md

@@ -15,3 +15,4 @@ Fixed Bugs:
 - [#172] Correct KGG/KGM detection, QMC2 map decoding, unpadded ekey decoding and concurrent output handling.
 - [#172] Keep decrypted key databases in memory; prevent canceled downloads from publishing partial files.
 - [#172] Fix QR login races, stale scan results, desktop task threading and trimmed session serialization.
+- Fix release authentication by using the built-in GitHub token with `contents: write` permission scoped to the release job.
