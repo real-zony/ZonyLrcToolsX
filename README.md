@@ -44,10 +44,6 @@ dotnet run --project src/ZonyLrcTools.Desktop -c Release
 
 Requires .NET SDK 10. Local changes do not update the PR until explicitly committed and pushed. See [desktop notes](./docs/en_US.md#desktop-development) for publishing, configuration and manual verification.
 
-
-# Donation
-[爱发电](https://afdian.net/a/zony-lrc-tools)
-
 ## Star History
 
 <a href="https://star-history.dera.page/real-zony/ZonyLrcToolsX?type=timeline">
